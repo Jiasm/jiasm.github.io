@@ -1,43 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>index</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="resource/css/reset.css" />
   <style type="text/css">
     a {
       display: block;
+      cursor: pointer;
     }
   </style>
   <script type="text/javascript" src="js/require.js"></script>
   <script type="text/javascript">
-    require(['feed/index'],function  (_data) {
-      var datas = _data.data;
-      var panel = document.createDocumentFragment();
-      for (var len = datas.length - 1; len >= 0; len--) {
-        var btn = document.createElement("a");
-        var data = datas[len];
-        btn.innerHTML = data.title;
-        btn.title = data.general;
-        btn.id = data.id;
-        btn.href = "#";
-        panel.appendChild(btn);
-      }
-      document.getElementById("nav").appendChild(panel);
-      document.body.onclick = function (event) {
-        event = event || window.event;
-        if (event.target.localName === "a") {
-          require(["feed/" + event.target.id],function  (_d) {
-            document.getElementById("art").innerHTML = _d.content;
-          });
-          return false;
+    var $history;
+    onload = function () {
+      init();
+      document.body.onclick = navigation;
+      $history = new History("retreat", "forward");
+    }
+    function init () {
+      require(['feed/index'],function  (_data) {
+        var datas = _data.data;
+        var $panel = document.createDocumentFragment();
+        var $article = createElement("li");
+        var $title = createElement("p");
+        var $postTitle = createElement("a");
+        var $dateTitle = createElement("time");
+        $article.className = "article";
+        $title.className = "title";
+        $postTitle.className = "post-title";
+        $dateTitle.className = "date-title";
+        for (var len = datas.length - 1; len >= 0; len--) {
+          var data = datas[len];
+          $article = $article.cloneNode();
+          $title = $title.cloneNode();
+          $postTitle = $postTitle.cloneNode();
+          $dateTitle = $dateTitle.cloneNode();
+          $postTitle.innerHTML = data.title;
+          $postTitle.title = data.title;
+          //$postTitle.href = "#" + data.id;
+          $postTitle.id = data.id;
+          $dateTitle.innerHTML = data.postDate;
+          $postTitle.appendChild($dateTitle);
+          $title.appendChild($postTitle);
+          $article.appendChild($title);
+          $panel.appendChild($article);
         }
+        document.getElementById("article-list").appendChild($panel);
+        $history.push(document.body.cloneNode(true));
+      });
+    }
+    function build (data, container) {
+      var $panel = document.createDocumentFragment();
+      var $article = createElement("article");
+      var $header =createElement("header");
+      var $postTitle = createElement("h1");
+      var $postDate = createElement("time");
+      var $content = createElement("section");
+      $postTitle.innerHTML = data.title;
+      $postDate.innerHTML = data.postDate;
+      $header.appendChild($postTitle);
+      $header.appendChild($postDate);
+      $article.appendChild($header);
+      $content.innerHTML = data.content;
+      $article.appendChild($content);
+      $panel.appendChild($article);
+      container.innerHTML = $article.outerHTML;
+      $history.push(document.body.cloneNode(true));
+    }
+    function createElement(tag) {
+      return document.createElement(tag);
+    }
+    function navigation (event) {
+      var target = (event || window.event).target;
+      if (target.localName === "a" || target.localName === "time") {
+        require(["feed/" + (target.id || target.parentNode.id)], function (_data) {
+          build(_data, document.getElementById("main"))
+        })
       }
-    });
+    }
+    function History (_retreat, _forward, _max) {
+      var _history = [], _max = _max, cursor = -1;
+      this.push = function (tag) {
+        if (_max & _history.length >= _max) _history.shift();
+        _history.push(tag.innerHTML);
+        cursor++;
+        document.getElementById(_retreat).disabled = cursor <= 0;
+        document.getElementById(_forward).disabled = cursor >= _history.length - 1;
+      }
+      this.refresh = function () {
+        _history = [];
+        cursor = -1;
+      }
+      var rebind = function () {
+        document.body.innerHTML = _history[cursor];
+        document.body.onclick = navigation;
+        $retreat = document.getElementById(_retreat);
+        $forward = document.getElementById(_forward);
+        $retreat.disabled = cursor <= 0;
+        $forward.disabled = cursor >= _history.length - 1;
+        $retreat.onclick = retreat;
+        $forward.onclick = forward;
+      }
+      var retreat = function () {
+        if (cursor <= 0) return;
+        cursor--;
+        rebind();
+      }
+      var forward = function () {
+        if (cursor >= _history.length) return;
+        cursor++;
+        rebind();
+      }
+      var $retreat = document.getElementById(_retreat);
+      var $forward = document.getElementById(_forward);
+      $retreat.disabled = true;
+      $forward.disabled = true;
+      $retreat.onclick = retreat;
+      $forward.onclick = forward;
+    }
   </script>
 </head>
 <body>
-  <nav id="nav"></nav>
-  <div id="art"></div>
+  <header>
+    <h1>贾顺名</h1>
+    <h2>Web初级熟练工</h2>
+    <nav>
+      <button id="retreat">返回</button>
+      <button id="forward">前进</button>
+    </nav>
+  </header>
+  <main id="main">
+    <header>全部文章</header>
+    <ul id="article-list"></ul>
+  </main>
+  <footer>
+    &copy;贾顺名
+  </footer>
 </body>
 </html>
-
-
