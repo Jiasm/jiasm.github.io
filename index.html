@@ -83,8 +83,11 @@
       var _history = [], _max = _max, cursor = -1;
       this.push = function (tag) {
         if (_max & _history.length >= _max) _history.shift();
-        _history.push(tag.innerHTML);
         cursor++;
+        if (cursor != _history.length) {
+          _history = _history.slice(0, cursor)
+        }
+        _history.push(tag.innerHTML);
         document.getElementById(_retreat).disabled = cursor <= 0;
         document.getElementById(_forward).disabled = cursor >= _history.length - 1;
       }
