@@ -21,6 +21,7 @@
     /*引入多说 end*/
     //改装一下多说- -
     function initDUOSHUO () {
+      document.body.scrollTop = "0px";
       DUOSHUO.init();
       var countList = document.getElementsByClassName("ds-thread-count"),counts;
       for (var len = countList.length - 1, counts = countList[len]; len > 0; len--, counts = countList[len])
