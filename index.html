@@ -4,14 +4,27 @@
   <title>index</title>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="resource/css/reset.css" />
-  <style type="text/css">
-    a {
-      display: block;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="resource/css/base.css" />
   <script type="text/javascript" src="js/require.js"></script>
   <script type="text/javascript">
+    /*引入多说*/
+    var duoshuoQuery = {short_name:"jiasm"};
+    (function (){
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    /*引入多说 end*/
+    //改装一下多说- -
+    function initDUOSHUO () {
+      DUOSHUO.init();
+      var countList = document.getElementsByClassName("ds-thread-count"),counts;
+      for (var len = countList.length - 1, counts = countList[len]; len > 0; len--, counts = countList[len])
+        counts.innerHTML = counts.innerHTML||"暂无评论";
+    }
     var $history;
     onload = function () {
       init();
@@ -26,6 +39,7 @@
         var $title = createElement("p");
         var $postTitle = createElement("a");
         var $dateTitle = createElement("time");
+        var $comments = createElement("p");
         $article.className = "article";
         $title.className = "title";
         $postTitle.className = "post-title";
@@ -36,18 +50,22 @@
           $title = $title.cloneNode();
           $postTitle = $postTitle.cloneNode();
           $dateTitle = $dateTitle.cloneNode();
+          $comments = $comments.cloneNode();
           $postTitle.innerHTML = data.title;
           $postTitle.title = data.title;
           //$postTitle.href = "#" + data.id;
           $postTitle.id = data.id;
           $dateTitle.innerHTML = data.postDate;
           $postTitle.appendChild($dateTitle);
+          $comments.innerHTML = '<span class="ds-thread-count" data-thread-key="' + data.id + '" data-count-type="comments"></span>';
           $title.appendChild($postTitle);
           $article.appendChild($title);
+          $article.appendChild($comments);
           $panel.appendChild($article);
         }
         document.getElementById("article-list").appendChild($panel);
         $history.push(document.body.cloneNode(true));
+        initDUOSHUO();
       });
     }
     function build (data, container) {
@@ -65,8 +83,17 @@
       $content.innerHTML = data.content;
       $article.appendChild($content);
       $panel.appendChild($article);
-      container.innerHTML = $article.outerHTML;
+      //添加多说评论框
+      var duoshuoBox = [];
+      duoshuoBox.push('<div class="ds-thread" data-thread-key="');
+      duoshuoBox.push(data.id);
+      duoshuoBox.push('" data-title="');
+      duoshuoBox.push(data.title);
+      duoshuoBox.push('" data-url="jiasm.github.io"></div>');
+      
+      container.innerHTML = $article.outerHTML + duoshuoBox.join("");
       $history.push(document.body.cloneNode(true));
+      initDUOSHUO();
     }
     function createElement(tag) {
       return document.createElement(tag);
@@ -104,6 +131,7 @@
         $forward.disabled = cursor >= _history.length - 1;
         $retreat.onclick = retreat;
         $forward.onclick = forward;
+        initDUOSHUO();
       }
       var retreat = function () {
         if (cursor <= 0) return;
