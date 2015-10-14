@@ -1,0 +1,96 @@
+body {
+  color: rgba(255, 255, 255, .8);
+  background: #25a1c3; 
+  background: -moz-linear-gradient(left,#25a1c3 0,#64bc5b 100%);
+  background: -webkit-gradient(linear,left top,right top,color-stop(0,#25a1c3),color-stop(100%,#64bc5b));
+  background: -webkit-linear-gradient(left,#25a1c3 0,#64bc5b 100%);
+  background: -o-linear-gradient(left,#25a1c3 0,#64bc5b 100%);
+  background: -ms-linear-gradient(left,#25a1c3 0,#64bc5b 100%);
+  background: linear-gradient(to right,#25a1c3 0,#64bc5b 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#25a1c3',endColorstr='#64bc5b',GradientType=1);
+}
+html, body {
+  font-family: cursive;
+  height: 100%;
+  position: relative;
+}
+body>header {
+	position: relative;
+	width: 60%;
+	margin: 0 auto;
+	border: .1rem rgba(231,231,231,1) solid;
+	border-bottom-left-radius: 2rem;
+	border-bottom-right-radius: 2rem;
+	border-top: none;
+	background-color:rgba(231,231,231,.05);
+}
+body>header>h1 {
+	text-align: center;
+	font-size: 3rem;
+}
+body>header>h2 {
+	text-align: center;
+	font-size: 1.6rem;
+	padding-bottom: .5rem;
+}
+main {
+  position: relative;
+  max-width: 800px;
+  margin: 2rem auto 0;
+  padding: 0 2rem 3rem;
+  border: .1rem rgba(231,231,231,1) solid;
+  border-radius: 2rem;
+  background-color:rgba(231,231,231,.05);
+  font-size: 1.2rem;
+}
+main h1 {
+	padding: 3rem 0 1.5rem;
+	font-size: 2rem;
+	text-align: center;
+}
+main .post-title:hover {
+  border-left: .2rem solid rgba(255, 255, 255, 0.22);
+}
+main .date-title {
+  float: right;
+}
+a.post-title {
+  display: block;
+  cursor: pointer;
+}
+.for-back {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 2rem;
+  z-index: 2;
+}
+.for-back button {
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  width: 50%;
+  height: 100%;
+  color: rgba(255, 255, 255, .8);
+  font-size: 1.6em;
+  font-weight: 700;
+  font-family: '微软雅黑';
+  background-color: rgba(42, 163, 186, .8);
+  -webkit-transition: color .2s linear,background .2s linear;
+  -moz-transition: color .2s linear,background .2s linear;
+  -o-transition: color .2s linear,background .2s linear;
+  transition: color .2s linear,background .2s linear;
+}
+.for-back button:hover {
+  background-color: rgba(42, 163, 186, .9);
+}
+.for-back button:first-of-type {
+	border-right: 1px solid rgba(255, 255, 255, .5);
+}
+img {
+  max-width: 100%;
+}
+footer {
+  padding-bottom: 2rem;
+  text-align: center;
+}
