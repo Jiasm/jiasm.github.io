@@ -1,6 +1,6 @@
 body {
   color: rgba(255, 255, 255, .8);
-  background: #25a1c3; 
+  background: #25a1c3;
   background: -moz-linear-gradient(left,#25a1c3 0,#64bc5b 100%);
   background: -webkit-gradient(linear,left top,right top,color-stop(0,#25a1c3),color-stop(100%,#64bc5b));
   background: -webkit-linear-gradient(left,#25a1c3 0,#64bc5b 100%);
@@ -9,30 +9,35 @@ body {
   background: linear-gradient(to right,#25a1c3 0,#64bc5b 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#25a1c3',endColorstr='#64bc5b',GradientType=1);
 }
+
 html, body {
   font-family: cursive;
   height: 100%;
   position: relative;
 }
+
 body>header {
-	position: relative;
-	width: 60%;
-	margin: 0 auto;
-	border: .1rem rgba(231,231,231,1) solid;
-	border-bottom-left-radius: 2rem;
-	border-bottom-right-radius: 2rem;
-	border-top: none;
-	background-color:rgba(231,231,231,.05);
+  position: relative;
+  width: 60%;
+  margin: 0 auto;
+  border: .1rem rgba(231,231,231,1) solid;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  border-top: none;
+  background-color: rgba(231,231,231,.05);
 }
+
 body>header>h1 {
-	text-align: center;
-	font-size: 3rem;
+  text-align: center;
+  font-size: 3rem;
 }
+
 body>header>h2 {
-	text-align: center;
-	font-size: 1.6rem;
-	padding-bottom: .5rem;
+  text-align: center;
+  font-size: 1.6rem;
+  padding-bottom: .5rem;
 }
+
 main {
   position: relative;
   max-width: 800px;
@@ -40,57 +45,132 @@ main {
   padding: 0 2rem 3rem;
   border: .1rem rgba(231,231,231,1) solid;
   border-radius: 2rem;
-  background-color:rgba(231,231,231,.05);
+  background-color: rgba(231,231,231,.05);
   font-size: 1.2rem;
 }
+
 main h1 {
-	padding: 3rem 0 1.5rem;
-	font-size: 2rem;
-	text-align: center;
+  padding: 3rem 0 1.5rem;
+  font-size: 2rem;
+  text-align: center;
 }
+
 main .post-title:hover {
   border-left: .2rem solid rgba(255, 255, 255, 0.22);
 }
+
 main .date-title {
   float: right;
 }
+
 a.post-title {
   display: block;
   cursor: pointer;
 }
+
 .for-back {
   position: fixed;
-  bottom: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 2rem;
   z-index: 2;
 }
+
 .for-back button {
+  outline: none;
   cursor: pointer;
   border: none;
   display: inline-block;
-  width: 50%;
-  height: 100%;
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
   color: rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  border: .2rem solid rgba(255, 255, 255, .5);
   font-size: 1.6em;
   font-weight: 700;
   font-family: '微软雅黑';
-  background-color: rgba(42, 163, 186, .8);
-  -webkit-transition: color .2s linear,background .2s linear;
-  -moz-transition: color .2s linear,background .2s linear;
-  -o-transition: color .2s linear,background .2s linear;
+  background-color: rgba(0, 0, 0, 0);
   transition: color .2s linear,background .2s linear;
 }
-.for-back button:hover {
-  background-color: rgba(42, 163, 186, .9);
+
+.for-back button:before {
+  content: "";
+  display: block;
+  position: absolute;
+  border: .2rem solid rgba(255, 255, 255, .5);
+  width: .8rem;
+  height: .8rem;
+  top: 32%;
+  left: 38%;
+  transform: rotate(45deg);
+  border-top: none;
+  border-right: none;
 }
-.for-back button:first-of-type {
-	border-right: 1px solid rgba(255, 255, 255, .5);
+
+.for-back button:last-of-type {
+  right: 0;
+  transform: rotate(180deg);
 }
+
+.for-back button[disabled] {
+  display: none;
+}
+
 img {
   max-width: 100%;
 }
+
 footer {
   padding-bottom: 2rem;
   text-align: center;
+}
+
+/*
+  多说的默认样式
+*/
+#ds-thread * {
+  text-shadow: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  background-color: transparent !important;
+}
+
+#ds-thread #ds-reset a.ds-like-thread-button.ds-rounded {
+  color: rgba(255, 255, 255, .8) !important;
+  border: .1rem rgba(231,231,231,.23) solid !important;
+}
+
+#ds-reset li.ds-tab a.ds-current {
+  border: .1rem rgba(231,231,231,.23) solid !important;
+}
+
+#ds-thread #ds-reset .ds-post-self {
+  border-top: none !important;
+}
+
+#ds-thread #ds-reset .ds-time, #ds-thread #ds-reset .ds-comment-actions a, #ds-thread #ds-reset .ds-account-control span,#ds-thread #ds-reset a,#ds-thread #ds-reset .ds-sort a,#ds-thread #ds-reset .ds-textarea-wrapper textarea,#ds-thread #ds-reset a.ds-like-thread-button span {
+  color: rgba(255, 255, 255, .8) !important;
+}
+
+#ds-thread #ds-reset .ds-account-control ul {
+  border: none !important;
+}
+
+#ds-thread #ds-reset .ds-account-control.ds-active ul li a,#ds-thread #ds-reset li.ds-post,#ds-thread #ds-reset .ds-comments {
+  border-top: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.23);
+}
+
+#ds-thread #ds-reset .ds-textarea-wrapper,#ds-reset .ds-gradient-bg,#ds-thread #ds-reset .ds-post-options,#ds-thread #ds-reset .ds-meta {
+  border: 1px solid rgba(255,255,255,0.23) !important;
+}
+
+#ds-thread #ds-reset .ds-post-button,#ds-thread #ds-reset .ds-sort a.ds-current, #ds-thread #ds-reset .ds-sort a:active,#ds-reset .ds-highlight,#ds-thread #ds-reset .ds-comment-body a:hover, #ds-thread #ds-reset .ds-account-control.ds-active span,#ds-thread #ds-reset .ds-sort a:hover {
+  color: rgb(143, 42, 177) !important;
+}
+
+#ds-thread #ds-reset .ds-post-button:hover {
+  color: rgb(140, 29, 177) !important;
 }
