@@ -63,6 +63,11 @@ main .date-title {
   float: right;
 }
 
+main .ds-thread-count {
+  font-size: .8em;
+  padding-left: 1em;
+}
+
 a.post-title {
   display: block;
   cursor: pointer;
