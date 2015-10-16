@@ -166,3 +166,10 @@ footer {
 #ds-thread #ds-reset .ds-post-button:hover {
   color: rgb(140, 29, 177) !important;
 }
+#ds-reset .ds-icon {
+  background: transparent url("http://static.duoshuo.com/images/sprites.png") no-repeat !important;
+  background-position: 0 -130px !important;
+}
+#ds-thread #ds-reset .ds-account-control span.ds-icon {
+  background-position: 0 0 !important;
+}
