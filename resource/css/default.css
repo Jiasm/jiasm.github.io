@@ -126,20 +126,23 @@ footer {
 #ds-thread * {
   text-shadow: none !important;
   box-shadow: none !important;
-  background: none !important;
   background-color: transparent !important;
 }
 
 #ds-thread #ds-reset a.ds-like-thread-button.ds-rounded {
   color: rgba(255, 255, 255, .8) !important;
   border: .1rem rgba(231,231,231,.23) solid !important;
+  
+  background: none !important;
 }
 
 #ds-reset li.ds-tab a.ds-current {
   border: .1rem rgba(231,231,231,.23) solid !important;
+  background: none !important;
 }
 
 #ds-thread #ds-reset .ds-post-self {
+  background: none !important;
   border-top: none !important;
 }
 
@@ -148,28 +151,26 @@ footer {
 }
 
 #ds-thread #ds-reset .ds-account-control ul {
+  background: none !important;
   border: none !important;
 }
 
 #ds-thread #ds-reset .ds-account-control.ds-active ul li a,#ds-thread #ds-reset li.ds-post,#ds-thread #ds-reset .ds-comments {
+  background: none !important;
   border-top: none !important;
   border-bottom: 1px solid rgba(255,255,255,0.23);
 }
 
 #ds-thread #ds-reset .ds-textarea-wrapper,#ds-reset .ds-gradient-bg,#ds-thread #ds-reset .ds-post-options,#ds-thread #ds-reset .ds-meta,#ds-thread #ds-reset .ds-post-button {
   border: 1px solid rgba(255,255,255,0.23) !important;
+  background: none !important;
 }
 
 #ds-thread #ds-reset .ds-post-button,#ds-thread #ds-reset .ds-sort a.ds-current, #ds-thread #ds-reset .ds-sort a:active,#ds-reset .ds-highlight,#ds-thread #ds-reset .ds-comment-body a:hover, #ds-thread #ds-reset .ds-account-control.ds-active span,#ds-thread #ds-reset .ds-sort a:hover {
   color: rgb(143, 42, 177) !important;
+  background: none !important;
 }
 #ds-thread #ds-reset .ds-post-button:hover {
   color: rgb(140, 29, 177) !important;
-}
-#ds-reset .ds-icon {
-  background: transparent url("http://static.duoshuo.com/images/sprites.png") no-repeat !important;
-  background-position: 0 -130px !important;
-}
-#ds-thread #ds-reset .ds-account-control span.ds-icon {
-  background-position: 0 0 !important;
+  background: none !important;
 }
