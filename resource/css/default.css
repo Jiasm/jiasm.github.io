@@ -151,14 +151,13 @@ footer {
   border-bottom: 1px solid rgba(255,255,255,0.23);
 }
 
-#ds-thread #ds-reset .ds-textarea-wrapper,#ds-reset .ds-gradient-bg,#ds-thread #ds-reset .ds-post-options,#ds-thread #ds-reset .ds-meta {
+#ds-thread #ds-reset .ds-textarea-wrapper,#ds-reset .ds-gradient-bg,#ds-thread #ds-reset .ds-post-options,#ds-thread #ds-reset .ds-meta,#ds-thread #ds-reset .ds-post-button {
   border: 1px solid rgba(255,255,255,0.23) !important;
 }
 
 #ds-thread #ds-reset .ds-post-button,#ds-thread #ds-reset .ds-sort a.ds-current, #ds-thread #ds-reset .ds-sort a:active,#ds-reset .ds-highlight,#ds-thread #ds-reset .ds-comment-body a:hover, #ds-thread #ds-reset .ds-account-control.ds-active span,#ds-thread #ds-reset .ds-sort a:hover {
   color: rgb(143, 42, 177) !important;
 }
-
 #ds-thread #ds-reset .ds-post-button:hover {
   color: rgb(140, 29, 177) !important;
 }
