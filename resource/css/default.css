@@ -112,6 +112,9 @@ footer {
 #go2top:hover {
   color: rgba(255, 255, 255, .8);
 }
+::selection {
+  background-color: rgba(255, 255, 255, .2);
+}
 /*
   多说的默认样式
 */
