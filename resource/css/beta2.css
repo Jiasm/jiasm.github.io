@@ -21,19 +21,19 @@ body>header {
 	position: relative;
 	width: 20%;
 	margin-top: 2em;
-	transition: 0.5s background-color;
 }
 body>header>h1 {
 	color: #F2F2F2;
 	border: .2rem solid currentColor;
 	padding: .2rem .5rem;
-	transition: 0.5s color, border-color;
 }
 body>header:hover {
+	transition: 0.5s background-color;
 	background-color: #F2F2F2;
 }
 body>header:hover>h1 {
 	color: #84754E;
+	transition: 0.5s color, border-color;
 }
 body>header>h1>a {
 	display: block;
@@ -63,9 +63,9 @@ body>main article {
 	font-size: 1.6em;
 }
 body>main section a:hover {
-	transition: .5s color;
 	text-decoration: underline;
 	color: #84754E;
+	transition: .5s color;
 }
 .article {
 	border-bottom: 1px solid #eee;
@@ -78,11 +78,11 @@ body>main section a:hover {
 }
 .article .post-title {
 	font-size: 1.2em;
-	transition: 0.5s color, text-decoration;
 }
 .article .post-title:hover {
 	color: #84754E;
 	text-decoration: underline;
+	transition: 0.5s color;
 }
 .article .date-title {
   	float: right;
@@ -115,7 +115,6 @@ footer {
 	font-weight: 700;
 	background-color: #84754E;
 	display: none;
-	transition: 0.5s background-color, color;
 }
 #go2top:before {
 	content: "";
@@ -133,4 +132,5 @@ footer {
 #go2top:hover {
 	color: #84754E;
 	background-color: #F2F2F2;
+	transition: 0.5s background-color, color;
 }
