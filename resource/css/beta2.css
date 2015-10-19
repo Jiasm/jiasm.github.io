@@ -1,0 +1,118 @@
+.fork-me {
+	background-color: #84754E;
+	color: #FAFAF9;
+}
+* {
+	box-sizing:border-box;
+	line-height: 1.7;
+	font-family: cursive;
+}
+body>header {
+	font-size: 2rem;
+	background-color: #84754E;
+	color: #FAFAF9;
+	text-align: center;
+	width: auto;
+	padding: .2rem;
+	margin: 0 auto;
+	position: relative;
+	width: 20%;
+	margin-top: 2em;
+}
+body>header>h1 {
+	border: .2rem solid #FAFAF9;
+	padding: .2rem .5rem;
+}
+body>header>h1>a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+body>main {
+    padding: 1.5rem;
+    max-width: 800px;
+    margin: 4em auto 0;
+    border: 1px solid #F5F5F5;
+    background-color: #FDFDFD;
+    color: #202021;
+}
+body>main>header {
+	color: #84754E;
+	font-size: 2.5em;
+	border-bottom: 1px solid #84754e;
+}
+body>main>header>h1 {
+	margin-left: 1rem;
+}
+body>main img {
+	max-width: 100%;
+}
+body>main article {
+	font-size: 1.6em;
+}
+.article {
+	border-bottom: 1px solid #eee;
+    margin-top: 1.5em;
+    padding-bottom: 1em;
+    font-size: 1.6em;
+}
+.article:last-of-type {
+	border-bottom: none;
+}
+.article .post-title {
+	font-size: 1.2em;
+	transition: 0.5s color;
+	transition: 0.5s text-decoration;
+}
+.article .post-title:hover {
+	color: #84754E;
+	text-decoration: underline;
+}
+.article .date-title {
+  	float: right;
+}
+.article .ds-thread-count {
+	color: #B5B3B3;
+}
+footer {
+	background-color: #1f1f1f;
+	color: #84754e;
+	text-align: center;
+	font-size: 2em;
+	padding: 2em 0 .5em;
+}
+
+#go2top  {
+  bottom: 20px;
+  right: 50px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  display: block;
+  position: fixed;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  color: #FAFAF9;
+  border: .2rem solid currentColor;
+  font-size: 1.6em;
+  font-weight: 700;
+  background-color: #84754E;
+  display: none;
+}
+#go2top:before {
+  content: "";
+  display: block;
+  position: absolute;
+  border: .2rem solid currentColor;
+  width: .8rem;
+  height: .8rem;
+  top: 37%;
+  left: 31%;
+  transform: rotate(135deg);
+  border-top: none;
+  border-right: none;
+}
+#go2top:hover {
+  color: rgba(255, 255, 255, .8);
+}
