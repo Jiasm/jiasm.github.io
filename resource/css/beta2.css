@@ -62,6 +62,11 @@ body>main img {
 body>main article {
 	font-size: 1.6em;
 }
+body>main section a:hover {
+	transition: .5s color;
+	text-decoration: underline;
+	color: #84754E;
+}
 .article {
 	border-bottom: 1px solid #eee;
     margin-top: 1.5em;
