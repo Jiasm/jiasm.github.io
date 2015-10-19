@@ -166,6 +166,7 @@ footer {
   background: none !important;
 }
 
+
 #ds-thread #ds-reset .ds-post-button,#ds-thread #ds-reset .ds-sort a.ds-current, #ds-thread #ds-reset .ds-sort a:active,#ds-reset .ds-highlight,#ds-thread #ds-reset .ds-comment-body a:hover, #ds-thread #ds-reset .ds-account-control.ds-active span,#ds-thread #ds-reset .ds-sort a:hover {
   color: rgb(143, 42, 177) !important;
   background: none !important;
@@ -174,3 +175,14 @@ footer {
   color: rgb(140, 29, 177) !important;
   background: none !important;
 }
+#ds-thread #ds-reset #ds-bubble { 
+  color: rgb(51, 51, 51) !important; 
+  border: 1px solid rgb(170, 170, 170) !important;
+  background-color: rgb(255, 255, 255) !important; 
+}
+
+#ds-thread #ds-reset #ds-bubble a { color: rgb(231, 112, 100) !important; }
+
+#ds-thread #ds-reset #ds-bubble a:hover { color: rgb(221, 51, 34) !important; }
+
+#ds-thread #ds-reset #ds-bubble .ds-arrow-border { border-top-color: rgb(170, 170, 170) !important; }
