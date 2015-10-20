@@ -1,4 +1,4 @@
-﻿
+
 
 /*
   fork git 样式
@@ -49,4 +49,13 @@
   -webkit-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
+  
+}
+.complete footer  {
+  position: initial;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }

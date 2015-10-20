@@ -45,7 +45,8 @@
     })();
     /*引入多说 end*/
     //改装一下多说- -
-    function initDUOSHUO () {
+    function loadComplete () {
+      document.body.className += "complete";
       document.body.scrollTop = "0px";
       DUOSHUO.init();
       var countList = document.getElementsByClassName("ds-thread-count"),counts;
@@ -54,6 +55,7 @@
     }
     onload = function () {
       location.search?change():init();
+      loadComplete();
     }
     function init () {
       require(['feed/index'],function  (_data) {
@@ -88,7 +90,6 @@
           $panel.appendChild($article);
         }
         document.getElementById("article-list").appendChild($panel);
-        initDUOSHUO();
       });
     }
     function change () {
@@ -128,7 +129,6 @@
       duoshuoBox.push('" data-url="jiasm.github.io"></div>');
       
       container.innerHTML = $article.outerHTML + duoshuoBox.join("");
-      initDUOSHUO();
     }
     function createElement(tag) {
       return document.createElement(tag);
