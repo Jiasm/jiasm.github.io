@@ -29,6 +29,9 @@
         </a>
       </div>
     </div>
+    <div id="loading">
+  
+    </div>
   </footer>
   <script type="text/javascript" src="js/jquery.js"></script>
   <script type="text/javascript" src="js/require.js"></script>
@@ -47,11 +50,11 @@
     //改装一下多说- -
     function loadComplete () {
       document.body.scrollTop = "0px";
-      document.body.className += "complete";
       DUOSHUO.init();
       var countList = document.getElementsByClassName("ds-thread-count"),counts;
       for (var len = countList.length - 1, counts = countList[len]; len > 0; len--, counts = countList[len])
         counts.innerHTML = counts.innerHTML||"暂无评论";
+      document.body.className += "complete";
     }
     onload = function () {
       location.search?change():init();
