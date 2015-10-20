@@ -46,8 +46,8 @@
     /*引入多说 end*/
     //改装一下多说- -
     function loadComplete () {
-      document.body.className += "complete";
       document.body.scrollTop = "0px";
+      document.body.className += "complete";
       DUOSHUO.init();
       var countList = document.getElementsByClassName("ds-thread-count"),counts;
       for (var len = countList.length - 1, counts = countList[len]; len > 0; len--, counts = countList[len])
@@ -55,7 +55,6 @@
     }
     onload = function () {
       location.search?change():init();
-      loadComplete();
     }
     function init () {
       require(['feed/index'],function  (_data) {
@@ -90,6 +89,7 @@
           $panel.appendChild($article);
         }
         document.getElementById("article-list").appendChild($panel);
+        loadComplete();
       });
     }
     function change () {
@@ -129,6 +129,7 @@
       duoshuoBox.push('" data-url="jiasm.github.io"></div>');
       
       container.innerHTML = $article.outerHTML + duoshuoBox.join("");
+      loadComplete();
     }
     function createElement(tag) {
       return document.createElement(tag);
