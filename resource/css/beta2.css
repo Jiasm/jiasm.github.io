@@ -10,6 +10,8 @@
     border-right-color: transparent;
     border-radius: 50%;
     animation: spin 2s infinite;
+    top:45%;
+    left:45%;
 	top:calc(50% - 20px);
 	left:calc(50% - 20px);
 	position:fixed;
