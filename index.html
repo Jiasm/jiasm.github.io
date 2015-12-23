@@ -1,153 +1,174 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>index</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="resource/css/online/main.css" />
-<!--  调试使用 
+    <title>index</title>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+    if (typeof Symbol === "undefined") {
+        alert("your browser is too low b");
+        location.href = "about:blank";
+    }
+    </script>
+    <link rel="stylesheet" type="text/css" href="resource/css/online/reset.css" />
+    <link rel="stylesheet" type="text/css" href="resource/css/online/main.css" />
+    <!--  调试使用 
   <link rel="stylesheet" type="text/css" href="resource/css/reset.css" />
   <link rel="stylesheet" type="text/css" href="resource/css/base.css" />
   <link rel="stylesheet" type="text/css" href="resource/css/beta2.css" />
   <link rel="stylesheet" type="text/css" href="resource/css/highlight.css" /> 
 -->
-  <link rel="Shortcut Icon" href="resource/icon.ico">
+    <link rel="Shortcut Icon" href="resource/icon.ico">
 </head>
+
 <body>
-  <header>
-    <h1><a href="?">贾顺名</a></h1>
-  </header>
-  <main id="main">
-    <header><h1>全部文章</h1></header>
-    <ul id="article-list"></ul>
-  </main>
-  <footer>
-    &copy;贾顺名
-    <div id="go2top" title="灰上去"></div>
-    <div class="fork-me-wrapper">
-      <div class="fork-me">
-        <a class="fork-me-link" href="https://github.com/Jiasm/jiasm.github.io">
-          <span class="fork-me-text">
+    <header>
+        <h1><a href="?">贾顺名</a></h1>
+    </header>
+    <main id="main">
+        <header>
+            <h1>全部文章</h1></header>
+        <ul id="article-list"></ul>
+    </main>
+    <footer>
+        &copy;贾顺名
+        <div id="go2top" title="灰上去"></div>
+        <div class="fork-me-wrapper">
+            <div class="fork-me">
+                <a class="fork-me-link" href="https://github.com/Jiasm/jiasm.github.io">
+                    <span class="fork-me-text">
             F**k Me On GitHub
           </span>
-        </a>
-      </div>
-    </div>
-    <div id="loading">
-  
-    </div>
-  </footer>
-  <script type="text/javascript" src="js/jquery.js"></script>
-  <script type="text/javascript" src="js/require.js"></script>
-  <script type="text/javascript">
+                </a>
+            </div>
+        </div>
+        <div id="loading">
+        </div>
+    </footer>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/require.js"></script>
+    <script type="text/javascript">
+    "use strict";
     /*引入多说*/
-    var duoshuoQuery = {short_name:"jiasm"};
-    (function (){
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0] 
-       || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
+    var duoshuoQuery = {
+        short_name: "jiasm"
+    };
+    let ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
     /*引入多说 end*/
     //改装一下多说- -
-    function loadComplete () {
-      document.body.scrollTop = "0px";
-      DUOSHUO.init();
-      var countList = document.getElementsByClassName("ds-thread-count"),counts;
-      for (var len = countList.length - 1, counts = countList[len]; len > 0; len--, counts = countList[len])
-        counts.innerHTML = counts.innerHTML||"暂无评论";
-      document.body.className += "complete";
+    function loadComplete() {
+        document.body.scrollTop = "0px";
+        DUOSHUO.init();
+        let countList = $(".ds-thread-count");
+        countList.each((_, item) => {
+            if (!item.innerHTML)
+                item.innerHTML = "暂无评论";
+        })
+        document.body.className += "complete";
     }
-    onload = function () {
-      location.search?change():init();
+    onload = function() {
+        location.search ? change() : init();
     }
-    function init () {
-      require(['feed/index'],function  (_data) {
-        var datas = _data.data;
-        var $panel = document.createDocumentFragment();
-        var $article = createElement("li");
-        var $title = createElement("p");
-        var $postTitle = createElement("a");
-        var $dateTitle = createElement("time");
-        var $comments = createElement("p");
-        $article.className = "article";
-        $title.className = "title";
-        $postTitle.className = "post-title";
-        $dateTitle.className = "date-title";
-        for (var len = datas.length - 1; len >= 0; len--) {
-          var data = datas[len];
-          $article = $article.cloneNode();
-          $title = $title.cloneNode();
-          $postTitle = $postTitle.cloneNode();
-          $dateTitle = $dateTitle.cloneNode();
-          $comments = $comments.cloneNode();
-          $postTitle.innerHTML = data.title;
-          $postTitle.href = "?page=" + data.id;
-          $postTitle.title = data.title;
-          $postTitle.id = data.id;
-          $dateTitle.innerHTML = data.postDate;
-          $postTitle.appendChild($dateTitle);
-          $comments.innerHTML = '<span class="ds-thread-count" data-thread-key="' + data.id + '" data-count-type="comments"></span>';
-          $title.appendChild($postTitle);
-          $article.appendChild($title);
-          $article.appendChild($comments);
-          $panel.appendChild($article);
-        }
-        document.getElementById("article-list").appendChild($panel);
+
+    function init() {
+        require(['feed/index'], (_data) => {
+            let datas = _data.data;
+            let $panel = document.createDocumentFragment();
+            let $article = createElement("li");
+            let $title = createElement("p");
+            let $postTitle = createElement("a");
+            let $dateTitle = createElement("time");
+            let $comments = createElement("p");
+            $article.className = "article";
+            $title.className = "title";
+            $postTitle.className = "post-title";
+            $dateTitle.className = "date-title";
+            for (let len = datas.length - 1; len >= 0; len--) {
+                let data = datas[len];
+                $article = $article.cloneNode();
+                $title = $title.cloneNode();
+                $postTitle = $postTitle.cloneNode();
+                $dateTitle = $dateTitle.cloneNode();
+                $comments = $comments.cloneNode();
+                $postTitle.innerHTML = data.title;
+                $postTitle.href = "?page=" + data.id;
+                $postTitle.title = data.title;
+                $postTitle.id = data.id;
+                $dateTitle.innerHTML = data.postDate;
+                $postTitle.appendChild($dateTitle);
+                $comments.innerHTML = '<span class="ds-thread-count" data-thread-key="' + data.id + '" data-count-type="comments"></span>';
+                $title.appendChild($postTitle);
+                $article.appendChild($title);
+                $article.appendChild($comments);
+                $panel.appendChild($article);
+            }
+            document.getElementById("article-list").appendChild($panel);
+            loadComplete();
+        });
+    }
+
+    function change() {
+        let key = location.search.substring(1);
+        let search = generate(key);
+        require(["feed/" + search.page], (_data) => {
+            build(_data, document.getElementById("main"))
+        })
+    }
+
+    function generate(key) {
+        let kvs = key.split("&"),
+            kv, len, obj = {};
+        for (let len = kvs.length - 1, kv = kvs[len].split("="); len >= 0; kv = kvs[len--].split("="))
+            obj[kv[0]] = kv[1];
+        return obj;
+    }
+
+    function build(data, container) {
+        let $panel = document.createDocumentFragment();
+        let $article = createElement("article");
+        let $header = createElement("header");
+        let $postTitle = createElement("h1");
+        let $postDate = createElement("time");
+        let $content = createElement("section");
+        $postTitle.innerHTML = data.title;
+        $postDate.innerHTML = data.postDate;
+        $header.appendChild($postTitle);
+        $header.appendChild($postDate);
+        $article.appendChild($header);
+        $content.innerHTML = data.content;
+        $article.appendChild($content);
+        $panel.appendChild($article);
+        //添加多说评论框
+        let duoshuoBox = [];
+        duoshuoBox.push('<div class="ds-thread" data-thread-key="');
+        duoshuoBox.push(data.id);
+        duoshuoBox.push('" data-title="');
+        duoshuoBox.push(data.title);
+        duoshuoBox.push('" data-url="jiasm.github.io"></div>');
+
+        container.innerHTML = $article.outerHTML + duoshuoBox.join("");
         loadComplete();
-      });
     }
-    function change () {
-      var key = location.search.substring(1);
-      var search = generate(key);
-      require(["feed/" + search.page], function (_data) {
-        build(_data, document.getElementById("main"))
-      })
-    }
-    function generate (key) {
-      var kvs = key.split("&"), kv, len, obj = {};
-      for (var len = kvs.length - 1, kv = kvs[len].split("="); len >= 0; kv = kvs[len--].split("="))
-        obj[kv[0]] = kv[1];
-      return obj;
-    }
-    function build (data, container) {
-      var $panel = document.createDocumentFragment();
-      var $article = createElement("article");
-      var $header =createElement("header");
-      var $postTitle = createElement("h1");
-      var $postDate = createElement("time");
-      var $content = createElement("section");
-      $postTitle.innerHTML = data.title;
-      $postDate.innerHTML = data.postDate;
-      $header.appendChild($postTitle);
-      $header.appendChild($postDate);
-      $article.appendChild($header);
-      $content.innerHTML = data.content;
-      $article.appendChild($content);
-      $panel.appendChild($article);
-      //添加多说评论框
-      var duoshuoBox = [];
-      duoshuoBox.push('<div class="ds-thread" data-thread-key="');
-      duoshuoBox.push(data.id);
-      duoshuoBox.push('" data-title="');
-      duoshuoBox.push(data.title);
-      duoshuoBox.push('" data-url="jiasm.github.io"></div>');
-      
-      container.innerHTML = $article.outerHTML + duoshuoBox.join("");
-      loadComplete();
-    }
+
     function createElement(tag) {
-      return document.createElement(tag);
+        return document.createElement(tag);
     }
 
-    $(window).scroll(function(){
-      $(window).scrollTop()>100?$("#go2top").fadeIn(1000): $("#go2top").fadeOut(1000);
+    $(window).scroll(() => {
+        $(window).scrollTop() > 100 ? $("#go2top").fadeIn(1000) : $("#go2top").fadeOut(1000);
     });
 
-    $("#go2top").click(function(){
-      $('body,html').animate({scrollTop:0},1000);
+    $("#go2top").click(() => {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 1000);
     });
-  </script>
+    </script>
 </body>
+
 </html>
