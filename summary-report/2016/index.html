@@ -1,7 +1,182 @@
 <!DOCTYPE html>
 <html>
-	<head></head>
-	<body>
-		hello world
-	</body>
+
+<head>
+    <title>2015年终总结</title>
+    <meta charset="utf-8" />
+    <!-- 适配开始 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="browsermode" content="application">
+    <meta name="x5-page-mode" content="app">
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- 适应移动端end -->
+    <link rel="stylesheet" type="text/css" href="../../resource/css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../resource/css/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <style type="text/css" id="delay"></style>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/require.js"></script>
+</head>
+
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- page1 start -->
+            <div class="swiper-slide table canAnimate page1">
+                <div class="myAnimate delay-2 rubberBand hgroup">
+                    <h1>
+						<span class="myAnimate bounceInUp">2</span>
+						<span class="myAnimate delay-0d5 bounceInDown">0</span>
+						<span class="myAnimate delay-1 bounceInLeft">1</span>
+						<span class="myAnimate delay-1d5 bounceInRight">5</span>
+					</h1>
+                    <h2>年终总结</h2>
+                </div>
+            </div>
+            <!-- page1 end -->
+            <!-- page2 start -->
+            <div class="swiper-slide page2">
+                <h2 class="myAnimate" data-animate="bounceInUp">2015年目标完成状况</h2>
+                <div id="completeTable" class="table">
+                </div>
+            </div>
+            <!-- page2 end -->
+            <div class="swiper-slide page3">
+                <h2 class="myAnimate" data-animate="bounceInUp">2015年这一年</h2>
+                
+            </div>
+            <div class="swiper-slide">Slide 4</div>
+            <div class="swiper-slide">Slide 5</div>
+            <div class="swiper-slide">Slide 6</div>
+            <div class="swiper-slide">Slide 7</div>
+            <div class="swiper-slide">Slide 8</div>
+            <div class="swiper-slide">Slide 9</div>
+            <div class="swiper-slide">Slide 10</div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <script type="text/javascript">
+    $(function() {
+        var getDelay = buildDelayStyle(),
+            handlersMap = {
+                1: getPage1
+            },
+            baseHandler = function($slide, count, $slides) {
+                var $animates = $slide.find("[data-animate]");
+                $animates.each(function(_, $tag) {
+                    $tag = $($tag);
+                    $tag.addClass($tag.data("animate")).removeData("animate");
+                })
+                $slide.addClass("canAnimate");
+            };
+        require(['../../js/swiper'], function(Swiper) {
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                direction: 'vertical',
+                onSlideChangeEnd: getChangeHandler(registerHandler(baseHandler, handlersMap))
+            });
+        });
+
+
+        function registerHandler(baseHandler, handlersMap) {
+            return function($slides, count) {
+                var $slide = $slides.eq(count);
+                if ($slide.hasClass("canAnimate")) {
+                    return;
+                }
+                handlersMap[count] && handlersMap[count]($slide, count, $slides);
+                baseHandler && baseHandler($slide, count, $slides);
+            }
+        }
+
+        function getChangeHandler(handlerFunc) {
+            var $slides = $(".swiper-slide");
+            return function(swiper) {
+                handlerFunc($slides, swiper.activeIndex)
+            }
+        }
+
+        // 拼一个延迟动画的style，顺便返回一个获取延迟多少多少的class的函数
+        function buildDelayStyle() {
+            var innerHtml = "",
+                utilSize = 20,
+                delay,
+                result = {};
+            while (--utilSize) {
+                delay = utilSize / 2;
+                innerHtml += ".myAnimate.delay-";
+                innerHtml += (result[utilSize] = (delay + "").replace(/\./g, "d"), result[utilSize]);
+                innerHtml += "{";
+                innerHtml += "-webkit-animation-delay: ";
+                innerHtml += delay
+                innerHtml += "s;";
+                innerHtml += "animation-delay: ";
+                innerHtml += delay
+                innerHtml += "s;";
+                innerHtml += "}";
+            }
+            $("#delay").html(innerHtml);
+            return function(count) {
+                return result[count + 1];
+            }
+        }
+
+        function getPage1() {
+            var innerHtml = "",
+                targets = [{
+                    title: "学习EcmScript6",
+                    value: "done"
+                }, {
+                    title: "学习CSS3",
+                    value: "done"
+                }, {
+                    title: "学习zepto",
+                    value: "done"
+                }, {
+                    title: "学习Nodejs",
+                    value: "done"
+                }, {
+                    title: "换个新手机",
+                    value: "done"
+                }, {
+                    title: "换个新电脑",
+                    value: "undone"
+                }, {
+                    title: "减肥",
+                    value: "probably"
+                }],
+                len = targets.length,
+                index = 0;
+            while (index < len) {
+                innerHtml += "<p class='table-row'>";
+                innerHtml += "<span class='table-cell title myAnimate delay-";
+                innerHtml += getDelay(index);
+                innerHtml += "' data-animate='bounceInRight'>";
+                innerHtml += targets[index].title;
+                innerHtml += "</span>";
+                innerHtml += "<span class='table-cell value myAnimate delay-";
+                innerHtml += getDelay(index);
+                innerHtml += "' data-animate='bounceInLeft'>";
+                innerHtml += targets[index].value;
+                innerHtml += "</span>";
+                innerHtml += "</p>";
+                index++;
+            }
+            $("#completeTable").html(innerHtml);
+        }
+    })
+    </script>
+</body>
+
 </html>

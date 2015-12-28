@@ -1,0 +1,137 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    position: relative;
+    height: 100%;
+}
+
+body {
+    background-color: #fff;
+    font-family: "微软雅黑", sans-serif;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    color: #257FF2;
+    -webkit-background-clip: text;
+    -webkit-animation: hue 60s infinite linear;
+    box-sizing: border-box;
+} 
+h2 {
+    font-size: 1.5em;
+    text-indent: 1.5em;
+    padding-top: 2em;
+}
+
+@-webkit-keyframes hue {
+    from {
+        -webkit-filter: hue-rotate(0deg);
+    }
+    to {
+        -webkit-filter: hue-rotate(-360deg);
+    }
+}
+
+.table {
+    display: table;
+}
+
+.table .table-row {
+    display: table-row;
+}
+
+.table-row .table-cell {
+    display: table-cell;
+}
+
+.swiper-container {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.myAnimate {
+    visibility: hidden;
+}
+
+.canAnimate .myAnimate {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    visibility: visible;
+}
+
+/*
+	page1 start
+*/
+
+.page1 .hgroup {
+    vertical-align: middle;
+    text-align: center;
+    display: table-cell;
+}
+
+.page1 h1 {
+    font-size: 2em;
+}
+
+.page1 h2 {
+    font-size: 2em;
+    letter-spacing: .2em;
+    text-indent: 0;
+    padding-top: 0;
+}
+
+
+/*
+	page1 end
+*/
+
+
+/*
+	page2 start
+*/
+
+.page2 h2 {
+    font-size: 1.5em;
+    text-indent: 1.5em;
+    padding-top: 2em;
+}
+
+.page2 .table{
+    width: 100%;
+    padding-top: 3em;
+}
+
+.page2 .table-cell {
+    text-align: center;
+    height: 2.5em;
+}
+
+.page2 .table-cell.title {
+    width: 60%;
+}
+
+.page2 .table-cell.value {
+    width: 40%;
+    font-family: cursive, sans-serif;
+}
+
+
+/*
+	page2 end
+*/
+
+
+@media (max-width: 320px) {
+	body {
+		font-size: 16px;
+	}
+}
