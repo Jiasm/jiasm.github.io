@@ -1,6 +1,7 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box; 
 }
 
 html,
@@ -15,17 +16,20 @@ body {
     font-size: 20px;
     margin: 0;
     padding: 0;
-    color: #257FF2;
-    -webkit-background-clip: text;
-    -webkit-animation: hue 60s infinite linear;
-    -webkit-text-fill-color: transparent;
-    box-sizing: border-box;
-
-} 
+}
 h2 {
     font-size: 1.5em;
     text-indent: 1.5em;
     padding-top: 2em;
+    
+}
+
+.neon {
+    color: #257FF2;
+    background-image: -webkit-linear-gradient(92deg,#257FF2,#053675);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: hue 60s infinite linear;
 }
 
 @-webkit-keyframes hue {
@@ -62,7 +66,7 @@ h2 {
     visibility: hidden;
 }
 
-.canAnimate .myAnimate {
+.swiper-slide-active.canAnimate .myAnimate {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
@@ -70,14 +74,36 @@ h2 {
     visibility: visible;
 }
 
+.table{
+    width: 100%;
+    padding-top: 3em;
+}
+
+.table-cell {
+    text-align: center;
+    height: 2.5em;
+}
+.article {
+    font-size: 1em;
+    text-indent: 2em;
+    padding: 2em;
+    width: 100%;
+}
+.big {
+    font-size: 2em;
+}
+
 /*
 	page1 start
 */
-
 .page1 .hgroup {
     vertical-align: middle;
     text-align: center;
     display: table-cell;
+}
+
+.hgroup span {
+    display: inline-block;
 }
 
 .page1 h1 {
@@ -91,7 +117,9 @@ h2 {
     padding-top: 0;
 }
 
-
+.page1.table {
+    padding-top: 0;
+}
 /*
 	page1 end
 */
@@ -105,16 +133,6 @@ h2 {
     font-size: 1.5em;
     text-indent: 1.5em;
     padding-top: 2em;
-}
-
-.page2 .table{
-    width: 100%;
-    padding-top: 3em;
-}
-
-.page2 .table-cell {
-    text-align: center;
-    height: 2.5em;
 }
 
 .page2 .table-cell.title {
@@ -131,9 +149,53 @@ h2 {
 	page2 end
 */
 
+/*
+    page5 start
+*/
+#futureTable .table-cell {
+    padding-left: 3em;
+    text-align: left;
+}
+/*
+    page5 end
+*/
+
+/*
+    page7 start
+*/
+.page7 h2 span{
+    display: inline-block;
+}
+.myRe {
+    width: 90%;
+    margin: 0 auto;
+}
+/*
+    page7 end
+*/
 
 @media (max-width: 320px) {
 	body {
 		font-size: 16px;
 	}
+}
+
+/*
+    自己的东西，当然要任性了！
+*/
+@media (orientation:landscape) {
+    body {
+        display: none;
+    }
+    html:before {
+        content: "请在手机端或者竖屏下浏览";
+        font-size: 2em;
+        color: #257FF2;
+        top: 30%;
+        position: relative;
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+    }
 }
