@@ -1,7 +1,7 @@
 * {
     padding: 0;
     margin: 0;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 html,
@@ -17,16 +17,16 @@ body {
     margin: 0;
     padding: 0;
 }
+
 h2 {
     font-size: 1.5em;
     text-indent: 1.5em;
     padding-top: 2em;
-    
 }
 
 .neon {
     color: #257FF2;
-    background-image: -webkit-linear-gradient(92deg,#257FF2,#053675);
+    background-image: -webkit-linear-gradient(92deg, #257FF2, #053675);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     -webkit-animation: hue 60s infinite linear;
@@ -64,6 +64,11 @@ h2 {
 
 .myAnimate {
     visibility: hidden;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .swiper-slide-active.canAnimate .myAnimate {
@@ -74,7 +79,7 @@ h2 {
     visibility: visible;
 }
 
-.table{
+.table {
     width: 100%;
     padding-top: 3em;
 }
@@ -83,19 +88,23 @@ h2 {
     text-align: center;
     height: 2.5em;
 }
+
 .article {
     font-size: 1em;
     text-indent: 2em;
     padding: 2em;
     width: 100%;
 }
+
 .big {
     font-size: 2em;
 }
 
+
 /*
-	page1 start
+    page1 start
 */
+
 .page1 .hgroup {
     vertical-align: middle;
     text-align: center;
@@ -120,13 +129,15 @@ h2 {
 .page1.table {
     padding-top: 0;
 }
+
+
 /*
-	page1 end
+    page1 end
 */
 
 
 /*
-	page2 start
+    page2 start
 */
 
 .page2 h2 {
@@ -146,43 +157,54 @@ h2 {
 
 
 /*
-	page2 end
+    page2 end
 */
+
 
 /*
     page5 start
 */
+
 #futureTable .table-cell {
     padding-left: 3em;
     text-align: left;
 }
+
+
 /*
     page5 end
 */
 
+
 /*
     page7 start
 */
-.page7 h2 span{
+
+.page7 h2 span {
     display: inline-block;
 }
+
 .myRe {
     width: 90%;
     margin: 0 auto;
 }
+
+
 /*
     page7 end
 */
 
 @media (max-width: 320px) {
-	body {
-		font-size: 16px;
-	}
+    body {
+        font-size: 16px;
+    }
 }
+
 
 /*
     自己的东西，当然要任性了！
 */
+
 @media (orientation:landscape) {
     body {
         display: none;

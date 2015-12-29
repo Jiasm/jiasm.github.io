@@ -11,31 +11,31 @@ $(function() {
                 $tag.addClass($tag.data("animate")).removeData("animate");
             })
             $slide.addClass("canAnimate");
-            location.hash = "pageNo=" + count;
-        };
-    require(['../../js/swiper'], function(Swiper) {
-        var swiper = new Swiper('.swiper-container', {
+        },
+        swiper = new Swiper('.swiper-container', {
             pagination: '.swiper-pagination',
             paginationClickable: true,
             direction: 'vertical',
             onSlideChangeEnd: getChangeHandler(registerHandler(baseHandler, handlersMap))
         }),
-        count = location.hash ? location.hash.match(/\=(\d+)?$/)[1] : 0;
-        if (count) {
-            swiper.slideTo(count);
-        }
-            baseHandler($(".page1").eq(0), 0);
-    });
+        count = +(location.hash ? location.hash.match(/pageNo\=(\d+)?$/)[1] : 0);
+    if (count) {
+        swiper.slideTo(count);
+    } else {
+        baseHandler($(".page1"), count);
+    }
 
 
     function registerHandler(baseHandler, handlersMap) {
         return function($slides, count) {
             var $slide = $slides.eq(count);
+            location.hash = "pageNo=" + count;
             if ($slide.hasClass("canAnimate")) {
                 return;
+            } else {
+                handlersMap[count] && handlersMap[count]($slide, count, $slides);
+                baseHandler && baseHandler($slide, count, $slides);
             }
-            handlersMap[count] && handlersMap[count]($slide, count, $slides);
-            baseHandler && baseHandler($slide, count, $slides);
         }
     }
 
