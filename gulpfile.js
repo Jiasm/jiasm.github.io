@@ -11,6 +11,12 @@ gulp.task("style", () => gulp
 );
 
 gulp.task("default", () => {
-	gulp.start("style");
+	gulp.start("js");
 	console.log("success");
 })
+
+gulp.task("js", () => gulp
+	.src("js/*.js")
+	.pipe(concat("concat.js"))
+	.pipe(gulp.dest("build"))
+);

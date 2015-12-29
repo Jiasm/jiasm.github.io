@@ -18,6 +18,65 @@ body {
     padding: 0;
 }
 
+#content {
+    height: 100%;
+}
+
+#loading {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 233;
+    background-color: #ccc;
+    vertical-align: middle;
+    color: #257FF2;
+    padding-top: 0;
+}
+
+#loading h2 {
+    vertical-align: middle;
+    padding-top: 0;
+}
+
+#loading .dott {
+    animation: jump 1.5s infinite ease-in;
+    -webkit-animation: jump 1.5s infinite ease-in;
+}
+#loading .dott2 {
+    animation-delay: .2s;
+    -webkit-animation-delay: .2s;
+}
+#loading .dott3 {
+    animation-delay: .4s;
+    -webkit-animation-delay: .4s;
+}
+
+@keyframes jump {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    35% {
+        transform: translate3d(0, -.5em, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes jump {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+    35% {
+        -webkit-transform: translate3d(0, -.5em, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
 h2 {
     font-size: 1.5em;
     text-indent: 1.5em;
@@ -45,11 +104,11 @@ h2 {
     display: table;
 }
 
-.table .table-row {
+.table-row {
     display: table-row;
 }
 
-.table-row .table-cell {
+.table-cell {
     display: table-cell;
 }
 
@@ -117,6 +176,10 @@ h2 {
 
 .page1 h1 {
     font-size: 2em;
+}
+
+.page1 h1>span {
+    padding: 0 .2em;
 }
 
 .page1 h2 {

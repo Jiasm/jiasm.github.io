@@ -20,135 +20,30 @@
     <meta name="x5-page-mode" content="app">
     <meta name="msapplication-tap-highlight" content="no">
     <!-- 适应移动端end -->
-    <link rel="stylesheet" type="text/css" href="../../resource/css/swiper.min.css" />
+    <!--<link rel="stylesheet" type="text/css" href="../../resource/css/swiper.min.css" />
     <link rel="stylesheet" type="text/css" href="../../resource/css/animate.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />-->
+    <link rel="stylesheet" type="text/css" href="build/css/main.css" />
     <style type="text/css" id="delay"></style>
-    <script type="text/javascript" src="../../js/jquery.js"></script>
-    <script type="text/javascript" src="../../js/require.js"></script>
-    <script type="text/javascript" src="../../js/react.js"></script>
-    <script type="text/javascript" src="../../js/react-dom.js"></script>
-    <script type="text/javascript" src="../../js/browser.min.js"></script>
-    <script type="text/javascript" src="../../js/swiper.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="//static.duoshuo.com/embed.js"></script>
-    
 </head>
 
 <body>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <!-- page1 start -->
-            <div class="swiper-slide table page1">
-                <div class="myAnimate delay-2 hgroup" data-animate="rubberBand">
-                    <h1>
-                        <span class="myAnimate" data-animate="bounceInUp">
-                            <span class="neon">2</span>
-                        </span>
-                        <span class="myAnimate delay-0d5" data-animate="bounceInDown">
-                            <span class="neon">0</span>
-                        </span>
-                        <span class="myAnimate delay-1" data-animate="bounceInLeft">
-                            <span class="neon">1</span>
-                        </span>
-                        <span class="myAnimate delay-1d5" data-animate="bounceInRight">
-                            <span class="neon">5</span>
-                        </span>
-                    </h1>
-                    <h2 class="neon">年终总结</h2>
-                </div>
-            </div>
-            <!-- page1 end -->
-            <!-- page2 start -->
-            <div class="swiper-slide page2">
-                <h2 class="myAnimate" data-animate="bounceInUp">
-                    <span class="neon">2015年目标完成状况</span>
-                </h2>
-                <div id="completeTable" class="table">
-                </div>
-            </div>
-            <!-- page2 end -->
-            <!-- page3 start -->
-            <div class="swiper-slide page3">
-                <h2 class="myAnimate" data-animate="bounceInDown">
-                    <span class="neon">2015年这一年</span>
-                </h2>
-                <div class="article myAnimate delay-d5" data-animate="slideInUp">
-                    <p class="neon">
-                        2015年异常的快，也许是因为事情太多了，也许就是因为这一年本来就短，不管如何，这一年就这么过去了，人生并不像火车要通过每个站似的经过每一个生活阶段。人生总是直向前行走，从不留下什么。
-                    </p>
-                    <p class="neon">
-                        2015年自我感觉是比较不错的一年，学习了很多新技术，结交了一大波小伙伴，今年过的很<span class="big">幸福</span>。
-                    </p>
-                </div>
-            </div>
-            <!-- page3 end -->
-            <!-- page4 start -->
-            <div class="swiper-slide">
-                <h2 class="myAnimate" data-animate="rotateInDownRight">
-                    <span class="neon">自我评价</span>
-                </h2>
-                <div class="article myAnimate" data-animate="rotateInDownLeft">
-                    <p class="neon">
-                        虽然一直都在进步，但是自己也知道，还有很多不完美的地方，比如：</p>
-                    <p class="neon">
-                        过于粗心，经常导致代码带着bug上线- -
-                    </p>
-                    <p class="neon">
-                        不成熟，太轻易的就给人打保票，然后自己却做不到，搞得特别没意思。
-                    </p>
-                    <p class="neon">
-                        希望在新的一年里，自己做事能够更<span class="big">稳重</span>些。
-                    </p>
-                </div>
-            </div>
-            <!-- page4 end -->
-            <!-- page5 start -->
-            <div class="swiper-slide">
-                <h2 class="myAnimate" data-animate="bounceInDown">
-                    <span class="neon">2016年目标</span>
-                </h2>
-                <div id="futureTable" class="table">
-                </div>
-            </div>
-            <!-- page5 end -->
-            <!-- page6 start -->
-            <div class="swiper-slide">
-                <h2 class="myAnimate" data-animate="bounceInUp">
-                    <span class="neon">写在最后的话</span>
-                </h2>
-                <div class="article myAnimate" data-animate="fadeInUpBig">
-                    <p class="neon">
-                        父母恩，养育情。深似海，大如山。
-                    </p>
-                    <p class="neon">
-                        操劳苦，教养累，数不尽，报不完。
-                    </p>
-                    <p class="neon">
-                        常牵挂，多思念。情深深，意绵绵。
-                    </p>
-                    <p class="neon">
-                        声声诉，字字爱。衷心祝，永康健。
-                    </p>
-                    <p class="neon">
-                        爸妈，你们辛苦了！
-                    </p>
-                    <p class="neon">
-                        希望你们在新的一年里，身体健康，万事如意！
-                    </p>
-                </div>
-            </div>
-            <!-- page6 end -->
-            <!-- page7 start -->
-            <div class="swiper-slide page7">
-                <h2>
-                    <span class="myAnimate" data-animate="swing"><span class="neon">评论区</span></span>
-                </h2>
-                <div class="myRe ds-thread" data-thread-key="summary2015" data-title="2015年终总结" data-url="jiasm.github.io"></div>
-            </div>
-        </div>
-        <div class="swiper-pagination neon"></div>
+    <div id="content"></div>
+    <div id="loading" class="table">
+        <h2 class="table-cell"><span>加载中</span><span class="dott dott1">.</span><span class="dott dott2">.</span><span class="dott dott3">.</span></h2>
     </div>
+    <!--<script type="text/javascript" src="../../js/jquery.js" ></script>
+    <script type="text/javascript" src="../../js/react.min.js" ></script>
+    <script type="text/javascript" src="../../js/react-dom.js" ></script>
+    <script type="text/javascript" src="../../js/swiper.js" ></script>
+    <script type="text/javascript" src="build/index.js" ></script>-->
+    <script type="text/javascript" src="build/js/concat.js" ></script>
+    <script type="text/javascript">
+    var duoshuoQuery = {
+        short_name: "jiasm"
+    };
+    </script>
+    <script type="text/javascript" src="//static.duoshuo.com/embed.js"></script>
 </body>
 
 </html>
