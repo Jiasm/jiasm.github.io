@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style></style>
+	</head>
+	<body>
+		<h1>
+			è·ç¦»æ–°å¹´è¿˜æœ‰
+		</h1>
+		<div>
+			<span id="days">1</span>
+			å¤?
+			<span id="hours">22</span>
+			æ—?
+			<span id="minutes">33</span>
+			åˆ?
+			<span id="seconds">44</span>
+			ç§?
+		</div>
+		<script>
+		"use strict";
+		function CountDown (date, callback, step) {
+			if (typeof date === "string") {
+				date = Date.parse(date);
+			}
+
+			callback = callback || function () {};
+			step = step || 1000;
+			this.now = date;
+
+		}
+		</script>
+	</body>
+</html>
