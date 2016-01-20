@@ -270,17 +270,18 @@ h2 {
 
 @media (orientation:landscape) {
     body {
-        display: none;
-    }
-    html:before {
-        content: "请在手机端或者竖屏下浏览";
-        font-size: 2em;
-        color: #257FF2;
-        top: 30%;
-        position: relative;
-        display: block;
-        width: 100%;
+        width: 800px;
         margin: 0 auto;
-        text-align: center;
     }
+/*     html:before {
+    content: "请在手机端或者竖屏下浏览";
+    font-size: 2em;
+    color: #257FF2;
+    top: 30%;
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+} */
 }

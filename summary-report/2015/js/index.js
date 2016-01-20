@@ -241,7 +241,7 @@ $(function() {
                     value: "done"
                 }, {
                     title: "换个新电脑",
-                    value: "undone"
+                    value: "done"
                 }, {
                     title: "体重减到70KG",
                     value: "probably"
@@ -304,8 +304,6 @@ $(function() {
                     title: "用NodeJs搭建自己的网站"
                 }, {
                     title: "买个域名"
-                }, {
-                    title: "换个新电脑- -"
                 }, {
                     title: "把体重控制在68KG"
                 }],
