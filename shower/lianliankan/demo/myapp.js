@@ -474,7 +474,7 @@ var guiData = {
                                             "hasChildren": true,
                                             "style": {
                                                 "lineWidth": 2,
-                                                "lineColor": "Red",
+                                                "lineColor": "red",    // 点击的边框颜色
                                                 "fillColor": "White",
                                                 "textColor": "Black",
                                                 "fontSize": 15,
@@ -1033,49 +1033,6 @@ var guiData = {
                                                     }
                                                 }
                                             ]
-                                        },
-                                        {
-                                            "type": "ui-label",
-                                            "name": "ui-label",
-                                            "w": 265,
-                                            "h": 45,
-                                            "x": 98,
-                                            "y": 18,
-                                            "text": "High Scores",
-                                            "vTextAlign": "middle",
-                                            "hTextAlign": "center",
-                                            "xAttr": 3,
-                                            "yAttr": 3,
-                                            "widthAttr": 0,
-                                            "heightAttr": 0,
-                                            "autoAdjustHeight": false,
-                                            "xParam": 1,
-                                            "yParam": 1,
-                                            "widthParam": 1,
-                                            "heightParam": 1,
-                                            "isUILabel": true,
-                                            "isUIElement": true,
-                                            "hasChildren": true,
-                                            "ANIM_OLD_OUT": 1,
-                                            "ANIM_NEW_IN": 3,
-                                            "textInMiddle": true,
-                                            "style": {
-                                                "lineWidth": 2,
-                                                "lineColor": "Red",
-                                                "fillColor": "trans",
-                                                "textColor": "White",
-                                                "fontSize": 24,
-                                                "fontFamily": "serif",
-                                                "textB": true
-                                            },
-                                            "events": {
-                                                "onClick": null,
-                                                "onChanged": null,
-                                                "onOnUpdateTransform": null
-                                            },
-                                            "images": {
-                                                "display": 2
-                                            }
                                         },
                                         {
                                             "type": "ui-button",

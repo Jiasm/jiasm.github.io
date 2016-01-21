@@ -321,7 +321,7 @@ function onBeforeMainWinOpen(win) {
 			if(grid.isDone()) {
 				var now = new Date();
 				var cost = (now.getTime() - grid.startTime.getTime())/1000;
-				var tips = cost + " seconds";
+				var tips = cost + " seconds";	// 这里是结束后的
 				HighScores.add(window.gameLevel, "player", cost);
 				grid.openWindow("win_done", 
 					function (retCode) {
@@ -371,7 +371,7 @@ function onBeforeMainWinOpen(win) {
 				str = "0";
 			}
 
-			labelTime.setText(str);
+			labelTime.setText(str);	// 倒计时的
 			labelTime.postRedraw();
 
 			if(grid.isDone()) {
@@ -398,6 +398,7 @@ function onBeforeMainWinOpen(win) {
 			grid.updateTime();		
 		}
 
+		// 这里设置选中的边框颜色
 		if(!this.firstImage) {
 			this.firstImage = child;
 			child.setBorderStyle("blue", 1);
@@ -426,5 +427,5 @@ function onBeforeMainWinOpen(win) {
 		}
 	}
 
-	CanTK.getEffectsPlayer().load("disappear", "apps/llk/audio/disappear.mp3");
+	CanTK.getEffectsPlayer().load("disappear", "http://gameui.duapp.com/demos/animal-link/apps/llk/audio/disappear.mp3");
 }
