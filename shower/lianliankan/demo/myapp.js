@@ -300,7 +300,7 @@ var guiData = {
                                                         "onOnUpdateTransform": null
                                                     },
                                                     "images": {
-                                                        "display": 0,
+                                                        "display": 0,   // 这个是返回的按钮
                                                         "default_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/action_bar_back.png"
                                                     }
                                                 }
@@ -485,7 +485,7 @@ var guiData = {
                                                 "onOnUpdateTransform": null
                                             },
                                             "images": {
-                                                "display": 4,
+                                                "display": 4,   // 这些是连连看所需的图片
                                                 "default_bg": "http://gameui.duapp.com/demos/animal-link/apps\/llk\/images\/f00.png",
                                                 "option_image_0": "http://gameui.duapp.com/demos/animal-link/apps\/llk\/images\/f01.png",
                                                 "option_image_1": "http://gameui.duapp.com/demos/animal-link/apps\/llk\/images\/f02.png",
@@ -1028,7 +1028,7 @@ var guiData = {
                                                         "onOnUpdateTransform": null
                                                     },
                                                     "images": {
-                                                        "display": 0,
+                                                        "display": 0,   // 这个是关闭按钮的图片
                                                         "default_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/cancel.png"
                                                     }
                                                 }
@@ -1174,7 +1174,7 @@ var guiData = {
                                         "onClick": ""
                                     },
                                     "images": {
-                                        "display": 3,
+                                        "display": 3,   // 不知道干嘛使得
                                         "item_bg_normal": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/tab_item_1_bg_normal.png",
                                         "item_bg_active": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/tab_item_1_bg_active.png",
                                         "item_bg_current_active": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/tab_item_1_bg_current_active.png",
@@ -1310,7 +1310,7 @@ var guiData = {
                                                         "onUpdateData": null
                                                     },
                                                     "images": {
-                                                        "display": 2,
+                                                        "display": 2,   // 滚动条那个小图标
                                                         "scrollBarImg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/theme\/default\/android\/scrollbar.png"
                                                     },
                                                     "children": [
@@ -1350,7 +1350,7 @@ var guiData = {
                                                                 "onRemoved": null
                                                             },
                                                             "images": {
-                                                                "display": 2,
+                                                                "display": 2,   // 带圆圈的关闭按钮
                                                                 "delete_item": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/list_delete_item.png"
                                                             },
                                                             "children": [
@@ -1822,7 +1822,7 @@ var guiData = {
                                 "onSwithToFront": null
                             },
                             "images": {
-                                "display": 3,
+                                "display": 3,   // 背景图
                                 "default_bg": "http://gameui.duapp.com/demos/animal-link/apps\/llk\/images\/bg.jpg"
                             },
                             "children": [
@@ -1957,7 +1957,7 @@ var guiData = {
                                                         "onOnUpdateTransform": null
                                                     },
                                                     "images": {
-                                                        "display": 2,
+                                                        "display": 2,   // 初级的按钮
                                                         "focused_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_4.9.png",
                                                         "active_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_4_pressed.9.png",
                                                         "normal_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_4.9.png",
@@ -2047,7 +2047,7 @@ var guiData = {
                                                         "onOnUpdateTransform": null
                                                     },
                                                     "images": {
-                                                        "display": 2,
+                                                        "display": 2,   // 中级的按钮
                                                         "focused_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/button_blue.9.png",
                                                         "active_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/button_blue_active.9.png",
                                                         "normal_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/button_blue.9.png",
@@ -2137,7 +2137,7 @@ var guiData = {
                                                         "onOnUpdateTransform": null
                                                     },
                                                     "images": {
-                                                        "display": 2,
+                                                        "display": 2,   // 高级的按钮
                                                         "focused_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_3.9.png",
                                                         "active_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_3_pressed.9.png",
                                                         "normal_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_3.9.png",
@@ -2145,403 +2145,8 @@ var guiData = {
                                                     }
                                                 }
                                             ]
-                                        },
-                                        {
-                                            "type": "ui-list-item",
-                                            "name": "ui-list-item",
-                                            "w": 335,
-                                            "h": 80,
-                                            "x": 5,
-                                            "y": 245,
-                                            "text": "",
-                                            "xAttr": 0,
-                                            "yAttr": 0,
-                                            "widthAttr": 2,
-                                            "heightAttr": 0,
-                                            "autoAdjustHeight": false,
-                                            "xParam": 1,
-                                            "yParam": 1,
-                                            "widthParam": 1,
-                                            "heightParam": 1,
-                                            "isUIListItem": true,
-                                            "isUIElement": true,
-                                            "hasChildren": true,
-                                            "ANIM_DRAW_LINE": 1,
-                                            "style": {
-                                                "lineWidth": 2,
-                                                "lineColor": "rgba(0,0,0,0)",
-                                                "fillColor": "rgba(0,0,0,0)",
-                                                "textColor": "rgba(0,0,0,0)",
-                                                "fontSize": 10,
-                                                "fontFamily": "serif"
-                                            },
-                                            "events": {
-                                                "onClick": null,
-                                                "onLongPress": null,
-                                                "onRemoved": null
-                                            },
-                                            "images": {
-                                                "display": 2
-                                            },
-                                            "children": [
-                                                {
-                                                    "type": "ui-button",
-                                                    "name": "ui-button",
-                                                    "w": 331,
-                                                    "h": 72,
-                                                    "x": 2,
-                                                    "y": 4,
-                                                    "text": "High Scores",
-                                                    "vTextAlign": "middle",
-                                                    "hTextAlign": "center",
-                                                    "xAttr": 3,
-                                                    "yAttr": 3,
-                                                    "widthAttr": 1,
-                                                    "heightAttr": 1,
-                                                    "wMin": 50,
-                                                    "hMin": 40,
-                                                    "enableAutoScaleFontSize": true,
-                                                    "xParam": 1,
-                                                    "yParam": 1,
-                                                    "widthParam": 0.98805970149254,
-                                                    "heightParam": 0.9,
-                                                    "isUIButton": true,
-                                                    "isUIElement": true,
-                                                    "hasChildren": true,
-                                                    "widthScaleMin": 100,
-                                                    "widthScaleMax": 800,
-                                                    "heightScaleMin": 40,
-                                                    "heightScaleMax": 156,
-                                                    "style": {
-                                                        "lineWidth": 2,
-                                                        "lineColor": "Red",
-                                                        "fillColor": "White",
-                                                        "textColor": "#E0E0E0",
-                                                        "fontSize": 22,
-                                                        "fontFamily": "serif",
-                                                        "textB": true,
-                                                        "enableGradient": true
-                                                    },
-                                                    "events": {
-                                                        "onClick": "this.openWindow(\"win_high_scores\", \n\tfunction (retCode) {console.log(\"window closed.\");}, false);",
-                                                        "onOnUpdateTransform": null
-                                                    },
-                                                    "images": {
-                                                        "display": 2,
-                                                        "focused_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_2.9.png",
-                                                        "active_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_2_pressed.9.png",
-                                                        "normal_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_2.9.png",
-                                                        "disable_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/btn_2.9.png"
-                                                    }
-                                                }
-                                            ]
                                         }
                                     ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "ui-window",
-                            "name": "win_help",
-                            "w": 460,
-                            "h": 740,
-                            "x": 0,
-                            "y": 0,
-                            "text": "",
-                            "xAttr": 0,
-                            "yAttr": 0,
-                            "widthAttr": 2,
-                            "heightAttr": 2,
-                            "animHint": "scale",
-                            "xParam": 1,
-                            "yParam": 1,
-                            "widthParam": 1,
-                            "heightParam": 1,
-                            "isUINormalWindow": true,
-                            "isUIWindow": true,
-                            "isUIElement": true,
-                            "hasChildren": true,
-                            "style": {
-                                "lineWidth": 2,
-                                "lineColor": "Green",
-                                "fillColor": "#dcdcdc",
-                                "textColor": "Black",
-                                "fontSize": 16,
-                                "fontFamily": "serif"
-                            },
-                            "events": {
-                                "onClick": "",
-                                "onLoad": null,
-                                "onUnload": null,
-                                "onOpen": "console.log(\"onOpen was triggered\")",
-                                "onBeforeOpen": null,
-                                "onClose": "console.log(\"onClose was triggered\")",
-                                "onSwitchToBack": null,
-                                "onSwitchToFront": null,
-                                "onGesture": null,
-                                "onKeyDown": null,
-                                "onKeyUp": null,
-                                "onSwithToBack": null,
-                                "onSwithToFront": null
-                            },
-                            "images": {
-                                "display": 4
-                            },
-                            "children": [
-                                {
-                                    "type": "ui-toolbar",
-                                    "name": "ui-toolbar",
-                                    "w": 460,
-                                    "h": 80,
-                                    "x": 0,
-                                    "y": 0,
-                                    "text": "",
-                                    "xAttr": 0,
-                                    "yAttr": 4,
-                                    "widthAttr": 2,
-                                    "heightAttr": 0,
-                                    "wMin": 100,
-                                    "wMax": 2000,
-                                    "hMin": 40,
-                                    "hMax": 200,
-                                    "xParam": 1,
-                                    "yParam": 1,
-                                    "widthParam": 1,
-                                    "heightParam": 1,
-                                    "isUIToolBar": true,
-                                    "isUIElement": true,
-                                    "hasChildren": true,
-                                    "style": {
-                                        "lineWidth": 2,
-                                        "lineColor": "Green",
-                                        "fillColor": "#7ecce9",
-                                        "textColor": "Black",
-                                        "fontSize": 16,
-                                        "fontFamily": "serif"
-                                    },
-                                    "events": {
-                                        "onClick": "console.log(\"onClick was triggered\")"
-                                    },
-                                    "images": {
-                                        "display": 2
-                                    },
-                                    "children": [
-                                        {
-                                            "type": "ui-button",
-                                            "name": "ui-button",
-                                            "w": 73,
-                                            "h": 80,
-                                            "x": 387,
-                                            "y": 0,
-                                            "text": "",
-                                            "vTextAlign": "middle",
-                                            "hTextAlign": "center",
-                                            "xAttr": 5,
-                                            "yAttr": 3,
-                                            "widthAttr": 1,
-                                            "heightAttr": 2,
-                                            "wMin": 50,
-                                            "hMin": 50,
-                                            "enableAutoScaleFontSize": true,
-                                            "xParam": 1,
-                                            "yParam": 1,
-                                            "widthParam": 0.15869565217391,
-                                            "heightParam": 1,
-                                            "isUIButton": true,
-                                            "isUIElement": true,
-                                            "hasChildren": true,
-                                            "widthScaleMin": 50,
-                                            "widthScaleMax": 200,
-                                            "heightScaleMin": 42,
-                                            "heightScaleMax": 170,
-                                            "style": {
-                                                "lineWidth": 2,
-                                                "lineColor": "Red",
-                                                "fillColor": "#358de7",
-                                                "textColor": "#E0E0E0",
-                                                "fontSize": 20,
-                                                "fontFamily": "serif",
-                                                "textB": true
-                                            },
-                                            "events": {
-                                                "onClick": null,
-                                                "onOnUpdateTransform": null
-                                            },
-                                            "images": {
-                                                "display": 0
-                                            }
-                                        },
-                                        {
-                                            "type": "ui-button",
-                                            "name": "ui-button",
-                                            "w": 57,
-                                            "h": 80,
-                                            "x": 0,
-                                            "y": 0,
-                                            "text": "",
-                                            "vTextAlign": "middle",
-                                            "hTextAlign": "center",
-                                            "xAttr": 4,
-                                            "yAttr": 3,
-                                            "widthAttr": 1,
-                                            "heightAttr": 2,
-                                            "wMin": 50,
-                                            "hMin": 50,
-                                            "enableAutoScaleFontSize": true,
-                                            "xParam": 1,
-                                            "yParam": 1,
-                                            "widthParam": 0.12391304347826,
-                                            "heightParam": 1,
-                                            "isUIButton": true,
-                                            "isUIElement": true,
-                                            "hasChildren": true,
-                                            "widthScaleMin": 50,
-                                            "widthScaleMax": 200,
-                                            "heightScaleMin": 42,
-                                            "heightScaleMax": 170,
-                                            "style": {
-                                                "lineWidth": 2,
-                                                "lineColor": "Red",
-                                                "fillColor": "#358de7",
-                                                "textColor": "#E0E0E0",
-                                                "fontSize": 20,
-                                                "fontFamily": "serif",
-                                                "textB": true
-                                            },
-                                            "events": {
-                                                "onClick": "var retCode = 0;\nthis.closeWindow(retCode);",
-                                                "onOnUpdateTransform": null
-                                            },
-                                            "images": {
-                                                "display": 0
-                                            },
-                                            "children": [
-                                                {
-                                                    "type": "ui-image",
-                                                    "name": "ui-image",
-                                                    "w": 54,
-                                                    "h": 49,
-                                                    "x": 2,
-                                                    "y": 16,
-                                                    "text": "",
-                                                    "xAttr": 3,
-                                                    "yAttr": 3,
-                                                    "widthAttr": 0,
-                                                    "heightAttr": 0,
-                                                    "clickable": false,
-                                                    "clickedStyleParam": 0.8,
-                                                    "clickedStyleType": 2,
-                                                    "imageRotation": 0,
-                                                    "xParam": 1,
-                                                    "yParam": 1,
-                                                    "widthParam": 1,
-                                                    "heightParam": 1,
-                                                    "isUIImage": true,
-                                                    "isUIElement": true,
-                                                    "hasChildren": true,
-                                                    "style": {
-                                                        "lineWidth": 2,
-                                                        "lineColor": "Red",
-                                                        "fillColor": "#65b6fe",
-                                                        "textColor": "Black",
-                                                        "fontSize": 16,
-                                                        "fontFamily": "serif"
-                                                    },
-                                                    "events": {
-                                                        "onClick": null,
-                                                        "onOnUpdateTransform": null
-                                                    },
-                                                    "images": {
-                                                        "display": 0,
-                                                        "default_bg": "http://gameui.duapp.com/demos/animal-link/drawapp8\/images\/common\/icons\/hdpi\/cancel.png"
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "type": "ui-label",
-                                            "name": "ui-label",
-                                            "w": 242,
-                                            "h": 58,
-                                            "x": 109,
-                                            "y": 11,
-                                            "text": "Help",
-                                            "vTextAlign": "middle",
-                                            "hTextAlign": "center",
-                                            "xAttr": 3,
-                                            "yAttr": 3,
-                                            "widthAttr": 0,
-                                            "heightAttr": 0,
-                                            "autoAdjustHeight": false,
-                                            "xParam": 1,
-                                            "yParam": 1,
-                                            "widthParam": 1,
-                                            "heightParam": 1,
-                                            "isUILabel": true,
-                                            "isUIElement": true,
-                                            "hasChildren": true,
-                                            "ANIM_OLD_OUT": 1,
-                                            "ANIM_NEW_IN": 3,
-                                            "textInMiddle": true,
-                                            "style": {
-                                                "lineWidth": 2,
-                                                "lineColor": "Red",
-                                                "fillColor": "trans",
-                                                "textColor": "White",
-                                                "fontSize": 28,
-                                                "fontFamily": "serif",
-                                                "textB": true
-                                            },
-                                            "events": {
-                                                "onClick": null,
-                                                "onChanged": null,
-                                                "onOnUpdateTransform": null
-                                            },
-                                            "images": {
-                                                "display": 2
-                                            }
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "ui-image",
-                                    "name": "ui-image",
-                                    "w": 460,
-                                    "h": 660,
-                                    "x": 0,
-                                    "y": 80,
-                                    "text": "",
-                                    "xAttr": 3,
-                                    "yAttr": 6,
-                                    "widthAttr": 2,
-                                    "heightAttr": 3,
-                                    "clickable": false,
-                                    "clickedStyleParam": 0.8,
-                                    "clickedStyleType": 0,
-                                    "imageRotation": 0,
-                                    "xParam": 1,
-                                    "yParam": 1,
-                                    "widthParam": 1,
-                                    "heightParam": 1,
-                                    "isUIImage": true,
-                                    "isUIElement": true,
-                                    "hasChildren": true,
-                                    "style": {
-                                        "lineWidth": 2,
-                                        "lineColor": "Red",
-                                        "fillColor": "White",
-                                        "textColor": "Black",
-                                        "fontSize": 16,
-                                        "fontFamily": "serif"
-                                    },
-                                    "events": {
-                                        "onClick": null,
-                                        "onOnUpdateTransform": null
-                                    },
-                                    "images": {
-                                        "display": 3,
-                                        "default_bg": "http://gameui.duapp.com/demos/animal-link/apps\/llk\/images\/help.jpg"
-                                    }
                                 }
                             ]
                         }
