@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<style></style>
-	</head>
-	<body>
-		<h1>
-			距离新年还有
+
+<head>
+    <meta charset='utf-8'>
+    <style></style>
+</head>
+
+<body>
+    <h1>
+			距离过年还有
 		</h1>
-		<div>
-			<span id="days">1</span>
-			�?
-			<span id="hours">22</span>
-			�?
-			<span id="minutes">33</span>
-			�?
-			<span id="seconds">44</span>
-			�?
-		</div>
-		<script>
-		"use strict";
-		function CountDown (date, callback, step) {
-			if (typeof date === "string") {
-				date = Date.parse(date);
-			}
+    <div id="newYear">
+    </div>
+    <script>
+    'use strict';
 
-			callback = callback || function () {};
-			step = step || 1000;
-			this.now = date;
+    function newYear() {
+        var newYear = new Date();
+        newYear.setFullYear(2016);
+        newYear.setMonth(2);
+        newYear.setDate(7);
+        newYear.setHours(24);
+        newYear.setMinutes(0);
+        newYear.setSeconds(0);
+        var miniSeconds = newYear.getTime() - new Date().getTime();
+        var second = miniSeconds / 1000,
+        	minutes = second / 60,
+        	hours = minutes / 60,
+        	date = hours / 24,
+        	month = date / 31;
+        document.getElementById("newYear").innerHTML = "距离新年还有:<br/>"+ month + "月;<br/>"+ date + "天;<br/>" + hours + "小时;<br/>" + minutes + "分钟;<br/>" + second + "秒;<br/>";
+    }
+    setInterval(newYear, 1000);
+    </script>
+</body>
 
-		}
-		</script>
-	</body>
 </html>
