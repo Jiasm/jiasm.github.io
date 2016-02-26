@@ -71,6 +71,7 @@
                 item.innerHTML = "暂无评论";
         })
         document.body.className += "complete";
+        Prism.highlightAll();   // 语法高亮
     }
     onload = function() {
         location.search ? change() : init();
