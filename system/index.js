@@ -83,7 +83,7 @@ function buildIndex() { // 生成博文目录的数据
 // 提交改动到git
 function gitCommit() {
     var exec = require('child_process').exec,
-        cmd = 'git add -all';
+        cmd = 'git add --all';
     exec(cmd, (error) => {
         if (error) {
             console.error(error);
