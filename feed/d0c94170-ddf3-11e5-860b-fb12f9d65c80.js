@@ -1,1 +1,0 @@
-define({"id":"d0c94170-ddf3-11e5-860b-fb12f9d65c80","title":"16年第一弹！！","postDate":"2016/2/28 16:18:15","content":"<pre class=\"language-javascript\"><code> \"哈\".repeat(233);</code></pre><p>用俺自己的博客后台提交博文就是不一样</p><p>&nbsp;</p>"});

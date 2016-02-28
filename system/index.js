@@ -4,11 +4,11 @@ var express = require("express"),
     fs = require("fs"),
     uuid = require("node-uuid"),
     bodyParser = require("body-parser"),
-    feedPath = "../feed/", // 博客数据存储位置
+    feedPath = "../feed/", 	// 博客数据存储位置
     feddIndex = "index.js"; // 博客目录文件名
 
 app.set("view engine", "ejs");
-app.use(express.static(`${__dirname}/resource`)); //
+app.use(express.static(`${__dirname}/resource`)); 
 app.set("views", `${__dirname}/views`);
 app.use(bodyParser.urlencoded({
     extended: true
@@ -39,9 +39,9 @@ app.post("/newBlog", (req, res) => {
                 console.error("博文js文件生成出错了。");
             } else {
                 console.log("博文js文件生成完毕。");
-                buildIndex(); // 重新生成index.js
-                gitCommit(); // 提交到git
-                res.redirect("http://jiasm.github.io/"); // 跳转到博客
+                buildIndex(); 								// 重新生成index.js
+                gitCommit(); 								// 提交到git
+                res.redirect("http://jiasm.github.io/"); 	// 跳转到博客
             }
         })
     });
@@ -52,11 +52,11 @@ app.listen(12306, () => {
 
 // 调用该函数 重新生成目录.js
 function buildIndex() { // 生成博文目录的数据
-    let items = []; // 博文列表
+    let items = []; 	// 博文列表
     var files = fs.readdirSync(feedPath);
     // 获取所有的博文
     files.forEach((item) => {
-        if (item != feddIndex) { // 跳过目录.js
+        if (item != feddIndex) { 		// 跳过目录.js
             let itemPath = `${feedPath}${item}`;
             let stats = fs.statSync(itemPath);
             if (!stats.isDirectory()) { // 如果是文件
@@ -66,6 +66,8 @@ function buildIndex() { // 生成博文目录的数据
                 if (/\{id\:/.test(str)) { // 如果json的key不标准（没有双引号）给他加上
                     str = str.replace(/(\w+)?\:\"/g, "\"$1\"\:\"");
                 }
+                var obj = JSON.parse(str);
+                obj.postDate = obj.postDate.replace(/\-/g, "\/");	// 将之前的日期的横线转一下
                 items.push(JSON.parse(str));
             }
         }

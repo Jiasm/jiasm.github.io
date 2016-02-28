@@ -1,0 +1,1 @@
+define({"id":"a330f990-ddf5-11e5-bb7f-254ceba07681","title":"2016年第一弹!!!","postDate":"2016/2/28 16:31:17","content":"<h2>用自家的博客后台提交博文，高大上有木有！！！</h2><pre class=\"language-javascript\"><code>var haha = 123; // 测测高亮</code></pre>"});
