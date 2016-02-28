@@ -39,9 +39,9 @@ app.post("/newBlog", (req, res) => {
                 console.error("博文js文件生成出错了。");
             } else {
                 console.log("博文js文件生成完毕。");
-                buildIndex(); // 重新生成index.js
-                res.writeHeader(200, { 'Content-Type': 'text/html;charset=UTF-8' })
-                res.end("<h1>博客提交完成</h1>");
+                buildIndex(); 	// 重新生成index.js
+                gitCommit();	// 提交到git
+    			res.redirect("http://jiasm.github.io/");	// 跳转到博客
             }
         })
     });
@@ -66,9 +66,7 @@ function buildIndex() { // 生成博文目录的数据
                 if (/\{id\:/.test(str)) { // 如果json的key不标准（没有双引号）给他加上
                     str = str.replace(/(\w+)?\:\"/g, "\"$1\"\:\"");
                 }
-                var obj = JSON.parse(str);
-                //console.log(obj.title);
-                items.push(obj);
+                items.push(JSON.parse(str));
             }
         }
     });
@@ -79,31 +77,25 @@ function buildIndex() { // 生成博文目录的数据
     var indexRender = `define(${JSON.stringify({data : items})});`;
 
     console.log("开始生成目录文件：");
-    fs.writeFile(`${feedPath}${feddIndex}`, indexRender, (err) => {
-        if (err) {
-            console.error("目录文件生成失败。");
+    fs.writeFileSync(`${feedPath}${feddIndex}`, indexRender);
+}
+
+// 提交改动到git
+function gitCommit() {
+    var exec = require('child_process').exec,
+        cmd = 'git add -all';
+    exec(cmd, (error) => {
+        if (error) {
+            console.error(error);
         } else {
-            console.log("目录文件生成完毕。")
+            let cmd = `git commit -m "${"来自本地博客后台系统" + new Date()}`;
+            exec(cmd, (error) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(`提交完成：${new Date()}`);
+                }
+            })
         }
     });
 }
-
-function gitCommit() {
-
-}
-var exec = require('child_process').exec,
-    cmd = 'git add index.js';
-exec(cmd, (error) => {
-    if (error) {
-        console.error(error);
-    } else {
-        let cmd = 'git commit -m "测试node exec提交git"'
-        exec(cmd, (error) => {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log("提交完成");
-            }
-        })
-    }
-});

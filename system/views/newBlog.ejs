@@ -38,10 +38,11 @@
 </head>
 
 <body>
-    <h2><%= userId%></h2>
+    <h2>新博客</h2>
     <form method="post" action="">
         <div>
             <div>
+                <input type="text" id="blogTitle" name="blogTitle" placeholder="标题">
                 <textarea id="blogContent" name="blogContent" rows="25" cols="80" style="width: 80%"></textarea>
                 <input type="submit" name="save" value="Submit" />
                 <input type="reset" name="reset" value="Reset" />

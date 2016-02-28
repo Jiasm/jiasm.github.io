@@ -1,0 +1,1 @@
+define({"id":"6d7d4050-ddf1-11e5-8177-7527929b2221","title":"2016年第一弹","postDate":"2016/2/28 16:1:9","content":"<p>第一次通过自己做得后台来提交博客，好激动。。。</p><pre class=\"language-javascript\"><code>var test = 123; // 顺便测测高亮</code></pre>"});
