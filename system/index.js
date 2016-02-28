@@ -39,9 +39,9 @@ app.post("/newBlog", (req, res) => {
                 console.error("博文js文件生成出错了。");
             } else {
                 console.log("博文js文件生成完毕。");
-                buildIndex(); 	// 重新生成index.js
-                gitCommit();	// 提交到git
-    			res.redirect("http://jiasm.github.io/");	// 跳转到博客
+                buildIndex(); // 重新生成index.js
+                gitCommit(); // 提交到git
+                res.redirect("http://jiasm.github.io/"); // 跳转到博客
             }
         })
     });
@@ -93,7 +93,13 @@ function gitCommit() {
                 if (error) {
                     console.error(error);
                 } else {
-                    console.log(`提交完成：${new Date()}`);
+                    exec('git push', (error) => {
+                        if (error) {
+                            console.error(error);
+                        } else {
+                            console.log(`提交完成：${new Date()}`);
+                        }
+                    })
                 }
             })
         }
