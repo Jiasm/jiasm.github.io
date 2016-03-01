@@ -67,7 +67,7 @@
         document.body.scrollTop = "0px";
         DUOSHUO.init();
         let countList = $(".ds-thread-count");
-        countList.each((_, item) => {
+        countList.each(function (_, item) {
             if (!item.innerHTML)
                 item.innerHTML = "暂无评论";
         })
@@ -79,7 +79,7 @@
     }
 
     function init() {
-        require(['feed/index'], (_data) => {
+        require(['feed/index'], function (_data) {
             let datas = _data.data;
             let $panel = document.createDocumentFragment();
             let $article = createElement("li");
@@ -118,7 +118,7 @@
     function change() {
         let key = location.search.substring(1);
         let search = generate(key);
-        require(["feed/" + search.page], (_data) => {
+        require(["feed/" + search.page], function (_data) {
             build(_data, document.getElementById("main"))
         })
     }
@@ -162,11 +162,11 @@
         return document.createElement(tag);
     }
 
-    $(window).scroll(() => {
+    $(window).scroll(function () {
         $(window).scrollTop() > 100 ? $("#go2top").fadeIn(1000) : $("#go2top").fadeOut(1000);
     });
 
-    $("#go2top").click(() => {
+    $("#go2top").click(function () {
         $('body,html').animate({
             scrollTop: 0
         }, 1000);
