@@ -1,7 +1,7 @@
-var handlerName = "ontouchstart" in document ? "touchstart" : "click";
 $(function() {
+    FastClick.attach(document.body);
     if (document.body.addEventListener) {
-        document.body.addEventListener(handlerName, function() {});
+        document.body.addEventListener("click", function() {});
     }
     var $loading = $(".loading").show(),
         $imgs = $("img[data-src]"),
@@ -22,11 +22,11 @@ $(function() {
         }).show();
     });
     // 切换难度事件
-    var $diffItem = $(".diff-item .diff-default").on(handlerName, function() {
+    var $diffItem = $(".diff-item .diff-default").on("click", function() {
         $diffItem.parent().removeClass("selected");
         $(this).parent().addClass("selected");
     });
-    $("#go2Play").on(handlerName, function() {
+    $("#go2Play").on("click", function() {
         if ($(".diff-item.selected").length <= 0) {
             alert("请选择游戏难度");
         } else {
@@ -34,11 +34,9 @@ $(function() {
             $loading.show();
             // 选择的图片列表
             var swiperImgs = [
-                'puzzle01.jpg',
-                'puzzle02.jpg',
-                'puzzle03.jpg',
-                'puzzle04.jpg',
-                'puzzle05.jpg'
+                'item1.jpg',
+                'item2.jpg',
+                'item3.jpg'
             ];
             // 用于生成选择图片界面的资源数组
             // 命名为原图名+.min+图片后缀
@@ -63,7 +61,7 @@ $(function() {
             }
         }
     });
-    $("#next").on(handlerName, function() {
+    $("#next").on("click", function() {
         $("#example-image").hide();
         var imgSrc = $(".swiper-slide-active img").attr("src"); // 获取当前选中图片的路径
         go2Play(imgSrc);
@@ -105,7 +103,7 @@ function generateSwiper(imgs) {
 
 function removeHandlers() {
     // 下方操作按钮事件重置及绑定
-    $("#refresh").add($("#level")).add($("#pause")).off(handlerName + ".control");
+    $("#refresh").add($("#level")).add($("#pause")).off("click" + ".control");
     $(window).off("resize.puzzle");
 }
 
@@ -117,9 +115,9 @@ function showMessage(html) {
     }).show(); // 遮罩层
     $("#message p").html(html); // 提示信息赋值
     $("#message").removeClass("zoomOutDown").addClass("zoomInUp").show(); // 动画事件
-    $("#message #close").on(handlerName + ".handlers", function() {
+    $("#message #close").on("click" + ".handlers", function() {
         $(".bar").hide(); // 隐藏遮罩层
-        $(this).off(handlerName + ".handlers"); // 移除该关闭事件
+        $(this).off("click" + ".handlers"); // 移除该关闭事件
         $("#message").removeClass("zoomInUp").addClass("zoomOutDown"); // 移除动画class
         setTimeout(function() {
             $("#message").hide();
@@ -191,15 +189,15 @@ function playGame(imgSrc, level) {
     initButton("gpi");
 
     removeHandlers();
-    $("#refresh").on(handlerName + ".control", refresh); // 刷新
+    $("#refresh").on("click" + ".control", refresh); // 刷新
 
-    $("#level").on(handlerName + ".control", function() { // 调整难度
+    $("#level").on("click" + ".control", function() { // 调整难度
         puzzle.gamePause();
         $("#diff-choice").show();
         $("#game-panel").hide();
     })
 
-    $("#pause").on(handlerName + ".control", function() { // 暂停或继续
+    $("#pause").on("click" + ".control", function() { // 暂停或继续
         var gameStatus = puzzle.getGameStatus();
         if (gameStatus === 1) {
             puzzle.gamePause();
