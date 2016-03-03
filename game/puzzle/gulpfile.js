@@ -8,7 +8,7 @@ gulp.task("js", () =>
 	gulp.src(["./resource/js/jquery.js", 
 		"./resource/js/fast-click.js", 
 		"./resource/js/puzzle.js", 
-		"./resource/js/swiper.js", 
+		"./resource/js/swiper.min.js", 
 		"./resource/js/index.js"]).
 	pipe(concat({
 		path: "all.js"
