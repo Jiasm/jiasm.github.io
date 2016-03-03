@@ -7,7 +7,7 @@ var gulp 	= require('gulp'),
 gulp.task("js", () => 
 	gulp.src(["./resource/js/jquery.js", 
 		"./resource/js/fast-click.js", 
-		"./resource/js/puzzle.js", 
+		"./resource/js/puzzle.min.js", 
 		"./resource/js/swiper.min.js", 
 		"./resource/js/index.js"]).
 	pipe(concat({
