@@ -133,7 +133,7 @@
 
     function build(data, container) {
         let $panel = document.createDocumentFragment();
-        let $article = createElement("article");
+        let $section = createElement("section");
         let $header = createElement("header");
         let $postTitle = createElement("h1");
         let $postDate = createElement("time");
@@ -142,19 +142,19 @@
         $postDate.innerHTML = data.postDate;
         $header.appendChild($postTitle);
         $header.appendChild($postDate);
-        $article.appendChild($header);
+        $section.appendChild($header);
         $content.innerHTML = data.content;
-        $article.appendChild($content);
-        $panel.appendChild($article);
+        $section.appendChild($content);
+        $panel.appendChild($section);
         //添加多说评论框
         let duoshuoBox = [];
-        duoshuoBox.push('<div class="ds-thread" data-thread-key="');
+        duoshuoBox.push('<article class="ds-thread" data-thread-key="');
         duoshuoBox.push(data.id);
         duoshuoBox.push('" data-title="');
         duoshuoBox.push(data.title);
-        duoshuoBox.push('" data-url="jiasm.github.io"></div>');
+        duoshuoBox.push('" data-url="jiasm.github.io"></article>');
 
-        container.innerHTML = $article.outerHTML + duoshuoBox.join("");
+        container.innerHTML = $section.outerHTML + duoshuoBox.join("");
         loadComplete();
     }
 

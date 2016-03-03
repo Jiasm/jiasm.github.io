@@ -82,7 +82,7 @@ body>main>header>h1 {
 body>main img {
 	max-width: 100%;
 }
-body>main article {
+body>main section {
 	font-size: 1.6em;
 }
 body>main section a:hover {
