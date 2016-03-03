@@ -83,7 +83,10 @@ body>main img {
 	max-width: 100%;
 }
 body>main section {
-	font-size: 1.6em;
+	font-size: 1.3em;
+}
+body>main section>header {
+	font-size: 1.3em;
 }
 body>main section a:hover {
 	text-decoration: underline;
