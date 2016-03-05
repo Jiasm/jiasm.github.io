@@ -38,12 +38,16 @@
 </head>
 
 <body>
-    <h2>新博客</h2>
-    <form method="post" action="/newBlog">
+    <h2>修改文章</h2>
+    <form method="post" action="/editorBlog">
         <div>
             <div>
-                <input type="text" id="blogTitle" name="blogTitle" placeholder="标题">
-                <textarea id="blogContent" name="blogContent" rows="25" cols="80" style="width: 80%"></textarea>
+                <input type="hidden" id="blogId" name="blogId" value="<%= blog.id %>">
+                <input type="hidden" id="blogPost" name="blogPost" value="<%= blog.postDate %>">
+                <input type="text" id="blogTitle" name="blogTitle" value="<%= blog.title %>" placeholder="标题">
+                <textarea id="blogContent" name="blogContent" rows="25" cols="80" style="width: 80%">
+                    <%= blog.content %>
+                </textarea>
                 <input type="submit" name="save" value="Submit" />
                 <input type="reset" name="reset" value="Reset" />
                 <a href="#" onclick="getContent()">get Content</a>
