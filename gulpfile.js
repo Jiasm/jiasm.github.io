@@ -1,22 +1,40 @@
 "use strict";
 console.log("begin");
 let gulp		= require("gulp"),
-	minifycss	= require("gulp-minify-css"),
+	uglify 		= require("gulp-uglify"),
+	cssmin 		= require("gulp-cssmin"),
+	rename 		= require("gulp-rename"),
 	concat		= require("gulp-concat");
-gulp.task("style", () => gulp
-	.src("resource/css/*.css")
-	.pipe(concat("main.css"))
-	.pipe(minifycss())
-	.pipe(gulp.dest("resource/css/online"))
-);
 
 gulp.task("default", () => {
 	gulp.start("js");
+	gulp.start("css");
 	console.log("success");
 })
 
-gulp.task("js", () => gulp
-	.src("js/*.js")
-	.pipe(concat("concat.js"))
-	.pipe(gulp.dest("build"))
+gulp.task("js", () => gulp.
+	src(["js/jquery.js",
+		"js/require.js",
+		"js/prism.js",
+		"js/index.js"]).
+	pipe(concat("main.js")).
+	pipe(gulp.dest("js/")).
+	pipe(uglify()).
+	pipe(rename({
+		suffix: ".min"
+	})).
+	pipe(gulp.dest("js/"))
 );
+gulp.task("css", () =>  gulp.
+	src(["resource/css/reset.css", 
+		"resource/css/base.css", 
+		"resource/css/beta2.css", 
+		"resource/css/prism.css"]).
+	pipe(concat("main.css")).
+	pipe(gulp.dest("resource/css/")).
+	pipe(cssmin()).
+	pipe(rename({
+		suffix: ".min"
+	})).
+	pipe(gulp.dest("resource/css/"))
+)

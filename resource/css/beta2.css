@@ -28,7 +28,7 @@
 * {
 	box-sizing:border-box;
 	line-height: 1.7;
-	font-family: cursive;
+	font-family: cursive, "微软雅黑", sans-serif;
 }
 body {
 	background: #F2F2F2;
@@ -99,6 +99,9 @@ body>main section a:hover {
     padding-bottom: 1em;
     font-size: 1.6em;
 }
+.article p {
+	overflow: hidden;
+}
 .article:last-of-type {
 	border-bottom: none;
 }
@@ -159,4 +162,23 @@ footer {
 	color: #84754E;
 	background-color: #F2F2F2;
 	transition: 0.5s background-color, color;
+}
+
+@media (max-width: 800px) {
+	body>header {
+		width: 50%;
+	}
+	.article .date-title {
+		font-size: .7em;
+	}
+	.fork-me-wrapper {
+	    width: 130px;
+	    height: 130px;
+	    top: -10px;
+	    right: -10px;
+	}
+	.fork-me {
+	    font-size: 12px;
+	    top: 30px;
+	}
 }

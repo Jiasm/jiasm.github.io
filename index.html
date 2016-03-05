@@ -11,14 +11,9 @@
         location.href = "about:blank";
     }*/
     </script>
-    <link rel="stylesheet" type="text/css" href="resource/css/online/reset.css" />
-    <link rel="stylesheet" type="text/css" href="resource/css/online/main.css" />
     <!--  调试使用 
-  <link rel="stylesheet" type="text/css" href="resource/css/reset.css" />
-  <link rel="stylesheet" type="text/css" href="resource/css/base.css" />
-  <link rel="stylesheet" type="text/css" href="resource/css/beta2.css" />
-  <link rel="stylesheet" type="text/css" href="resource/css/highlight.css" /> 
 -->
+  <link rel="stylesheet" type="text/css" href="resource/css/main.min.css" /> 
     <link rel="Shortcut Icon" href="resource/icon.ico">
 </head>
 
@@ -46,132 +41,7 @@
         <div id="loading">
         </div>
     </footer>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/require.js"></script>
-    <script type="text/javascript" src="js/prism.js"></script>
-    <script type="text/javascript">
-    "use strict";
-    /*引入多说*/
-    var duoshuoQuery = {
-        short_name: "jiasm"
-    };
-    let ds = document.createElement('script');
-    ds.type = 'text/javascript';
-    ds.async = true;
-    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-    /*引入多说 end*/
-    //改装一下多说- -
-    function loadComplete() {
-        document.body.scrollTop = "0px";
-        DUOSHUO.init();
-        let countList = $(".ds-thread-count");
-        countList.each(function (_, item) {
-            if (!item.innerHTML)
-                item.innerHTML = "暂无评论";
-        })
-        document.body.className += "complete";
-        Prism.highlightAll();   // 语法高亮
-    }
-    onload = function() {
-        location.search ? change() : init();
-    }
-
-    function init() {
-        require(['feed/index'], function (_data) {
-            let datas = _data.data;
-            let $panel = document.createDocumentFragment();
-            let $article = createElement("li");
-            let $title = createElement("p");
-            let $postTitle = createElement("a");
-            let $dateTitle = createElement("time");
-            let $comments = createElement("p");
-            $article.className = "article";
-            $title.className = "title";
-            $postTitle.className = "post-title";
-            $dateTitle.className = "date-title";
-            for (let len = datas.length - 1; len >= 0; len--) {
-                let data = datas[len];
-                $article = $article.cloneNode();
-                $title = $title.cloneNode();
-                $postTitle = $postTitle.cloneNode();
-                $dateTitle = $dateTitle.cloneNode();
-                $comments = $comments.cloneNode();
-                $postTitle.innerHTML = data.title;
-                $postTitle.href = "?page=" + data.id;
-                $postTitle.title = data.title;
-                $postTitle.id = data.id;
-                $dateTitle.innerHTML = data.postDate;
-                $postTitle.appendChild($dateTitle);
-                $comments.innerHTML = '<span class="ds-thread-count" data-thread-key="' + data.id + '" data-count-type="comments"></span>';
-                $title.appendChild($postTitle);
-                $article.appendChild($title);
-                $article.appendChild($comments);
-                $panel.appendChild($article);
-            }
-            document.getElementById("article-list").appendChild($panel);
-            loadComplete();
-        });
-    }
-
-    function change() {
-        let key = location.search.substring(1);
-        let search = generate(key);
-        require(["feed/" + search.page], function (_data) {
-            build(_data, document.getElementById("main"))
-        })
-    }
-
-    function generate(key) {
-        let kvs = key.split("&"),
-            kv, len, obj = {};
-        for (let len = kvs.length - 1, kv = kvs[len].split("="); len >= 0; kv = kvs[len--].split("="))
-            obj[kv[0]] = kv[1];
-        return obj;
-    }
-
-    function build(data, container) {
-        let $panel = document.createDocumentFragment();
-        let $section = createElement("section");
-        let $header = createElement("header");
-        let $postTitle = createElement("h1");
-        let $postDate = createElement("time");
-        let $content = createElement("section");
-        $postTitle.innerHTML = data.title;
-        $postDate.innerHTML = data.postDate;
-        $header.appendChild($postTitle);
-        $header.appendChild($postDate);
-        $section.appendChild($header);
-        $content.innerHTML = data.content;
-        $section.appendChild($content);
-        $panel.appendChild($section);
-        //添加多说评论框
-        let duoshuoBox = [];
-        duoshuoBox.push('<article class="ds-thread" data-thread-key="');
-        duoshuoBox.push(data.id);
-        duoshuoBox.push('" data-title="');
-        duoshuoBox.push(data.title);
-        duoshuoBox.push('" data-url="jiasm.github.io"></article>');
-
-        container.innerHTML = $section.outerHTML + duoshuoBox.join("");
-        loadComplete();
-    }
-
-    function createElement(tag) {
-        return document.createElement(tag);
-    }
-
-    $(window).scroll(function () {
-        $(window).scrollTop() > 100 ? $("#go2top").fadeIn(1000) : $("#go2top").fadeOut(1000);
-    });
-
-    $("#go2top").click(function () {
-        $('body,html').animate({
-            scrollTop: 0
-        }, 1000);
-    });
-    </script>
+    <script type="text/javascript" src="js/main.min.js"></script>
 </body>
 
 </html>
