@@ -1,1 +1,0 @@
-define({"id":"83cb8b40-ddfc-11e5-9b3e-6f9225ee601b","title":"16年第一弹！！！","postDate":"2016/2/28 17:20:31","content":"<pre class=\"language-javascript\"><code> \"哈\".repeat(233);</code></pre><h1>用自己的博客后台提交博文，这感觉就是不一样。</h1><p>&nbsp;<img src=\"https://github.com/bpassos/git-commands/raw/master/img/git.png\" alt=\"\" width=\"383\" height=\"383\" /></p>"});
