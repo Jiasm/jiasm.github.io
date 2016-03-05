@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>文章列表</title>
+<ul>
+	<% blogs.forEach((item) => { %>
+		<li><p>
+			<span><%= item.title %></span>
+			<time><%= item.postDate %></time>
+			<a href="editorBlog?id=<%= item.id %>">修改</a>
+			<a href="removeBlog?id=<%= item.id %>">删除</a>
+		</p></li>
+	<% }) %>
+</ul>

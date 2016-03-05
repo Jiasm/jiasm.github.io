@@ -4,11 +4,14 @@ var express = require("express"),
     fs = require("fs"),
     uuid = require("node-uuid"),
     bodyParser = require("body-parser"),
-    feedPath = "../feed/", 	// 博客数据存储位置
+    exec = require('child_process').exec,
+    url = require("url"),
+    qs = require("querystring"),
+    feedPath = "../feed/", // 博客数据存储位置
     feddIndex = "index.js"; // 博客目录文件名
 
 app.set("view engine", "ejs");
-app.use(express.static(`${__dirname}/resource`)); 
+app.use(express.static(`${__dirname}/resource`));
 app.set("views", `${__dirname}/views`);
 app.use(bodyParser.urlencoded({
     extended: true
@@ -16,6 +19,7 @@ app.use(bodyParser.urlencoded({
 app.get(["/", "/index"], (req, res) => {
     res.render("index");
 });
+// add操作
 app.get("/newBlog", (req, res) => {
     res.render("newBlog")
 });
@@ -39,24 +43,65 @@ app.post("/newBlog", (req, res) => {
                 console.error("博文js文件生成出错了。");
             } else {
                 console.log("博文js文件生成完毕。");
-                buildIndex(); 								// 重新生成index.js
-                gitCommit(); 								// 提交到git
-                res.redirect("http://jiasm.github.io/"); 	// 跳转到博客
+                buildIndex(); // 重新生成index.js
+                gitCommit(callback); // 提交到git
             }
         })
     });
+});
+app.get("/list", (req, res) => {
+    let items = getAllBlogs();
+    res.render("list", {
+        blogs: items.reverse()
+    })
+});
+app.get("/removeBlog", (req, res) => {
+    var fileName = qs.parse(url.parse(req.url).query).id;
+    var cmd = `git rm ${feedPath}${fileName}.js`;
+    exec(cmd, (error) => {
+        if (error) {
+            console.error(error);
+        } else {
+            gitCommit((error) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    let items = getAllBlogs();
+                    res.render("list", {
+                        blogs: items.reverse()
+                    })
+                }
+            });
+        }
+    })
 });
 app.listen(12306, () => {
     console.log("runing at 12306");
 });
 
+function callback(error) { // 对文件操作完成后的回掉
+    if (error) {
+        console.error(error);
+    } else {
+        res.redirect("http://jiasm.github.io/"); // 跳转到博客
+    }
+}
+
 // 调用该函数 重新生成目录.js
 function buildIndex() { // 生成博文目录的数据
-    let items = []; 	// 博文列表
-    var files = fs.readdirSync(feedPath);
+    let items = getAllBlogs(); // 博文列表
+    var indexRender = `define(${JSON.stringify({data : items})});`;
+
+    console.log("开始生成目录文件：");
+    fs.writeFileSync(`${feedPath}${feddIndex}`, indexRender);
+}
+
+function getAllBlogs() {
+    let items = [],
+        files = fs.readdirSync(feedPath);
     // 获取所有的博文
     files.forEach((item) => {
-        if (item != feddIndex) { 		// 跳过目录.js
+        if (item != feddIndex) { // 跳过目录.js
             let itemPath = `${feedPath}${item}`;
             let stats = fs.statSync(itemPath);
             if (!stats.isDirectory()) { // 如果是文件
@@ -67,25 +112,20 @@ function buildIndex() { // 生成博文目录的数据
                     str = str.replace(/(\w+)?\:\"/g, "\"$1\"\:\"");
                 }
                 var obj = JSON.parse(str);
-                obj.postDate = obj.postDate.replace(/\-/g, "\/");	// 将之前的日期的横线转一下
+                obj.postDate = obj.postDate.replace(/\-/g, "\/"); // 将之前的日期的横线转一下
                 items.push(JSON.parse(str));
             }
         }
     });
 
-    items = items.sort((left, right) => {
+    return items.sort((left, right) => {
         return new Date(left.postDate) - new Date(right.postDate)
     })
-    var indexRender = `define(${JSON.stringify({data : items})});`;
-
-    console.log("开始生成目录文件：");
-    fs.writeFileSync(`${feedPath}${feddIndex}`, indexRender);
 }
 
 // 提交改动到git
-function gitCommit() {
-    var exec = require('child_process').exec,
-        cmd = 'git add --all';
+function gitCommit(callback) {
+    var cmd = 'git add --all';
     exec(cmd, (error) => {
         if (error) {
             console.error(error);
@@ -95,13 +135,7 @@ function gitCommit() {
                 if (error) {
                     console.error(error);
                 } else {
-                    exec('git push', (error) => {
-                        if (error) {
-                            console.error(error);
-                        } else {
-                            console.log(`提交完成：${new Date()}`);
-                        }
-                    })
+                    exec('git push', callback)
                 }
             })
         }
