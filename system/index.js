@@ -72,7 +72,6 @@ app.get("/removeBlog", (req, res) => {
 app.get("/editorBlog", (req, res) => {
     var fileName = qs.parse(url.parse(req.url).query).id;
     var blog = getBlog(`${feedPath}${fileName}.js`);
-    console.log(blog);
     res.render("editorBlog", {
         blog: blog
     });
@@ -87,12 +86,12 @@ app.post("/editorBlog", (req, res) => {
 app.listen(12306, () => {
     console.log("runing at 12306");
 });
-
+// 提交完git后的回调 跳转到我的博客
 function callback(res) { // 对文件操作完成后的回掉
     console.log("进入提交完成后的回调");
     res.redirect("http://jiasm.github.io/"); // 跳转到博客
 }
-
+// 写入文章 用于 add alter
 function writeBlog(id, title, postDate, content, res) {
     console.log("博文js文件开始生成：")
     fs.writeFile(`../feed/${id}.js`, `define({"id":"${id}","title":"${title}","postDate":"${postDate}","content":"${content.replace(/(\"|\')+?/g, "\\$1")}"});`, (err) => {
@@ -134,7 +133,7 @@ function getAllBlogs() {
         return new Date(left.postDate) - new Date(right.postDate)
     })
 }
-
+// 获取文章json 不包含content
 function genratorJSON(path) {
     let data = fs.readFileSync(path);
     // 将适用于require的js文件砍掉一些，以转换为标准json格式
@@ -146,7 +145,7 @@ function genratorJSON(path) {
     obj.postDate = obj.postDate.replace(/\-/g, "\/"); // 将之前的日期的横线转一下（改用 / 省得出问题- -）
     return obj;
 }
-
+// 获取文章json 包含content
 function getBlog(path) {
     let data = fs.readFileSync(path);
     var str = data.toString().replace(/^define\(|\)\;?$/g, "");
