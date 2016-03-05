@@ -28,6 +28,7 @@ onload = function() {
 
 function init() {
     require(['feed/index'], function(_data) {
+        document.title = "首页";
         var datas = _data.data;
         var $panel = document.createDocumentFragment();
         var $article = createElement("li");
@@ -102,7 +103,7 @@ function build(data, container) {
     duoshuoBox.push('" data-title="');
     duoshuoBox.push(data.title);
     duoshuoBox.push('" data-url="jiasm.github.io"></article>');
-
+    document.title = $postTitle;    
     container.innerHTML = $section.outerHTML + duoshuoBox.join("");
     loadCompvare();
 }
