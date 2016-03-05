@@ -86,7 +86,6 @@ function callback(error) { // 对文件操作完成后的回掉
         res.redirect("http://jiasm.github.io/"); // 跳转到博客
     }
 }
-
 // 调用该函数 重新生成目录.js
 function buildIndex() { // 生成博文目录的数据
     let items = getAllBlogs(); // 博文列表
@@ -141,3 +140,5 @@ function gitCommit(callback) {
         }
     });
 }
+buildIndex();
+gitCommit();
