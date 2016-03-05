@@ -37,7 +37,7 @@ app.post("/newBlog", (req, res) => {
             title = req.body.blogTitle, // 博文标题
             content = req.body.blogContent.replace(/\n|\r/g, ""); // 博文内容
 
-        writeBlog(id, title, postDate, content); 
+        writeBlog(id, title, postDate, content, res);
     });
 });
 // 文章列表 进行删除修改操作
@@ -79,25 +79,21 @@ app.get("/editorBlog", (req, res) => {
 })
 app.post("/editorBlog", (req, res) => {
     var id = req.body.blogId,
-        postDate = req.body.blogPost,   // 发表时间
-        title = req.body.blogTitle,     // 博文标题
+        postDate = req.body.blogPost, // 发表时间
+        title = req.body.blogTitle, // 博文标题
         content = req.body.blogContent.replace(/\n|\r/g, ""); // 博文内容
-    writeBlog(id, title, postDate, content);
+    writeBlog(id, title, postDate, content, res);
 })
 app.listen(12306, () => {
     console.log("runing at 12306");
 });
 
-function callback(error) { // 对文件操作完成后的回掉
+function callback(res) { // 对文件操作完成后的回掉
     console.log("进入提交完成后的回调");
-    if (error) {
-        console.error(error);
-    } else {
-        res.redirect("http://jiasm.github.io/"); // 跳转到博客
-    }
+    res.redirect("http://jiasm.github.io/"); // 跳转到博客
 }
 
-function writeBlog(id, title, postDate, content) {
+function writeBlog(id, title, postDate, content, res) {
     console.log("博文js文件开始生成：")
     fs.writeFile(`../feed/${id}.js`, `define({"id":"${id}","title":"${title}","postDate":"${postDate}","content":"${content.replace(/(\"|\')+?/g, "\\$1")}"});`, (err) => {
         if (err) {
@@ -105,7 +101,7 @@ function writeBlog(id, title, postDate, content) {
         } else {
             console.log("博文js文件生成完毕。");
             buildIndex(); // 重新生成index.js
-            gitCommit(callback); // 提交到git
+            gitCommit(callback, res); // 提交到git
         }
     })
 }
@@ -163,7 +159,7 @@ function getBlog(path) {
 }
 
 // 提交改动到git
-function gitCommit(callback) {
+function gitCommit(callback, res) {
     var cmd = 'git add --all';
     exec(cmd, (error) => {
         if (error) {
@@ -175,7 +171,13 @@ function gitCommit(callback) {
                     console.error(error);
                 } else {
                     console.log("提交到git");
-                    exec('git push', callback);
+                    exec('git push', (error) => {
+                        if (error) {
+                            console.error(error);
+                        } else {
+                            callback(res)
+                        }
+                    });
                 }
             })
         }
