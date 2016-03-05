@@ -11,7 +11,7 @@ ds.charset = 'UTF-8';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
 //引入多说 end
 //改装一下多说- -
-function loadCompvare() {
+function loadComplete() {
     document.body.scrollTop = "0px";
     DUOSHUO.init();
     var countList = $(".ds-thread-count");
@@ -60,7 +60,7 @@ function init() {
             $panel.appendChild($article);
         }
         document.getElementById("article-list").appendChild($panel);
-        loadCompvare();
+        loadComplete();
     });
 }
 
@@ -105,7 +105,7 @@ function build(data, container) {
     duoshuoBox.push('" data-url="jiasm.github.io"></article>');
     document.title = $postTitle;    
     container.innerHTML = $section.outerHTML + duoshuoBox.join("");
-    loadCompvare();
+    loadComplete();
 }
 
 function createElement(tag) {
