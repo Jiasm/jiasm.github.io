@@ -6,7 +6,7 @@ html {
     background: none;
     background-color: #02CAC8;
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
 }
 
 a {
@@ -182,8 +182,9 @@ p {
 
 /* 游戏界面 */
 
-.game-panel {
-    position: fixed;
+.game-panel,
+.control-container {
+    position: absolute;
     width: 100%;
     display: none;
     overflow-y: auto;
@@ -216,7 +217,7 @@ p {
 }
 
 .control-container {
-    position: fixed;
+    position: absolute;
     width: 100%;
     color: #fff;
     bottom: 0;
@@ -563,6 +564,13 @@ p {
         -webkit-transform: rotate(0deg);
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
+    }
+}
+
+@media (orientation: landscape) {
+    html {
+        max-width: 400px;
+        background-color: #243E79;
     }
 }
 

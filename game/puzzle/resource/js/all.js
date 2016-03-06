@@ -1002,6 +1002,7 @@ function go2Play(imgSrc) {
     loadResource([imgSrc], function() {
         $loading.hide();
         $("#game-panel").show(); // 显示游戏面板
+        $("#control-container").show();
         playGame(imgSrc, level);
     })
     $("#message p").html(""); // 将提示框文本清除
@@ -1061,6 +1062,7 @@ function playGame(imgSrc, level) {
         puzzle.gamePause();
         $("#diff-choice").show();
         $("#game-panel").hide();
+        $("#control-container").hide();
     })
 
     $("#pause").on("click" + ".control", function() { // 暂停或继续
