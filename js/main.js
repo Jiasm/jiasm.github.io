@@ -2218,7 +2218,7 @@ function build(data, container) {
     duoshuoBox.push('" data-title="');
     duoshuoBox.push(data.title);
     duoshuoBox.push('" data-url="jiasm.github.io"></article>');
-    document.title = $postTitle;    
+    document.title = data.title;    
     container.innerHTML = $section.outerHTML + duoshuoBox.join("");
     loadComplete();
 }
