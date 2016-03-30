@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Jiasm/jiasm.github.io#readme",
   "devDependencies": {
     "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
     "express": "^4.13.4",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
