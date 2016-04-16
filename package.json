@@ -1,0 +1,36 @@
+{
+  "name": "Data_Platform",
+  "version": "0.0.1",
+  "description": "Data Platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,hbs,css index.js",
+    "deploy": "shipit production deploy",
+    "rollback": "shipit production rollback"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.oschina.net/darrencode/Data_Platform.git"
+  },
+  "dependencies": {
+    "co-views": "^2.1.0",
+    "handlebars": "^3.0.3",
+    "koa": "^1.2.0",
+    "koa-body-parser": "^1.1.2",
+    "koa-router": "^5.1.2",
+    "koa-safe-jsonp": "^0.3.1",
+    "koa-static": "^1.5.2",
+    "mysql": "^2.7.0",
+    "only": "0.0.2",
+    "qiniu": "^6.1.8",
+    "redis": "^0.12.1",
+    "thenify-all": "^1.6.0",
+    "urllib": "^2.3.8"
+  },
+  "devDependencies": {
+    "shipit-cnpm": "^0.1.0",
+    "shipit-deploy": "^2.0.0",
+    "shipit-pm": "^0.1.0"
+  }
+}

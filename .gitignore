@@ -1,0 +1,23 @@
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+# vim
+*.swp
+
+# build目标用来存放静态文件
+build
+
+npm-debug.log
+node_modules
+.idea
+.DS_Store

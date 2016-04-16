@@ -1,0 +1,21 @@
+{
+  "name": "",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssshrink": "^0.1.4",
+    "gulp-file-include": "^0.13.7",
+    "gulp-flatten": "^0.1.0",
+    "gulp-qn": "^0.1.1",
+    "gulp-rev": "^3.0.1",
+    "gulp-rev-collector": "^0.1.4",
+    "gulp-uglify": "^1.2.0",
+    "run-sequence": "^1.1.0"
+  }
+}
