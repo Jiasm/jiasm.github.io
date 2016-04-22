@@ -19,18 +19,20 @@ let bui = {
 let publicPath = '../public';
 let viewPath = '../views';
 let jsPath = './js/*.js';
-let cssPath = './css/*.css';
+let cssPath = './css/*.scss';
 let tplPath = './tpl/page/*.html';
 let otherHtmlPath = './tpl/**/*.html';
 
 let qntoken = require('../conf/qiniu.js');
 let gulp = require('gulp');
+let autoprefixer = require('gulp-autoprefixer');
 let concat = require('gulp-concat');
 let shrink = require('gulp-cssshrink');
+let fileinclude = require('gulp-file-include');
 let flatten = require('gulp-flatten');
+let sass = require('gulp-sass');
 let uglify = require('gulp-uglify');
 let runS = require('run-sequence');
-let fileinclude = require('gulp-file-include');
 let qn = require('gulp-qn');
 // MD5戳
 let rev = require('gulp-rev');
@@ -51,6 +53,10 @@ gulp.task(bui['js'], function() {
 });
 gulp.task(bui['css'], function() {
   return gulp.src(cssPath)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions']
+    }))
     .pipe(flatten())
     // .pipe(concat(_pa + '.css'))
     .pipe(gulp.dest(publicPath + '/css'));
