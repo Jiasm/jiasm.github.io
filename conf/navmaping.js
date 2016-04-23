@@ -38,22 +38,13 @@ const maping = {
     title: "直播数据",
     icon: "fa-video-camera",
     child_menu: [{
-      title: "日消费",
+      title: "日 消费/收入",
       href: "javascript:;"
     }, {
-      title: "周消费",
+      title: "周 消费/收入",
       href: "javascript:;"
     }, {
-      title: "总消费",
-      href: "javascript:;"
-    }, {
-      title: "日收入",
-      href: "javascript:;"
-    }, {
-      title: "周收入",
-      href: "javascript:;"
-    }, {
-      title: "总收入",
+      title: "总 消费/收入",
       href: "javascript:;"
     },],
   },
