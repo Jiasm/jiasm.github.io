@@ -21,7 +21,7 @@ const maping = {
     },],
   },
   abroad: {
-    title: "海外用户分析",
+    title: "海外用户",
     icon: "fa-user",
     child_menu: [{
       title: "活跃用户数",
@@ -35,7 +35,7 @@ const maping = {
     },],
   },
   retention: {
-    title: "留存分析",
+    title: "用户留存",
     icon: "fa-area-chart",
     child_menu: [{
       title: "日留存",
@@ -46,6 +46,23 @@ const maping = {
     }, {
       title: "月留存",
       href: "/retention/monthly"
+    },],
+  },
+  channel: {
+    title: "渠道分布",
+    icon: "fa-sitemap",
+    child_menu: [{
+      title: "渠道列表",
+      href: "/channel/list"
+    }, {
+      title: "活跃用户数",
+      href: "/channel/active"
+    }, {
+      title: "新增用户数",
+      href: "/channel/reg"
+    }, {
+      title: "留存用户数",
+      href: "/channel/retention"
     },],
   },
   video: {
@@ -59,23 +76,6 @@ const maping = {
       href: "javascript:;"
     }, {
       title: "总 消费/收入",
-      href: "javascript:;"
-    },],
-  },
-  channel: {
-    title: "渠道分析",
-    icon: "fa-sitemap",
-    child_menu: [{
-      title: "S1",
-      href: "javascript:;"
-    }, {
-      title: "S2",
-      href: "javascript:;"
-    }, {
-      title: "S3",
-      href: "javascript:;"
-    }, {
-      title: "S4",
       href: "javascript:;"
     },],
   },
