@@ -30,21 +30,35 @@
     var seriesList = [];
     var date = $('#reportrange').attr('xdate');
     var stats = $('.stats .btn.sel').attr('stats');
-    var url = '/data/retention?action=' + path + '&stats=' + stats + '&date=' + date;
+    var url = '/data/users?action=' + (path === 'reg' ? 'get_daily_reg' : 'get_daily_active') + '&stats=' + stats + '&date=' + date;
 
     bluedAjaxFunc(url, function(res) {
       if (res.code === 200) {
         toastr.success('The data load success!');
-        var reg = res.data.reg;
-        for (var k = 0; k < reg.length; k++) {
-          regNum += reg[k].reg
+        var reg = res.data;
+        var datas = {};
+        for (var key in reg) {
+          var item = reg[key];
+          var len = item.length;
+          while (len--) {
+            var platform = item[len].platform;
+            var count = item[len][path];
+            var data = datas[platform] = datas[platform] || [];
+            data.push(count);
+            regNum += count;
+          }
         }
+        // for (var k = 0; k < reg.length; k++) {
+        //   regNum += reg[k].reg
+        // }
         $('#retentionreg').html(regNum);
-        var data = res.data.retention;
-        for (var i = 0; i < data.length; i++) {
-          dateList.push(data[i].name);
+
+        var index = 0;
+        var len = datas.length;
+        for (var key in datas) {
+          dateList.push(key);
           seriesList.push({
-            name: data[i].name,
+            name: key,
             type: 'bar',
             stack: '总量',
             label: {
@@ -53,43 +67,47 @@
                 position: 'insideRight'
               }
             },
-            data: [reg[i].reg, data[i].a1, data[i].a2, data[i].a3, data[i].a4, data[i].a5, data[i].a6, data[i].a7]
+            data: datas[key]
           });
         }
+        // for (var key in reg) {
+        //   dateList.push(data[i].name);
+        //   seriesList.push({
+        //     name: data[i].name,
+        //     type: 'bar',
+        //     stack: '总量',
+        //     label: {
+        //       normal: {
+        //         show: true,
+        //         position: 'insideRight'
+        //       }
+        //     },
+        //     data: [reg[i].reg, data[i].a1, data[i].a2, data[i].a3, data[i].a4, data[i].a5, data[i].a6, data[i].a7]
+        //   });
+        // }
         option.legend.data = dateList;
         option.series = seriesList;
-        if (path === 'daily') {
+        if (path === 'active') {
           option.xAxis.data = [
-            moment(date).format('MM/DD') + '新增',
-            moment(date).add(1, 'days').format('MM/DD') + '留存',
-            moment(date).add(2, 'days').format('MM/DD') + '留存',
-            moment(date).add(3, 'days').format('MM/DD') + '留存',
-            moment(date).add(4, 'days').format('MM/DD') + '留存',
-            moment(date).add(5, 'days').format('MM/DD') + '留存',
-            moment(date).add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(7, 'days').format('MM/DD') + '留存',
+            moment(date).format('MM/DD') + '日活',
+            moment(date).add(1, 'days').format('MM/DD') + '日活',
+            moment(date).add(2, 'days').format('MM/DD') + '日活',
+            moment(date).add(3, 'days').format('MM/DD') + '日活',
+            moment(date).add(4, 'days').format('MM/DD') + '日活',
+            moment(date).add(5, 'days').format('MM/DD') + '日活',
+            moment(date).add(6, 'days').format('MM/DD') + '日活',
+            moment(date).add(7, 'days').format('MM/DD') + '日活',
           ]
-        } else if (path === 'weekly') {
+        } else if (path === 'reg') {
           option.xAxis.data = [
-            moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + '新增',
-            moment(date).add(1, 'weeks').format('MM/DD') + '-' + moment(date).add(1, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(2, 'weeks').format('MM/DD') + '-' + moment(date).add(2, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(3, 'weeks').format('MM/DD') + '-' + moment(date).add(3, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(4, 'weeks').format('MM/DD') + '-' + moment(date).add(4, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(5, 'weeks').format('MM/DD') + '-' + moment(date).add(5, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(6, 'weeks').format('MM/DD') + '-' + moment(date).add(6, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-            moment(date).add(7, 'weeks').format('MM/DD') + '-' + moment(date).add(7, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-          ]
-        } else {
-          option.xAxis.data = [
-            moment(date).format('M') + '月新增',
-            moment(date).add(1, 'months').format('M') + '月留存',
-            moment(date).add(2, 'months').format('M') + '月留存',
-            moment(date).add(3, 'months').format('M') + '月留存',
-            moment(date).add(4, 'months').format('M') + '月留存',
-            moment(date).add(5, 'months').format('M') + '月留存',
-            moment(date).add(6, 'months').format('M') + '月留存',
-            moment(date).add(7, 'months').format('M') + '月留存',
+            moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(1, 'weeks').format('MM/DD') + '-' + moment(date).add(1, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(2, 'weeks').format('MM/DD') + '-' + moment(date).add(2, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(3, 'weeks').format('MM/DD') + '-' + moment(date).add(3, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(4, 'weeks').format('MM/DD') + '-' + moment(date).add(4, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(5, 'weeks').format('MM/DD') + '-' + moment(date).add(5, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(6, 'weeks').format('MM/DD') + '-' + moment(date).add(6, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
+            moment(date).add(7, 'weeks').format('MM/DD') + '-' + moment(date).add(7, 'weeks').add(6, 'days').format('MM/DD') + '日新增',
           ]
         }
         myChart.setOption(option);
@@ -104,11 +122,11 @@
   // <!-- datepicker -->
   var cb = function(start, end, label) {
 
-    if (path === 'daily') {
+    if (path === 'active') {
       $('#reportrange span').html(start.format(SHOWDATE));
       $('#reportrange').attr('xdate', start.format(SHOWDATE));
       $('#retentiondate').html(start.format(SHOWDATE));
-    } else if (path === 'weekly') {
+    } else if (path === 'reg') {
       $('#reportrange span').html(start.format(SHOWDATE));
       $('#reportrange').attr('xdate', start.subtract(start.weekday() - 1, 'days').format(SHOWDATE));
       $('#retentiondate').html(start.format(SHOWDATE) + ' 至 ' + start.add(6, 'days').format(SHOWDATE));
