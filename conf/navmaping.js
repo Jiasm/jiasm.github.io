@@ -32,24 +32,30 @@ const maping = {
     }, {
       title: "月留存",
       href: "/retention/monthly"
-    }, ],
+    },],
   },
   video: {
     title: "直播数据",
     icon: "fa-video-camera",
     child_menu: [{
-      title: "S1",
+      title: "日消费",
       href: "javascript:;"
     }, {
-      title: "S2",
+      title: "周消费",
       href: "javascript:;"
     }, {
-      title: "S3",
+      title: "总消费",
       href: "javascript:;"
     }, {
-      title: "S4",
+      title: "日收入",
       href: "javascript:;"
-    }, ],
+    }, {
+      title: "周收入",
+      href: "javascript:;"
+    }, {
+      title: "总收入",
+      href: "javascript:;"
+    },],
   },
   channel: {
     title: "渠道分析",
@@ -66,7 +72,7 @@ const maping = {
     }, {
       title: "S4",
       href: "javascript:;"
-    }, ],
+    },],
   },
   product: {
     title: "产品功能",
@@ -83,7 +89,7 @@ const maping = {
     }, {
       title: "S4",
       href: "javascript:;"
-    }, ],
+    },],
   },
   mobile: {
     title: "终端属性",
@@ -100,7 +106,7 @@ const maping = {
     }, {
       title: "S4",
       href: "javascript:;"
-    }, ],
+    },],
   },
   errors: {
     title: "错误分析",
@@ -117,7 +123,7 @@ const maping = {
     }, {
       title: "S4",
       href: "javascript:;"
-    }, ],
+    },],
   },
 };
 
@@ -142,7 +148,7 @@ module.exports = function(role) {
 }
 
 // 通过传入的key值取出对应的菜单项 参数为空则表示全部
-function buildMap (obj) {
+function buildMap(obj) {
   var map = {};
   if (!obj) {
     for (let key in maping) {
