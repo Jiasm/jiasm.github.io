@@ -130,6 +130,17 @@ const maping = {
       href: "javascript:;"
     },],
   },
+  manage: {
+    title: "平台设置",
+    icon: "fa-tags",
+    child_menu: [{
+      title: "成员管理",
+      href: "javascript:;"
+    }, {
+      title: "权限管理",
+      href: "javascript:;"
+    },],
+  },
 };
 
 module.exports = function(role) {
