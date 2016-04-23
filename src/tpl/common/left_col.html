@@ -27,64 +27,15 @@
         <div class="menu_section">
           <h3>管理员</h3>
           <ul class="nav side-menu">
-            <li><a><i class="fa fa-home"></i> 核心数据 <span class="fa fa-chevron-down"></span></a>
+            {{#each navmaping}}
+            <li><a><i class="fa {{this.icon}}"></i> {{this.title}} <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu" style="display: none">
-                <li><a href="/dashboard/index">Dashboard</a></li>
+                {{#each this.child_menu}}
+                <li><a href="{{this.href}}">{{this.title}}</a></li>
+                {{/each}}
               </ul>
             </li>
-            <li><a><i class="fa fa-user"></i> 用户分析 <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="/users/active">日活用户数</a></li>
-                <li><a href="/users/reg">日新增用户数</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-area-chart"></i> 留存分析 <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="/retention/daily">日留存</a></li>
-                <li><a href="/retention/weekly">周留存</a></li>
-                <li><a href="/retention/monthly">月留存</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-video-camera"></i> 直播数据<span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="javascript:;">S1</a></li>
-                <li><a href="javascript:;">S2</a></li>
-                <li><a href="javascript:;">S3</a></li>
-                <li><a href="javascript:;">S4</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-sitemap"></i> 渠道分析 <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="javascript:;">S1</a></li>
-                <li><a href="javascript:;">S2</a></li>
-                <li><a href="javascript:;">S3</a></li>
-                <li><a href="javascript:;">S4</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-cogs"></i> 产品功能<span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="javascript:;">S1</a></li>
-                <li><a href="javascript:;">S2</a></li>
-                <li><a href="javascript:;">S3</a></li>
-                <li><a href="javascript:;">S4</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-mobile"></i> 终端属性 <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="javascript:;">S1</a></li>
-                <li><a href="javascript:;">S2</a></li>
-                <li><a href="javascript:;">S3</a></li>
-                <li><a href="javascript:;">S4</a></li>
-              </ul>
-            </li>
-            <li><a><i class="fa fa-tags"></i> 错误分析 <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu" style="display: none">
-                <li><a href="javascript:;">S1</a></li>
-                <li><a href="javascript:;">S2</a></li>
-                <li><a href="javascript:;">S3</a></li>
-                <li><a href="javascript:;">S4</a></li>
-              </ul>
-            </li>
+            {{/each}}
           </ul>
         </div>
       </div>
