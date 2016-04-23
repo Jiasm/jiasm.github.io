@@ -23,12 +23,15 @@ function* getDailyActive(query) {
 
   let list = yield q(ak47, sql);
   for (let i = 0; i < list.length; i++) {
-    if (obj[i]) {
-
+    if (obj[list[i].date]) {
+      obj[list[i].date].push(list[i])
+    } else {
+      obj[list[i].date] = [list[i]]
     }
+    delete list[i].date;
   }
 
-  return list
+  return obj
 }
 
 function* getDailyReg(query) {
