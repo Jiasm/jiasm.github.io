@@ -72,8 +72,8 @@
             </li>
             <li><a><i class="fa fa-user"></i> 用户分析 <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu" style="display: none">
-                <li><a href="/users/dailyactive">日活用户</a></li>
-                <li><a href="/users/reg">新增用户</a></li>
+                <li><a href="/users/active">日活用户数</a></li>
+                <li><a href="/users/reg">日新增用户数</a></li>
               </ul>
             </li>
             <li><a><i class="fa fa-area-chart"></i> 留存分析 <span class="fa fa-chevron-down"></span></a>
@@ -190,10 +190,12 @@
       <div class="row x_content">
         <p><code id="retentiondate"></code> 用户新增用户 <code id="retentionreg"> 计算中... </code></p>
         <div class="stats">
-          <button class="btn btn-default" type="button" stats="">全部</button>
+          <button class="btn btn-default" type="button" stats="date">全部</button>
           <button class="btn btn-default" type="button" stats="platform">手机终端</button>
           <button class="btn btn-default" type="button" stats="country">国家(只计算前十)</button>
           <button class="btn btn-default" type="button" stats="city_settled">城市(只计算前十)</button>
+          <button class="btn btn-default" type="button" stats="cn">国内</button>
+          <button class="btn btn-default" type="button" stats="abroad">海外</button>
         </div>
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div id="retentionmain" style="width: 100%;height:500px;"></div>
