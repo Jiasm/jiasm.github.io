@@ -34,6 +34,7 @@ function* getDailyReg(query) {
     groupbyStr,
     orderbyStr,
     'limit 0,70');
+    console.log(sql);
   return yield handleResult(sql);
 }
 

@@ -70,13 +70,13 @@ const maping = {
     icon: "fa-video-camera",
     child_menu: [{
       title: "日 消费/收入",
-      href: "javascript:;"
+      href: "/video/daily"
     }, {
       title: "周 消费/收入",
-      href: "javascript:;"
+      href: "/video/weekly"
     }, {
       title: "总 消费/收入",
-      href: "javascript:;"
+      href: "/video/total"
     },],
   },
   product: {

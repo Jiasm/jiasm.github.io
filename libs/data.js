@@ -1,11 +1,16 @@
 'use strict';
 
-let dashboard = require('../dao/dashboard.js');
-let retention = require('../dao/retention.js');
-let users = require('../dao/users.js');
+let prefix = '../dao/';
+let dashboard = require(`${prefix}dashboard.js`);
+let retention = require(`${prefix}retention.js`);
+let users = require(`${prefix}users.js`);
+let video = require(`${prefix}video.js`);
+let abroad = require(`${prefix}abroad.js`);
 
 module.exports = {
-  retention: retention,
-  dashboard: dashboard,
-  users: users,
+  retention,
+  dashboard,
+  users,
+  video,
+  abroad,
 }
