@@ -18,7 +18,21 @@ const maping = {
     }, {
       title: "日新增用户数",
       href: "/users/reg"
-    }],
+    },],
+  },
+  abroad: {
+    title: "海外用户分析",
+    icon: "fa-user",
+    child_menu: [{
+      title: "活跃用户数",
+      href: "/abroad/active"
+    }, {
+      title: "新增用户数",
+      href: "/abroad/reg"
+    }, {
+      title: "留存用户数",
+      href: "/abroad/retention"
+    },],
   },
   retention: {
     title: "留存分析",
