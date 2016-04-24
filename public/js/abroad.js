@@ -87,7 +87,7 @@
         if (timeline === 'daily') {  // 暂时先留着，等着做周和月
           var suffix = '日' + typeName;
           option.xAxis.data = [
-            moment(date).format('MM/DD') + suffix,
+            moment(date).format('MM/DD') + (path === 'retention' ? '日新增' : suffix),
             moment(date).add(1, 'days').format('MM/DD') + suffix,
             moment(date).add(2, 'days').format('MM/DD') + suffix,
             moment(date).add(3, 'days').format('MM/DD') + suffix,
@@ -99,7 +99,7 @@
         } else if (timeline === 'weekly') {
           var suffix = '周' + typeName;
           option.xAxis.data = [
-            moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + suffix,
+            moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + (path === 'retention' ? '周新增' : suffix),
             moment(date).add(1, 'weeks').format('MM/DD') + '-' + moment(date).add(1, 'weeks').add(6, 'days').format('MM/DD') + suffix,
             moment(date).add(2, 'weeks').format('MM/DD') + '-' + moment(date).add(2, 'weeks').add(6, 'days').format('MM/DD') + suffix,
             moment(date).add(3, 'weeks').format('MM/DD') + '-' + moment(date).add(3, 'weeks').add(6, 'days').format('MM/DD') + suffix,
@@ -109,15 +109,16 @@
             moment(date).add(7, 'weeks').format('MM/DD') + '-' + moment(date).add(7, 'weeks').add(6, 'days').format('MM/DD') + suffix,
           ]
         } else {
+          var suffix = '月' + typeName;
           option.xAxis.data = [
-            moment(date).format('M') + '月新增',
-            moment(date).add(1, 'months').format('M') + '月留存',
-            moment(date).add(2, 'months').format('M') + '月留存',
-            moment(date).add(3, 'months').format('M') + '月留存',
-            moment(date).add(4, 'months').format('M') + '月留存',
-            moment(date).add(5, 'months').format('M') + '月留存',
-            moment(date).add(6, 'months').format('M') + '月留存',
-            moment(date).add(7, 'months').format('M') + '月留存',
+            moment(date).format('M') + (path === 'retention' ? '月新增' : suffix),
+            moment(date).add(1, 'months').format('M') + suffix,
+            moment(date).add(2, 'months').format('M') + suffix,
+            moment(date).add(3, 'months').format('M') + suffix,
+            moment(date).add(4, 'months').format('M') + suffix,
+            moment(date).add(5, 'months').format('M') + suffix,
+            moment(date).add(6, 'months').format('M') + suffix,
+            moment(date).add(7, 'months').format('M') + suffix,
           ]
         }
         myChart.setOption(option);
