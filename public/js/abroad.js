@@ -22,7 +22,7 @@
     series: null,
   };
 
-  function load() {
+  function load(flag) {
     toastr.info('loading...');
     var myChart = echarts.init(document.getElementById('retentionmain'));
     var regNum = 0;
@@ -31,7 +31,7 @@
     var stats = $('.stats .btn.sel').attr('stats');
     var isPlatform = /platform/.test(stats);
     var timeline = stats.match(/([^\_]+)?\_?/)[1];
-    changePicker(timeline);
+    if (!flag) changePicker(timeline);  // 如果不是通过选择日期触发的事件，重新生成一下日期选择框
     var date = $('#reportrange').attr('xdate');
     var url = '/data/abroad?action=' + path + '&stats=' + stats + '&date=' + date;
 
@@ -87,28 +87,10 @@
         }
         if (timeline === 'daily') {  // 暂时先留着，等着做周和月
           var suffix = '日' + typeName;
-          option.xAxis.data = [
-            moment(date).format('MM/DD') + (path === 'retention' ? '日新增' : suffix),
-            moment(date).add(1, 'days').format('MM/DD') + suffix,
-            moment(date).add(2, 'days').format('MM/DD') + suffix,
-            moment(date).add(3, 'days').format('MM/DD') + suffix,
-            moment(date).add(4, 'days').format('MM/DD') + suffix,
-            moment(date).add(5, 'days').format('MM/DD') + suffix,
-            moment(date).add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(7, 'days').format('MM/DD') + suffix,
-          ]
+          option.xAxis.data = [moment(date).format('MM/DD') + (path === 'retention' ? '日新增' : suffix)].concat(buildShaft([1, 2, 4, 5, 6, 7], date, 'd', suffix));
         } else if (timeline === 'weekly') {
           var suffix = '周' + typeName;
-          option.xAxis.data = [
-            moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + (path === 'retention' ? '周新增' : suffix),
-            moment(date).add(1, 'weeks').format('MM/DD') + '-' + moment(date).add(1, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(2, 'weeks').format('MM/DD') + '-' + moment(date).add(2, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(3, 'weeks').format('MM/DD') + '-' + moment(date).add(3, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(4, 'weeks').format('MM/DD') + '-' + moment(date).add(4, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(5, 'weeks').format('MM/DD') + '-' + moment(date).add(5, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(6, 'weeks').format('MM/DD') + '-' + moment(date).add(6, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(7, 'weeks').format('MM/DD') + '-' + moment(date).add(7, 'weeks').add(6, 'days').format('MM/DD') + suffix,
-          ]
+          option.xAxis.data = [moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + (path === 'retention' ? '周新增' : suffix)].concat(buildShaft([1, 2, 4, 5, 6, 7], date, 'w', suffix));
         } else {
           var suffix = '月' + typeName;
           option.xAxis.data = [
@@ -130,6 +112,36 @@
     });
   }
 
+  // 用来生成x时间轴
+  // attr 偏移量 可以为数字或者为数组
+  // date 当前日期
+  // unit 单位 日｜周｜月 XXXXX
+  // suffix 轴日期后边拼的字符串 如： 日新增 日留存 什么什么的
+  function buildShaft (attr, date, unit, suffix) {
+    if (typeof attr !== 'object') {
+      var str;
+      switch (unit) {
+        case 'd':
+        case 'daily':
+          str = moment(date).add(attr, 'days').format('MM/DD') + suffix || '';
+          break;
+        case 'w':
+        case 'weekly':
+          str = moment(date).add(attr, 'weeks').format('MM/DD') + '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('MM/DD') + suffix || '';
+          break;
+      }
+      return str;
+    } else {
+      var arr = [];
+      var index = 0;
+      var len = attr.length;
+      for (; index < len; index++) {
+        arr.push(buildShaft(attr[index], date, unit, suffix));
+      }
+      return arr;
+    }
+  }
+
   // 因为切换日周月是在一个页面完成的，所以不能直接通过截取location.href来获取 所以在切换按钮click事件中调用了该函数
   function changePicker (path) {
     // <!-- datepicker -->
@@ -148,7 +160,8 @@
         $('#reportrange').attr('xdate', start.format('YYYY-MM'));
         $('#retentiondate').html(start.format('YYYY-M') + '月');
       }
-      load();
+      // 这里参数表示为切换日期，而不是切换日周月 因为切换日周月需要重新生成datepicker
+      load(true);
     }
 
     if (path === 'daily') {
