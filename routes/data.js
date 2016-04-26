@@ -4,7 +4,7 @@ let dataLibs = require('../libs/data.js');
 let setStrTransformHump = require('../tools/tools.js').setStrTransformHump;
 
 module.exports = function(router, conf) {
-  router.get('/data/:path', function*() {
+  router.get('/:path', function*() {
     let path = this.params.path;
     let action = this.query.action || '';
     let processName = setStrTransformHump(action);
