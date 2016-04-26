@@ -78,8 +78,6 @@ function* getRetention (query) {
   ${abroadLimit}
   ${isPlatform ? 'GROUP BY platform  ORDER BY platform DESC' : ''}
   `;
-  console.log(sql);
-  console.log(regSql);
   return yield handleRetention(sql, regSql, date, isPlatform);
 }
 
@@ -101,20 +99,26 @@ function* handleRetention(sql, regSql, date, isPlatform) {
   let list = yield q(ak47, sql);
   var regList = yield q(ak47, regSql);
   if (!list) return [];
-  if (isPlatform) {
-    let obj = {};
-    let getItem = function (key) {
-      let len = list.length;
-      let index = 0;
-      let val = [];
-      for (; index < len; index++) {
+  let getItem = function (key) {
+    let len = list.length;
+    let index = 0;
+    let val = [];
+    for (; index < len; index++) {
+      if (isPlatform) {
         val.push({
           platform: list[index].platform,
           retention: list[index][key]
         });
+      } else {
+        val.push({
+          retention: list[index][key]
+        });
       }
-      return val;
     }
+    return val;
+  }
+  if (isPlatform) {
+    let obj = {};
     return {
       [date]: regList,
       [moment(date).add(1, 'day').format('YYYYMMDD')]: getItem('a1'),
