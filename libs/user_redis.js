@@ -9,11 +9,11 @@ let userRedisServer = userRedisServers[random(0, userRedisServers.length - 1)];
 let userRedisClient = redis.createClient('6379', userRedisServer);
 let userRedisCo = thenifyAll(userRedisClient, userRedisClient, [
   'zcard',
+  'hget',
   'hgetall',
   'hmget',
   'zrevrange',
   'zscore',
-  'hget',
 ]);
 
 module.exports = userRedisCo;

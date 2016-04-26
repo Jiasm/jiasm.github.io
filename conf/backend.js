@@ -39,4 +39,13 @@ module.exports = {
     password: 'yYVzvAXQFUAHpHUT',
     database: 'livedata'
   },
+  userMysql: {
+    host: [
+      '10.10.230.43',
+      '10.10.231.221'
+    ],
+    user: 'blued',
+    password: 'YGB8twmZBLe46Fzw',
+    database: 'blued'
+  },
 }
