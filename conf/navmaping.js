@@ -135,7 +135,7 @@ const maping = {
     icon: "fa-cog",
     child_menu: [{
       title: "成员管理",
-      href: "/userconfig"
+      href: "/settings"
     }, {
       title: "权限管理",
       href: "javascript:;"

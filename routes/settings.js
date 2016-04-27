@@ -9,16 +9,25 @@ const USERTABLE = 'dt_admin';
 
 module.exports = function(router, conf) {
   var navmaping = require('../conf/navmaping.js')();
-  router.get('/', function* () {
+  router.get('/', function*() {
     var path = this.params.path;
-    let html = yield render('userconfig', {
+    let html = yield render('members', {
       title: conf.productName,
       navmaping: navmaping
     });
     this.body = html;
   });
 
-  router.post('/adduser', function* (next) {
+  router.get('/new', function*() {
+    var path = this.params.path;
+    let html = yield render('new', {
+      title: conf.productName,
+      navmaping: navmaping
+    });
+    this.body = html;
+  });
+
+  router.post('/adduser', function*(next) {
     var params = this.request.body;
     var uid = params.uid;
     var is_super = params.is_super;
