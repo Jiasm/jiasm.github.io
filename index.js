@@ -44,7 +44,7 @@ app.use(function*(next) {
       // 如果登录则查询该账号的对应权限
       let uid = hashids.decode(account)[0];
       if (uid) {
-        let adminInfo = yield q(ak47, 'SELECT * FROM dt_admin WHERE uid=' + uid);
+        let adminInfo = yield q(ak47, `SELECT * FROM dt_admin WHERE uid=${uid}`);
         if (adminInfo.length) {
           let is_super = adminInfo[0].is_super;
           let is_locked = adminInfo[0].is_locked;
@@ -104,6 +104,15 @@ app.use(function*(next) {
 //     });
 //   }
 // });
+
+// page not found
+app.use(function*(next) {
+  yield next;
+  if (404 != this.status) {
+    return;
+  }
+  this.redirect('/404');
+})
 
 // Data interface
 jsonp(app);
