@@ -48,8 +48,22 @@ const maping = {
       href: "/retention/monthly"
     },],
   },
+  video: {
+    title: "直播数据",
+    icon: "fa-video-camera",
+    child_menu: [{
+      title: "日 消费/收入",
+      href: "/video/daily"
+    }, {
+      title: "周 消费/收入",
+      href: "/video/weekly"
+    }, {
+      title: "总 消费/收入",
+      href: "/video/total"
+    },],
+  },
   channel: {
-    title: "渠道分布",
+    title: "渠道分布(待开发)",
     icon: "fa-sitemap",
     child_menu: [{
       title: "渠道列表",
@@ -65,22 +79,8 @@ const maping = {
       href: "/channel/retention"
     },],
   },
-  video: {
-    title: "直播数据",
-    icon: "fa-video-camera",
-    child_menu: [{
-      title: "日 消费/收入",
-      href: "/video/daily"
-    }, {
-      title: "周 消费/收入",
-      href: "/video/weekly"
-    }, {
-      title: "总 消费/收入",
-      href: "/video/total"
-    },],
-  },
   product: {
-    title: "产品功能",
+    title: "产品功能(待开发)",
     icon: "fa-cogs",
     child_menu: [{
       title: "S1",
@@ -97,7 +97,7 @@ const maping = {
     },],
   },
   mobile: {
-    title: "终端属性",
+    title: "终端属性(待开发)",
     icon: "fa-mobile",
     child_menu: [{
       title: "S1",
@@ -114,7 +114,7 @@ const maping = {
     },],
   },
   errors: {
-    title: "错误分析",
+    title: "错误分析(待开发)",
     icon: "fa-tags",
     child_menu: [{
       title: "S1",
@@ -132,7 +132,7 @@ const maping = {
   },
   manage: {
     title: "平台设置",
-    icon: "fa-tags",
+    icon: "fa-cog",
     child_menu: [{
       title: "成员管理",
       href: "javascript:;"
