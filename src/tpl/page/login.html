@@ -3,6 +3,9 @@
 
 <head>
   @@include('../common/head.html')
+  <style media="screen">
+    .notice {color: red;}
+  </style>
 </head>
 
 <body style="background:#F7F7F7;">
@@ -17,20 +20,22 @@
           <form>
             <h1>Login Form</h1>
             <div>
-              <input type="text" class="form-control" placeholder="Username" required="" />
+              <input id="account" type="text" class="form-control" placeholder="请输入Blued账号 手机/邮箱" autocomplete="off" />
             </div>
             <div>
-              <input type="password" class="form-control" placeholder="Password" required="" />
+              <input id="passwd" type="password" class="form-control" placeholder="请输入Blued账号 密码" autocomplete="off" />
             </div>
             <div>
-              <a class="btn btn-default submit" href="/dashboard">Log in</a>
+              <a id="btn" class="btn btn-default submit" href="javascript:;">Log in</a>
             </div>
+            <br/>
+            <div id="notice" class="notice hide">账号或密码不能为空</div>
+            <br/>
             <div class="clearfix"></div>
             <div class="separator">
               <div class="clearfix"></div>
               <div>
                 <h1><i class="fa fa-pie-chart" style="font-size: 26px;"></i> {{title}}</h1>
-
                 <p>©2016 www.blued.com All Rights Reserved</p>
               </div>
             </div>
@@ -41,7 +46,50 @@
       </div>
     </div>
   </div>
+  <script src="/js/jquery.min.js"></script>
+  <script type="text/javascript">
+    var $name = $('#account');
+    var $pw = $('#passwd');
+    var $btn = $('#btn');
+    var $notice = $('#notice');
+    $name.on('keyup', function(event) {
+      if (event.keyCode === 13) {
+        $btn.trigger('click');
+      }
+    });
+    $pw.on('keyup', function(event) {
+      if (event.keyCode === 13) {
+        $btn.trigger('click');
+      }
+    });
 
+    $btn.on('click', function(){
+      var account = $name.val();
+      var pw = $pw.val();
+
+      if (account.length && pw.length) {
+        $notice.addClass('hide');
+        var type = (account.indexOf('@') !== -1)? 'email' : 'phone';
+        var url = '/login/'+type +'?input='+account+'&pw='+pw;
+        $.ajax({
+          url: url,
+          method: 'POST',
+          data: {
+            input: account,
+            pw: pw,
+          },
+          success: function(res) {
+            if(res.code !== 200) {
+              $notice.removeClass('hide').html(res.msg);
+            } else {
+              location.href = '/dashboard/index';
+            }
+          }
+        });
+      } else {
+        $notice.removeClass('hide').html('账号或密码不能为空');
+      }
+    });
+  </script>
 </body>
-
 </html>

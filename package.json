@@ -16,6 +16,7 @@
   "dependencies": {
     "co-views": "^2.1.0",
     "handlebars": "^3.0.3",
+    "hashids": "1.0.2",
     "koa": "^1.2.0",
     "koa-body-parser": "^1.1.2",
     "koa-compose": "^2.4.0",
