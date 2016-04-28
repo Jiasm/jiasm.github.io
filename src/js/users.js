@@ -71,41 +71,8 @@
         }
         option.legend.data = dateList;
         option.series = seriesList;
-        // if (path === 'daily') {  // 暂时先留着，等着做周和月
-          var suffix = isActive ? '日活' : '日新增';
-          option.xAxis.data = [
-            moment(date).format('MM/DD') + suffix,
-            moment(date).add(1, 'days').format('MM/DD') + suffix,
-            moment(date).add(2, 'days').format('MM/DD') + suffix,
-            moment(date).add(3, 'days').format('MM/DD') + suffix,
-            moment(date).add(4, 'days').format('MM/DD') + suffix,
-            moment(date).add(5, 'days').format('MM/DD') + suffix,
-            moment(date).add(6, 'days').format('MM/DD') + suffix,
-            moment(date).add(7, 'days').format('MM/DD') + suffix,
-          ]
-        // } else if (path === 'weekly') {
-        //   option.xAxis.data = [
-        //     moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + '新增',
-        //     moment(date).add(1, 'weeks').format('MM/DD') + '-' + moment(date).add(1, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //     moment(date).add(2, 'weeks').format('MM/DD') + '-' + moment(date).add(2, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //     moment(date).add(3, 'weeks').format('MM/DD') + '-' + moment(date).add(3, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //     moment(date).add(4, 'weeks').format('MM/DD') + '-' + moment(date).add(4, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //     moment(date).add(5, 'weeks').format('MM/DD') + '-' + moment(date).add(5, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //     moment(date).add(6, 'weeks').format('MM/DD') + '-' + moment(date).add(6, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //     moment(date).add(7, 'weeks').format('MM/DD') + '-' + moment(date).add(7, 'weeks').add(6, 'days').format('MM/DD') + '留存',
-        //   ]
-        // } else {
-        //   option.xAxis.data = [
-        //     moment(date).format('M') + '月新增',
-        //     moment(date).add(1, 'months').format('M') + '月留存',
-        //     moment(date).add(2, 'months').format('M') + '月留存',
-        //     moment(date).add(3, 'months').format('M') + '月留存',
-        //     moment(date).add(4, 'months').format('M') + '月留存',
-        //     moment(date).add(5, 'months').format('M') + '月留存',
-        //     moment(date).add(6, 'months').format('M') + '月留存',
-        //     moment(date).add(7, 'months').format('M') + '月留存',
-        //   ]
-        // }
+        var suffix = isActive ? '日活' : '日新增';
+        option.xAxis.data = [moment(date).format('MM/DD') + suffix].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'd', suffix));
         myChart.setOption(option);
         toastr.clear();
       } else {
@@ -114,62 +81,7 @@
     });
   }
 
-
-  // <!-- datepicker -->
-  var cb = function(start, end, label) {
-
-    // if (path === 'daily') {
-    $('#reportrange span').html(start.format(SHOWDATE));
-    $('#reportrange').attr('xdate', start.format(SHOWDATE));
-    $('#retentiondate').html(start.format(SHOWDATE));
-    // } else if (path === 'weekly') {
-    //   $('#reportrange span').html(start.format(SHOWDATE));
-    //   $('#reportrange').attr('xdate', start.subtract(start.weekday() - 1, 'days').format(SHOWDATE));
-    //   $('#retentiondate').html(start.format(SHOWDATE) + ' 至 ' + start.add(6, 'days').format(SHOWDATE));
-    // } else {
-    //   $('#reportrange span').html(start.format('YYYY-MM'));
-    //   $('#reportrange').attr('xdate', start.format('YYYY-MM'));
-    //   $('#retentiondate').html(start.format('YYYY-M') + '月');
-    // }
-    load();
-  }
-
-  // if (path === 'daily') {
-  var _date = moment().subtract(8, 'days');
-  // } else if (path === 'weekly') {
-  //   var _date = moment().weekday(-13);
-  // } else {
-  //   var _date = moment().subtract(3, 'months').startOf('months');
-  // }
-  var optionSet1 = {
-    weekStart: 1,
-    startDate: _date,
-    singleDatePicker: true,
-    minDate: '01/01/2016',
-    maxDate: '12/31/2018',
-    showDropdowns: true,
-    showWeekNumbers: true,
-    opens: 'left',
-    buttonClasses: ['btn btn-default'],
-    applyClass: 'btn-small btn-primary',
-    cancelClass: 'btn-small',
-    format: 'MM/DD/YYYY',
-    separator: ' to ',
-  };
-  //if (path === 'daily') {
-  $('#retentiondate').html(_date.format(SHOWDATE));
-  $('#reportrange span').html(_date.format(SHOWDATE));
-  $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-  // } else if (path === 'weekly') {
-  //   $('#retentiondate').html(_date.format(SHOWDATE) + ' 至 ' + moment().weekday(-13).add(6, 'days').format(SHOWDATE));
-  //   $('#reportrange span').html(_date.format(SHOWDATE));
-  //   $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-  // } else {
-  //   $('#retentiondate').html(_date.format('YYYY-M') + '月');
-  //   $('#reportrange span').html(_date.format('YYYY-MM'));
-  //   $('#reportrange').attr('xdate', _date.format('YYYY-MM')).daterangepicker(optionSet1, cb);
-  // }
-  // <!-- /datepicker -->
+  Utils.changePicker('daily');
 
   $('.stats .btn').on('click', function() {
     if ($(this).hasClass('sel')) {

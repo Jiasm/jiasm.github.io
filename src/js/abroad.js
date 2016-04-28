@@ -73,36 +73,20 @@
         }
         option.legend.data = dateList;
         option.series = seriesList;
-        var typeName;
-        switch (path) {
-          case 'active':
-            typeName = '活跃';
-            break;
-          case 'reg':
-            typeName = '新增';
-            break;
-          case 'retention':
-            typeName = '留存';
-            break;
-        }
+        var typeName = ({
+          active: '活跃',
+          reg: '新增',
+          retention: '留存'
+        })[path];
         if (timeline === 'daily') {  // 暂时先留着，等着做周和月
           var suffix = '日' + typeName;
-          option.xAxis.data = [moment(date).format('MM/DD') + (path === 'retention' ? '日新增' : suffix)].concat(buildShaft([1, 2, 4, 5, 6, 7], date, 'd', suffix));
+          option.xAxis.data = [moment(date).format('MM/DD') + (path === 'retention' ? '日新增' : suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'd', suffix));
         } else if (timeline === 'weekly') {
           var suffix = '周' + typeName;
-          option.xAxis.data = [moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + (path === 'retention' ? '周新增' : suffix)].concat(buildShaft([1, 2, 4, 5, 6, 7], date, 'w', suffix));
+          option.xAxis.data = [moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + (path === 'retention' ? '周新增' : suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'w', suffix));
         } else {
           var suffix = '月' + typeName;
-          option.xAxis.data = [
-            moment(date).format('M') + (path === 'retention' ? '月新增' : suffix),
-            moment(date).add(1, 'months').format('M') + suffix,
-            moment(date).add(2, 'months').format('M') + suffix,
-            moment(date).add(3, 'months').format('M') + suffix,
-            moment(date).add(4, 'months').format('M') + suffix,
-            moment(date).add(5, 'months').format('M') + suffix,
-            moment(date).add(6, 'months').format('M') + suffix,
-            moment(date).add(7, 'months').format('M') + suffix,
-          ]
+          option.xAxis.data = [moment(date).format('MM/DD') + (path === 'retention' ? '月新增' : suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'm', suffix));
         }
         myChart.setOption(option);
         toastr.clear();
@@ -112,39 +96,8 @@
     });
   }
 
-  // 用来生成x时间轴
-  // attr 偏移量 可以为数字或者为数组
-  // date 当前日期
-  // unit 单位 日｜周｜月 XXXXX
-  // suffix 轴日期后边拼的字符串 如： 日新增 日留存 什么什么的
-  function buildShaft (attr, date, unit, suffix) {
-    if (typeof attr !== 'object') {
-      var str;
-      switch (unit) {
-        case 'd':
-        case 'daily':
-          str = moment(date).add(attr, 'days').format('MM/DD') + suffix || '';
-          break;
-        case 'w':
-        case 'weekly':
-          str = moment(date).add(attr, 'weeks').format('MM/DD') + '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('MM/DD') + suffix || '';
-          break;
-      }
-      return str;
-    } else {
-      var arr = [];
-      var index = 0;
-      var len = attr.length;
-      for (; index < len; index++) {
-        arr.push(buildShaft(attr[index], date, unit, suffix));
-      }
-      return arr;
-    }
-  }
-
   // 因为切换日周月是在一个页面完成的，所以不能直接通过截取location.href来获取 所以在切换按钮click事件中调用了该函数
   function changePicker (path) {
-    // <!-- datepicker -->
     var cb = function(start, end, label) {
 
       if (path === 'daily') {
@@ -163,43 +116,7 @@
       // 这里参数表示为切换日期，而不是切换日周月 因为切换日周月需要重新生成datepicker
       load(true);
     }
-
-    if (path === 'daily') {
-      var _date = moment().subtract(8, 'days');
-    } else if (path === 'weekly') {
-      var _date = moment().weekday(-13);
-    } else {
-      var _date = moment().subtract(3, 'months').startOf('months');
-    }
-    var optionSet1 = {
-      weekStart: 1,
-      startDate: _date,
-      singleDatePicker: true,
-      minDate: '01/01/2016',
-      maxDate: '12/31/2018',
-      showDropdowns: true,
-      showWeekNumbers: true,
-      opens: 'left',
-      buttonClasses: ['btn btn-default'],
-      applyClass: 'btn-small btn-primary',
-      cancelClass: 'btn-small',
-      format: 'MM/DD/YYYY',
-      separator: ' to ',
-    };
-    if (path === 'daily') {
-      $('#retentiondate').html(_date.format(SHOWDATE));
-      $('#reportrange span').html(_date.format(SHOWDATE));
-      $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-    } else if (path === 'weekly') {
-      $('#retentiondate').html(_date.format(SHOWDATE) + ' 至 ' + moment().weekday(-13).add(6, 'days').format(SHOWDATE));
-      $('#reportrange span').html(_date.format(SHOWDATE));
-      $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-    } else {
-      $('#retentiondate').html(_date.format('YYYY-M') + '月');
-      $('#reportrange span').html(_date.format('YYYY-MM'));
-      $('#reportrange').attr('xdate', _date.format('YYYY-MM')).daterangepicker(optionSet1, cb);
-    }
-    //<!-- /datepicker -->
+    Utils.changePicker(path, cb);
   }
 
   $('.stats .btn').on('click', function() {

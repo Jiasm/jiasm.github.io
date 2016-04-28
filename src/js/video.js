@@ -107,49 +107,7 @@
     })[key] || ''
   }
 
-  // <!-- datepicker -->
-  var cb = function(start, end, label) {
-
-    if (path === 'daily') {
-      $('#reportrange span').html(start.format(SHOWDATE));
-      $('#reportrange').attr('xdate', start.format(SHOWDATE));
-      $('#retentiondate').html(start.format(SHOWDATE));
-    } else if (path === 'weekly') {
-      $('#reportrange span').html(start.format(SHOWDATE));
-      $('#reportrange').attr('xdate', start.subtract(start.weekday() - 1, 'days').format(SHOWDATE));
-      $('#retentiondate').html(start.format(SHOWDATE) + ' 至 ' + start.add(6, 'days').format(SHOWDATE));
-    }
-    load();
-  }
-
-  var _date = moment().subtract(1, 'day');
-  var optionSet1 = {
-    weekStart: 1,
-    startDate: _date,
-    singleDatePicker: true,
-    minDate: '01/01/2016',
-    maxDate: '12/31/2018',
-    showDropdowns: true,
-    showWeekNumbers: true,
-    opens: 'left',
-    buttonClasses: ['btn btn-default'],
-    applyClass: 'btn-small btn-primary',
-    cancelClass: 'btn-small',
-    format: 'MM/DD/YYYY',
-    separator: ' to ',
-  };
-  if (path === 'daily') {
-    $('#retentiondate').html(_date.format(SHOWDATE));
-    $('#reportrange span').html(_date.format(SHOWDATE));
-    $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-  } else if (path === 'weekly') {
-    $('#retentiondate').html(_date.format(SHOWDATE) + ' 至 ' + moment().weekday(-13).add(6, 'days').format(SHOWDATE));
-    $('#reportrange span').html(_date.format(SHOWDATE));
-    $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-  } else {  // 这里表示为总的消费和充值
-    $('#retentiondate').hide()
-  }
-  // <!-- /datepicker -->
+  Utils.changePicker(path);
 
   $('.stats .btn').on('click', function() {
     if ($(this).hasClass('sel')) {
