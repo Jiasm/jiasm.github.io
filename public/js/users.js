@@ -81,7 +81,7 @@
     });
   }
 
-  Utils.changePicker('daily');
+  Utils.changePicker('daily', load);
 
   $('.stats .btn').on('click', function() {
     if ($(this).hasClass('sel')) {

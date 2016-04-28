@@ -45,7 +45,7 @@
 
 
   // 生成日期选择框，对日期切换的事件做了默认值设置，可以传入第二个参数进行定制事件处理
-  function changePicker (path, cb) {
+  function changePicker (path, load, cb) {
 
     cb = cb || function(start, end, label) {
       if (path === 'daily') {

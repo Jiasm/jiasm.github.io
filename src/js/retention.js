@@ -75,7 +75,7 @@
     });
   }
 
-  Utils.changePicker(path);
+  Utils.changePicker(path, load);
 
   $('.stats .btn').on('click', function() {
     if ($(this).hasClass('sel')) {

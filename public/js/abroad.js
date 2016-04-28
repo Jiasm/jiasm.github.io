@@ -98,25 +98,7 @@
 
   // 因为切换日周月是在一个页面完成的，所以不能直接通过截取location.href来获取 所以在切换按钮click事件中调用了该函数
   function changePicker (path) {
-    var cb = function(start, end, label) {
-
-      if (path === 'daily') {
-        $('#reportrange span').html(start.format(SHOWDATE));
-        $('#reportrange').attr('xdate', start.format(SHOWDATE));
-        $('#retentiondate').html(start.format(SHOWDATE));
-      } else if (path === 'weekly') {
-        $('#reportrange span').html(start.format(SHOWDATE));
-        $('#reportrange').attr('xdate', start.subtract(start.weekday() - 1, 'days').format(SHOWDATE));
-        $('#retentiondate').html(start.format(SHOWDATE) + ' 至 ' + start.add(6, 'days').format(SHOWDATE));
-      } else {
-        $('#reportrange span').html(start.format('YYYY-MM'));
-        $('#reportrange').attr('xdate', start.format('YYYY-MM'));
-        $('#retentiondate').html(start.format('YYYY-M') + '月');
-      }
-      // 这里参数表示为切换日期，而不是切换日周月 因为切换日周月需要重新生成datepicker
-      load(true);
-    }
-    Utils.changePicker(path, cb);
+    Utils.changePicker(path, load.bind(this, true));
   }
 
   $('.stats .btn').on('click', function() {
