@@ -52,7 +52,7 @@ app.use(function*(next) {
           if (is_locked === 1) {
             re();
           }
-          if (is_super === 1) {
+          if (is_super === 1 || is_super === 2) {
 
           } else {
 
