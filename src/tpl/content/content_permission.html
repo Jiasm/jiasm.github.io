@@ -1,0 +1,22 @@
+<style media="screen">
+
+</style>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="row x_title">
+        <h2>观察者权限管理</h2>
+      </div>
+      <div class="x_content">
+        {{#each navmaping}}
+          <input id="{{@key}}" type="checkbox" class="flat" checked="" />
+          <label for="{{@key}}">{{this.title}}</label>
+          <br/>
+        {{/each}}
+        <div class="ln_solid"></div>
+        <button class="btn btn-primary">重置</button>
+        <button class="btn btn-success">提交</button>
+      </div>
+    </div>
+  </div>
+</div>
