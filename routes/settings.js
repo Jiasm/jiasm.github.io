@@ -60,10 +60,14 @@ module.exports = function(router, conf) {
         let res = yield q(ak47, addSql);
         console.log(res);
         if (res.affectedRows === 1) { // 受影响行数
-          this.body = {success: true}
+          this.body = {
+            success: true
+          }
         }
       } else {
-        this.body = {err: '该用户已存在'}
+        this.body = {
+          err: '该用户已存在'
+        }
       }
     } catch (e) {
       this.body = {
