@@ -137,8 +137,11 @@ const maping = {
       title: "成员管理",
       href: "/settings"
     }, {
-      title: "权限管理",
-      href: "javascript:;"
+      title: "添加新成员",
+      href: "/settings/new"
+    }, {
+      title: "观察者权限管理",
+      href: "/settings/permission"
     },],
   },
 };

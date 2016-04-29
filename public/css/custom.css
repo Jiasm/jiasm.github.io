@@ -892,7 +892,7 @@ legend {
   background: #fff;
 }
 .well.profile_view .bottom {
-  margin-top: -20px;
+  margin-top: 0;
   background: #F2F5F7;
   padding: 9px 0;
   border-top: 1px solid #E6E9ED;
@@ -1343,7 +1343,7 @@ ul.msg_list li a .message {
   border: 1px solid #D9DEE4;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  
+
 }
 .dropdown-menu>li>a {
   color: #5A738E;
