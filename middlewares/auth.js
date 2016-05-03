@@ -7,6 +7,7 @@ let hashids = require('../libs/hashids.js');
 module.exports = function(app) {
   app.use(function*(next) {
     let url = this.request.url;
+    // 过滤出相关的url
     let fillters = url.search(/^\/(login|data|nopermission|404)/);
 
     let reLogin = () => {
@@ -21,7 +22,6 @@ module.exports = function(app) {
 
     if (fillters === -1) {
       let account = this.cookies.get('BD_UID');
-      // 过滤出登录相关的url
       if (!account) {
         reLogin(); // 如没有登录
       } else {

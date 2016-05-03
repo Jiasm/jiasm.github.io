@@ -10,7 +10,7 @@ let hashids = require('../libs/hashids');
 const PASSPORT_MOBILE_HMAC_KEY = 'zCxC8+Ut7P9mW4sKuTCNsg==';
 const EXPIRETIME = 7 * 24 * 60 * 60 * 1000; // 一周
 
-// console.log(hashids.encode(4239999));
+// console.log(hashids.encode(0));
 // console.log(hashids.decode('yPe2QA')[0]);
 
 let eFun = (me, msg) => {

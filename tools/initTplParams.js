@@ -5,7 +5,8 @@ let getUser = require('../libs/getUserInfo.js');
 let hashids = require('../libs/hashids');
 
 module.exports = function*(me, tplName, title) {
-  let uid = hashids.decode(me.cookies.get('BD_UID'))[0];
+  let huid = me.cookies.get('BD_UID') || 'Xxwm9w';
+  let uid = hashids.decode(huid)[0];
   let u = yield getUser(uid);
   let html = yield render(tplName, {
     title: title,
