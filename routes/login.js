@@ -8,6 +8,7 @@ let userRedis = require('../libs/user_redis.js');
 let q = require('../tools/query.js');
 let hashids = require('../libs/hashids');
 const PASSPORT_MOBILE_HMAC_KEY = 'zCxC8+Ut7P9mW4sKuTCNsg==';
+const EXPIRETIME = 7 * 24 * 60 * 60 * 1000; // 一周
 
 // console.log(hashids.encode(4239999));
 // console.log(hashids.decode('yPe2QA')[0]);
@@ -26,11 +27,14 @@ let proPasswd = (str) => {
   return sign;
 }
 
-let checkPasswd = (pw1, pw2, me, uid) => {
+let checkPasswd = (user, pw2, me) => {
+  let pw1 = user.passwd;
+  let uid = user.uid;
+
   if (pw1 === pw2) {
     let account = hashids.encode(Number(uid));
-    me.cookies.set('BDNAME', account, {
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 一周
+    me.cookies.set('BD_UID', account, {
+      maxAge: EXPIRETIME,
     });
     me.jsonp = {
       code: 200,
@@ -63,8 +67,8 @@ module.exports = function(router, conf) {
         .digest('hex')
         .toString().slice(0, 2);
       let userid = yield userRedis.hget(['u:emails:' + emailmd5, input]);
-      let userPasswd = yield userRedis.hget('u:' + userid, 'passwd');
-      checkPasswd(userPasswd, passwd, this, userid);
+      let userInfo = yield userRedis.hgetall('u:' + userid);
+      checkPasswd(userInfo, passwd, this);
     } catch (err) {
       eFun(this, 'err_msg: ' + err.message + ' || err_name: ' + err.name + ' || err_stack: ' + err.stack);
     }
@@ -89,8 +93,8 @@ module.exports = function(router, conf) {
       });
       if (user.length) {
         let userid = user[0].uid;
-        let userPasswd = yield userRedis.hget('u:' + userid, 'passwd');
-        checkPasswd(userPasswd, passwd, this, userid);
+        let userInfo = yield userRedis.hgetall('u:' + userid);
+        checkPasswd(userInfo, passwd, this);
       } else {
         eFun(this, 'input error');
       }

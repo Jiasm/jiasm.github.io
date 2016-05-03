@@ -11,11 +11,11 @@
       <!-- menu prile quick info -->
       <div class="profile">
         <div class="profile_pic">
-          <img src="https://dn-web-blued-cn.qbox.me/userfiles/004/239/999/15328!Head.jpg!720x720.png" alt="..." class="img-circle profile_img">
+          <img src="{{avatar}}" alt="..." class="img-circle profile_img">
         </div>
         <div class="profile_info">
           <span>Welcome,</span>
-          <h2>Darren</h2>
+          <h2>{{name}}</h2>
         </div>
       </div>
       <!-- /menu prile quick info -->
@@ -25,7 +25,7 @@
       <!-- sidebar menu -->
       <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
-          <h3>管理员</h3>
+          <h3>{{identity}}</h3>
           <ul class="nav side-menu">
             {{#each navmaping}}
             <li><a><i class="fa {{this.icon}}"></i> {{this.title}} <span class="fa fa-chevron-down"></span></a>

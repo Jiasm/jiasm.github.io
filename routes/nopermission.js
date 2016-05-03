@@ -6,7 +6,6 @@ let ak47 = require('../libs/mysql.js')('ak47');
 let getUser = require('../libs/getUserInfo.js');
 
 module.exports = function(router, conf) {
-  let navmaping = require('../conf/navmaping.js')();
   router.get('/', function*() {
     let path = this.params.path;
     let adminUidList = yield q(ak47, `SELECT * FROM dt_admin WHERE is_super=1 and is_locked=0`);
