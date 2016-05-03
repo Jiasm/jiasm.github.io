@@ -3,7 +3,7 @@
   $('#adduser').on('submit', function () {
     $('#user-submit').html('提交中...').attr('disabled', 'disabled');
      $.ajax({
-       url: 'userconfig/adduser',
+       url: '/settings/adduser',
        method: 'post',
        data: {
          uid: $('#uid').val(),

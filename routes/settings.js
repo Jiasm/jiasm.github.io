@@ -41,7 +41,6 @@ module.exports = function(router, conf) {
     let uid = params.uid;
     let is_super = params.is_super;
     // let latest_operate_time
-    //
     try {
       let sql = `
         SELECT count(1) as count
