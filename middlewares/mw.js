@@ -4,7 +4,7 @@ let bodyParser = require('koa-body-parser');
 let serve = require('koa-static');
 let jsonp = require('koa-safe-jsonp');
 let auth = require('./auth.js');
-let er = require('./error.js');
+let re = require('./redirect.js');
 
 module.exports = function(app) {
   // Parse request body into ctx.request.body
@@ -25,7 +25,7 @@ module.exports = function(app) {
   auth(app);
 
   // error handler
-  er(app);
+  re(app);
 
   // Data interface
   jsonp(app);

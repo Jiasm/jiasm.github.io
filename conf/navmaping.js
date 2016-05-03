@@ -168,7 +168,7 @@ module.exports = function(role) {
 
 // 通过传入的key值取出对应的菜单项 参数为空则表示全部
 function buildMap(obj) {
-  var map = {};
+  let map = {};
   if (!obj) {
     for (let key in maping) {
       map[key] = maping[key];

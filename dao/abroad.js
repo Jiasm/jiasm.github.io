@@ -6,11 +6,11 @@ let ak47 = require('../libs/mysql.js')('ak47');
 let findcity = require('../tools/findcity.js');
 let q = require('../tools/query.js');
 const abroadLimit = 'AND country != \'cn\'';
-function* getActive (query) {
+function* getActive(query) {
   let date = moment(query.date).format('YYYYMMDD');
-  var isPlatform = /platform/.test(query.stats);
+  let isPlatform = /platform/.test(query.stats);
   // let stats = query.stats === 'date' ? 'date' : 'date,' + query.stats;
-  var sql = `
+  let sql = `
   SELECT date, SUM(active) AS active${isPlatform ? ', platform' : ''}
   FROM users_count
   WHERE city_settled!='1_999_000000'
@@ -24,11 +24,11 @@ function* getActive (query) {
   return yield handleResult(sql);
 }
 
-function* getReg (query) {
+function* getReg(query) {
   let date = moment(query.date).format('YYYYMMDD');
-  var isPlatform = /platform/.test(query.stats);
+  let isPlatform = /platform/.test(query.stats);
   //console.log(date.valueOf());
-  var sql = `
+  let sql = `
   SELECT date,platform, SUM(reg) AS reg${isPlatform ? ', platform' : ''}
   FROM users_count
   WHERE city_settled!='1_999_000000'
@@ -42,11 +42,14 @@ function* getReg (query) {
   return yield handleResult(sql);
 }
 
-function* getRetention (query) {
+function* getRetention(query) {
   let date = moment(query.date).format('YYYYMMDD');
-  var isPlatform = /platform/.test(query.stats);
-  var timeline = query.stats.match(/([^\_]+)?\_?/)[1];
-  var sql, regSql, where, regWhere;
+  let isPlatform = /platform/.test(query.stats);
+  let timeline = query.stats.match(/([^\_]+)?\_?/)[1];
+  let sql;
+  let regSql;
+  let where;
+  let regWhere;
   switch (timeline) {
     case 'daily':
       where = `WHERE date=${date}`;
@@ -97,9 +100,11 @@ function* handleResult(sql) {
 
 function* handleRetention(sql, regSql, date, isPlatform) {
   let list = yield q(ak47, sql);
-  var regList = yield q(ak47, regSql);
-  if (!list) return [];
-  let getItem = function (key) {
+  let regList = yield q(ak47, regSql);
+  if (!list) {
+    return [];
+  }
+  let getItem = function(key) {
     let len = list.length;
     let index = 0;
     let val = [];
@@ -110,9 +115,7 @@ function* handleRetention(sql, regSql, date, isPlatform) {
           retention: list[index][key]
         });
       } else {
-        val.push({
-          retention: list[index][key]
-        });
+        val.push({retention: list[index][key]});
       }
     }
     return val;
@@ -133,13 +136,27 @@ function* handleRetention(sql, regSql, date, isPlatform) {
     list = list[0];
     return {
       [date]: regList,
-      [moment(date).add(1, 'day').format('YYYYMMDD')]: [{retention: list.a1}],
-      [moment(date).add(2, 'day').format('YYYYMMDD')]: [{retention: list.a2}],
-      [moment(date).add(3, 'day').format('YYYYMMDD')]: [{retention: list.a3}],
-      [moment(date).add(4, 'day').format('YYYYMMDD')]: [{retention: list.a4}],
-      [moment(date).add(5, 'day').format('YYYYMMDD')]: [{retention: list.a5}],
-      [moment(date).add(6, 'day').format('YYYYMMDD')]: [{retention: list.a6}],
-      [moment(date).add(7, 'day').format('YYYYMMDD')]: [{retention: list.a7}],
+      [moment(date).add(1, 'day').format('YYYYMMDD')]: [{
+        retention: list.a1
+      }],
+      [moment(date).add(2, 'day').format('YYYYMMDD')]: [{
+        retention: list.a2
+      }],
+      [moment(date).add(3, 'day').format('YYYYMMDD')]: [{
+        retention: list.a3
+      }],
+      [moment(date).add(4, 'day').format('YYYYMMDD')]: [{
+        retention: list.a4
+      }],
+      [moment(date).add(5, 'day').format('YYYYMMDD')]: [{
+        retention: list.a5
+      }],
+      [moment(date).add(6, 'day').format('YYYYMMDD')]: [{
+        retention: list.a6
+      }],
+      [moment(date).add(7, 'day').format('YYYYMMDD')]: [{
+        retention: list.a7
+      }],
     }
   }
 }

@@ -16,11 +16,11 @@ function files() {
     let apps = {};
     dirs.map(function(value) {
       value = value.replace(/(\.js|\.json)$/, '');
-      var router = new Router({prefix: '/' + value});
+      let router = new Router({prefix: '/' + value});
 
       if (value.indexOf('.') != 0) {
         apps[value] = path.join(dirname, name, value);
-        var route = require(apps[value]);
+        let route = require(apps[value]);
         if (typeof route == 'function') {
           route(router, conf)
         }
