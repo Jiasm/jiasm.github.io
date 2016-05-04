@@ -1,6 +1,6 @@
 "use strict";
 
-const maping = {
+const mapping = {
   dashboard: {
     title: "核心数据",
     icon: "fa-home",
@@ -167,14 +167,14 @@ module.exports = function(role) {
 function buildMap(obj) {
   let map = {};
   if (!obj) {
-    for (let key in maping) {
-      map[key] = maping[key];
+    for (let key in mapping) {
+      map[key] = mapping[key];
     }
   } else {
     for (let key of obj) {
-      let item = maping[key];
+      let item = mapping[key];
       if (item) {
-        map[key] = maping[key];
+        map[key] = mapping[key];
       }
     }
   }

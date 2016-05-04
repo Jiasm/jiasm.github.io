@@ -5,7 +5,7 @@ let q = require('../tools/query.js');
 let ak47 = require('../libs/mysql.js')('ak47');
 
 module.exports = function*(userId) {
-  let navmaping = require('../conf/navmaping.js')();
+  let navmapping = require('../conf/navmapping.js')();
   let adminInfo = yield q(ak47, `SELECT * FROM dt_admin WHERE uid=${userId}`);
   let is_super = (adminInfo.length) ? adminInfo[0].is_super : 0;
 
@@ -15,7 +15,7 @@ module.exports = function*(userId) {
       name: user.name || '',
       avatar: user.avatar || 'https://dn-web-blued-cn.qbox.me/userfiles/006/701/811/9669!Head.jpg',
       identity: (is_super) ? '管理员' : '观察者',
-      navmaping: navmaping,
+      navmapping: navmapping,
     }
   });
   return userInfo;

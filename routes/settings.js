@@ -20,7 +20,7 @@ module.exports = function(router, conf) {
     var authority = yield getAuthority(uid);
     let html = yield render('permission', {
       title: conf.productName,
-      navmaping: navmaping,
+      navmapping: navmapping,
       authority: authority && authority.rule
     });
     this.body = html;
@@ -30,7 +30,7 @@ module.exports = function(router, conf) {
     let path = this.params.path;
     let html = yield render('new', {
       title: conf.productName,
-      navmaping: navmaping
+      navmapping: navmapping
     });
     this.body = html;
   });

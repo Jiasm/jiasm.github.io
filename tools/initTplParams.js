@@ -10,7 +10,7 @@ module.exports = function*(me, tplName, title) {
   let u = yield getUser(uid);
   let html = yield render(tplName, {
     title: title,
-    navmaping: u.navmaping || [],
+    navmapping: u.navmapping || [],
     name: u.name || '',
     avatar: u.avatar || '',
     identity: u.identity || '',
