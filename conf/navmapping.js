@@ -143,25 +143,26 @@ const mapping = {
   },
 };
 
-module.exports = function(role) {
-  /*
-    dashboard:  核心数据
-    users:      用户分析
-    retention:  留存分析
-    video:      直播数据
-    channel:    渠道分析
-    product:    产品功能
-    mobile:     终端属性
-    errors:     错误分析
-   */
-  switch (role) {
-    case 'XXX':
-      return buildMap(['dashboard', 'users']);
-      break;
-    default:
-      return buildMap();
-  }
-}
+module.exports = buildMap;
+// function(role) {
+//   /*
+//     dashboard:  核心数据
+//     users:      用户分析
+//     retention:  留存分析
+//     video:      直播数据
+//     channel:    渠道分析
+//     product:    产品功能
+//     mobile:     终端属性
+//     errors:     错误分析
+//    */
+//   switch (role) {
+//     case 'XXX':
+//       return buildMap(['dashboard', 'users']);
+//       break;
+//     default:
+//       return buildMap();
+//   }
+// }
 
 // 通过传入的key值取出对应的菜单项 参数为空则表示全部
 function buildMap(obj) {
