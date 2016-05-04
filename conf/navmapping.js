@@ -96,40 +96,40 @@ const mapping = {
       href: "javascript:;"
     },],
   },
-  mobile: {
-    title: "终端属性(待开发)",
-    icon: "fa-mobile",
-    child_menu: [{
-      title: "S1",
-      href: "javascript:;"
-    }, {
-      title: "S2",
-      href: "javascript:;"
-    }, {
-      title: "S3",
-      href: "javascript:;"
-    }, {
-      title: "S4",
-      href: "javascript:;"
-    },],
-  },
-  errors: {
-    title: "错误分析(待开发)",
-    icon: "fa-tags",
-    child_menu: [{
-      title: "S1",
-      href: "javascript:;"
-    }, {
-      title: "S2",
-      href: "javascript:;"
-    }, {
-      title: "S3",
-      href: "javascript:;"
-    }, {
-      title: "S4",
-      href: "javascript:;"
-    },],
-  },
+  // mobile: {
+  //   title: "终端属性(待开发)",
+  //   icon: "fa-mobile",
+  //   child_menu: [{
+  //     title: "S1",
+  //     href: "javascript:;"
+  //   }, {
+  //     title: "S2",
+  //     href: "javascript:;"
+  //   }, {
+  //     title: "S3",
+  //     href: "javascript:;"
+  //   }, {
+  //     title: "S4",
+  //     href: "javascript:;"
+  //   },],
+  // },
+  // errors: {
+  //   title: "错误分析(待开发)",
+  //   icon: "fa-tags",
+  //   child_menu: [{
+  //     title: "S1",
+  //     href: "javascript:;"
+  //   }, {
+  //     title: "S2",
+  //     href: "javascript:;"
+  //   }, {
+  //     title: "S3",
+  //     href: "javascript:;"
+  //   }, {
+  //     title: "S4",
+  //     href: "javascript:;"
+  //   },],
+  // },
   settings: {
     title: "平台设置",
     icon: "fa-cog",
