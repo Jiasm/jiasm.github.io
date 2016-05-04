@@ -18,9 +18,7 @@ module.exports = function(router, conf) {
   router.get('/permission', function*() {
     let uid = this.query.uid;
     var authority = yield getAuthority(uid);
-    let html = yield render('permission', {
-      title: conf.productName,
-      navmapping: navmapping,
+    let html = yield initTpl(this, 'permission', conf.productName, {
       authority: authority && authority.rule
     });
     this.body = html;
