@@ -53,8 +53,6 @@ function* getWeekly(query) {
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).add(6, 'days').format('YYYYMMDD'),
     groupByStr1,
     'ORDER BY reg DESC');
-console.log(sql);
-console.log(regSql);
   return yield handleResult(sql, regSql, stats);
 }
 
