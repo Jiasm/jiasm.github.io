@@ -9,7 +9,7 @@ module.exports = function*(me, tplName, title, cusParams) {
   let huid = me.cookies.get('BD_UID') || 'Xxwm9w';
   let uid = hashids.decode(huid)[0];
   let u = yield getUser(uid);
-  if (u === 'nopermission') {
+  if (isEmptyObject(u.navmapping)) {
     me.st = 60002;
     me.redirect('nopermission');
   }
