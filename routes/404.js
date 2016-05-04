@@ -3,7 +3,6 @@
 let render = require('../libs/views.js');
 
 module.exports = function(router, conf) {
-  let navmaping = require('../conf/navmaping.js')();
   router.get('/', function*() {
     let path = this.params.path;
     let html = yield render('error', {

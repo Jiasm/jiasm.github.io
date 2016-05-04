@@ -4,24 +4,24 @@ let q = require('../tools/query.js');
 let ak47 = require('../libs/mysql.js')('ak47');
 let hashids = require('../libs/hashids.js');
 
-let reLogin = () => {
-  this.status = 60001;
-}
-let rePremission = () => {
-  this.status = 60002;
-}
-let re404 = () => {
-  this.status = 404;
-}
-
 module.exports = function(app) {
   app.use(function*(next) {
     let url = this.request.url;
+    // 过滤出相关的url
     let fillters = url.search(/^\/(login|data|nopermission|404)/);
-    let account = this.cookies.get('BDNAME');
+
+    let reLogin = () => {
+      this.st = 60001;
+    }
+    let rePremission = () => {
+      this.st = 60002;
+    }
+    let re404 = () => {
+      this.st = 404;
+    }
 
     if (fillters === -1) {
-      // 过滤出登录相关的url
+      let account = this.cookies.get('BD_UID');
       if (!account) {
         reLogin(); // 如没有登录
       } else {
