@@ -50,7 +50,7 @@ $(function() {
 
 // Sidebar Menu active class
 $(function() {
-  var url = window.location.pathname + location.search;
+  var url = window.location.pathname; // + location.search; 不要后边的query 因为在用户权限操作时会拼接一个uid 这样不能正常的选中li
   $('#sidebar-menu a[href="' + url + '"]').parent('li').addClass('current-page').parent('ul').slideDown().parent().addClass('active');
 });
 

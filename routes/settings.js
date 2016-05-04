@@ -2,6 +2,7 @@
 
 let render = require('../libs/views.js');
 let moment = require('moment');
+let getAuthority = require('../libs/getAuthority.js');
 let ak47 = require('../libs/mysql.js')('ak47');
 let q = require('../tools/query.js');
 
@@ -19,10 +20,12 @@ module.exports = function(router, conf) {
   });
 
   router.get('/permission', function*() {
-    let path = this.params.path;
+    let uid = this.query.uid;
+    var authority = yield getAuthority(uid);
     let html = yield render('permission', {
       title: conf.productName,
-      navmaping: navmaping
+      navmaping: navmaping,
+      authority: authority && authority.rule
     });
     this.body = html;
   });
