@@ -6,8 +6,12 @@ let ak47 = require('../libs/mysql.js')('ak47');
 
 module.exports = function*(userId) {
   let adminInfo = yield q(ak47, `SELECT * FROM dt_admin WHERE uid=${userId}`);
-  let is_super = (adminInfo.length) ? adminInfo[0].is_super : 0;
-  let navmapping = require('../conf/navmapping.js')(is_super ? null : JSON.parse(adminInfo[0].authority || []));
+  let is_super = 0;
+  let navmapping = [];
+  if (adminInfo.length) {
+    is_super = (adminInfo.length) ? adminInfo[0].is_super : 0;
+    navmapping = require('../conf/navmapping.js')(is_super ? null : JSON.parse(adminInfo[0].authority || []));
+  }
   let userInfo = yield userRedis.hgetall('u:' + userId).then(function(user) {
     return {
       uid: userId,

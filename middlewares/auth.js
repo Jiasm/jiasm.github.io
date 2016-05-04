@@ -21,7 +21,7 @@ module.exports = function(app) {
     }
 
     if (fillters === -1) {
-      let account = this.cookies.get('BD_UID');
+      let account = this.cookies.get('BDTOKEN');
       if (!account) {
         reLogin(); // 如没有登录
       } else {

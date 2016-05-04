@@ -5,7 +5,7 @@ let hashids = require('../libs/hashids.js');
 
 module.exports = function(router, conf) {
   router.get('/', function*() {
-    let account = this.cookies.get('BD_UID');
+    let account = this.cookies.get('BDTOKEN');
     if (account) {
       let uid = hashids.decode(account)[0];
       let userInfo = yield getUser(uid);

@@ -33,7 +33,7 @@ let checkPasswd = (user, pw2, me) => {
 
   if (pw1 === pw2) {
     let account = hashids.encode(Number(uid));
-    me.cookies.set('BD_UID', account, {
+    me.cookies.set('BDTOKEN', account, {
       maxAge: EXPIRETIME,
     });
     me.jsonp = {

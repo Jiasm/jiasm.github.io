@@ -6,8 +6,8 @@ let hashids = require('../libs/hashids');
 
 // 如果需要往模版里传入一些比较特殊的数据，塞到第四个参数里即可。
 module.exports = function*(me, tplName, title, cusParams) {
-  let huid = me.cookies.get('BD_UID') || 'Xxwm9w';
-  let uid = hashids.decode(huid)[0];
+  let huid = me.cookies.get('BDTOKEN');
+  let uid = huid ? hashids.decode(huid)[0] : '0';
   let u = yield getUser(uid);
   // 权限为空 或者请求的路径（key）不存在他的权限内 返回木有权限
   if (isEmptyObject(u.navmapping) || !(me.url.match(/\/?(\w+)?\/?/)[1] in u.navmapping)) {
