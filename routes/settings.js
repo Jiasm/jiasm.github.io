@@ -26,10 +26,7 @@ module.exports = function(router, conf) {
 
   router.get('/new', function*() {
     let path = this.params.path;
-    let html = yield render('new', {
-      title: conf.productName,
-      navmapping: navmapping
-    });
+    let html = yield initTpl(this, 'new', conf.productName);
     this.body = html;
   });
 
