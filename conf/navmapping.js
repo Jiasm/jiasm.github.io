@@ -130,7 +130,7 @@ const mapping = {
       href: "javascript:;"
     },],
   },
-  manage: {
+  settings: {
     title: "平台设置",
     icon: "fa-cog",
     child_menu: [{
@@ -179,5 +179,8 @@ function buildMap(obj) {
       }
     }
   }
+  Object.assign(map, {
+    settings: mapping['settings']
+  })
   return map;
 }
