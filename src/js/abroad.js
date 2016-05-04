@@ -52,7 +52,7 @@
             regNum += count;
           }
         }
-        $('#retentionreg').html(regNum);
+        $('#retentionreg').html(numberAddComma(regNum));
 
         var index = 0;
         var len = datas.length;

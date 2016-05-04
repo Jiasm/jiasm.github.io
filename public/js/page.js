@@ -45,3 +45,8 @@ function bluedSetCookie(c_name, value, expiredays) {
   exdate.setHours(exdate.getHours() + expiredays);
   document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toUTCString());
 }
+
+function numberAddComma(num) {
+  var str = num + '';
+  return str.split('').reverse().join('').replace(/(\d{3})/g, '$1,').replace(/\,$/, '').split('').reverse().join('');
+}

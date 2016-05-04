@@ -39,7 +39,7 @@
         for (var k = 0; k < reg.length; k++) {
           regNum += reg[k].reg
         }
-        $('#retentionreg').html(regNum);
+        $('#retentionreg').html(numberAddComma(regNum));
         var data = res.data.retention;
         for (var i = 0; i < data.length; i++) {
           dateList.push(data[i].name);
