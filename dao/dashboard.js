@@ -9,7 +9,7 @@ function* getActiveAndReg(query) {
   let res = {};
   let sql = util.format('SELECT %s FROM %s %s',
     'date,sum(reg) AS reg,sum(active) AS active',
-    'users_count',
+    'users_count_by_app',
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + stardate + ' AND date<=' + enddate + ' group by date');
 
   res.monthly = yield ak47.query(sql).then(function(result) {

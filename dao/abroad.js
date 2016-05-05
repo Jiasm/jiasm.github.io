@@ -12,7 +12,7 @@ function* getActive(query) {
   // let stats = query.stats === 'date' ? 'date' : 'date,' + query.stats;
   let sql = `
   SELECT date, SUM(active) AS active${isPlatform ? ', platform' : ''}
-  FROM users_count
+  FROM users_count_by_app
   WHERE city_settled!='1_999_000000'
   AND date>=${date}
   AND date<=${moment(date).add(6, 'days').format('YYYYMMDD')}
@@ -30,7 +30,7 @@ function* getReg(query) {
   //console.log(date.valueOf());
   let sql = `
   SELECT date,platform, SUM(reg) AS reg${isPlatform ? ', platform' : ''}
-  FROM users_count
+  FROM users_count_by_app
   WHERE city_settled!='1_999_000000'
   AND date>=${date}
   AND date<=${moment(date).add(6, 'days').format('YYYYMMDD')}
@@ -75,7 +75,7 @@ function* getRetention(query) {
   `;
   regSql = `
   SELECT SUM(reg) AS retention${isPlatform ? ', platform' : ''}
-  FROM users_count
+  FROM users_count_by_app
   ${regWhere}
   AND city_settled!='1_999_000000'
   ${abroadLimit}

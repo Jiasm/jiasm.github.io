@@ -23,7 +23,7 @@ function* getDaily(query) {
 
   let regSql = util.format('SELECT %s FROM %s %s %s %s',
     params + 'SUM(reg) AS reg',
-    'users_count',
+    'users_count_by_app',
     'WHERE city_settled!=\'1_999_000000\' AND date=' + date,
     groupByStr,
     'ORDER BY reg DESC');
@@ -49,7 +49,7 @@ function* getWeekly(query) {
 
   let regSql = util.format('SELECT %s FROM %s %s %s %s',
     params1 + 'SUM(reg) AS reg',
-    'users_count',
+    'users_count_by_app',
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).add(6, 'days').format('YYYYMMDD'),
     groupByStr1,
     'ORDER BY reg DESC');
@@ -66,7 +66,7 @@ function* getMonthly(query) {
 
   let sql = util.format('SELECT %s FROM %s %s %s %s %s',
     params + 'SUM(after1) AS a1,SUM(after2) AS a2,SUM(after3) AS a3,SUM(after4) AS a4,SUM(after5) AS a5,SUM(after6) AS a6,SUM(after7) AS a7',
-    'monthly_retention',
+    'monthly_retention_by_app',
     'WHERE month=' + date,
     groupByStr,
     'ORDER BY a1 DESC',
@@ -75,7 +75,7 @@ function* getMonthly(query) {
   date = date + '01';
   let regSql = util.format('SELECT %s FROM %s %s %s %s',
     params1 + 'SUM(reg) AS reg',
-    'users_count',
+    'users_count_by_app',
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).endOf('months').format('YYYYMMDD'),
     groupByStr1,
     'ORDER BY reg DESC');

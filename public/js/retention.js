@@ -35,16 +35,29 @@
     bluedAjaxFunc(url, function(res) {
       if (res.code === 200) {
         toastr.success('The data load success!');
-        var reg = res.data.reg;
-        for (var k = 0; k < reg.length; k++) {
-          regNum += reg[k].reg
+        var reg = generatorData(res.data.reg, res.data.retention, date, 'timestmap-' + path, 'name', 'reg', ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7'])
+        reg = sliceData(reg, 10);
+        var datas = {};
+        for (var key in reg) {
+          var item = reg[key];
+          var len = item.length;
+          var index = 0;
+          for (; index < len; index++) {
+            var platform = item[index].name;
+            var count = item[index].value;
+            var data = datas[platform] = datas[platform] || [];
+            data.push(count);
+            regNum += count;
+          }
         }
         $('#retentionreg').html(numberAddComma(regNum));
-        var data = res.data.retention;
-        for (var i = 0; i < data.length; i++) {
-          dateList.push(data[i].name);
+
+        var index = 0;
+        var len = datas.length;
+        for (var key in datas) {
+          dateList.push(key);
           seriesList.push({
-            name: data[i].name,
+            name: key,
             type: 'bar',
             stack: '总量',
             label: {
@@ -53,7 +66,7 @@
                 position: 'insideRight'
               }
             },
-            data: [reg[i].reg, data[i].a1, data[i].a2, data[i].a3, data[i].a4, data[i].a5, data[i].a6, data[i].a7]
+            data: datas[key]
           });
         }
         option.legend.data = dateList;
@@ -62,10 +75,13 @@
         var suffix = '留存';
         if (path === 'daily') {
           option.xAxis.data = [moment(date).format('MM/DD') + '新增'].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'd', suffix));
+          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6, 7], date, 't-d'), null, stats === '' ? ['用户'] : null));
         } else if (path === 'weekly') {
           option.xAxis.data = [moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + '新增'].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'w', suffix));
+          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6, 7], date, 't-w'), null, stats === '' ? ['用户'] : null));
         } else {
           option.xAxis.data = [moment(date).format('M') + '新增'].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'm', suffix));
+          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6, 7], date, 't-m'), null, stats === '' ? ['用户'] : null));
         }
         myChart.setOption(option);
         toastr.clear();

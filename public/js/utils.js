@@ -29,6 +29,21 @@
         case 'month':
           str = moment(date).add(attr, 'months').format('M') + suffix || '';
           break;
+        case 't-d':
+        case 'timestmap-d':
+        case 'timestmap-daily':
+          str = moment(date).add(attr, 'days').format('YYYYMMDD');
+          break;
+        case 't-w':
+        case 'timestmap-w':
+        case 'timestmap-weekly':
+          str = moment(date).add(attr, 'weeks').format('YYYYMMDD')+ '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('YYYYMMDD');
+          break;
+        case 't-m':
+        case 'timestmap-m':
+        case 'timestmap-month':
+          str = moment(date).add(attr, 'months').format('YYYYMMDD');
+          break;
       }
       return str;
     } else {

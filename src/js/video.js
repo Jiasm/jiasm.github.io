@@ -74,6 +74,39 @@
         option.series = seriesList;
         option.xAxis.data = getAxis(titles);
         myChart.setOption(option);
+        var buildRow, headers;
+        if (stats === 'platform') {
+          buildRow = function (timeline, datas, titles) {
+            var titleLen = titles.length;
+            var str = '<tr><td>' + timeline + '</td>';
+            for (var titleIndex = 0; titleIndex < titleLen; titleIndex++) {
+              str += '<td>' + datas[titles[titleIndex]][0].android + '</td>';
+              str += '<td>' + datas[titles[titleIndex]][0].ios + '</td>';
+            }
+            str += '</tr>';
+            return str;
+          }
+          headers = ['android消费', 'ios消费', 'android充值', 'ios充值'];
+        } else {
+          buildRow = function (timeline, datas, titles) {
+            var titleLen = titles.length;
+            var str = '<tr><td>' + timeline + '</td>';
+            for (var titleIndex = 0; titleIndex < titleLen; titleIndex++) {
+              str += '<td>' + datas[titles[titleIndex]][0].total + '</td>';
+            }
+            str += '</tr>';
+            return str;
+          }
+          headers = ['消费', '充值'];
+        }
+
+        if (path === 'daily') {
+          $('#data-table').html(buildTable(datas, Utils.buildShaft(0, date, 't-d'), null, headers ,buildRow));
+        } else if (path === 'weekly') {
+          $('#data-table').html(buildTable(datas, Utils.buildShaft(0, date, 't-w'), null, headers ,buildRow));
+        } else {
+          $('#data-table').html(buildTable(datas, '*', null, headers ,buildRow));
+        }
         toastr.clear();
       } else {
         toastr.error(res.msg);

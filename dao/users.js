@@ -13,11 +13,12 @@ function* getDailyActive(query) {
   let orderbyStr = (stats === 'date') ? 'ORDER BY date ASC' : 'ORDER BY active DESC';
   let sql = util.format('SELECT %s FROM %s %s %s %s',
     stats + ', SUM(active) AS active',
-    'users_count',
+    'users_count_by_app',
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).add(6, 'days').format('YYYYMMDD'),
     groupbyStr,
     orderbyStr,
     'limit 0,70');
+    console.log(sql);
   return yield handleResult(sql);
 }
 
@@ -29,7 +30,7 @@ function* getDailyReg(query) {
 
   let sql = util.format('SELECT %s FROM %s %s %s %s',
     stats + ', SUM(reg) AS reg',
-    'users_count',
+    'users_count_by_app',
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).add(6, 'days').format('YYYYMMDD'),
     groupbyStr,
     orderbyStr,
