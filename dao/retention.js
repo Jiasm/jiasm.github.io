@@ -15,7 +15,7 @@ function* getDaily(query) {
 
   let sql = util.format('SELECT %s FROM %s %s %s %s %s',
     params + 'SUM(after1) AS a1,SUM(after2) AS a2,SUM(after3) AS a3,SUM(after4) AS a4,SUM(after5) AS a5,SUM(after6) AS a6,SUM(after7) AS a7',
-    'daily_retention',
+    'daily_retention_by_app',
     'WHERE date=' + date,
     groupByStr,
     'ORDER BY a1 DESC',
@@ -41,7 +41,7 @@ function* getWeekly(query) {
 
   let sql = util.format('SELECT %s FROM %s %s %s %s %s',
     params + 'SUM(after1) AS a1,SUM(after2) AS a2,SUM(after3) AS a3,SUM(after4) AS a4,SUM(after5) AS a5,SUM(after6) AS a6,SUM(after7) AS a7',
-    'weekly_retention',
+    'weekly_retention_by_app',
     'WHERE week=' + date,
     groupByStr,
     'ORDER BY a1 DESC',
