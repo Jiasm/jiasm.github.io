@@ -36,7 +36,15 @@
     bluedAjaxFunc(url, function(res) {
       if (res.code === 200) {
         toastr.success('The data load success!');
-        var reg = sliceData(res.data, 10);
+        var reg = DataFactory(sliceData(res.data, 10), {
+          key: true,
+          former: {
+            type: stats,
+            value: path,
+            date: date,
+            unit: 'd'
+          }
+        });
         var colCount = 0; // 如果数据返回的不够7天的 下边的表格需要被处理下
         var datas = {};
         for (var key in reg) {
@@ -45,8 +53,8 @@
           var len = item.length;
           var index = 0;
           for (; index < len; index++) {
-            var platform = item[index][stats] || '活跃用户';
-            var count = item[index][path];
+            var platform = item[index].type || '活跃用户';
+            var count = item[index].value;
             var data = datas[platform] = datas[platform] || [];
             data.push(count);
             regNum += count;
@@ -71,8 +79,8 @@
             data: datas[key]
           });
         }
-        option.legend.data = dateList.slice(0, 10);
-        option.series = seriesList.slice(0, 10);
+        option.legend.data = dateList;
+        option.series = seriesList;
         var suffix = isActive ? '日活' : '日新增';
         option.xAxis.data = [moment(date).format('MM/DD') + suffix].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7].slice(0, colCount), date, 'd', suffix));
         myChart.setOption(option);

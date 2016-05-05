@@ -74,6 +74,8 @@
         option.series = seriesList;
         option.xAxis.data = getAxis(titles);
         myChart.setOption(option);
+
+        //  这里用来生成特殊的表格
         var buildRow, headers;
         if (stats === 'platform') {
           buildRow = function (timeline, datas, titles) {

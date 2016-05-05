@@ -35,15 +35,25 @@
     bluedAjaxFunc(url, function(res) {
       if (res.code === 200) {
         toastr.success('The data load success!');
-        var reg = generatorData(res.data.reg, res.data.retention, date, 'timestmap-' + path, 'name', 'reg', ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7'])
-        reg = sliceData(reg, 10);
+        var dataConfig = {
+          date: date,
+          unit: path,
+          former: {
+            type: 'name'
+          }
+        }
+        var __reg = DataFactory(res.data.reg, dataConfig);
+        dataConfig.date = moment(date).add(1, 'd').format('YYYY-MM-DD');
+        var __retention = DataFactory(res.data.retention, dataConfig);
+        var reg = DataFactory.concat([__reg, __retention]);
+        reg = sliceData(reg, 10); // 处理后的数据
         var datas = {};
         for (var key in reg) {
           var item = reg[key];
           var len = item.length;
           var index = 0;
           for (; index < len; index++) {
-            var platform = item[index].name;
+            var platform = /^\d+$/.test(item[index].type) ? '用户' : item[index].type;
             var count = item[index].value;
             var data = datas[platform] = datas[platform] || [];
             data.push(count);
