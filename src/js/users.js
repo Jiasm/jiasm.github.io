@@ -2,6 +2,7 @@
 (function() {
   var SHOWDATE = 'YYYY-MM-DD';
   var path = location.pathname.split('/').pop();
+  var timeUnit = path[0];
   var option = {
     tooltip: {
       trigger: 'axis',
@@ -28,10 +29,10 @@
     var regNum = 0;
     var dateList = [];
     var seriesList = [];
-    var isActive = (path === 'active');
+    var isActive = (/active/.test(path));
     var date = $('#reportrange').attr('xdate');
     var stats = $('.stats .btn.sel').attr('stats');
-    var url = '/data/users?action=' + (isActive ? 'get_daily_active' : 'get_daily_reg') + '&stats=' + stats + '&date=' + date;
+    var url = '/data/users?action=' + 'get_' + path + '&stats=' + stats + '&date=' + date;
 
     bluedAjaxFunc(url, function(res) {
       if (res.code === 200) {
@@ -40,9 +41,9 @@
           key: true,
           former: {
             type: stats,
-            value: path,
+            value: path.split('_').pop(),
             date: date,
-            unit: 'd'
+            unit: timeUnit
           }
         });
         var colCount = 0; // 如果数据返回的不够7天的 下边的表格需要被处理下
@@ -81,10 +82,10 @@
         }
         option.legend.data = dateList;
         option.series = seriesList;
-        var suffix = isActive ? '日活' : '日新增';
-        option.xAxis.data = [moment(date).format('MM/DD') + suffix].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7].slice(0, colCount), date, 'd', suffix));
+        var suffix = getTitle(isActive, timeUnit);
+        option.xAxis.data = [Utils.buildShaft([0], date, timeUnit, suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7].slice(0, colCount), date, timeUnit, suffix));
         myChart.setOption(option);
-        $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6].slice(0, colCount), date, 't-d')));
+        $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6].slice(0, colCount), date, 't-' + timeUnit)));
         toastr.clear();
       } else {
         toastr.error(res.msg);
@@ -92,7 +93,15 @@
     });
   }
 
-  Utils.changePicker('daily', load);
+  Utils.changePicker(path, load);
+
+  function getTitle (isActive, key) {
+    return ({
+      d: isActive ? '日活' : '日新增',
+      w: isActive ? '周活' : '周新增',
+      m: isActive ? '月活' : '月新增',
+    })[key];
+  }
 
   $('.stats .btn').on('click', function() {
     if ($(this).hasClass('sel')) {

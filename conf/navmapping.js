@@ -14,10 +14,22 @@ const mapping = {
     icon: "fa-user",
     child_menu: [{
       title: "日活用户数",
-      href: "/users/active"
+      href: "/users/daily_active"
     }, {
       title: "日新增用户数",
-      href: "/users/reg"
+      href: "/users/daily_reg"
+    },{
+      title: "周活用户数",
+      href: "/users/weekly_active"
+    }, {
+      title: "周新增用户数",
+      href: "/users/weekly_reg"
+    },{
+      title: "月活用户数",
+      href: "/users/monthly_active"
+    }, {
+      title: "月新增用户数",
+      href: "/users/monthly_reg"
     },],
   },
   abroad: {

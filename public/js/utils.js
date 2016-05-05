@@ -27,7 +27,7 @@
           break;
         case 'm':
         case 'month':
-          str = moment(date).add(attr, 'months').format('M') + suffix || '';
+          str = moment(date).add(attr, 'months').format('MM') + suffix || '';
           break;
         case 't-d':
         case 'timestmap-d':
@@ -42,7 +42,7 @@
         case 't-m':
         case 'timestmap-m':
         case 'timestmap-month':
-          str = moment(date).add(attr, 'months').format('YYYYMMDD');
+          str = moment(date).add(attr, 'months').format('YYYYMM');
           break;
       }
       return str;
@@ -63,11 +63,11 @@
   function changePicker (path, load, cb) {
 
     cb = cb || function(start, end, label) {
-      if (path === 'daily') {
+      if (/daily/.test(path)) {
         $('#reportrange span').html(start.format(SHOWDATE));
         $('#reportrange').attr('xdate', start.format(SHOWDATE));
         $('#retentiondate').html(start.format(SHOWDATE));
-      } else if (path === 'weekly') {
+      } else if (/weekly/.test(path)) {
         $('#reportrange span').html(start.format(SHOWDATE));
         $('#reportrange').attr('xdate', start.subtract(start.weekday() - 1, 'days').format(SHOWDATE));
         $('#retentiondate').html(start.format(SHOWDATE) + ' 至 ' + start.add(6, 'days').format(SHOWDATE));
@@ -79,9 +79,9 @@
       load();
     }
 
-    if (path === 'daily') {
+    if (/daily/.test(path)) {
       var _date = moment().subtract(8, 'days');
-    } else if (path === 'weekly') {
+    } else if (/weekly/.test(path)) {
       var _date = moment().weekday(-13);
     } else {
       var _date = moment().subtract(3, 'months').startOf('months');
@@ -101,11 +101,11 @@
       format: 'MM/DD/YYYY',
       separator: ' to ',
     };
-    if (path === 'daily') {
+    if (/daily/.test(path)) {
       $('#retentiondate').html(_date.format(SHOWDATE));
       $('#reportrange span').html(_date.format(SHOWDATE));
       $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
-    } else if (path === 'weekly') {
+    } else if (/weekly/.test(path)) {
       $('#retentiondate').html(_date.format(SHOWDATE) + ' 至 ' + moment().weekday(-13).add(6, 'days').format(SHOWDATE));
       $('#reportrange span').html(_date.format(SHOWDATE));
       $('#reportrange').attr('xdate', _date.format(SHOWDATE)).daterangepicker(optionSet1, cb);
