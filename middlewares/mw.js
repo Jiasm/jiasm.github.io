@@ -5,6 +5,8 @@ let serve = require('koa-static');
 let jsonp = require('koa-safe-jsonp');
 let auth = require('./auth.js');
 let re = require('./redirect.js');
+let dirname = require('path').dirname;
+let base = dirname(process.mainModule.filename);
 
 module.exports = function(app) {
   // Parse request body into ctx.request.body
@@ -19,7 +21,7 @@ module.exports = function(app) {
   });
 
   // static file
-  app.use(serve(process.cwd() + '/public'));
+  app.use(serve(base + '/public'));
 
   // auth check
   auth(app);
