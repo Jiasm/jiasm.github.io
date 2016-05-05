@@ -49,6 +49,10 @@
           <div class="text-center text-center">
             <h1 class="error-number">{{type}}</h1>
             <h2>{{{text}}}</h2>
+            <h4 style="margin: 50px;">
+              5秒钟后自动跳转
+            </h4>
+            <a href="/login" type="button" class="btn btn-info btn-lg">返回登录页</a>
           </div>
         </div>
       </div>
@@ -57,6 +61,11 @@
     </div>
     <!-- footer content -->
   </div>
+  <script type="text/javascript">
+    setTimeout(function () {
+      location.href = '/login';
+    }, 5000);
+  </script>
 </body>
 
 </html>
