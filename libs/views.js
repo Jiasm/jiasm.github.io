@@ -1,7 +1,10 @@
 'use strict';
 
 let views = require('co-views');
-let render = views(process.cwd() + '/views', {
+let dirname = require('path').dirname;
+let base = dirname(process.mainModule.filename);
+
+let render = views(base + '/views', {
   default: 'html',
   map: {
     html: 'handlebars'
