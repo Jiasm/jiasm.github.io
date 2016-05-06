@@ -7,94 +7,52 @@ let findcity = require('../tools/findcity.js');
 let q = require('../tools/query.js');
 
 function* getDailyActive(query) {
-  let date = moment(query.date).format('YYYYMMDD');
-  let stats = query.stats === 'date' ? 'date' : 'date,' + query.stats;
-  let groupbyStr = (stats === 'date') ? 'GROUP BY date' : 'GROUP BY ' + stats;
-  let orderbyStr = (stats === 'date') ? 'ORDER BY date ASC' : 'ORDER BY active DESC';
-  let sql = util.format('SELECT %s FROM %s %s %s %s',
-    stats + ', SUM(active) AS active',
-    'users_count_by_app',
-    'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).add(6, 'days').format('YYYYMMDD'),
-    groupbyStr,
-    orderbyStr,
-    'limit 0,70');
-  return yield handleResult(sql, 'date');
+  return yield generateData('date', moment(query.date).format('YYYYMMDD'), moment(query.date).add(6, 'days').format('YYYYMMDD'), 'active', query.stats);
 }
 
 function* getDailyReg(query) {
-  let date = moment(query.date).format('YYYYMMDD');
-  let stats = query.stats === 'date' ? 'date' : 'date,' + query.stats;
-  let groupbyStr = (stats === 'date') ? 'GROUP BY date' : 'GROUP BY date,' + stats;
-  let orderbyStr = (stats === 'date') ? 'ORDER BY date ASC' : 'ORDER BY reg DESC';
-
-  let sql = util.format('SELECT %s FROM %s %s %s %s',
-    stats + ', SUM(reg) AS reg',
-    'users_count_by_app',
-    'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).add(6, 'days').format('YYYYMMDD'),
-    groupbyStr,
-    orderbyStr,
-    'limit 0,70');
-  return yield handleResult(sql, 'date');
+  return yield generateData('date', moment(query.date).format('YYYYMMDD'), moment(query.date).add(6, 'days').format('YYYYMMDD'), 'reg', query.stats);
 }
 function* getWeeklyActive(query) {
-  let date = moment(query.date).startOf('isoWeek').format('YYYYMMDD');
-  let stats = query.stats === 'week' ? 'week' : 'week' + (query.stats ? ',' + query.stats : '');
-  let groupbyStr = (stats === 'week') ? 'GROUP BY week' : 'GROUP BY ' + stats;
-  let orderbyStr = (stats === 'week') ? 'ORDER BY week ASC' : 'ORDER BY active DESC';
-  let sql = util.format('SELECT %s FROM %s %s %s %s',
-    stats + ', SUM(active) AS active',
-    'weekly_users_count_by_app',
-    'WHERE city_settled!=\'1_999_000000\' AND week>=' + date + ' AND week<=' + moment(date).add(6, 'weeks').format('YYYYMMDD'),
-    groupbyStr,
-    orderbyStr,
-    'limit 0,70');
-  return yield handleResult(sql, 'week');
+  return yield generateData('week', moment(query.date).startOf('isoWeek').format('YYYYMMDD'), moment(query.date).add(6, 'weeks').format('YYYYMMDD'), 'active', query.stats);
 }
 
 function* getWeeklyReg(query) {
-  let date = moment(query.date).startOf('isoWeek').format('YYYYMMDD');
-  let stats = query.stats === 'week' ? 'week' : 'week' + (query.stats ? ',' + query.stats : '');
-  let groupbyStr = (stats === 'week') ? 'GROUP BY week' : 'GROUP BY week,' + stats;
-  let orderbyStr = (stats === 'week') ? 'ORDER BY week ASC' : 'ORDER BY reg DESC';
-
-  let sql = util.format('SELECT %s FROM %s %s %s %s',
-    stats + ', SUM(reg) AS reg',
-    'weekly_users_count_by_app',
-    'WHERE city_settled!=\'1_999_000000\' AND week>=' + date + ' AND week<=' + moment(date).add(6, 'weeks').format('YYYYMMDD'),
-    groupbyStr,
-    orderbyStr,
-    'limit 0,70');
-  return yield handleResult(sql, 'week');
+  return yield generateData('week', moment(query.date).startOf('isoWeek').format('YYYYMMDD'), moment(query.date).add(6, 'weeks').format('YYYYMMDD'), 'reg', query.stats);
 }
 function* getMonthlyActive(query) {
-  let date = moment(query.date).format('YYYYMM');
-  let stats = query.stats === 'month' ? 'month' : 'month' + (query.stats ? ',' + query.stats : '');
-  let groupbyStr = (stats === 'month') ? 'GROUP BY month' : 'GROUP BY ' + stats;
-  let orderbyStr = (stats === 'month') ? 'ORDER BY month ASC' : 'ORDER BY active DESC';
-  let sql = util.format('SELECT %s FROM %s %s %s %s',
-    stats + ', SUM(active) AS active',
-    'monthly_users_count_by_app',
-    'WHERE city_settled!=\'1_999_000000\' AND month>=' + date + ' AND month<=' + moment(date).add(6, 'months').format('YYYYMM'),
-    groupbyStr,
-    orderbyStr,
-    'limit 0,70');
-  return yield handleResult(sql, 'month');
+  return yield generateData('month', moment(query.date).format('YYYYMM'), moment(query.date).add(6, 'months').format('YYYYMM'),'active', query.stats);
 }
 
 function* getMonthlyReg(query) {
-  let date = moment(query.date).format('YYYYMM');
-  let stats = query.stats === 'month' ? 'month' : 'month' + (query.stats ? ',' + query.stats : '');
-  let groupbyStr = (stats === 'month') ? 'GROUP BY month' : 'GROUP BY month,' + stats;
-  let orderbyStr = (stats === 'month') ? 'ORDER BY month ASC' : 'ORDER BY reg DESC';
+  return yield generateData('month', moment(query.date).format('YYYYMM'), moment(query.date).add(6, 'months').format('YYYYMM'), 'reg', query.stats);
+}
+
+// 查询数据
+// timeUnit: date|week|month
+// date: 开始时间
+// endDate: 结束时间
+// type: sum的字段名
+// stats: 根据查询方式不同 改变查询的字段
+function* generateData(timeUnit, date, endDate, type, stats) {
+  stats = stats === timeUnit ? timeUnit : timeUnit + (stats ? ',' + stats : '');
+  let groupbyStr = (stats === timeUnit) ? 'GROUP BY ' + timeUnit : 'GROUP BY ' + timeUnit + ',' + stats;
+  let orderbyStr = (stats === timeUnit) ? 'ORDER BY ' + timeUnit +' ASC' : 'ORDER BY ' + type + ' DESC';
+  let tableName = ({
+    date: 'users_count_by_app',
+    week: 'weekly_users_count_by_app',
+    month: 'monthly_users_count_by_app'
+  })[timeUnit];
+
 
   let sql = util.format('SELECT %s FROM %s %s %s %s',
-    stats + ', SUM(reg) AS reg',
-    'monthly_users_count_by_app',
-    'WHERE city_settled!=\'1_999_000000\' AND month>=' + date + ' AND month<=' + moment(date).add(6, 'months').format('YYYYMM'),
+    stats + ', SUM(' + type + ') AS ' + type,
+    tableName,
+    'WHERE city_settled!=\'1_999_000000\' AND ' + timeUnit + '>=' + date + ' AND ' + timeUnit + '<=' + endDate,
     groupbyStr,
     orderbyStr,
     'limit 0,70');
-  return yield handleResult(sql, 'month');
+  return yield handleResult(sql, timeUnit);
 }
 
 function* handleResult(sql, date) {
