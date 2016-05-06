@@ -32,7 +32,7 @@
       // 获取列完毕
 
       for (; index < cols.length; index++) {
-        var arr = _data[buildShaft(index, date, config.unit)] = [];
+        var arr = _data[buildShaft(index, date, config.unit, config.dateFormat)] = [];
         for (var key in data) {
           arr.push(buildItem(data[key][type], data[key][cols[index]]));
         }
@@ -68,21 +68,22 @@
   // date 当前日期
   // unit 单位 日｜周｜月 XXXXX
   // suffix 轴日期后边拼的字符串 如： 日新增 日留存 什么什么的
-  function buildShaft (attr, date, unit, suffix) {
+  function buildShaft (attr, date, unit, format) {
+    format = format || 'YYYYMMDD';
     if (typeof attr !== 'object') {
       var str;
       switch (unit) {
         case 'd':
         case 'daily':
-          str = moment(date).add(attr, 'days').format('YYYYMMDD');
+          str = moment(date, format).add(attr, 'days').format('YYYYMMDD');
           break;
         case 'w':
         case 'weekly':
-          str = moment(date).add(attr, 'weeks').format('YYYYMMDD')+ '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('YYYYMMDD');
+          str = moment(date, format).add(attr, 'weeks').format('YYYYMMDD')+ '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('YYYYMMDD');
           break;
         case 'm':
-        case 'month':
-          str = moment(date).add(attr, 'months').format('YYYYMMDD');
+        case 'monthly':
+          str = moment(date, format).add(attr, 'months').format('YYYYMM');
           break;
       }
       return str;
@@ -91,7 +92,7 @@
       var index = 0;
       var len = attr.length;
       for (; index < len; index++) {
-        arr.push(buildShaft(attr[index], date, unit, suffix));
+        arr.push(buildShaft(attr[index], date, unit, format));
       }
       return arr;
     }

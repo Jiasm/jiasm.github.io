@@ -71,7 +71,6 @@ function* getMonthly(query) {
     groupByStr,
     'ORDER BY a1 DESC',
     'LIMIT 0,10');
-
   date = date + '01';
   let regSql = util.format('SELECT %s FROM %s %s %s %s',
     params1 + 'SUM(reg) AS reg',
@@ -79,7 +78,6 @@ function* getMonthly(query) {
     'WHERE city_settled!=\'1_999_000000\' AND date>=' + date + ' AND date<=' + moment(date).endOf('months').format('YYYYMMDD'),
     groupByStr1,
     'ORDER BY reg DESC');
-
   return yield handleResult(sql, regSql, stats);
 }
 
