@@ -51,11 +51,16 @@ function numberAddComma(num) {
   return str.split('').reverse().join('').replace(/(\d{3})/g, '$1,').replace(/\,$/, '').split('').reverse().join('');
 }
 
-function buildTable (data, timeline, keys, headers, buildRow, title) {
+function buildTable (config) {
   var templete = '';
   var index = 0;
-  keys = keys || getKeys(data);
-  buildRow = buildRow || _buildRow;
+  var data = config.data;
+  var timeline = config.timeline;
+  var keys = config.keys || getKeys(data);
+  var headers = config.headers || keys;
+  var buildRow = config.buildRow || _buildRow;
+  var title = config.title || '';
+
   var headerStr = '<th>' + (headers || keys).join('</th><th>') + '</th>';
   templete +='<div class="dashboard_graph x_panel">'
         +'<div class="row x_title">'
@@ -102,60 +107,6 @@ function getKeys (obj) {
   var index = 0;
   for (arr[index++] in obj);
   return arr;
-}
-
-/*
-  用于合并数据
-  默认用date做key
-  返回一个 json
-  目前用于用户留存
-  data1 结构为
-    { name: xxx,
-      value: xxx }
-  data2结构为
-    { name: xxx,
-      col1: xxx,
-      col2: xxx,
-      coln: xxx }
-  需要将数据合并为
-    [{ name: xxx,
-      value: xxx },
-    { name: xxx,
-      value: xxx }...]
-    date 用于生成json的key key为日期
-    unit 为日期的格式 天 周 月
-    key 为两个json数据中相对应的那一列的key
-    value 为data1的值的key
-    keys 为data2中要被转换的那些列的key
-    title 如果有值 则覆盖自动生成的 数据的name的值
- */
-function generatorData (data1, data2, date, unit, key, value, keys, title) {
-  var data = {};
-  var orders = [];
-  var row = data[Utils.buildShaft(0, date, unit)] = [];
-  for (var index = 0; index < data1.length; index++) {
-    var item = {};
-    item.name = title || data1[index][key];
-    item.value = data1[index][value];
-    orders.push(item.name);
-    row.push(item);
-  }
-  for (var i = 0; i < keys.length; i++) {
-    var row = data[Utils.buildShaft(i + 1, date, unit)] = [];
-    for (var oIndex = 0; oIndex < orders.length; oIndex++) {
-      for (var index = 0; index < data2.length; index++) {
-        if (data2[index][key] === orders[oIndex]) {
-          var item = {};
-          item.name = title || orders[oIndex];
-          item.value = data2[index][keys[i]];
-          row.push(item);
-        }
-      }
-    }
-  }
-
-
-  return data;
 }
 
 // 将数据中的数量超出 length参数 的值 后边的数据砍掉

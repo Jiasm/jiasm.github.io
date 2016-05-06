@@ -46,6 +46,9 @@
           }
         }
         var __reg = DataFactory(res.data.reg, dataConfig);
+        for (var key in res.data.reg) {
+          regNum += res.data.reg[key].reg;
+        }
         dataConfig.date = moment(date, dateFormat).add(1, isMonth ? 'M' : 'd').format(isMonth ? 'YYYY-MM' : 'YYYY-MM-DD');
         var __retention = DataFactory(res.data.retention, dataConfig);
         var reg = DataFactory.concat([__reg, __retention]);
@@ -60,7 +63,6 @@
             var count = item[index].value;
             var data = datas[platform] = datas[platform] || [];
             data.push(count);
-            regNum += count;
           }
         }
         $('#retentionreg').html(numberAddComma(regNum));
@@ -86,16 +88,38 @@
         option.series = seriesList;
 
         var suffix = '留存';
+        var isCountry = stats === 'country' || stats === 'city_settled';
+        var title = '<p><code id="retentiondate">2016-04-28</code> 新增用户 <code id="retentionreg">' + regNum +'</code></p>';
+        var buildRow = function (timeline, datas, titles) {
+            var str = '';
+            var index = 0;
+            var len = timeline.length;
+            var titleLen = titles.length;
+            for (; index < len; index++) {
+              str += '<tr>';
+              str += '<td>' + timeline[index] + '</td>';
+              for (var titleIndex = 0; titleIndex < titleLen; titleIndex++) {
+                var count = datas[titles[titleIndex]][index + 1] || 0;
+                str += isCountry ? '<td>' + count + '  ' + (count / datas[titles[titleIndex]][0] * 100).toFixed(2) + '%</td>' : '<td>留存用户：' + count + '，留存率：' + (count / datas[titles[titleIndex]][0] * 100).toFixed(2) + '%</td>';
+              }
+              str += '</tr>';
+            }
+            return str;
+          }
         if (path === 'daily') {
           option.xAxis.data = [moment(date, dateFormat).format('MM/DD') + '新增'].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'd', suffix));
-          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6, 7], date, 't-d'), null, stats === '' ? ['用户'] : null));
         } else if (path === 'weekly') {
           option.xAxis.data = [moment(date, dateFormat).format('MM/DD') + '-' + moment(date, dateFormat).add(6, 'days').format('MM/DD') + '新增'].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'w', suffix));
-          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6, 7], date, 't-w'), null, stats === '' ? ['用户'] : null));
         } else {
           option.xAxis.data = [moment(date, dateFormat).format('MM') + '新增'].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'm', suffix));
-          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6, 7], date, 't-m'), null, stats === '' ? ['用户'] : null));
         }
+        var $table = $('#data-table').html(buildTable({
+          data: datas,
+          timeline: Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 't-' + path),
+          keys: stats === '' ? ['用户'] : null,
+          buildRow: buildRow
+        }));
+        $table.find('.x_title').after(title)
         myChart.setOption(option);
         toastr.clear();
       } else {

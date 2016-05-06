@@ -26,22 +26,25 @@
           str = moment(date).add(attr, 'weeks').format('MM/DD') + '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('MM/DD') + suffix || '';
           break;
         case 'm':
-        case 'month':
+        case 'monthly':
           str = moment(date).add(attr, 'months').format('MM') + suffix || '';
           break;
         case 't-d':
+        case 't-daily':
         case 'timestmap-d':
         case 'timestmap-daily':
           str = moment(date).add(attr, 'days').format('YYYYMMDD');
           break;
         case 't-w':
+        case 't-weekly':
         case 'timestmap-w':
         case 'timestmap-weekly':
           str = moment(date).add(attr, 'weeks').format('YYYYMMDD')+ '-' + moment(date).add(attr, 'weeks').add(6, 'days').format('YYYYMMDD');
           break;
         case 't-m':
+        case 't-monthly':
         case 'timestmap-m':
-        case 'timestmap-month':
+        case 'timestmap-monthly':
           str = moment(date).add(attr, 'months').format('YYYYMM');
           break;
       }
