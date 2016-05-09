@@ -45,12 +45,11 @@ function* getMonthly(query) {
   });
 }
 
-function* getData ({
-  date, // 日期范围的开始
-  endDate,  // 日期范围的结束
-  stats,  // 可能是设备 国家 等等的一些值
-  timeUnit // 标识是 month  week 或者 day
-}) {
+function* getData (config) {
+  let date = config.date;// 日期范围的开始
+  let endDate = config.endDate;// 日期范围的结束
+  let stats = config.stats;// 可能是设备 国家 等等的一些值
+  let timeUnit = config.timeUnit;// 标识是 month  week 或者 day
   let params = stats + ' as name,';
   let params1 = (stats === timeUnit) ? 'date as name,' : stats + ' as name,';
   let groupByStr = 'GROUP BY ' + stats;
@@ -95,17 +94,16 @@ function* getData ({
   return yield handleResult(sql, regSql, stats);
 }
 
-function* dataByCountry({
-  stats, // 可能是设备 国家 等等的一些值
-  date, // 开始日期
-  endDate, // 结束日期
-  params, // 查询注册人数的参数
-  params1, // 查询留存人数的参数
-  groupByStr, // 查询注册人数的分组条件
-  groupByStr1, // 查询留存人数的分组条件
-  timeUnit, // 时间单位 month day week 等等...
-  tableName // 留存人数的表名 分 day week month
-}) {
+function* dataByCountry(config) {
+  let stats = config.stats; // 可能是设备 国家 等等的一些值
+  let date = config.date; // 开始日期
+  let endDate = config.endDate; // 结束日期
+  let params = config.params; // 查询注册人数的参数
+  let params1 = config.params1; // 查询留存人数的参数
+  let groupByStr = config.groupByStr; // 查询注册人数的分组条件
+  let groupByStr1 = config.groupByStr1; // 查询留存人数的分组条件
+  let timeUnit = config.timeUnit; // 时间单位 month day week 等等...
+  let tableName = config.tableName; // 留存人数的表名 分 day week month
   let regSql = util.format('SELECT %s FROM %s %s %s %s',
     params + 'SUM(reg) AS reg',
     'users_count_by_app',

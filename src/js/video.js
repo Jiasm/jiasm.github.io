@@ -51,7 +51,7 @@
             _total += item[title];
             numbers[key].push(item[title]);
           }
-          regNum += _total;
+          regNum += numberAddComma(_total);
         }
         $('#retentionreg').html(regNum.replace(/^\//, ''));
 
@@ -82,8 +82,8 @@
             var titleLen = titles.length;
             var str = '<tr><td>' + timeline + '</td>';
             for (var titleIndex = 0; titleIndex < titleLen; titleIndex++) {
-              str += '<td>' + datas[titles[titleIndex]][0].android + '</td>';
-              str += '<td>' + datas[titles[titleIndex]][0].ios + '</td>';
+              str += '<td>' + (datas[titles[titleIndex]][0].android || 0) + '</td>';
+              str += '<td>' + (datas[titles[titleIndex]][0].ios || 0) + '</td>';
             }
             str += '</tr>';
             return str;
@@ -94,7 +94,7 @@
             var titleLen = titles.length;
             var str = '<tr><td>' + timeline + '</td>';
             for (var titleIndex = 0; titleIndex < titleLen; titleIndex++) {
-              str += '<td>' + datas[titles[titleIndex]][0].total + '</td>';
+              str += '<td>' + (datas[titles[titleIndex]][0].total || 0) + '</td>';
             }
             str += '</tr>';
             return str;
@@ -102,13 +102,19 @@
           headers = ['消费', '充值'];
         }
 
-        if (path === 'daily') {
-          $('#data-table').html(buildTable(datas, Utils.buildShaft(0, date, 't-d'), null, headers ,buildRow));
-        } else if (path === 'weekly') {
-          $('#data-table').html(buildTable(datas, Utils.buildShaft(0, date, 't-w'), null, headers ,buildRow));
-        } else {
-          $('#data-table').html(buildTable(datas, '*', null, headers ,buildRow));
+        var tableConfig = {
+          data: datas,
+          headers: headers,
+          buildRow: buildRow
         }
+        if (path === 'daily') {
+          tableConfig.timeline = Utils.buildShaft(0, date, 't-d');
+        } else if (path === 'weekly') {
+          tableConfig.timeline = Utils.buildShaft(0, date, 't-w');
+        } else {
+          tableConfig.timeline = '*';
+        }
+        $('#data-table').html(buildTable(tableConfig));
         toastr.clear();
       } else {
         toastr.error(res.msg);
