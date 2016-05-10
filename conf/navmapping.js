@@ -18,19 +18,19 @@ const mapping = {
     }, {
       title: "日新增用户数",
       href: "/users/daily_reg"
-    },{
+    }, {
       title: "周活用户数",
       href: "/users/weekly_active"
     }, {
       title: "周新增用户数",
       href: "/users/weekly_reg"
-    },{
+    }, {
       title: "月活用户数",
       href: "/users/monthly_active"
     }, {
       title: "月新增用户数",
       href: "/users/monthly_reg"
-    },],
+    } ],
   },
   abroad: {
     title: "海外用户",
@@ -44,7 +44,7 @@ const mapping = {
     }, {
       title: "留存用户数",
       href: "/abroad/retention"
-    },],
+    } ],
   },
   retention: {
     title: "用户留存",
@@ -58,7 +58,7 @@ const mapping = {
     }, {
       title: "月留存",
       href: "/retention/monthly"
-    },],
+    } ],
   },
   video: {
     title: "直播数据",
@@ -72,7 +72,15 @@ const mapping = {
     }, {
       title: "总 消费/收入",
       href: "/video/total"
-    },],
+    } ],
+  },
+  advert: {
+    title: "广告流量统计",
+    icon: "fa-table",
+    child_menu: [{
+      title: "日 广告流量",
+      href: "/advert/daily"
+    } ],
   },
   channel: {
     title: "渠道分布(待开发)",
@@ -89,7 +97,7 @@ const mapping = {
     }, {
       title: "留存用户数",
       href: "/channel/retention"
-    },],
+    } ],
   },
   product: {
     title: "产品功能(待开发)",
@@ -106,7 +114,7 @@ const mapping = {
     }, {
       title: "S4",
       href: "javascript:;"
-    },],
+    } ],
   },
   // mobile: {
   //   title: "终端属性(待开发)",
@@ -151,7 +159,7 @@ const mapping = {
     }, {
       title: "添加新成员",
       href: "/settings/new"
-    },],
+    }, ],
   },
 };
 

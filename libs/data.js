@@ -7,7 +7,8 @@ let users = require(`${prefix}users.js`);
 let video = require(`${prefix}video.js`);
 let abroad = require(`${prefix}abroad.js`);
 let members = require(`${prefix}members.js`);
-let permission = require(`${prefix}permission.js`)
+let permission = require(`${prefix}permission.js`);
+let advert = require(`${prefix}advert.js`);
 
 module.exports = {
   retention,
@@ -17,4 +18,5 @@ module.exports = {
   abroad,
   members,
   permission,
+  advert,
 }
