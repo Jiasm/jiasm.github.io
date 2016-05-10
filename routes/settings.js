@@ -20,8 +20,10 @@ module.exports = function(router, conf) {
   router.get('/permission', function*() {
     let uid = this.query.uid;
     var authority = yield getAuthority(uid);
+    let user = yield getUser(uid);
     let html = yield initTpl(this, 'permission', conf.productName, {
-      authority: authority && authority.rule
+      authority: authority && authority.rule,
+      userName: user.name
     });
     this.body = html;
   });

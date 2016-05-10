@@ -136,12 +136,16 @@
       <div class="row x_title">
         <h2>观察者权限管理</h2>
       </div>
+      <div class="x_content" id="admin-list">
+        <div class="row x_title">
+          <h5>请为(<span id="admin-count"> {{userName}} </span>)设置权限</h5>
+        </div>
+      </div>
       <div class="x_content rule-setting">
         {{#each navmapping}}
-          <input id="{{@key}}" type="checkbox" class="flat" />
-          <label for="{{@key}}">{{this.title}}</label>
-          <br/>
-        {{/each}}
+        <input id="{{@key}}" type="checkbox" class="flat" />
+        <label for="{{@key}}">{{this.title}}</label>
+        <br/> {{/each}}
         <div class="ln_solid"></div>
         <button class="btn btn-primary" id="reset">重置</button>
         <button class="btn btn-success" id="commit">提交</button>

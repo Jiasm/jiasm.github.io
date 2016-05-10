@@ -49,7 +49,7 @@
     $(this).addClass('btn-primary').addClass('sel');
     load();
   });
-  $('.stats .btn').eq(1).trigger('click');
+  $('.stats .btn').eq(0).trigger('click');
 
   // 生成展示数据的表格
   function buildTable (config) {
@@ -59,10 +59,10 @@
     var headers = [];
 
     if (stats === '') { // 表示为默认显示方式
-      headers = ['url', 'pv', 'uv'];
+      headers = ['url', 'PV', 'UV'];
       values = ['pv', 'uv'];
     } else if (stats === 'platform') { // 表示为按设备区分显示
-      headers = ['url', 'android pv', 'android uv', 'ios pv', 'ios uv', 'unknown pv', 'unknown uv'];
+      headers = ['url', 'android PV', 'android UV', 'ios PV', 'ios UV', 'unknown PV', 'unknown UV'];
       values = ['androidpv', 'androiduv', 'iospv', 'iosuv', 'unknownpv', 'unknownuv'];
     }
 
