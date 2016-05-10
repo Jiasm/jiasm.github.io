@@ -137,12 +137,12 @@
         <h2>观察者权限管理</h2>
       </div>
       <div class="x_content" id="admin-list">
-        <div class="row x_title">
+        <div class="row x_title" style="border-bottom: none;">
           <h5>请为(<span id="admin-count"> {{userName}} </span>)设置权限</h5>
         </div>
       </div>
       <div class="x_content rule-setting">
-        {{#each navmapping}}
+        {{#each mappings}}
         <input id="{{@key}}" type="checkbox" class="flat" />
         <label for="{{@key}}">{{this.title}}</label>
         <br/> {{/each}}

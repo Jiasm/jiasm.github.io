@@ -17,78 +17,99 @@ module.exports = function(router, conf) {
     this.body = html;
   });
 
-  router.get('/permission', function*() {
-    let uid = this.query.uid;
-    var authority = yield getAuthority(uid);
-    let user = yield getUser(uid);
-    let html = yield initTpl(this, 'permission', conf.productName, {
-      authority: authority && authority.rule,
-      userName: user.name
-    });
-    this.body = html;
+  router.get('/permission', function*(next) {
+    yield checkUser(this, getPermission);
   });
 
   router.get('/new', function*() {
-    let path = this.params.path;
-    let html = yield initTpl(this, 'new', conf.productName);
-    this.body = html;
+    yield checkUser(this, newUser);
   });
 
   router.post('/adduser', function*(next) {
-    let account = this.cookies.get('BDTOKEN');
+    yield checkUser(this, addUser);
+  });
+
+
+
+  function* checkUser (me, callback) {
+    let account = me.cookies.get('BDTOKEN');
     // 没有获取到uid
     if (!account || !hashids.decode(account)[0]) {
-      this.body = {
+      me.body = {
         err: '请刷新后重试'
       }
+      me.redirect('/nopermission');
     } else {
       let uid = hashids.decode(account)[0];
       let user = yield getUser(uid);
       // 没有查询到对应的用户 或者该用户是观察者
       if (!user || user.is_super === 0) {
-        this.body = {
+        me.body = {
           err: '无此权限'
         }
+        me.redirect('/nopermission');
       } else {
-        this.body = yield addUser(this);
+        me.body = yield callback(me);
       }
     }
-    yield next;
-  });
-}
+  }
 
+  // 获取要被设置权限的那个人的权限
+  function* getPermission (me) {
+    let uid = me.query.uid;
+    var authority = yield getAuthority(uid);
+    var _data = JSON.parse((authority && authority.rule) || '[]');
+    _data.push('settings');
+    let user = yield getUser(uid);
+    let html = yield initTpl(me, 'permission', conf.productName, {
+      authority: JSON.stringify(_data),
+      mappings: require('../conf/navmapping.js')(),
+      userName: user.name
+    });
 
-function* addUser (me) {
-  let params = me.request.body;
-  let uid = params.uid;
-  let is_super = params.is_super;
-  try {
-    let sql = `
-      SELECT count(1) as count
-      FROM ${USERTABLE}
-      WHERE uid = ${uid}
-    `;
-    let result = yield q(ak47, sql);
-    let count = result[0].count; // 获取该uid是否已经存在
-    if (count === 0) {
-      let addSql = `
-        INSERT INTO ${USERTABLE} (uid, is_super)
-        VALUES (${uid}, ${is_super})
+    return html;
+  }
+
+  // 打开添加用户界面
+  function* newUser (me) {
+    let path = me.params.path;
+    let html = yield initTpl(me, 'new', conf.productName);
+    return html;
+  }
+
+  // 添加用户
+  function* addUser (me) {
+    let params = me.request.body;
+    let uid = params.uid;
+    let is_super = params.is_super;
+    try {
+      let sql = `
+        SELECT count(1) as count
+        FROM ${USERTABLE}
+        WHERE uid = ${uid}
       `;
-      let res = yield q(ak47, addSql);
-      if (res.affectedRows === 1) { // 受影响行数 == 1 表示添加成功
+      let result = yield q(ak47, sql);
+      let count = result[0].count; // 获取该uid是否已经存在
+      if (count === 0) {
+        let addSql = `
+          INSERT INTO ${USERTABLE} (uid, is_super)
+          VALUES (${uid}, ${is_super})
+        `;
+        let res = yield q(ak47, addSql);
+        if (res.affectedRows === 1) { // 受影响行数 == 1 表示添加成功
+          return {
+            success: true
+          }
+        }
+      } else {
         return {
-          success: true
+          err: '该用户已存在'
         }
       }
-    } else {
+    } catch (e) {
       return {
-        err: '该用户已存在'
+        err: e
       }
-    }
-  } catch (e) {
-    return {
-      err: e
     }
   }
 }
