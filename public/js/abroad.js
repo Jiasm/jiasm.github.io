@@ -78,19 +78,24 @@
           reg: '新增',
           retention: '留存'
         })[path];
+
+        var dataConfig = {
+          data: datas
+        }
         if (timeline === 'daily') {  // 暂时先留着，等着做周和月
           var suffix = '日' + typeName;
           option.xAxis.data = [moment(date).format('MM/DD') + (path === 'retention' ? '日新增' : suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'd', suffix));
-          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6].concat(path === 'retention' ? [7] : []), date, 't-d')));
+          dataConfig.timeline = Utils.buildShaft([0, 1, 2, 3, 4, 5, 6].concat(path === 'retention' ? [7] : []), date, 't-d');
         } else if (timeline === 'weekly') {
           var suffix = '周' + typeName;
           option.xAxis.data = [moment(date).format('MM/DD') + '-' + moment(date).add(6, 'days').format('MM/DD') + (path === 'retention' ? '周新增' : suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'w', suffix));
-          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6], date, 't-w')));
+          dataConfig.timeline = Utils.buildShaft([0, 1, 2, 3, 4, 5, 6], date, 't-w');
         } else {
           var suffix = '月' + typeName;
           option.xAxis.data = [moment(date).format('MM/DD') + (path === 'retention' ? '月新增' : suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7], date, 'm', suffix));
-          $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6], date, 't-m')));
+          dataConfig.timeline = Utils.buildShaft([0, 1, 2, 3, 4, 5, 6], date, 't-m');
         }
+        $('#data-table').html(buildTable(dataConfig));
         myChart.setOption(option);
         toastr.clear();
       } else {

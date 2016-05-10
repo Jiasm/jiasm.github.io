@@ -58,8 +58,17 @@
             var count = item[index].value;
             var data = datas[platform] = datas[platform] || [];
             data.push(count);
+          }
+        }
+        for (var key in reg) {
+          var item = reg[key];
+          var len = item.length;
+          var index = 0;
+          for (; index < len; index++) {
+            var count = item[index].value;
             regNum += count;
           }
+          break;
         }
         $('#retentionreg').html(numberAddComma(regNum));
 
@@ -85,7 +94,11 @@
         var suffix = getTitle(isActive, timeUnit);
         option.xAxis.data = [Utils.buildShaft([0], date, timeUnit, suffix)].concat(Utils.buildShaft([1, 2, 3, 4, 5, 6, 7].slice(0, colCount), date, timeUnit, suffix));
         myChart.setOption(option);
-        $('#data-table').html(buildTable(datas, Utils.buildShaft([0, 1, 2, 3, 4, 5, 6].slice(0, colCount), date, 't-' + timeUnit)));
+        var dataConfig = {
+          data: datas,
+          timeline: Utils.buildShaft([0, 1, 2, 3, 4, 5, 6].slice(0, colCount), date, 't-' + timeUnit)
+        }
+        $('#data-table').html(buildTable(dataConfig));
         toastr.clear();
       } else {
         toastr.error(res.msg);
