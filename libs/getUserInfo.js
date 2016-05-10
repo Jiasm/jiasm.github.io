@@ -10,7 +10,7 @@ module.exports = function*(userId) {
   let navmapping = [];
   if (adminInfo.length) {
     is_super = (adminInfo.length) ? adminInfo[0].is_super : 0;
-    navmapping = require('../conf/navmapping.js')(is_super ? null : JSON.parse(adminInfo[0].authority || []));
+    navmapping = require('../conf/navmapping.js')(is_super ? null : JSON.parse(adminInfo[0].authority || '[]'));
   }
   let userInfo = yield userRedis.hgetall('u:' + userId).then(function(user) {
     return {
