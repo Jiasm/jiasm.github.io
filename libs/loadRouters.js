@@ -28,6 +28,14 @@ function files() {
       routers.push(router.routes());
     });
 
+    // 增加一个默认的router 因为有些貌似不走中间件 直接not found了。。。
+    let indexRouter = new Router({prefix: '/'});
+    indexRouter.get('/', function* () {
+      this.redirect('/index');
+    });
+
+    routers.push(indexRouter.routes());
+
     return compose(routers);
   } else {
     return [];
