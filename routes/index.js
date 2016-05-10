@@ -19,7 +19,7 @@ module.exports = function(router, conf) {
         this.redirect('/dashboard/index');
       }
     } else {
-      this.st = 404;
+      this.st = 60001;
     }
   });
 }
