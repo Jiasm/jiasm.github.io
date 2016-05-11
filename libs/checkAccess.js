@@ -19,7 +19,7 @@ function* checkAccess (me, callback) {
     let uid = hashids.decode(account)[0];
     let user = yield getUser(uid);
     // 没有查询到对应的用户 或者该用户是观察者
-    if (!user || user.is_super === 0) {
+    if (!user || user.is_super === 0 || user.is_locked === 1) {
 
       me.body = {
         err: '无此权限'

@@ -43,8 +43,11 @@
               +'</div>';
             } else {
               watcherCount++;
-              watcherStr += '<div class="col-md-4 col-sm-4 col-xs-12 animated fadeInDown">'
+              watcherStr += '<div class="col-md-4 col-sm-4 col-xs-12 animated fadeInDown watcher-warp">'
                 +'<div class="well profile_view">'
+                  + (window.admin ? '<div class="col-sm-12" style="text-align:right;">'
+                    +'<a class="close-link" data-uid="' + item.uid + '" data-name="' + item.info.name + '" href="javascript:;"><i class="fa fa-close"></i></a>'
+                  +'</div>' : '')
                   +'<div class="col-sm-12">'
                     +'<div class="left col-xs-7">'
                       +'<ul class="list-unstyled">'
@@ -70,12 +73,37 @@
           $('#admin-count').html(adminCount);
           $('#watcher-list').append(watcherStr);
           $('#watcher-count').html(watcherCount);
+
+          $('.close-link').on('click', function () {
+            confirmDelete($(this));
+          })
         } else {
           toastr.error(data.msg);
         }
         toastr.clear();
       }
     });
+  }
+
+  function confirmDelete ($target) {
+    if (confirm('确定要删除' + $target.data('name') + '吗？ \n该操作无法还原。')) {
+      toastr.info('删除中...');
+      $.ajax({
+        url: '/settings/remove?uid=' + $target.data('uid'),
+        method: 'get',
+        dataType: 'json',
+        success: function (data) {
+          if (data.success) {
+            toastr.success('删除成功');
+            $target.parents('.watcher-warp').remove();
+          } else {
+            toastr.error(data.err);
+          }
+
+          toastr.clear();
+        }
+      })
+    }
   }
 
   load();

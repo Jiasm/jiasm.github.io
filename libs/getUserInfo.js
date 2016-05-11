@@ -18,6 +18,7 @@ module.exports = function*(userId) {
       name: user.name || '',
       avatar: user.avatar || 'https://dn-web-blued-cn.qbox.me/userfiles/006/701/811/9669!Head.jpg',
       is_super: is_super,
+      is_locked: adminInfo[0].is_locked,
       identity: (is_super) ? '管理员' : '观察者',
       navmapping: navmapping,
     }
