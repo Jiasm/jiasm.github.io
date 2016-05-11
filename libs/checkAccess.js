@@ -12,8 +12,9 @@ function* checkAccess (me, callback) {
       err: '请刷新后重试'
     }
     // 跳转无权限页面
-    me.redirect('/nopermission');
-
+    //me.redirect('/nopermission');
+    me.st = 60002;
+    return ;
   } else {
 
     let uid = hashids.decode(account)[0];
@@ -25,7 +26,8 @@ function* checkAccess (me, callback) {
         err: '无此权限'
       }
       // 跳转无权限页面
-      me.redirect('/nopermission');
+      // me.redirect('/nopermission');
+      me.st = 60002;
 
     } else {
 

@@ -56,7 +56,7 @@ module.exports = function(router, conf) {
       let uid = hashids.decode(account)[0];
       let user = yield getUser(uid);
       if (user.is_locked !== 1) { // 表示不是锁定状态
-        this.redirect('/index');  // 无需登录 跳转index
+        this.st = 200;
         return ;
       }
     }

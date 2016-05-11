@@ -12,7 +12,7 @@ module.exports = function*(me, tplName, title, cusParams) {
   // 权限为空 或者请求的路径（key）不存在他的权限内 返回木有权限
   if (isEmptyObject(u.navmapping) || !(me.url.match(/\/?(\w+)?\/?/)[1] in u.navmapping)) {
     me.st = 60002;
-    me.redirect('nopermission');
+    return;
   }
 
   let params = {
