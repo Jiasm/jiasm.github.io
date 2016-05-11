@@ -28,6 +28,7 @@
         success: function (data) {
           if (data.data === 1) {
             toastr.success('更新成功');
+            location.href = '/settings';
           } else if (data.data === 0) {
             toastr.error('该用户不存在');
           } else {
