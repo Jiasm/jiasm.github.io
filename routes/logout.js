@@ -1,11 +1,12 @@
 'use strict';
 
 module.exports = function(router, conf) {
-  router.get('/', function*() {
+  router.get('/', function*(next) {
     this.cookies
       .set('BDTOKEN', '', {
         maxAge: -1,
       });
-    this.redirect('/login');
+    this.st = 60001;
+    return;
   });
 }
