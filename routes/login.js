@@ -6,6 +6,7 @@ let render = require('../libs/views.js');
 let userMysql = require('../libs/mysql.js')('userMysql');
 let userRedis = require('../libs/user_redis.js');
 let q = require('../tools/query.js');
+let getUser = require('../libs/getUserInfo.js');
 let hashids = require('../libs/hashids');
 const PASSPORT_MOBILE_HMAC_KEY = 'zCxC8+Ut7P9mW4sKuTCNsg==';
 const EXPIRETIME = 7 * 24 * 60 * 60 * 1000; // 一周
@@ -49,6 +50,17 @@ let checkPasswd = (user, pw2, me) => {
 
 module.exports = function(router, conf) {
   router.get('/', function*() {
+    let account = this.cookies.get('BDTOKEN');
+    // 获取到cookie信息 表示用户已经登录
+    if (account && hashids.decode(account)[0]) {
+      let uid = hashids.decode(account)[0];
+      let user = yield getUser(uid);
+      if (user.is_locked !== 1) { // 表示不是锁定状态
+        this.redirect('/index');  // 无需登录 跳转index
+        return ;
+      }
+    }
+
     let html = yield render('login', {
       title: conf.productName
     });
