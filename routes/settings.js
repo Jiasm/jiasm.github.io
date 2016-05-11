@@ -6,8 +6,8 @@ let getAuthority = require('../libs/getAuthority.js');
 let ak47 = require('../libs/mysql.js')('ak47');
 let q = require('../tools/query.js');
 let initTpl = require('../tools/initTplParams.js');
-let hashids = require('../libs/hashids');
 let getUser = require('../libs/getUserInfo.js');
+let checkAccess = require('../libs/checkAccess.js');
 
 const USERTABLE = 'dt_admin';
 
@@ -18,47 +18,24 @@ module.exports = function(router, conf) {
   });
 
   router.get('/permission', function*(next) {
-    yield checkUser(this, getPermission);
+    yield checkAccess(this, getPermission);
   });
 
   router.get('/new', function*() {
-    yield checkUser(this, newUser);
+    yield checkAccess(this, newUser);
   });
 
   router.post('/adduser', function*(next) {
-    yield checkUser(this, addUser);
+    yield checkAccess(this, addUser);
   });
-
-
-
-  function* checkUser (me, callback) {
-    let account = me.cookies.get('BDTOKEN');
-    // 没有获取到uid
-    if (!account || !hashids.decode(account)[0]) {
-      me.body = {
-        err: '请刷新后重试'
-      }
-      me.redirect('/nopermission');
-    } else {
-      let uid = hashids.decode(account)[0];
-      let user = yield getUser(uid);
-      // 没有查询到对应的用户 或者该用户是观察者
-      if (!user || user.is_super === 0) {
-        me.body = {
-          err: '无此权限'
-        }
-        me.redirect('/nopermission');
-      } else {
-        me.body = yield callback(me);
-      }
-    }
-  }
 
   // 获取要被设置权限的那个人的权限
   function* getPermission (me) {
     let uid = me.query.uid;
+    // 获取这个人的权限信息 一个数组字符串
     var authority = yield getAuthority(uid);
     var _data = JSON.parse((authority && authority.rule) || '[]');
+    // 默认都能看到settings
     _data.push('settings');
     let user = yield getUser(uid);
     let html = yield initTpl(me, 'permission', conf.productName, {
