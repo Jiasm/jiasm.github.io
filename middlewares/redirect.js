@@ -7,7 +7,7 @@ module.exports = function(app) {
 
     if (st === 200) { // 已经登录
       this.redirect('/index');
-    } else if (st === 404) { // 没有找到对应的router
+    } else if (st === 404 || this.status === 404) { // 没有找到对应的router
       this.redirect('/404');
     } else if (st === 60001) { // 没有登录
       this.redirect('/login');
