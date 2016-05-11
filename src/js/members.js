@@ -1,5 +1,7 @@
 ;
 (function() {
+  var uid = 0;  // 存储一下当前选中叉号的是哪个uid
+
   function load () {
     toastr.info('loading...');
     $.ajax({
@@ -43,10 +45,10 @@
               +'</div>';
             } else {
               watcherCount++;
-              watcherStr += '<div class="col-md-4 col-sm-4 col-xs-12 animated fadeInDown watcher-warp">'
+              watcherStr += '<div class="col-md-4 col-sm-4 col-xs-12 animated fadeInDown watcher-warp" id="uid-' + item.uid + '">'
                 +'<div class="well profile_view">'
                   + (window.admin ? '<div class="col-sm-12" style="text-align:right;">'
-                    +'<a class="close-link" data-uid="' + item.uid + '" data-name="' + item.info.name + '" href="javascript:;"><i class="fa fa-close"></i></a>'
+                    +'<a class="close-link" data-uid="' + item.uid + '" data-name="' + item.info.name + '" data-toggle="modal" data-target="#myModal" style="cursor:pointer;"><i class="fa fa-close"></i></a>'
                   +'</div>' : '')
                   +'<div class="col-sm-12">'
                     +'<div class="left col-xs-7">'
@@ -76,7 +78,8 @@
 
           $('.close-link').on('click', function () {
             confirmDelete($(this));
-          })
+          });
+          $('.removeuser').on('click', removeUser);
         } else {
           toastr.error(data.msg);
         }
@@ -86,24 +89,30 @@
   }
 
   function confirmDelete ($target) {
-    if (confirm('确定要删除' + $target.data('name') + '吗？ \n该操作无法还原。')) {
-      toastr.info('删除中...');
-      $.ajax({
-        url: '/settings/remove?uid=' + $target.data('uid'),
-        method: 'get',
-        dataType: 'json',
-        success: function (data) {
-          if (data.success) {
-            toastr.success('删除成功');
-            $target.parents('.watcher-warp').remove();
-          } else {
-            toastr.error(data.err);
-          }
+      uid = $target.data('uid');
+      if (!uid) return;
+      $('#remove-name').html($target.data('name'));
+  }
 
-          toastr.clear();
+  function removeUser () {
+    if (!uid) return;
+    toastr.info('删除中...');
+    $.ajax({
+      url: '/settings/remove?uid=' + uid,
+      method: 'get',
+      dataType: 'json',
+      success: function (data) {
+        if (data.success) {
+          toastr.success('删除成功');
+          $('#uid-' + uid).remove();
+          $('#myModal').removeClass('in');
+        } else {
+          toastr.error(data.err);
         }
-      })
-    }
+
+        toastr.clear();
+      }
+    })
   }
 
   load();
