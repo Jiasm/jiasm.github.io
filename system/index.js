@@ -7,7 +7,7 @@ var express = require("express"),
     exec = require('child_process').exec,
     url = require("url"),
     qs = require("querystring"),
-    feedPath = "../feed/", // 博客数据存储位置
+    feedPath = "./feed/", // 博客数据存储位置
     feddIndex = "index.js"; // 博客目录文件名
 
 app.set("view engine", "ejs");
@@ -94,9 +94,9 @@ function callback(res) { // 对文件操作完成后的回掉
 // 写入文章 用于 add alter
 function writeBlog(id, title, postDate, content, res) {
     console.log("博文js文件开始生成：")
-    fs.writeFile(`../feed/${id}.js`, `define({"id":"${id}","title":"${title}","postDate":"${postDate}","content":"${content.replace(/(\"|\')+?/g, "\\$1")}"});`, (err) => {
+    fs.writeFile(`${feedPath}${id}.js`, `define({"id":"${id}","title":"${title}","postDate":"${postDate}","content":"${content.replace(/(\"|\')+?/g, "\\$1")}"});`, (err) => {
         if (err) {
-            console.error("博文js文件生成出错了。");
+            console.error("博文js文件生成出错了。", err);
         } else {
             console.log("博文js文件生成完毕。");
             buildIndex(); // 重新生成index.js
@@ -164,7 +164,7 @@ function gitCommit(callback, res) {
         if (error) {
             console.error(error);
         } else {
-            let cmd = `git commit -m "${"来自本地博客后台系统" + new Date()}`;
+            let cmd = `git commit -m "${"来自本地博客后台系统" + new Date()}"`;
             exec(cmd, (error) => {
                 if (error) {
                     console.error(error);
