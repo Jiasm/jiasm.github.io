@@ -5384,3 +5384,10 @@ ul.notifications {
   width: 100%;
   height: 2px;
 }
+
+/**
+ * 修复有些url过长 导致后边的单元格无法正常显示的bug
+ */
+td {
+  word-break: break-all;
+}
