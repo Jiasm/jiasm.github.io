@@ -1,3 +1,23 @@
+footer {
+  background: url("../img/boardbottom-new-2x.png") no-repeat center bottom;
+  background-size: 100%;
+  padding-bottom: 80px; }
+
+header {
+  padding: 80px; }
+
+h1 {
+  margin: .67em 0 5px;
+  text-align: center;
+  text-decoration: none; }
+
+h1 a {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.25;
+  color: #fff;
+  text-decoration: none; }
+
 .complete #loading {
   display: none;
   z-index: -1; }
@@ -5,7 +25,7 @@
 #loading {
   height: 40px;
   width: 40px;
-  border: 2px solid #fff;
+  border: 2px solid #eee;
   border-left-color: transparent;
   border-right-color: transparent;
   border-radius: 50%;
@@ -20,6 +40,41 @@
   50% {
     transform: rotate(360deg); } }
 
+*, ::before, ::after {
+  box-sizing: border-box; }
+
+html {
+  background: #f1eedc;
+  color: #eee;
+  background-image: url("../img/walltexture.png");
+  background-repeat: repeat;
+  background-position: top left;
+  background-attachment: scroll;
+  font-family: 'Gloria Hallelujah', Arial, Helvetica, sans-serif;
+  font-size: 62.5%;
+  overflow-y: scroll;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%; }
+
+body {
+  position: relative;
+  background: #855e42 url("../img/woodtexture.jpg");
+  background-size: 225px auto;
+  border-radius: 10px;
+  box-shadow: 5px 2px 15px rgba(0, 0, 0, 0.4);
+  display: block;
+  margin: 40px auto;
+  padding: 40px;
+  max-width: 1240px; }
+
+.wrap {
+  background: #000 url("../img/chalk2.jpg") repeat;
+  background-size: 360px auto;
+  border-radius: 10px;
+  display: block;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5) inset;
+  padding: 15px 100px 5px;
+  z-index: 10; }
 
 .syntaxhighlighter a, .syntaxhighlighter div, .syntaxhighlighter code, .syntaxhighlighter table, .syntaxhighlighter table td, .syntaxhighlighter table tr, .syntaxhighlighter table tbody, .syntaxhighlighter table thead, .syntaxhighlighter table caption, .syntaxhighlighter textarea {
   -moz-border-radius: 0 0 0 0 !important;
