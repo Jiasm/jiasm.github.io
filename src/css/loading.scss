@@ -1,0 +1,25 @@
+$color: #fff;
+.complete #loading {
+  display: none;
+  z-index: -1;
+}
+#loading {
+  height: 40px;
+  width: 40px;
+  border: 2px solid $color;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 2s infinite;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+  position: fixed;
+}
+@keyframes spin {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(360deg);
+  }
+}

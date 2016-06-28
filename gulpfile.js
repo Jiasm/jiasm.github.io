@@ -1,40 +1,39 @@
-"use strict";
-console.log("begin");
-let gulp		= require("gulp"),
-	uglify 		= require("gulp-uglify"),
-	cssmin 		= require("gulp-cssmin"),
-	rename 		= require("gulp-rename"),
-	concat		= require("gulp-concat");
+'use strict';
+let gulp = require('gulp');
+let sass = require('gulp-sass');
+let uglify = require('gulp-uglify');
+let rename = require('gulp-rename');
+let concat = require('gulp-concat');
+let cssmin = require('gulp-cssmin');
 
-gulp.task("default", () => {
-	gulp.start("js");
-	gulp.start("css");
-	console.log("success");
-})
+const jsFiles = ['src/js/jquery.js', 'src/js/require.js', 'js/prism.js', 'src/js/*.js'];
+const jsPath = 'resource/js';
+const cssFiles = ['src/css/*.scss', 'src/css/*.css'];
+const cssPath = 'resource/css';
+
+gulp.task('watch', () => gulp.watch(jsFiles.concat(cssFiles), ['js', 'css']));
 
 gulp.task("js", () => gulp.
-	src(["js/jquery.js",
-		"js/require.js",
-		"js/prism.js",
-		"js/index.js"]).
+	src(jsFiles).
 	pipe(concat("main.js")).
-	pipe(gulp.dest("js/")).
+	pipe(gulp.dest(jsPath)).
 	pipe(uglify()).
 	pipe(rename({
 		suffix: ".min"
 	})).
-	pipe(gulp.dest("js/"))
-);
-gulp.task("css", () =>  gulp.
-	src(["resource/css/reset.css", 
-		"resource/css/base.css", 
-		"resource/css/beta2.css", 
-		"resource/css/prism.css"]).
-	pipe(concat("main.css")).
-	pipe(gulp.dest("resource/css/")).
-	pipe(cssmin()).
-	pipe(rename({
-		suffix: ".min"
-	})).
-	pipe(gulp.dest("resource/css/"))
+	pipe(gulp.dest(jsPath))
 )
+
+gulp.task('css', () =>
+  gulp.src(cssFiles)
+    .pipe(sass())
+    .pipe(concat('main.css'))
+    .pipe(gulp.dest(cssPath))
+    .pipe(cssmin())
+    .pipe(rename({
+      extname: '.min.css'
+    }))
+  	.pipe(gulp.dest(cssPath))
+)
+
+gulp.task('default', ['js', 'css']);
