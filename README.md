@@ -4,7 +4,7 @@
 
 
 ```shell
-npm install --save-dev
+npm install
 npm start
 ```
 
