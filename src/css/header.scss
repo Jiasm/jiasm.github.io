@@ -7,9 +7,41 @@ h1 {
   text-decoration: none;
 }
 h1 a {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 30px;
   line-height: 1.25;
   color: #fff;
   text-decoration: none;
+  font-weight: normal;
+}
+nav {
+  margin-top: 50px;
+  text-align: center;
+  ul {
+    font-size: 0;
+    li {
+      display: inline-block;
+      margin: 0 20px;
+      a {
+        padding: 10px 30px;
+        font-size: 20px;
+        text-decoration: none;
+        position: relative;
+        &::before, &::after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 2px;
+          bottom: 0;
+          left: 50%;
+          background-color: #fff;
+          transition-property: left, width;
+          transition-duration: .3s;
+        }
+        &:hover::before {
+          left: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
 }

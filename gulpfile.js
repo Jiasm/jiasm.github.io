@@ -5,6 +5,7 @@ let uglify = require('gulp-uglify');
 let rename = require('gulp-rename');
 let concat = require('gulp-concat');
 let cssmin = require('gulp-cssmin');
+let babel = require('gulp-babel');
 
 const jsFiles = ['src/js/jquery.js', 'src/js/require.js', 'js/prism.js', 'src/js/*.js'];
 const jsPath = 'resource/js';
@@ -15,6 +16,9 @@ gulp.task('watch', () => gulp.watch(jsFiles.concat(cssFiles), ['js', 'css']));
 
 gulp.task("js", () => gulp.
 	src(jsFiles).
+	pipe(babel({
+		presets: ['es2015']
+	})).
 	pipe(concat("main.js")).
 	pipe(gulp.dest(jsPath)).
 	pipe(uglify()).
