@@ -127,19 +127,19 @@
 var duoshuoQuery = {
     short_name: "jiasm"
 }
-var ds = document.createElement('script')
-ds.src = '//static.duoshuo.com/embed.js'
-ds.charset = 'UTF-8'
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds)
+var ds = document.createElement('script');
+ds.src = '//static.duoshuo.com/embed.js';
+ds.charset = 'UTF-8';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
 //引入多说 end
 
 // 引入百度统计
-var _hmt = _hmt || []
+var _hmt = _hmt || [];
 (function() {
-  var hm = document.createElement('script')
-  hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091'
-  var s = document.getElementsByTagName('script')[0]
-  s.parentNode.insertBefore(hm, s)
+  var hm = document.createElement('script');
+  hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(hm, s);
 })()
 // 引入百度统计 end
 
@@ -153,16 +153,20 @@ window.addEventListener('load', function () {
    * 加载首页
    */
   function index () {
-    requirejs(['feed/index'], function (dataList) {
-      var str = `
-        <header><h2>全部文章</h2></header>
-        <ul class="article-list" id="article-list">
-        ${buildItem(dataList.data)}
-        </ul>
-      `
-      $('#content').html(str)
-      loadComplete()
-    })
+    $.ajax({
+      url: 'feed/index.js',
+      success: function (dataList) {
+        var str = `
+          <header><h2>全部文章</h2></header>
+          <ul class="article-list" id="article-list">
+          ${buildItem(dataList.data)}
+          </ul>
+        `
+        $('#content').html(str)
+        loadComplete()
+      },
+      dataType: 'json'
+    });
   }
 
   /**
