@@ -147,26 +147,40 @@ window.addEventListener('load', function () {
   var router = new Router(window)
   var $body = $(document.body)
 
-  router.router('/', index).hold()
+  router
+    .router('/', index)
+    .router('/blog/:id', blog)
+    .unknown(function () {
+      this.render('/')
+    })
+    .hold()
 
   /**
    * 加载首页
    */
   function index () {
-    $.ajax({
-      url: 'feed/index.js',
-      success: function (dataList) {
-        var str = `
-          <header><h2>全部文章</h2></header>
-          <ul class="article-list" id="article-list">
-          ${buildItem(dataList.data)}
-          </ul>
-        `
-        $('#content').html(str)
-        loadComplete()
-      },
-      dataType: 'json'
-    });
+    getJSON('feed/index.js', function (error, dataList) {
+      if (error) return console.log(error);
+      var str = `
+        <header><h2>全部文章</h2></header>
+        <ul class="article-list" id="article-list">
+        ${buildItem(dataList.data)}
+        </ul>
+      `
+      $('#content').html(str)
+      loadComplete()
+    })
+  }
+
+  function blog (param) {
+
+    var id = param.id;
+    getJSON(`feed/${id}.js`, function (error, data) {
+      if (error) return console.log(error);
+      var str = data.content;
+      $('#content').html(str)
+      loadComplete()
+    })
   }
 
   /**
@@ -189,6 +203,24 @@ window.addEventListener('load', function () {
         </li>
       `
     }).join('')
+  }
+
+  /**
+   * 获取json数据的一个简单封装
+   * @param  {String}   url      url
+   * @param  {Function} callback 回调 默认第一个参数为error 如果有的话
+   */
+  function getJSON (url, callback) {
+    $.ajax({
+      url: url,
+      success: function (data) {
+        callback(null, data)
+      },
+      error: function (error) {
+        callback(error)
+      },
+      dataType: 'json'
+    });
   }
 
   /**

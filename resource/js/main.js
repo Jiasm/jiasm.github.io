@@ -2897,20 +2897,30 @@ window.addEventListener('load', function () {
   var router = new Router(window);
   var $body = $(document.body);
 
-  router.router('/', index).hold();
+  router.router('/', index).router('/blog/:id', blog).unknown(function () {
+    this.render('/');
+  }).hold();
 
   /**
    * 加载首页
    */
   function index() {
-    $.ajax({
-      url: 'feed/index.js',
-      success: function success(dataList) {
-        var str = '\n          <header><h2>全部文章</h2></header>\n          <ul class="article-list" id="article-list">\n          ' + buildItem(dataList.data) + '\n          </ul>\n        ';
-        $('#content').html(str);
-        loadComplete();
-      },
-      dataType: 'json'
+    getJSON('feed/index.js', function (error, dataList) {
+      if (error) return console.log(error);
+      var str = '\n        <header><h2>全部文章</h2></header>\n        <ul class="article-list" id="article-list">\n        ' + buildItem(dataList.data) + '\n        </ul>\n      ';
+      $('#content').html(str);
+      loadComplete();
+    });
+  }
+
+  function blog(param) {
+
+    var id = param.id;
+    getJSON('feed/' + id + '.js', function (error, data) {
+      if (error) return console.log(error);
+      var str = data.content;
+      $('#content').html(str);
+      loadComplete();
     });
   }
 
@@ -2923,6 +2933,24 @@ window.addEventListener('load', function () {
     return list.reverse().map(function (item) {
       return '\n        <li class="article">\n          <p class="title">\n            <a class="title-name" href="#/blog/' + item.id + '" title="' + item.title + '" id="' + item.id + '">\n              ' + item.title + '<time class="post-date">' + item.postDate + '</time>\n            </a>\n          </p>\n          <p>\n            <span class="ds-thread-count" data-thread-key="' + item.id + '" data-count-type="comments"></span>\n          </p>\n        </li>\n      ';
     }).join('');
+  }
+
+  /**
+   * 获取json数据的一个简单封装
+   * @param  {String}   url      url
+   * @param  {Function} callback 回调 默认第一个参数为error 如果有的话
+   */
+  function getJSON(url, callback) {
+    $.ajax({
+      url: url,
+      success: function success(data) {
+        callback(null, data);
+      },
+      error: function error(_error) {
+        callback(_error);
+      },
+      dataType: 'json'
+    });
   }
 
   /**
