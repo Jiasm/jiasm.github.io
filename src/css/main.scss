@@ -1,16 +1,4 @@
 $color: #eee;
-*, ::before, ::after {
-  box-sizing: border-box;
-}
-ul {
-  padding: 0;
-}
-li {
-  list-style: none;
-}
-a {
-  color: $color;
-}
 html {
   background: #f1eedc;
   color: #eee;
@@ -35,7 +23,7 @@ body {
   font-family: '苹方', sans-serif;
 }
 .wrap {
-  background: #000 url('../img/chalk2.jpg') repeat;
+  background: #000 url('../img/chalk.png') repeat;
   background-size: 360px auto;
   border-radius: 10px;
   display: block;

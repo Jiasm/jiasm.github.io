@@ -2907,19 +2907,24 @@ window.addEventListener('load', function () {
   function index() {
     getJSON('feed/index.js', function (error, dataList) {
       if (error) return console.log(error);
-      var str = '\n        <header><h2>全部文章</h2></header>\n        <ul class="article-list" id="article-list">\n        ' + buildItem(dataList.data) + '\n        </ul>\n      ';
+      var str = '\n        <header><h2>全部文章</h2></header>\n        <ul class="article-list article" id="article-list">\n        ' + buildItem(dataList.data) + '\n        </ul>\n      ';
       $('#content').html(str);
       loadComplete();
     });
   }
 
+  /**
+   * 加载博客
+   * @param  {Object} param router返回的参数
+   */
   function blog(param) {
-
     var id = param.id;
     getJSON('feed/' + id + '.js', function (error, data) {
       if (error) return console.log(error);
-      var str = data.content;
+      var str = parseString(data.content);
+      str += '\n        <article class="ds-thread" data-thread-key="' + data.id + '" data-title="' + data.title + '" data-url="jiasm.github.io"></article>\n      ';
       $('#content').html(str);
+      document.title = data.title;
       loadComplete();
     });
   }
@@ -2950,6 +2955,17 @@ window.addEventListener('load', function () {
         callback(_error);
       },
       dataType: 'json'
+    });
+  }
+
+  /**
+   * 将多余的转义符干掉
+   * @param  {String} str 原字符串
+   * @return {String}     过滤后的字符串
+   */
+  function parseString(str) {
+    return str.replace(/\\([^ts])?/g, function (_, $1) {
+      return $1 ? $1 === 'n' ? '\n' : $1 : _;
     });
   }
 

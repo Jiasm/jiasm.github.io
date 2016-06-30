@@ -163,7 +163,7 @@ window.addEventListener('load', function () {
       if (error) return console.log(error);
       var str = `
         <header><h2>全部文章</h2></header>
-        <ul class="article-list" id="article-list">
+        <ul class="article-list article" id="article-list">
         ${buildItem(dataList.data)}
         </ul>
       `
@@ -172,13 +172,20 @@ window.addEventListener('load', function () {
     })
   }
 
+  /**
+   * 加载博客
+   * @param  {Object} param router返回的参数
+   */
   function blog (param) {
-
     var id = param.id;
     getJSON(`feed/${id}.js`, function (error, data) {
       if (error) return console.log(error);
-      var str = data.content;
+      var str = parseString(data.content);
+      str += `
+        <article class="ds-thread" data-thread-key="${data.id}" data-title="${data.title}" data-url="jiasm.github.io"></article>
+      `;
       $('#content').html(str)
+      document.title = data.title
       loadComplete()
     })
   }
@@ -221,6 +228,15 @@ window.addEventListener('load', function () {
       },
       dataType: 'json'
     });
+  }
+
+  /**
+   * 将多余的转义符干掉
+   * @param  {String} str 原字符串
+   * @return {String}     过滤后的字符串
+   */
+  function parseString (str) {
+    return str.replace(/\\([^ts])?/g, function (_, $1) { return $1 ? ($1 === 'n' ? '\n' : $1) : _});
   }
 
   /**
