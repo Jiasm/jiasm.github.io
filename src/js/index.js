@@ -180,9 +180,13 @@ window.addEventListener('load', function () {
     var id = param.id;
     getJSON(`feed/${id}.js`, function (error, data) {
       if (error) return console.log(error);
-      var str = parseString(data.content);
+      var str = `
+        <article class="blog-wrap">
+          ${parseString(data.content)}
+        </article>
+      `;
       str += `
-        <article class="ds-thread" data-thread-key="${data.id}" data-title="${data.title}" data-url="jiasm.github.io"></article>
+        <section class="ds-thread" id="jarvis-comments" data-thread-key="${data.id}" data-title="${data.title}" data-url="jiasm.github.io"></section>
       `;
       $('#content').html(str)
       document.title = data.title

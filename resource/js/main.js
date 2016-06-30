@@ -2921,8 +2921,8 @@ window.addEventListener('load', function () {
     var id = param.id;
     getJSON('feed/' + id + '.js', function (error, data) {
       if (error) return console.log(error);
-      var str = parseString(data.content);
-      str += '\n        <article class="ds-thread" data-thread-key="' + data.id + '" data-title="' + data.title + '" data-url="jiasm.github.io"></article>\n      ';
+      var str = '\n        <article class="blog-wrap">\n          ' + parseString(data.content) + '\n        </article>\n      ';
+      str += '\n        <section class="ds-thread" id="jarvis-comments" data-thread-key="' + data.id + '" data-title="' + data.title + '" data-url="jiasm.github.io"></section>\n      ';
       $('#content').html(str);
       document.title = data.title;
       loadComplete();

@@ -1,0 +1,61 @@
+/*
+  fork git 样式
+*/
+$color: #ccc;
+.fork-me-wrapper {
+    width: 170px;
+    height: 170px;
+    top: 40px;
+    right: 40px;
+    overflow: hidden;
+    z-index: 9999;
+    position: absolute;
+    font-family: cursive;
+}
+
+.fork-me {
+    color: $color;
+    font-size: 16px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    white-space: nowrap;
+    width: auto;
+    height: auto;
+    top: 40px;
+    right: -55px;
+    padding: 2px 0;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,.5) ;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(45deg);
+}
+
+.fork-me-link,
+.fork-me-link:link,
+.fork-me-link:visited,
+.fork-me-link:hover,
+.fork-me-link:focus,
+.fork-me-link:active {
+    color: $color;
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px 50px;
+    border: 2px solid $color;
+}
+
+.fork-me-left {
+    left: 0;
+    right: auto;
+}
+
+.fork-me-left .fork-me {
+    left: -55px;
+    right: auto;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
