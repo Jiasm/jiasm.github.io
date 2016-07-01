@@ -41,8 +41,8 @@ module.exports = {
   },
   userMysql: {
     host: [
-      '10.10.230.43',
-      '10.10.231.221'
+      '10.10.225.153',
+      '10.10.241.58'
     ],
     user: 'blued',
     password: 'YGB8twmZBLe46Fzw',
