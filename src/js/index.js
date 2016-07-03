@@ -202,15 +202,14 @@ window.addEventListener('load', function () {
   function buildItem (list) {
     return list.reverse().map(item => {
       return `
-        <li class="article">
-          <p class="title">
-            <a class="title-name" href="#/blog/${item.id}" title="${item.title}" id="${item.id}">
-              ${item.title}<time class="post-date">${item.postDate}</time>
+        <li class="article-item">
+          <span class="title-name">
+            <a class="title-link" href="#/blog/${item.id}" title="${item.title}" id="${item.id}">
+              ${item.title}
             </a>
-          </p>
-          <p>
-            <span class="ds-thread-count" data-thread-key="${item.id}" data-count-type="comments"></span>
-          </p>
+          </span>
+          <time class="title-date">${item.postDate}</time>
+          <span class="ds-thread-count" data-thread-key="${item.id}" data-count-type="comments"></span>
         </li>
       `
     }).join('')

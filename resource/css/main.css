@@ -1,7 +1,46 @@
+.article-list {
+  color: #aaa; }
+
+.article-item {
+  position: relative;
+  line-height: 30px;
+  margin: 15px 0;
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  text-decoration: none;
+  border-bottom: 1px dashed #666; }
+  .article-item:last-of-type {
+    border-bottom: none; }
+
+.title-link {
+  display: inline-block;
+  height: 100%;
+  text-decoration: none;
+  border-bottom: none;
+  transition: color .5s; }
+  .title-link:hover {
+    color: #eee; }
+
+.title-name {
+  flex: 1;
+  padding-bottom: 5px; }
+
+.title-date {
+  width: 150px;
+  text-align: right; }
+
+.ds-thread-count {
+  width: 80px;
+  text-align: right; }
+
 footer {
   background: url("../img/boardbottom-new-2x.png") no-repeat center bottom;
   background-size: 100%;
-  padding-bottom: 80px; }
+  color: #aaa;
+  padding-top: 50px;
+  padding-bottom: 80px;
+  text-align: center; }
 
 @charset "UTF-8";
 /*
@@ -10,8 +49,8 @@ footer {
 .fork-me-wrapper {
   width: 170px;
   height: 170px;
-  top: 40px;
-  right: 40px;
+  top: 0;
+  right: 0;
   overflow: hidden;
   z-index: 9999;
   position: absolute;
@@ -70,12 +109,40 @@ h1 {
   text-decoration: none; }
 
 h1 a {
+  display: inline-block;
   font-size: 30px;
   line-height: 1.25;
   color: #fff;
   text-decoration: none;
   font-weight: normal;
-  border: none; }
+  border: none;
+  padding: 10px;
+  position: relative;
+  overflow: hidden; }
+  h1 a .border-line,
+  h1 a .border-line::before,
+  h1 a .border-line::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; }
+  h1 a .border-line::before,
+  h1 a .border-line::after {
+    content: '';
+    transition: left .5s, top .5s; }
+  h1 a .border-line::before {
+    left: 100%;
+    border-top: 2px solid #fff; }
+  h1 a .border-line::after {
+    top: 100%;
+    border-left: 2px solid #fff; }
+  h1 a .border-line.border-line-rotate {
+    transform: rotate(180deg); }
+  h1 a:hover .border-line::before {
+    left: 0; }
+  h1 a:hover .border-line::after {
+    top: 0; }
 
 nav {
   margin-top: 50px;
@@ -152,6 +219,7 @@ body {
   font-family: '苹方', sans-serif; }
 
 .wrap {
+  position: relative;
   background: #000 url("../img/chalk.png") repeat;
   background-size: 360px auto;
   border-radius: 10px;
@@ -159,6 +227,9 @@ body {
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5) inset;
   padding: 15px 100px 5px;
   z-index: 10; }
+
+.main header {
+  padding: 0; }
 
 .syntaxhighlighter a, .syntaxhighlighter div, .syntaxhighlighter code, .syntaxhighlighter table, .syntaxhighlighter table td, .syntaxhighlighter table tr, .syntaxhighlighter table tbody, .syntaxhighlighter table thead, .syntaxhighlighter table caption, .syntaxhighlighter textarea {
   -moz-border-radius: 0 0 0 0 !important;

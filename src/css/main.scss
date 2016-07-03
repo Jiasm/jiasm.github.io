@@ -23,6 +23,7 @@ body {
   font-family: '苹方', sans-serif;
 }
 .wrap {
+  position: relative;
   background: #000 url('../img/chalk.png') repeat;
   background-size: 360px auto;
   border-radius: 10px;
@@ -30,4 +31,12 @@ body {
   box-shadow: 5px 5px 20px rgba(0,0,0,.5) inset;
   padding: 15px 100px 5px;
   z-index: 10;
+}
+.main {
+  header {
+    padding: 0;
+    // h2 {
+    //   border-left: 2px solid $color;
+    // }
+  }
 }

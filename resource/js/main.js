@@ -2936,7 +2936,7 @@ window.addEventListener('load', function () {
    */
   function buildItem(list) {
     return list.reverse().map(function (item) {
-      return '\n        <li class="article">\n          <p class="title">\n            <a class="title-name" href="#/blog/' + item.id + '" title="' + item.title + '" id="' + item.id + '">\n              ' + item.title + '<time class="post-date">' + item.postDate + '</time>\n            </a>\n          </p>\n          <p>\n            <span class="ds-thread-count" data-thread-key="' + item.id + '" data-count-type="comments"></span>\n          </p>\n        </li>\n      ';
+      return '\n        <li class="article-item">\n          <span class="title-name">\n            <a class="title-link" href="#/blog/' + item.id + '" title="' + item.title + '" id="' + item.id + '">\n              ' + item.title + '\n            </a>\n          </span>\n          <time class="title-date">' + item.postDate + '</time>\n          <span class="ds-thread-count" data-thread-key="' + item.id + '" data-count-type="comments"></span>\n        </li>\n      ';
     }).join('');
   }
 
