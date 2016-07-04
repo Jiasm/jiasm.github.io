@@ -144,6 +144,7 @@ var _hmt = _hmt || [];
 // 引入百度统计 end
 
 window.addEventListener('load', function () {
+  var cls = new Cls($('.wrap'), $('.eraser'));
   var router = new Router(window)
   var $body = $(document.body)
 
@@ -258,5 +259,6 @@ window.addEventListener('load', function () {
     })
     $body.addClass('complete')
     Prism.highlightAll() // 语法高亮
+    cls.clean()
   }
 })

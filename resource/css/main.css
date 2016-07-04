@@ -1,3 +1,41 @@
+@charset "UTF-8";
+body {
+  background: #f1eedc;
+  color: #ccc;
+  background-image: url("../img/walltexture.png");
+  background-repeat: repeat;
+  background-position: top left;
+  background-attachment: scroll;
+  overflow-y: scroll;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  padding-top: 40px; }
+
+.back-border {
+  position: relative;
+  background: #855e42 url("../img/woodtexture.jpg");
+  background-size: 225px auto;
+  border-radius: 10px;
+  box-shadow: 5px 2px 15px rgba(0, 0, 0, 0.4);
+  display: block;
+  max-width: 1240px;
+  font-family: '苹方', sans-serif;
+  overflow: hidden; }
+
+.wrap {
+  position: relative;
+  margin: 40px;
+  background: #000 url("../img/chalk.png") repeat;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5) inset;
+  position: relative;
+  background-size: 360px auto;
+  border-radius: 10px;
+  display: block;
+  padding: 15px 100px 5px; }
+
+.main header {
+  padding: 0; }
+
 .article-list {
   color: #aaa; }
 
@@ -42,7 +80,6 @@ footer {
   padding-bottom: 80px;
   text-align: center; }
 
-@charset "UTF-8";
 /*
   fork git 样式
 */
@@ -179,7 +216,7 @@ nav {
 #loading {
   height: 40px;
   width: 40px;
-  border: 2px solid #eee;
+  border: 2px solid #ccc;
   border-left-color: transparent;
   border-right-color: transparent;
   border-radius: 50%;
@@ -193,43 +230,6 @@ nav {
     transform: rotate(0); }
   50% {
     transform: rotate(360deg); } }
-
-@charset "UTF-8";
-html {
-  background: #f1eedc;
-  color: #eee;
-  background-image: url("../img/walltexture.png");
-  background-repeat: repeat;
-  background-position: top left;
-  background-attachment: scroll;
-  overflow-y: scroll;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%; }
-
-body {
-  position: relative;
-  background: #855e42 url("../img/woodtexture.jpg");
-  background-size: 225px auto;
-  border-radius: 10px;
-  box-shadow: 5px 2px 15px rgba(0, 0, 0, 0.4);
-  display: block;
-  margin: 40px auto;
-  padding: 40px;
-  max-width: 1240px;
-  font-family: '苹方', sans-serif; }
-
-.wrap {
-  position: relative;
-  background: #000 url("../img/chalk.png") repeat;
-  background-size: 360px auto;
-  border-radius: 10px;
-  display: block;
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5) inset;
-  padding: 15px 100px 5px;
-  z-index: 10; }
-
-.main header {
-  padding: 0; }
 
 .syntaxhighlighter a, .syntaxhighlighter div, .syntaxhighlighter code, .syntaxhighlighter table, .syntaxhighlighter table td, .syntaxhighlighter table tr, .syntaxhighlighter table tbody, .syntaxhighlighter table thead, .syntaxhighlighter table caption, .syntaxhighlighter textarea {
   -moz-border-radius: 0 0 0 0 !important;
@@ -1660,7 +1660,6 @@ pre[class*="language-"] {
 .token.entity {
   cursor: help; }
 
-@charset "UTF-8";
 *, ::before, ::after {
   box-sizing: border-box; }
 

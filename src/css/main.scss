@@ -1,7 +1,7 @@
-$color: #eee;
-html {
+$color: #ccc;
+body {
   background: #f1eedc;
-  color: #eee;
+  color: $color;
   background-image: url('../img/walltexture.png');
   background-repeat: repeat;
   background-position: top left;
@@ -9,28 +9,31 @@ html {
   overflow-y: scroll;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
+  padding-top: 40px;
 }
-body {
+.back-border {
   position: relative;
   background: #855e42 url('../img/woodtexture.jpg');
   background-size: 225px auto;
   border-radius: 10px;
   box-shadow: 5px 2px 15px rgba(0,0,0,.4);
   display: block;
-  margin: 40px auto;
-  padding: 40px;
   max-width: 1240px;
   font-family: '苹方', sans-serif;
+  overflow: hidden;
+}
+.back-board {
 }
 .wrap {
   position: relative;
+  margin: 40px;
   background: #000 url('../img/chalk.png') repeat;
+  box-shadow: 5px 5px 20px rgba(0,0,0,.5) inset;
+  position: relative;
   background-size: 360px auto;
   border-radius: 10px;
   display: block;
-  box-shadow: 5px 5px 20px rgba(0,0,0,.5) inset;
   padding: 15px 100px 5px;
-  z-index: 10;
 }
 .main {
   header {
