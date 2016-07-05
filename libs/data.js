@@ -9,6 +9,7 @@ let abroad = require(`${prefix}abroad.js`);
 let members = require(`${prefix}members.js`);
 let permission = require(`${prefix}permission.js`);
 let advert = require(`${prefix}advert.js`);
+let report = require(`${prefix}report.js`);
 
 module.exports = {
   retention,
@@ -19,4 +20,5 @@ module.exports = {
   members,
   permission,
   advert,
+  report,
 }

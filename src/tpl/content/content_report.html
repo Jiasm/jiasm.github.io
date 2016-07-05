@@ -1,0 +1,170 @@
+<div class="row">
+  <div class="dashboard_graph x_panel">
+    <div class="row x_title">
+      <div class="col-md-6">
+        <h3>广告数据展示</h3>
+      </div>
+      <!-- <div class="col-md-6">
+        <div id="startDate" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+          <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+          <span></span> <b class="caret"></b>
+        </div>
+      </div> -->
+    </div>
+    <div class="row x_content">
+      <h5>筛选条件</h5>
+      <div class="ln_solid"></div>
+      <div class="form-group search-wrap">
+        <div class="col-md-12 form-row">
+          <div class="col-md-3 form-warp">
+            <div class="col-md-4 form-title">
+              <span class="form-title">日期</span>
+            </div>
+            <div class="col-md-8">
+              <div class="ib form-value date-picker">
+                <div id="startDate" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                  <span></span> <b class="caret"></b>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 form-warp">
+            <div class="col-md-4 form-title">
+              <span class="form-title">~</span>
+            </div>
+            <div class="col-md-8">
+              <div class="ib form-value date-picker">
+                <div id="endDate" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                  <span></span> <b class="caret"></b>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 form-warp data-type-wrap">
+            <div class="col-md-4 form-title">
+              <span class="form-title">类型</span>
+            </div>
+            <div class="col-md-8">
+              <select class="data-type" multiple>
+                <option selected>
+                  test1
+                </option>
+                <option>
+                  test2
+                </option>
+                <option>
+                  test3
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 form-row">
+          <div class="col-md-3 form-warp">
+            <div class="col-md-4 form-title">
+              <span class="form-title">投放地区</span>
+            </div>
+            <div class="col-md-7">
+              <div class="btn-group bootstrap-select data-area form-control">
+                <button type="button" class="btn dropdown-toggle btn-default">
+                  <span class="filter-option pull-left shower">全部</span>&nbsp;
+                  <span class="bs-caret">
+                    <span class="caret"></span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 form-warp">
+            <div class="col-md-4 form-title">
+              <span class="form-title">投放系统</span>
+            </div>
+            <div class="col-md-7">
+              <select class="platform-type form-control" name="">
+                <option>
+                  安卓
+                </option>
+                <option>
+                  ios
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3 form-warp">
+            <div class="col-md-4 form-title">
+              <span class="form-title">广告ID</span>
+            </div>
+            <div class="col-md-7">
+              <input class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5>分组条件</h5>
+      <div class="ln_solid"></div>
+      <div class="group-list">
+        <label>
+          <input type="checkbox" value="date" name="group-list"/>
+          <span>日期</span>
+        </label>
+        <label>
+          <input type="checkbox" value="type" name="group-list"/>
+          <span>类型</span>
+        </label>
+        <label>
+          <input type="checkbox" value="area" name="group-list"/>
+          <span>地区</span>
+        </label>
+        <label class="middle">
+          <input type="checkbox" value="platform" name="group-list"/>
+          <span>系统</span>
+        </label>
+        <label class="middle">
+          <input type="checkbox" value="ad-id" name="group-list"/>
+          <span>广告ID</span>
+        </label>
+      </div>
+      <h5>展示指标</h5>
+      <div class="ln_solid"></div>
+      <div class="show-list">
+        <label>
+          <input type="checkbox" value="exposure" name="show-list"/>
+          <span>曝光</span>
+        </label>
+        <label>
+          <input type="checkbox" value="close" name="show-list"/>
+          <span>关闭</span>
+        </label>
+        <label>
+          <input type="checkbox" value="click" name="show-list"/>
+          <span>点击</span>
+        </label>
+        <label class="middle">
+          <input type="checkbox" value="exposure-uv" name="show-list"/>
+          <span>曝光UV</span>
+        </label>
+        <label class="middle">
+          <input type="checkbox" value="click-uv" name="show-list"/>
+          <span>点击UV</span>
+        </label>
+        <label class="large">
+          <input type="checkbox" value="click-icon" name="show-list"/>
+          <span>头像/昵称点击</span>
+        </label>
+        <label>
+          <input type="checkbox" value="like" name="show-list"/>
+          <span>点赞数</span>
+        </label>
+      </div>
+      <div class="search-wrap">
+        <button class="btn btn-success search" type="button" name="button">查询</button>
+      </div>
+      <div id="data-table" class="col-md-12 col-sm-12 col-xs-12">
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>

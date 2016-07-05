@@ -80,6 +80,9 @@ const mapping = {
     child_menu: [{
       title: "日 广告流量",
       href: "/advert/daily"
+    }, {
+      title: "广告数据展示",
+      href: "/advert/report"
     } ],
   },
   channel: {
