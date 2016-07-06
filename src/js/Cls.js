@@ -38,6 +38,35 @@ function Cls (dom, $img) {
     context.fill()
   }
 
+  var calc = function (width, height, radius) {
+
+    var count = 5;
+    var w = width / count;
+    var h = height / count;
+
+    var info = {
+      width: w,
+      height: w,
+      radius: radius
+    }
+
+    var positions = info.positions = [];
+
+    var len = count * 2;
+    while (len--) {
+      // start end
+      positions.push([[(w * (len)) - radius / 2, 0 - radius / 2], [0 - radius / 2, (h * (len)) - radius / 2]]);
+    }
+
+    // positions.push([(w * 1) - radius / 2, (h * 0) - radius / 2]);
+    // positions.push([(w * 0) - radius / 2, (h * 1) - radius / 2]);
+    //
+    // positions.push([(w * 2) - radius / 2, (h * 0) - radius / 2]);
+    // positions.push([(w * 0) - radius / 2, (h * 2) - radius / 2]);
+
+    return info;
+  }
+
   var clean = this.clean = function () {
     var width = $dom.width() + parseInt($dom.css('padding-left')) + parseInt($dom.css('padding-right'));
     var height = $dom.height() + parseInt($dom.css('padding-top')) + parseInt($dom.css('padding-bottom'));
@@ -62,6 +91,18 @@ function Cls (dom, $img) {
     });
 
     $canvas.appendTo($dom);
+
+    var info = calc(width, height, width / 10);
+
+    var positions = info.positions;
+    var len = positions.length;
+    console.log(positions);
+    while (len--) {
+      var position = positions[len];
+      var start = position[0];
+      var end = position[1];
+      move(context, img, position[0], position[1], info.width, info.height, info.radius)
+    }
 
     // @TODO 通过 高宽 计算出 每次需要擦除的面积 然后多少次全部清除 达到擦黑板的行为
   }
