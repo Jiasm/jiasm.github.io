@@ -4,6 +4,7 @@
 
     initDatePicker();
     initSelector();
+    bindSearch();
   }
 
   /**
@@ -57,6 +58,15 @@
       preData: window.REGION_CODE_PREFIX,
       title: '选择投放地区'
     })
+  }
+
+  /**
+   * 绑定查询事件
+   */
+  function bindSearch () {
+    $('#search').on('click', function () {
+      console.log('search');
+    });
   }
 
   init()

@@ -38,6 +38,7 @@
     bluedAjaxFunc(url, function(res) {
       if (res.code === 200) {
         toastr.success('The data load success!');
+        var lock = true;  // 数据只取第一天的进行加和
         var reg = res.data;
         var datas = {};
         for (var key in reg) {
@@ -49,8 +50,11 @@
             var count = item[index][path];
             var data = datas[platform] = datas[platform] || [];
             data.push(count);
-            regNum += count;
+            if (lock) {
+              regNum += count;
+            }
           }
+          lock = false;
         }
         $('#retentionreg').html(numberAddComma(regNum));
 

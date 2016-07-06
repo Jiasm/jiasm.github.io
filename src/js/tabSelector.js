@@ -23,6 +23,13 @@
     $('.tab-selector-cancel').on('click', function () {
       $panel.hide()
     });
+    // 点击其他区域 也要隐藏它
+    $(window).on('click', function (e) {
+      var $this = $(e.target);
+      if ($container.has($this).length === 0 && $this.parents('.' + stylePre + 'container').length === 0 && !$this.hasClass(stylePre + 'container')) {
+        $panel.hide()
+      }
+    });
     // 点击确定可以隐藏
     $('.tab-selector-define').on('click', function () {
       var $checkboxs = $('.tab-selector-content-title');
@@ -99,7 +106,7 @@
 
   function appendDom ($dom, config) {
     var $parent = $dom.parent();
-    var $panel = $('<div>').css({
+    var $panel = $('<div class="' + stylePre + 'container">').css({
       top: $dom.height() + 3,
       position: 'absolute',
       display: 'none',
