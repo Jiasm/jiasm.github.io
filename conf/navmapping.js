@@ -81,9 +81,9 @@ const mapping = {
       title: "日 广告流量",
       href: "/advert/daily"
     }, {
-      title: "广告数据展示",
-      href: "/advert/report"
-    } ],
+      title: "日 广告流量（新）",
+      href: "/advert/newdaily"
+    }],
   },
   channel: {
     title: "渠道分布(待开发)",

@@ -3,6 +3,11 @@
   var SHOWDATE = 'YYYY-MM-DD';
   var path = location.pathname.split('/').pop();
 
+  // 因为迁移项目 所以广告获取的方式变了 所以添加一个特殊处理
+  if (path !== 'newdaily') {
+    document.getElementsByClassName('stats')[0].style.display = 'block';
+  }
+
   function load() {
     toastr.info('loading...');
     var regNum = 0;
@@ -80,11 +85,11 @@
     for (var key in data) {
       var item = data[key];
       str += '<tr>';
-      str += '<td>'
+      str += '<td class="url-cell">'
         + key
         + '</td>';
       for (var index = 0; index < len; index++) {
-        str += '<td>'
+        str += '<td class="value-cell">'
           + (item[values[index]] || 0);
           + '</td>';
       }

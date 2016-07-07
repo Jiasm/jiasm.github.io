@@ -36,12 +36,28 @@
       var checkLen = $checkboxs.filter(':checked').length;
       if (checkLen === 0 || $checkboxs.length === checkLen) {
         $container.find('.pull-left').text('全部')
+        $container.data('val', 'all')
       } else {
         var text = [];
-        $('.tab-selector-content-title:checked:lt(5)').each(function (_, item) {
-          text.push($(item).data('text'))
+        var val = [];
+        var $tabs = $('.tab-selector-checkbox');
+        $tabs.each(function (_, item) {
+          var $item = $(item);
+          // 如果某个洲被选中了 则不去找下边的城市
+          if ($item.prop('checked')) {
+            text.push($item.data('text'));
+            val.push($(item).val());
+          } else {
+            // 获取对应tab下选中的地区
+            var $boxs = $('.tab-selector-content-' + $item.data('tab-index') + ' .tab-selector-content-title:checked');
+            $boxs.each(function (_, item) {
+              text.push($(item).data('text'));
+              val.push($(item).val());
+            });
+          }
         });
-        $container.find('.pull-left').text(text.join(','))
+        $container.data('val', val.join(','));
+        $container.find('.pull-left').text(text.join(','));
       }
       $panel.hide()
     });
@@ -178,8 +194,8 @@
 
       // 拼接tab的标题
       nav += '<li class="' + stylePre + 'nav ' + stylePre + 'nav-' + index + '">';
-      nav += '<input type="checkbox" class="' + stylePre + 'checkbox ' + stylePre + 'checkbox-' + index + '" id="' + stylePre + 'checkbox-' + value +'" name="' + stylePre + 'checkbox" data-tab-index="' + index + '" value="' + value +'" />'
-      nav += '<span class="' + stylePre + 'nav-btn" data-tab-index="' + index + '" data-value="' + value +'">';
+      nav += '<input type="checkbox" class="' + stylePre + 'checkbox ' + stylePre + 'checkbox-' + index + '" id="' + stylePre + 'checkbox-' + value +'" name="' + stylePre + 'checkbox" data-tab-index="' + index + '" data-text="' + title + '" value="' + preData[value].replace(/\_$/, '') +'" />'
+      nav += '<span class="' + stylePre + 'nav-btn" data-tab-index="' + index + '" data-value="' + preData[value].replace(/\_$/, '') +'">';
       nav += title;
       nav += '</span>';
       nav += '</li>';

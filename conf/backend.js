@@ -48,4 +48,10 @@ module.exports = {
     password: 'YGB8twmZBLe46Fzw',
     database: 'blued'
   },
+  adData: {
+    host: ['10.10.112.43'],
+    user: 'blued',
+    password: 'VhAZ68vNwyaSwUea',
+    database: 'blued'
+  }
 }

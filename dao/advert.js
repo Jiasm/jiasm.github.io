@@ -2,6 +2,7 @@
 
 let util = require('util');
 let ak47 = require('../libs/mysql.js')('ak47');
+let adData = require('../libs/mysql.js')('adData');
 let moment = require('moment');
 
 const tableName = 'redirect_jump_day';
@@ -21,6 +22,28 @@ function* daily(query) {
 
   res = generatorData(res, {
     stats: query.stats,
+    group: 'url'
+  });
+
+  return res;
+}
+
+function* newdaily(query) {
+  let newTable = 'redirect_adm';
+  let date = moment(query.date).format('YYYYMMDD') || '';
+  let res = {};
+  let sql = `
+    SELECT sum(pv) AS pv, sum(uv) AS uv, url
+    FROM ${newTable}
+    WHERE day = ${date}
+    GROUP BY url
+  `;
+
+  res = yield adData.query(sql).then(function(result) {
+    return result[0];
+  });
+  
+  res = generatorData(res, {
     group: 'url'
   });
 
@@ -50,5 +73,6 @@ function generatorData (_data, config) {
 }
 
 module.exports = {
-  daily
+  daily,
+  newdaily
 }
