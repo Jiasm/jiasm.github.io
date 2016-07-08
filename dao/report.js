@@ -43,7 +43,7 @@ function* search(query) {
    * 如果选了亚洲并且没有选择中国 需要特殊处理
    * 其余情况 直接拼一个like
    */
-  if (regions && regions !== 'all') {
+  if (regions && regions[0] !== 'all') {
     let regionList = [];
     for (let item of regions) {
       // 这个说明全选了某个洲 全选了亚洲 需要判断是否存在有中国的选项 如果没有全选中国 需要将中国的
@@ -92,13 +92,11 @@ function* search(query) {
     ${where}
     GROUP BY ${group}
   `;
-  console.log(sql);
   var showReg = new RegExp(`.*(${show.join('|')}).*`);
 
   let adList = yield q(adData, sql);
   let dataList = new Map();
   let groupList = query.group.split(',');
-
   yield adList.map(function* (item) {
     if (showReg.test(item.url)) {
       let val = RegExp.$1;
