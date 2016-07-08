@@ -16,7 +16,7 @@ function* search(query) {
   let regions = query.regions.split(','); // 投放地区
   let platform = query.platform;          // 设备类型
   let adId = query.adId;                  // 广告ID
-  let group = query.group || 'day';       // 分组条件
+  let group = (query.group || 'day') + ',url';       // 分组条件
   let show = query.show.split(',');       // 展示指标
 
   let where = [];
@@ -32,7 +32,7 @@ function* search(query) {
   }
 
   // 广告类型
-  if (type) {
+  if (type .indexOf('all') < 0) {
     where.push(`type in (${type})`)
   }
 
@@ -60,16 +60,27 @@ function* search(query) {
   }
 
   // 设备类型
-  if (platform !== 'all') {
+  if (platform) {
     where.push(`platform = ${platform}`);
   }
 
   // 广告ID
   if (adId) {
-    where.push(`adId = ${adId}`);
+    where.push(`adm_id = ${adId}`);
   }
 
-  let cols = ['day', 'url', 'type', 'platform', 'region', 'adm_id as admId', 'pv'].join(','); // 要取的列
+  // 如果有选择展示指标
+  if (show.length > 0) {
+    let rule = ['1 = 1'];
+    for (let item of show) {
+      if (item) {
+        rule.push(`url like '%${item}%'`);
+      }
+    }
+    where.push(`(${rule.join(' or ')})`);
+  }
+
+  let cols = ['day', 'url', 'type', 'platform', 'region', 'adm_id', 'SUM(pv) AS pv'].join(','); // 要取的列
 
   where = where.length ? `WHERE ${where.join(' and ')}` : '';
 
@@ -79,49 +90,36 @@ function* search(query) {
     FROM
     ${tableName}
     ${where}
+    GROUP BY ${group}
   `;
   console.log(sql);
   var showReg = new RegExp(`.*(${show.join('|')}).*`);
 
   let adList = yield q(adData, sql);
+  let dataList = new Map();
+  let groupList = query.group.split(',');
 
-  adList = yield adList.map(function* (item) {
+  yield adList.map(function* (item) {
     if (showReg.test(item.url)) {
-      let key = RegExp.$1;  
-      item[key] = item.pv;  // pv可能作为 点赞 点击 曝光 balabala的出现
-      delete item.url;      // 删除 url
-      delete item.pv;       // 删除 pv
-      return item;
+      let val = RegExp.$1;
+      let key = '';
+      for (let k in item) {
+        if (groupList.indexOf(k) >= 0) {
+          key += item[k];
+        }
+      }
+      if (dataList.has(key)) {
+        let data = dataList.get(key);
+        data[val] = (data[val] || 0) + item.pv;
+        dataList.set(key, data);
+      } else {
+        item[val] = item.pv;
+        dataList.set(key, item);
+      }
     }
   });
 
-  return adList.filter(a => a);
-}
-
-function merge (rule, data) {
-  let arr = [];
-  let eqList = {};
-
-  for (let index in data) {
-    let item = data[index];
-    let str = toStr(rule, item);
-    let link = eqList.indexOf(str);
-
-    // 说明之前存储过关于它的数据
-    if (link) {
-
-    }
-  }
-}
-
-function toStr (rule, data) {
-  var str = '';
-  for (let index in rule) {
-    let key = rule[index];
-    let value = data[key];
-    str += `${key}:${value}`;
-  }
-  return str;
+  return Array.from(dataList.values());
 }
 
 module.exports = {
