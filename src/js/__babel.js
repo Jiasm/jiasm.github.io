@@ -24,8 +24,6 @@ window.addEventListener('load', function () {
   var $content = $('#content');
   var $go2top = $('#go2top');
 
-  var click = 'ontouchstart' in document.body ? 'touchstart' : 'click'; // 如果是触屏设备 使用touchstart
-
   /**
    * 初始化页面
    */
@@ -48,7 +46,7 @@ window.addEventListener('load', function () {
    */
   function bindEvent() {
     $win.on('scroll', srollHandler);
-    $go2top.on(click, go2topHandler);
+    $go2top.on('click', go2topHandler);
   }
 
   /**

@@ -26,6 +26,7 @@ body {
   max-width: 1240px;
   font-family: '苹方', sans-serif;
   overflow: hidden;
+  margin: 0 auto;
 }
 .back-board {
 }
@@ -49,5 +50,12 @@ body {
     // h2 {
     //   border-left: 2px solid $color;
     // }
+  }
+}
+article {
+  h1, h2, h3, h4, h5, h6 {
+    color: #fff;
+    padding-left: .6em;
+    border-left: .4em solid currentColor;
   }
 }

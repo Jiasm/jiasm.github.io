@@ -25,7 +25,8 @@ body {
   display: block;
   max-width: 1240px;
   font-family: '苹方', sans-serif;
-  overflow: hidden; }
+  overflow: hidden;
+  margin: 0 auto; }
 
 .wrap {
   position: relative;
@@ -42,6 +43,11 @@ body {
 
 .main header {
   padding: 0; }
+
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  color: #fff;
+  padding-left: .6em;
+  border-left: .4em solid currentColor; }
 
 .article-list {
   color: #aaa; }
