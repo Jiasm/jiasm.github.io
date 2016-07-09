@@ -18,18 +18,44 @@ var duoshuoQuery = {
 // 引入百度统计 & 多说 end
 
 window.addEventListener('load', function () {
-  var router = new Router(window);
+  var router = new Router(window); // @TODO 加上个before after就更完美了
+  var $win = $(window);
   var $body = $(document.body);
   var $content = $('#content');
+  var $go2top = $('#go2top');
 
-  router.router('/', index).router('/blog/:id', blog).unknown(function () {
-    this.render('/');
-  }).hold();
+  var click = 'ontouchstart' in document.body ? 'touchstart' : 'click'; // 如果是触屏设备 使用touchstart
+
+  /**
+   * 初始化页面
+   */
+  function init() {
+    initRouter();
+    bindEvent();
+  }
+
+  /**
+   * 注册router
+   */
+  function initRouter() {
+    router.router('/', index).router('/blog/:id', blog).unknown(function () {
+      this.render('/');
+    }).hold();
+  }
+
+  /**
+   * 绑定滚动事件
+   */
+  function bindEvent() {
+    $win.on('scroll', srollHandler);
+    $go2top.on(click, go2topHandler);
+  }
 
   /**
    * 加载首页
    */
   function index() {
+    loading();
     getJSON('feed/index.js', function (error, dataList) {
       if (error) return console.log(error);
       var str = '\n        <header><h2>全部文章</h2></header>\n        <ul class="article-list article" id="article-list">\n        ' + buildItem(dataList.data) + '\n        </ul>\n      ';
@@ -44,6 +70,7 @@ window.addEventListener('load', function () {
    * @param  {Object} param router返回的参数
    */
   function blog(param) {
+    loading();
     var id = param.id;
     getJSON('feed/' + id + '.js', function (error, data) {
       if (error) return console.log(error);
@@ -64,6 +91,28 @@ window.addEventListener('load', function () {
     return list.reverse().map(function (item) {
       return '\n        <li class="article-item">\n          <span class="title-name">\n            <a class="title-link" href="#/blog/' + item.id + '" title="' + item.title + '" id="' + item.id + '">\n              ' + item.title + '\n            </a>\n          </span>\n          <time class="title-date">' + item.postDate + '</time>\n          <span class="ds-thread-count" data-thread-key="' + item.id + '" data-count-type="comments"></span>\n        </li>\n      ';
     }).join('');
+  }
+
+  /**
+   * 监听滑动事件 目前只是处理了go2top
+   * @param  {Event} e
+   */
+  function srollHandler(e) {
+    if ($win.scrollTop() >= 666) {
+      $go2top.show();
+    } else {
+      $go2top.hide();
+    }
+  }
+
+  /**
+   * 监听go2top点击的事件
+   * @return {[type]} [description]
+   */
+  function go2topHandler() {
+    $('body,html').animate({
+      scrollTop: 0
+    }, 1e3);
   }
 
   /**
@@ -96,13 +145,20 @@ window.addEventListener('load', function () {
   }
 
   /**
+   * 将当前页面改为loading状态
+   */
+  function loading() {
+    $body.removeClass('complete');
+  }
+
+  /**
    * 加载dom完毕 需要设置多说评论框的加载 以及code语法高亮的解析
    */
   function loadComplete(config) {
     config = config || {};
     $content.html(config.content);
     document.title = config.title || '首页';
-    // document.body.scrollTop = '0px'
+    document.body.scrollTop = '0px';
     DUOSHUO.init();
     var countList = $('.ds-thread-count');
     countList.each(function (_, item) {
@@ -113,4 +169,6 @@ window.addEventListener('load', function () {
     $body.addClass('complete');
     Prism.highlightAll(); // 语法高亮
   }
+
+  init();
 });

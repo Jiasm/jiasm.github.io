@@ -1,4 +1,8 @@
 $color: #ccc;
+a, button, #go2top {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
 body {
   background: #f1eedc;
   color: $color;
@@ -10,6 +14,7 @@ body {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   padding-top: 40px;
+  margin: 0;
 }
 .back-border {
   position: relative;
@@ -34,6 +39,9 @@ body {
   border-radius: 10px;
   display: block;
   padding: 15px 100px 5px;
+  img {
+    max-width: 100%;
+  }
 }
 .main {
   header {

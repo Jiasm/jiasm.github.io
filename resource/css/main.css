@@ -1,4 +1,8 @@
 @charset "UTF-8";
+a, button, #go2top {
+  outline: none;
+  -webkit-tap-highlight-color: transparent; }
+
 body {
   background: #f1eedc;
   color: #ccc;
@@ -9,7 +13,8 @@ body {
   overflow-y: scroll;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
-  padding-top: 40px; }
+  padding-top: 40px;
+  margin: 0; }
 
 .back-border {
   position: relative;
@@ -32,6 +37,8 @@ body {
   border-radius: 10px;
   display: block;
   padding: 15px 100px 5px; }
+  .wrap img {
+    max-width: 100%; }
 
 .main header {
   padding: 0; }
@@ -80,6 +87,33 @@ footer {
   padding-bottom: 80px;
   text-align: center; }
 
+#go2top {
+  bottom: 70px;
+  right: 100px;
+  outline: 0;
+  cursor: pointer;
+  position: fixed;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  color: #ccc;
+  border: .2rem solid currentColor;
+  font-size: 1.6em;
+  background-color: transparent;
+  display: none; }
+  #go2top::before {
+    content: "";
+    display: block;
+    position: absolute;
+    border: .2rem solid currentColor;
+    width: .8rem;
+    height: .8rem;
+    top: 37%;
+    left: 31%;
+    transform: rotate(135deg);
+    border-top: none;
+    border-right: none; }
+
 /*
   fork git 样式
 */
@@ -92,6 +126,9 @@ footer {
   z-index: 9999;
   position: absolute;
   font-family: cursive; }
+  .fork-me-wrapper.scroll {
+    position: fixed;
+    right: 70px; }
 
 .fork-me {
   color: #ccc;
@@ -161,15 +198,15 @@ h1 a {
   h1 a .border-line::after {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 100%; }
   h1 a .border-line::before,
   h1 a .border-line::after {
     content: '';
-    transition: left .5s, top .5s; }
+    transition: right .5s, top .5s; }
   h1 a .border-line::before {
-    left: 100%;
+    right: 100%;
     border-top: 2px solid #fff; }
   h1 a .border-line::after {
     top: 100%;
@@ -177,7 +214,7 @@ h1 a {
   h1 a .border-line.border-line-rotate {
     transform: rotate(180deg); }
   h1 a:hover .border-line::before {
-    left: 0; }
+    right: 0; }
   h1 a:hover .border-line::after {
     top: 0; }
 
@@ -209,6 +246,9 @@ nav {
           left: 0;
           width: 100%; }
 
+.toggleItem {
+  display: none; }
+
 .complete #loading {
   display: none;
   z-index: -1; }
@@ -221,6 +261,8 @@ nav {
   border-right-color: transparent;
   border-radius: 50%;
   animation: spin 2s infinite;
+  top: 50%;
+  left: 50%;
   top: calc(50% - 20px);
   left: calc(50% - 20px);
   position: fixed; }
@@ -230,6 +272,56 @@ nav {
     transform: rotate(0); }
   50% {
     transform: rotate(360deg); } }
+
+@media (max-width: 420px) {
+  body {
+    padding: 0; }
+  .wrap {
+    margin: 20px;
+    padding: 15px 20px 5px; }
+  header {
+    padding: 40px; }
+  #go2top {
+    right: 50px; }
+  nav ul {
+    overflow: hidden;
+    height: 0;
+    margin-top: 20px;
+    transition: height .5s; }
+    nav ul li {
+      display: block;
+      padding: 10px; }
+      nav ul li a {
+        border-bottom: 1px solid currentColor; }
+        nav ul li a::before, nav ul li a::after {
+          display: none; }
+  label.toggleItem {
+    font-size: 22px;
+    display: block; }
+    label.toggleItem span {
+      position: relative; }
+      label.toggleItem span::before, label.toggleItem span::after {
+        position: absolute;
+        transition: transform .5s; }
+      label.toggleItem span::before {
+        left: -100%;
+        content: '>'; }
+      label.toggleItem span::after {
+        right: -100%;
+        content: '<'; }
+  nav input.toggleItem:checked + label.toggleItem span::before {
+    transform: rotate(90deg); }
+  nav input.toggleItem:checked + label.toggleItem span::after {
+    transform: rotate(-90deg); }
+  nav input.toggleItem:checked + label.toggleItem + ul {
+    height: 150px; }
+  .article-item {
+    display: block; }
+  .title-name {
+    display: block;
+    width: 100%; }
+  .ds-thread-count {
+    float: right; } }
 
 .syntaxhighlighter a, .syntaxhighlighter div, .syntaxhighlighter code, .syntaxhighlighter table, .syntaxhighlighter table td, .syntaxhighlighter table tr, .syntaxhighlighter table tbody, .syntaxhighlighter table thead, .syntaxhighlighter table caption, .syntaxhighlighter textarea {
   -moz-border-radius: 0 0 0 0 !important;

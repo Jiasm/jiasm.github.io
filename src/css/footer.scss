@@ -6,3 +6,31 @@ footer {
   padding-bottom: 80px;
   text-align: center;
 }
+#go2top {
+  bottom: 70px;
+  right: 100px;
+  outline: 0;
+  cursor: pointer;
+  position: fixed;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  color: #ccc;
+  border: .2rem solid currentColor;
+  font-size: 1.6em;
+  background-color: rgba(0,0,0,0);
+  display: none;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    border: .2rem solid currentColor;
+    width: .8rem;
+    height: .8rem;
+    top: 37%;
+    left: 31%;
+    transform: rotate(135deg);
+    border-top: none;
+    border-right: none;
+  }
+}
