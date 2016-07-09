@@ -1,29 +1,25 @@
 'use strict';
 
-//引入多说
+// 引入百度统计 & 多说
+var _hmt = _hmt || [];
 var duoshuoQuery = {
     short_name: "jiasm"
-}
-var ds = document.createElement('script');
-ds.src = '//static.duoshuo.com/embed.js';
-ds.charset = 'UTF-8';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-//引入多说 end
-
-// 引入百度统计
-var _hmt = _hmt || [];
+};
 (function() {
   var hm = document.createElement('script');
+  var ds = document.createElement('script');
   hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091';
+  ds.src = '//static.duoshuo.com/embed.js';
   var s = document.getElementsByTagName('script')[0];
   s.parentNode.insertBefore(hm, s);
-})()
-// 引入百度统计 end
+  s.parentNode.insertBefore(ds, s);
+})();
+// 引入百度统计 & 多说 end
 
 window.addEventListener('load', function () {
-  var cls = new Cls($('.wrap'), $('.eraser'));
-  var router = new Router(window)
-  var $body = $(document.body)
+  var router = new Router(window);
+  var $body = $(document.body);
+  var $content = $('#content');
 
   router
     .router('/', index)
@@ -31,7 +27,7 @@ window.addEventListener('load', function () {
     .unknown(function () {
       this.render('/')
     })
-    .hold()
+    .hold();
 
   /**
    * 加载首页
@@ -44,9 +40,10 @@ window.addEventListener('load', function () {
         <ul class="article-list article" id="article-list">
         ${buildItem(dataList.data)}
         </ul>
-      `
-      $('#content').html(str)
-      loadComplete()
+      `;
+      loadComplete({
+        content: str
+      });
     })
   }
 
@@ -64,9 +61,10 @@ window.addEventListener('load', function () {
         </article>
         <section class="ds-thread" id="jarvis-comments" data-thread-key="${data.id}" data-title="${data.title}" data-url="jiasm.github.io"></section>
       `;
-      $('#content').html(str)
-      document.title = data.title
-      loadComplete()
+      loadComplete({
+        title: data.title,
+        content: str
+      });
     })
   }
 
@@ -88,7 +86,7 @@ window.addEventListener('load', function () {
           <span class="ds-thread-count" data-thread-key="${item.id}" data-count-type="comments"></span>
         </li>
       `
-    }).join('')
+    }).join('');
   }
 
   /**
@@ -100,10 +98,10 @@ window.addEventListener('load', function () {
     $.ajax({
       url: url,
       success: function (data) {
-        callback(null, data)
+        callback(null, data);
       },
       error: function (error) {
-        callback(error)
+        callback(error);
       },
       dataType: 'json'
     });
@@ -123,17 +121,17 @@ window.addEventListener('load', function () {
    */
   function loadComplete (config) {
     config = config || {}
-    document.title = config.title || '首页'
+    $content.html(config.content);
+    document.title = config.title || '首页';
     // document.body.scrollTop = '0px'
-    DUOSHUO.init()
-    var countList = $('.ds-thread-count')
+    DUOSHUO.init();
+    var countList = $('.ds-thread-count');
     countList.each(function (_, item) {
         if (!item.innerHTML) {
-          item.innerHTML = '暂无评论'
+          item.innerHTML = '暂无评论';
         }
     })
-    $body.addClass('complete')
-    Prism.highlightAll() // 语法高亮
-    cls.clean()
+    $body.addClass('complete');
+    Prism.highlightAll(); // 语法高亮
   }
 })

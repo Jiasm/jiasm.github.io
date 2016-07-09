@@ -2,7 +2,7 @@ $color: #ccc;
 body {
   background: #f1eedc;
   color: $color;
-  // background-image: url('../img/walltexture.png');
+  background-image: url('../img/walltexture.png');
   background-repeat: repeat;
   background-position: top left;
   background-attachment: scroll;
@@ -13,7 +13,7 @@ body {
 }
 .back-border {
   position: relative;
-  // background: #855e42 url('../img/woodtexture.jpg');
+  background: #855e42 url('../img/woodtexture.jpg');
   background-size: 225px auto;
   border-radius: 10px;
   box-shadow: 5px 2px 15px rgba(0,0,0,.4);
@@ -27,7 +27,7 @@ body {
 .wrap {
   position: relative;
   margin: 40px;
-  // background: #000 url('../img/chalk.png') repeat;
+  background: #000 url('../img/chalk.png') repeat;
   box-shadow: 5px 5px 20px rgba(0,0,0,.5) inset;
   position: relative;
   background-size: 360px auto;

@@ -1,30 +1,26 @@
 'use strict';
 
-//引入多说
+// 引入百度统计 & 多说
 
+var _hmt = _hmt || [];
 var duoshuoQuery = {
   short_name: "jiasm"
 };
-var ds = document.createElement('script');
-ds.src = '//static.duoshuo.com/embed.js';
-ds.charset = 'UTF-8';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-//引入多说 end
-
-// 引入百度统计
-var _hmt = _hmt || [];
 (function () {
   var hm = document.createElement('script');
+  var ds = document.createElement('script');
   hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091';
+  ds.src = '//static.duoshuo.com/embed.js';
   var s = document.getElementsByTagName('script')[0];
   s.parentNode.insertBefore(hm, s);
+  s.parentNode.insertBefore(ds, s);
 })();
-// 引入百度统计 end
+// 引入百度统计 & 多说 end
 
 window.addEventListener('load', function () {
-  var cls = new Cls($('.wrap'), $('.eraser'));
   var router = new Router(window);
   var $body = $(document.body);
+  var $content = $('#content');
 
   router.router('/', index).router('/blog/:id', blog).unknown(function () {
     this.render('/');
@@ -37,8 +33,9 @@ window.addEventListener('load', function () {
     getJSON('feed/index.js', function (error, dataList) {
       if (error) return console.log(error);
       var str = '\n        <header><h2>全部文章</h2></header>\n        <ul class="article-list article" id="article-list">\n        ' + buildItem(dataList.data) + '\n        </ul>\n      ';
-      $('#content').html(str);
-      loadComplete();
+      loadComplete({
+        content: str
+      });
     });
   }
 
@@ -51,9 +48,10 @@ window.addEventListener('load', function () {
     getJSON('feed/' + id + '.js', function (error, data) {
       if (error) return console.log(error);
       var str = '\n        <article class="blog-wrap">\n          ' + parseString(data.content) + '\n        </article>\n        <section class="ds-thread" id="jarvis-comments" data-thread-key="' + data.id + '" data-title="' + data.title + '" data-url="jiasm.github.io"></section>\n      ';
-      $('#content').html(str);
-      document.title = data.title;
-      loadComplete();
+      loadComplete({
+        title: data.title,
+        content: str
+      });
     });
   }
 
@@ -102,6 +100,7 @@ window.addEventListener('load', function () {
    */
   function loadComplete(config) {
     config = config || {};
+    $content.html(config.content);
     document.title = config.title || '首页';
     // document.body.scrollTop = '0px'
     DUOSHUO.init();
@@ -113,6 +112,5 @@ window.addEventListener('load', function () {
     });
     $body.addClass('complete');
     Prism.highlightAll(); // 语法高亮
-    cls.clean();
   }
 });
