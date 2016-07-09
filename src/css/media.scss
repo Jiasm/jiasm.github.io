@@ -8,6 +8,13 @@
   }
   header {
     padding: 40px;
+    h1 a {
+      .border-line,
+      .border-line::before,
+      .border-line::after {
+        display: none;
+      }
+    }
   }
   #go2top {
     right: 50px;
