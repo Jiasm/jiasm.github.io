@@ -1,7 +1,7 @@
 {
-  "name": "Data_Platform",
+  "name": "jiasm.github.io",
   "version": "0.0.1",
-  "description": "Data Platform",
+  "description": "个人博客",
   "main": "index.js",
   "scripts": {
     "test": "npm test",
@@ -11,8 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.oschina.net/darrencode/Data_Platform.git"
+    "url": "git+https://github.com/Jiasm/jiasm.github.io.git"
   },
+  "keywords": [
+    "gitpage",
+    "blog",
+    "nodejs"
+  ],
+  "author": "jiasm",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jiasm/jiasm.github.io/issues"
+  },
+  "homepage": "https://github.com/Jiasm/jiasm.github.io#readme",
   "dependencies": {
     "co-views": "^2.1.0",
     "handlebars": "^3.0.3",
@@ -40,10 +51,5 @@
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^1.5.3",
     "node-uuid": "^1.4.7"
-  },
-  "devDependencies": {
-    "shipit-cnpm": "^0.1.0",
-    "shipit-deploy": "^2.0.0",
-    "shipit-pm": "^0.1.0"
   }
 }
