@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" name="viewport">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="x5-orientation" content="portrait">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <title>拼图游戏</title>
+    <!-- Bootstrap -->
+    <link href="resource/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="panel" id="panel">
+        <!-- 难度选择 -->
+        <div id="diff-choice" class="diff-choice">
+            <div class="choice-panel">
+                <div class="diff-item" data-diff="3">
+                    <img class="diff-default" data-src="geb.png" />
+                    <img class="diff-selected" data-src="gebc.png" />
+                </div>
+                <div class="diff-item" data-diff="4">
+                    <img class="diff-default" data-src="gmb.png" />
+                    <img class="diff-selected" data-src="gmbc.png" />
+                </div>
+                <div class="diff-item" data-diff="5">
+                    <img class="diff-default" data-src="ghb.png" />
+                    <img class="diff-selected" data-src="ghbc.png" />
+                </div>
+            </div>
+            <div class="button-container">
+                <div class="shadow">
+                    <a id="go2Play" class="btn">
+						确定
+					</a>
+                </div>
+            </div>
+        </div>
+        <!-- 难度选择 -->
+        <!-- 选择图片 -->
+        <div id="example-image" class="example-image">
+            <div class="example-title">
+                <h2>图背景选择</h2></div>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="button-container">
+                <div class="shadow">
+                    <a id="next" class="btn">
+						开始
+					</a>
+                </div>
+            </div>
+        </div>
+        <!-- 选择图片 -->
+        <!-- 游戏 -->
+        <div id="game-panel" class="game-panel">
+            <div class="nav-bar">
+                <div class="condition">
+                    <div class="timer-container">
+                        <p>倒计时
+                            <span id="hours">00</span>:
+                            <span id="minutes">00</span>:
+                            <span id="seconds">00</span>
+                        </p>
+                    </div>
+                    <div class="step-container">
+                        <p>
+                            <span>步数</span>
+                            <span id="steps"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="puzzle-bar" class="show-shadow">
+                <div id="puzzle-container"></div>
+            </div>
+            <div id="placeholder"></div>
+        </div>
+        <div id="control-container" class="control-container">
+            <div class="control-row action-buttons">
+                <div id="refresh" class="refresh">
+                    <img data-src="gri.png" />
+                    <!-- <p class="action-title">刷新</p> -->
+                </div>
+                <div id="pause" class="refresh">
+                    <img data-src="gpi.png" />
+                    <!-- <p class="action-title">暂停</p> -->
+                </div>
+                <div id="level" class="level">
+                    <img data-src="grei.png" />
+                    <!-- <p class="action-title">难度</p> -->
+                </div>
+            </div>
+        </div>
+        <!-- 游戏 -->
+        <!-- 提示框 -->
+        <div id="message" class="message animated">
+            <img id="close" data-src="shake_close.png">
+            <p></p>
+        </div>
+    </div>
+    <div class="bar loading" id="bar"></div>
+    <div class="loading" id="loading"></div>
+    <script src="resource/js/all.min.js"></script>
+</body>
+
+</html>

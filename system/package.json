@@ -1,0 +1,41 @@
+{
+  "name": "jiasm.github.io",
+  "version": "1.0.0",
+  "description": "个人博客",
+  "main": "system/index.js",
+  "scripts": {
+    "start": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,hbs,css system/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jiasm/jiasm.github.io.git"
+  },
+  "keywords": [
+    "gitpage",
+    "blog",
+    "nodejs"
+  ],
+  "author": "jiasm",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jiasm/jiasm.github.io/issues"
+  },
+  "homepage": "https://github.com/Jiasm/jiasm.github.io#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^1.5.3",
+    "node-uuid": "^1.4.7",
+    "koa": "^1.2.0",
+    "koa-router": "^5.4.0",
+    "koa-static": "^2.0.0"
+  }
+}
