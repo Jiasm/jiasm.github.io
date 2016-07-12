@@ -3,12 +3,21 @@
   <head>
     <meta charset="utf-8">
     <title>啥时候下班才能无视10点前必须到的龟腚</title>
+    <meta content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" name="viewport">
+    <style media="screen">
+      body {
+        color: #666;
+      }
+      span {
+        
+      }
+    </style>
   </head>
   <body>
     <h4>啥时候下班才能无视10点（第二天）前必须到的龟腚</h4>
     <div id="container">
       早上的打卡时间：<input type="time" v-model="workStart">
-      <button type="button" name="button" @click="getnow">现在</button>
+      <span type="button" name="button" @click="getnow">现在</span>
       <p>
         下班时间：{{workEnd}}
       </p>
