@@ -193,8 +193,6 @@ app.use(router.routes())
   .use(router.allowedMethods());
 
 router.get('/', function * () {
-  console.log(66662);
   this.body = 12345;
 });
-console.log(11);
 app.listen(12306);
