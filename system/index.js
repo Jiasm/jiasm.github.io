@@ -188,11 +188,17 @@
 var app = require('koa')();
 var router = require('koa-router')();
 var serve = require('koa-static');
+var views = require('co-views');
+
+var render = views('./system/views', {
+  map: { html: 'ejs' }
+})
 
 app.use(router.routes())
-  .use(router.allowedMethods());
+  .use(router.allowedMethods())
+  .use(serve('./system/resource'));
 
 router.get('/', function * () {
-  this.body = 12345;
+  this.body = yield render('index');
 });
 app.listen(12306);
