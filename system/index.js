@@ -117,7 +117,7 @@ function gitCommit (fileNames) {
   for (let fileName of fileNames) {
     execSync(`git add feed/${fileName}.js`)
   }
-  var commitCmd = `git commit -m "${'power by jarvis ' + new Date()}"`
+  var commitCmd = `git commit -m "${'powered by jarvis ' + new Date()}"`
   var pushCmd = 'git push'
 
   execSync(commitCmd)
