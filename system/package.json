@@ -4,7 +4,7 @@
   "description": "个人博客",
   "main": "system/index.js",
   "scripts": {
-    "start": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,hbs,css system/index.js"
+    "start": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,html,css system/index.js"
   },
   "repository": {
     "type": "git",
