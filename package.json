@@ -4,8 +4,8 @@
   "description": "个人博客",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
-    "start": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,hbs,css system/index.js",
+    "start": "node system/index.js",
+    "test": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,html,css system/index.js",
     "deploy": "shipit production deploy",
     "rollback": "shipit production rollback"
   },
@@ -53,6 +53,12 @@
     "node-uuid": "^1.4.7"
   },
   "devDependencies": {
-    "ejs": "^2.4.2"
+    "ejs": "^2.4.2",
+    "eslint": "^2.10.1",
+    "eslint-config-standard": "^5.3.1",
+    "eslint-plugin-promise": "^1.1.0",
+    "eslint-plugin-standard": "^1.3.2",
+    "eslint-plugin-react": "^5.2.2",
+    "koa-body-parser": "^1.1.2"
   }
 }
