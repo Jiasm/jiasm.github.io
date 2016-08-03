@@ -5,13 +5,13 @@ import style from './index.css'
 
 class ListItem extends Component {
   render () {
+    var {title, postDate} = this.props
     return (
       <div>
-        ListItem
+        {title} {postDate}
       </div>
     )
   }
 }
 
 export default ListItem
-  
