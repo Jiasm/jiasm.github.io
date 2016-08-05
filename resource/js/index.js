@@ -608,8 +608,6 @@
 	
 	var _index = __webpack_require__(11);
 	
-	var _index2 = _interopRequireDefault(_index);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -633,13 +631,23 @@
 	      var _props = this.props;
 	      var title = _props.title;
 	      var postDate = _props.postDate;
+	      var index = _props.index;
 	
+	      var style = {
+	        'transform': 'translate3d(351.724px, 278.672px, 0px) rotate(350deg) scale(0.94)',
+	        'z-index': '90',
+	        'background-color': 'rgb(217, 64, 52)'
+	      };
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        title,
-	        ' ',
-	        postDate
+	        { className: _index.item, style: style },
+	        _react2.default.createElement(
+	          'div',
+	          { className: _index.itemButton },
+	          title,
+	          ' ',
+	          postDate
+	        )
 	      );
 	    }
 	  }]);
@@ -684,10 +692,13 @@
 	
 	
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".jtdXm {\n  display: block;\n  width: 220px;\n  height: 310px;\n  position: absolute; }\n\n.Ie0tP {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  z-index: 99;\n  -webkit-tap-highlight-color: transparent; }\n", ""]);
 	
 	// exports
-
+	exports.locals = {
+		"item": "jtdXm",
+		"itemButton": "Ie0tP"
+	};
 
 /***/ },
 /* 13 */
