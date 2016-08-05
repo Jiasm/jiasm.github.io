@@ -1,34 +1,34 @@
-'use strict';
+'use strict'
 
 // 引入百度统计 & 多说
-var _hmt = _hmt || [];
+var _hmt = _hmt || []
 var duoshuoQuery = {
-    short_name: "jiasm"
+  short_name: 'jiasm'
 };
-(function() {
-  var hm = document.createElement('script');
-  var ds = document.createElement('script');
-  hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091';
-  ds.src = '//static.duoshuo.com/embed.js';
-  var s = document.getElementsByTagName('script')[0];
-  s.parentNode.insertBefore(hm, s);
-  s.parentNode.insertBefore(ds, s);
-})();
+(function () {
+  var hm = document.createElement('script')
+  var ds = document.createElement('script')
+  hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091'
+  ds.src = '//static.duoshuo.com/embed.js'
+  var s = document.getElementsByTagName('script')[0]
+  s.parentNode.insertBefore(hm, s)
+  s.parentNode.insertBefore(ds, s)
+})()
 // 引入百度统计 & 多说 end
 
 window.addEventListener('load', function () {
-  var router = new Router(window);  // @TODO 加上个before after就更完美了
-  var $win = $(window);
-  var $body = $(document.body);
-  var $content = $('#content');
-  var $go2top = $('#go2top');
+  var router = new Router(window)  // @TODO 加上个before after就更完美了
+  var $win = $(window)
+  var $body = $(document.body)
+  var $content = $('#content')
+  var $go2top = $('#go2top')
 
   /**
    * 初始化页面
    */
   function init () {
-    initRouter();
-    bindEvent();
+    initRouter()
+    bindEvent()
   }
 
   /**
@@ -41,7 +41,7 @@ window.addEventListener('load', function () {
       .unknown(function () {
         this.render('/')
       })
-      .hold();
+      .hold()
   }
 
   /**
@@ -49,25 +49,25 @@ window.addEventListener('load', function () {
    */
   function bindEvent () {
     $win.on('scroll', srollHandler)
-    $go2top.on('click', go2topHandler);
+    $go2top.on('click', go2topHandler)
   }
 
   /**
    * 加载首页
    */
   function index () {
-    loading();
+    loading()
     getJSON('feed/index.js', function (error, dataList) {
-      if (error) return console.log(error);
+      if (error) return console.log(error)
       var str = `
         <header><h2>全部文章</h2></header>
         <ul class="article-list article" id="article-list">
         ${buildItem(dataList.data)}
         </ul>
-      `;
+      `
       loadComplete({
         content: str
-      });
+      })
     })
   }
 
@@ -76,20 +76,20 @@ window.addEventListener('load', function () {
    * @param  {Object} param router返回的参数
    */
   function blog (param) {
-    loading();
-    var id = param.id;
+    loading()
+    var id = param.id
     getJSON(`feed/${id}.js`, function (error, data) {
-      if (error) return console.log(error);
+      if (error) return console.log(error)
       var str = `
         <article class="blog-wrap">
           ${parseString(data.content)}
         </article>
         <section class="ds-thread" id="jarvis-comments" data-thread-key="${data.id}" data-title="${data.title}" data-url="jiasm.github.io"></section>
-      `;
+      `
       loadComplete({
         title: data.title,
         content: str
-      });
+      })
     })
   }
 
@@ -111,7 +111,7 @@ window.addEventListener('load', function () {
           <span class="ds-thread-count" data-thread-key="${item.id}" data-count-type="comments"></span>
         </li>
       `
-    }).join('');
+    }).join('')
   }
 
   /**
@@ -120,9 +120,9 @@ window.addEventListener('load', function () {
    */
   function srollHandler (e) {
     if ($win.scrollTop() >= 666) {
-      $go2top.show();
+      $go2top.show()
     } else {
-      $go2top.hide();
+      $go2top.hide()
     }
   }
 
@@ -145,13 +145,13 @@ window.addEventListener('load', function () {
     $.ajax({
       url: url,
       success: function (data) {
-        callback(null, data);
+        callback(null, data)
       },
       error: function (error) {
-        callback(error);
+        callback(error)
       },
       dataType: 'json'
-    });
+    })
   }
 
   /**
@@ -160,34 +160,34 @@ window.addEventListener('load', function () {
    * @return {String}     过滤后的字符串
    */
   function parseString (str) {
-    return str.replace(/\\([^ts])?/g, function (_, $1) { return $1 ? ($1 === 'n' ? '\n' : $1) : _});
+    return str.replace(/\\([^ts])?/g, function (_, $1) { return $1 ? ($1 === 'n' ? '\n' : $1) : _ })
   }
 
   /**
    * 将当前页面改为loading状态
    */
   function loading () {
-    $body.removeClass('complete');
+    $body.removeClass('complete')
   }
 
   /**
    * 加载dom完毕 需要设置多说评论框的加载 以及code语法高亮的解析
    */
   function loadComplete (config) {
-    config = config || {};
-    $content.html(config.content);
-    document.title = config.title || '首页';
+    config = config || {}
+    $content.html(config.content)
+    document.title = config.title || '首页'
     document.body.scrollTop = '0px'
-    DUOSHUO.init();
-    var countList = $('.ds-thread-count');
+    DUOSHUO.init()
+    var countList = $('.ds-thread-count')
     countList.each(function (_, item) {
-        if (!item.innerHTML) {
-          item.innerHTML = '暂无评论';
-        }
+      if (!item.innerHTML) {
+        item.innerHTML = '暂无评论'
+      }
     })
-    $body.addClass('complete');
-    Prism.highlightAll(); // 语法高亮
+    $body.addClass('complete')
+    Prism.highlightAll() // 语法高亮
   }
 
-  init();
+  init()
 })
