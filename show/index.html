@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>页面的Title</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script id="others_zepto_10rc1" type="text/javascript" class="library" src="/js/sandbox/other/zepto.min.js"></script>
+	</head>
+	<body>
+		<p>
+			<a href="iblued://">直接打开链接</a>
+		</p>
+		<p>
+			<a href="iblued://">通过sharebar打开链接</a>
+		</p>
+		<script src="https://dn-web-blued-cn.qbox.me/web/static/sharebar/js/sharebar.min-6a1c1ffc.js"></script>
+    <script>
+      var scheme = 'iblued://international.blued.com?id=PWbnYj&lid=1104&action=liveplay&uid=PWbnYj';
+      var universal = scheme;
+      var func = new BluedShareBar({
+          expose: true,
+          scheme: {
+            ios: scheme,
+            android: scheme,
+          },
+          universal: universal
+        });
+        $('.icon-play').on('click', func)
+        $('.blued-link').on('click', func)
+
+        document.title = '使用JS修改后的Title'
+    </script>
+	</body>
+</html>

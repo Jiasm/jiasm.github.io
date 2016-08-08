@@ -11,6 +11,10 @@ class ListItem extends Component {
       'z-index': '90',
       'background-color': 'rgb(217, 64, 52)'
     }
+
+    transform: translate3d(508px, 265px, 0px) rotate(360deg) scale(1);
+    z-index: 100;
+    background: url("data/poster/sheep_c.png") no-repeat rgb(74, 66, 173);
     return (
       <div className={item} style={style}>
         <div className={itemButton}>
