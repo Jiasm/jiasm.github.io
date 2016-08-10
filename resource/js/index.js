@@ -81,7 +81,7 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(_Header2.default, null),
-	      _react2.default.createElement(_List2.default, { getData: getBlogList }),
+	      _react2.default.createElement(_List2.default, { getData: getBlogList, tw: 200, th: 300, ty: 100, gap: 12, radius: 600 }),
 	      children
 	    );
 	  };
@@ -554,7 +554,8 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(List).call(this, props));
 	
 	    _this.state = {
-	      blogList: []
+	      blogList: [],
+	      listLength: 0
 	    };
 	    return _this;
 	  }
@@ -563,6 +564,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var blogList = this.state.blogList;
+	
 	
 	      return _react2.default.createElement(
 	        'ul',
@@ -632,11 +634,37 @@
 	      var title = _props.title;
 	      var postDate = _props.postDate;
 	      var index = _props.index;
+	      // console.log(index, (index + 1) / 2 | 0, index % 2)
 	
+	      var rotate = Math.PI / 180;
+	      var width = 220;
+	      var height = 310;
+	      var x = (window.screen.availWidth - width) / 2;
+	      var y = (window.screen.availHeight - window.screen.availTop - height) / 2;
+	      var step = (index + 1) / 2 | 0;
+	      var isLeft = !!(index % 2);
+	      // console.log((index ? (isLeft ? step : -step) : 0))
+	      var styleConf = {
+	        translate: {
+	          x: x + (index ? (window.screen.availWidth - width) / 8 * (isLeft ? step : -step) : index),
+	          y: y + (index ? (window.screen.availHeight - window.screen.availTop - height) / 22 * step : index),
+	          z: 0
+	        },
+	        rotate: index ? (isLeft ? step : -step) * 10 : 0,
+	        scale: 1 - step * 6 / 100,
+	        zIndex: 100 - step * 10,
+	        backgroundColor: 'rgb(74, 66, 173)'
+	      };
+	      // console.log(styleConf.translate.x)
+	      // var styleConf = {
+	      //   'transform': 'translate3d(351.724px, 278.672px, 0px) rotate(350deg) scale(0.94)',
+	      //   'z-index': '90',
+	      //   'background-color': 'rgb(217, 64, 52)'
+	      // }
 	      var style = {
-	        'transform': 'translate3d(351.724px, 278.672px, 0px) rotate(350deg) scale(0.94)',
-	        'z-index': '90',
-	        'background-color': 'rgb(217, 64, 52)'
+	        transform: 'translate3d(' + styleConf.translate.x + 'px, ' + styleConf.translate.y + 'px, ' + styleConf.translate.z + 'px) rotate(' + styleConf.rotate + 'deg) scale(' + styleConf.scale + ')', // 'translate3d(508px, 265px, 0px) rotate(360deg) scale(1)',
+	        zIndex: styleConf.zIndex,
+	        backgroundColor: styleConf.backgroundColor
 	      };
 	      return _react2.default.createElement(
 	        'div',
@@ -692,7 +720,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".jtdXm {\n  display: block;\n  width: 220px;\n  height: 310px;\n  position: absolute; }\n\n.Ie0tP {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  z-index: 99;\n  -webkit-tap-highlight-color: transparent; }\n", ""]);
+	exports.push([module.id, ".jtdXm {\n  display: block;\n  width: 220px;\n  height: 310px;\n  position: absolute;\n  -webkit-transform-origin: bottom center;\n  -moz-transform-origin: bottom center;\n  -ms-transform-origin: bottom center;\n  -o-transform-origin: bottom center;\n  transform-origin: bottom center; }\n\n.Ie0tP {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  z-index: 99;\n  -webkit-tap-highlight-color: transparent; }\n", ""]);
 	
 	// exports
 	exports.locals = {

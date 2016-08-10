@@ -17,7 +17,7 @@ var getBlogList = (cb) => {
 var getLayout = () => ({children}) => (
   <div>
     <Header />
-    <List getData={getBlogList} />
+    <List getData={getBlogList} tw={200} th={300} ty={100} gap={12} radius={600} />
     {children}
   </div>
 )
