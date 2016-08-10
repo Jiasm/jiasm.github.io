@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>demo</title>
+  </head>
+  <body>
+    <button id="demo">
+      点我发起一个请求 获取图片
+    </button>
+    <script>
+      var $body = document.body
+      // jsonp服务的路径
+      var serveUrl = 'http://app.blued.cn/jsonp/cdn2base64'
+      // 获取到base64资源的回调函数的名称
+      var callback = 'getIt'
+      // 资源的路径 需要encode
+      var resourceUrl = encodeURIComponent('https://dn-web-blued-cn.qbox.me/userfiles/007/793/706/21213!Head.jpg')
+      // 拼接URL
+      var url = [serveUrl, callback, resourceUrl].join('/')
+
+      // 发起一个请求
+      var request = function (url) {
+        var _s = document.createElement('script')
+        _s.src = url
+        $body.appendChild(_s)
+      }
+
+      document.getElementById('demo').addEventListener('click', function () {
+        request(url)
+      })
+
+      /**
+       * 获取到资源的回调
+       *
+       * @param  {String} base64 资源转码为base64的字符串
+       * @param  {String} type   资源的类型
+       */
+      function getIt (base64, type) {
+        var $image = document.createElement('img')
+        $image.src = base64
+        $body.appendChild($image)
+      }
+    </script>
+  </body>
+</html>
