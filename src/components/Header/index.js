@@ -23,7 +23,7 @@ class Header extends Component {
       })
     } : e => {
       let key
-      if (window.scrollY >= 120) {
+      if (window.scrollY >= 192) {
         key = 'scrollHeader'
       } else if (window.scrollY >= 80) {
         key = 'overHeader'
