@@ -1,0 +1,74 @@
+.header {
+  display: block;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 256px;
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 1);
+  background-color: #039BE5;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 0 16px;
+  font-family: monospace, sans-serif;
+}
+
+.overHeader {
+  composes: header;
+  line-height: 64px;
+  font-size: 18px;
+
+  .title {
+    position: fixed;
+    left: 72px;
+    padding: 0;
+    width: (100% / 12 * 10);
+  }
+}
+
+.scrollHeader {
+  composes: overHeader;
+  position: fixed;
+  height: 64px;
+  top: 0;
+  box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px;
+}
+.title {
+  width: (100% / 12 * 8);
+  padding-top: 85px;
+  display: block;
+  margin: 0 auto;
+}
+
+
+@media (max-width: 480px) {
+  .header {
+    height: 128px;
+    padding: 73px 16px 0;
+
+    .title {
+      padding: 0;
+      width: 100%;
+      font-size: 24px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .mobileHeader {
+    composes: header;
+    height: 56px;
+    padding: 0;
+    position: fixed;
+    .title {
+      font-size: 18px;
+      line-height: 56px;
+      padding: 0;
+      padding-left: 56px;
+      padding-right: 18px;
+    }
+  }
+}

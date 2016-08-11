@@ -1,55 +1,63 @@
-'use strict';
-let gulp = require('gulp');
-let sass = require('gulp-sass');
-let uglify = require('gulp-uglify');
-let rename = require('gulp-rename');
-let concat = require('gulp-concat');
-let cssmin = require('gulp-cssmin');
-let babel = require('gulp-babel');
+/**
+ * 	1. gulp         默认任务 是最基础的一个任务 执行webpack打包 并生成对应的目录结构（如果是第一次执行的话）
+ *  2. gulp watch   监听资源的变化 如果资源发生变化 会调用默认任务
+ */
 
-const jsFiles = ['src/js/jquery.js', 'src/js/require.js', 'js/prism.js', 'src/js/*.js'];
-const babelFiles = 'src/js/babel/*.js';
-const babelPath = 'src/js';
-const jsPath = 'resource/js';
-const cssFiles = ['src/css/main.scss', 'src/css/*.scss', 'src/css/*.css'];
-const cssPath = 'resource/css';
+'use strict'
 
-gulp.task('watch', () => gulp.watch(jsFiles.concat(babelFiles, cssFiles), ['js', 'css']));
+var gulp = require('gulp')
 
-gulp.task('build-js', () => gulp.
-	src(babelFiles).
-	pipe(babel({
-		presets: ['es2015']
-	})).
-	pipe(concat("__babel.js")).
-	pipe(gulp.dest(babelPath))
+var sass = require('gulp-sass')    // 添加转换 sass -> css
+var del = require('del') // 删除img文件夹所用
+var autoprefixer = require('gulp-autoprefixer')
+var webpack = require('gulp-webpack')
+var named = require('vinyl-named')
+var config = require('./webpack.config.js')
+var vinylPaths = require('vinyl-paths')
+var runSequence = require('gulp-run-sequence')
+
+/**
+ * 下边是react相关的gulp任务
+ */
+
+const jsFilePath = ['./src/js/*.js']
+const cssFilePath = ['./src/components/**/*.scss']
+
+const watchPath = ['./src/**/*.js', './src/**/*.scss']
+
+const jsOutput = './resource/js'
+const cssOutput = './src/components/'
+
+gulp.task('clean', () =>
+  gulp.run(['clean-css'])
 )
 
-gulp.task('concat-js', () => gulp.
-	src(jsFiles).
-	pipe(concat("main.js")).
-	pipe(gulp.dest(jsPath)).
-	pipe(uglify()).
-	pipe(rename({
-		suffix: ".min"
-	})).
-	pipe(gulp.dest(jsPath))
+gulp.task('build-js', () =>
+  gulp.src(jsFilePath)
+    .pipe(named())
+    .pipe(webpack(config))
+    .pipe(gulp.dest(jsOutput))
 )
 
-gulp.task("js", () => gulp.
-	run(['build-js', 'concat-js'])
-)
-
-gulp.task('css', () =>
-  gulp.src(cssFiles)
-		.pipe(concat('main.css'))
+gulp.task('build-scss', () =>
+  gulp.src(cssFilePath)
     .pipe(sass())
-    .pipe(gulp.dest(cssPath))
-    .pipe(cssmin())
-    .pipe(rename({
-      extname: '.min.css'
+    .pipe(autoprefixer({
+      browsers: ['last 40 versions'],  // Android >= 4.0
+      cascade: false
     }))
-  	.pipe(gulp.dest(cssPath))
+    .pipe(gulp.dest(cssOutput))
 )
 
-gulp.task('default', ['js', 'css']);
+gulp.task('clean-css', () =>
+  gulp.src(`${cssOutput}/**/*.css`)
+    .pipe(vinylPaths(del))
+)
+
+gulp.task('watch', () => {
+  gulp.watch(watchPath, ['default'])
+})
+
+gulp.task('default', () =>
+  runSequence('build-scss', 'build-js', 'clean')
+)

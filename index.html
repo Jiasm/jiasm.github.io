@@ -6,66 +6,44 @@
     <meta charset="utf-8">
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
     <meta content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" name="viewport">
-    <script type="text/javascript">
-    /*if (typeof Symbol === "undefined") {
-        alert("your browser is too low b");
-        location.href = "about:blank";
-    }*/
-    </script>
-    <!--  调试使用
--->
-  <link rel="stylesheet" type="text/css" href="resource/css/main.min.css" />
+    <link rel="stylesheet" type="text/css" href="resource/css/prism.css" />
+    <link rel="stylesheet" href="https://dn-web-blued-cn.qbox.me/web/static/reset/reset-0a9cb7ab.css">
     <link rel="Shortcut Icon" href="https://avatars2.githubusercontent.com/u/9568094?v=3&s=40">
+    <style media="screen">
+      *, *::before, *::after {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        max-width: none;
+      }
+    </style>
 </head>
 
 <body>
-  <section class="back-border">
-      <section class="wrap">
-        <header>
-          <h1>
-            <a href="#/">
-              贾顺名
-              <i class="border-line"></i>
-              <i class="border-line border-line-rotate"></i>
-            </a>
-          </h1>
-          <nav>
-            <input class="toggleItem" type="checkbox" id="showItem" />
-            <label class="toggleItem" for="showItem"><span>菜单</span></label>
-            <ul>
-              <li>
-                <a href="#/">首页</a>
-              </li>
-              <li>
-                <a href="#/page/sort">分类</a>
-              </li>
-              <li>
-                <a href="#/page/about">关于我</a>
-              </li>
-            </ul>
-          </nav>
-        </header>
-        <main class="main" id="main">
-          <section class="content" id="content">
-
-          </section>
-          <div id="loading"></div>
-        </main>
-        <footer>
-          &copy;贾顺名
-          <div id="go2top" title="灰上去"></div>
-          <img class="eraser" src="./resource/img/chalk.png" style="display: none"/>
-        </footer>
-        <section class="fork-me-wrapper">
-          <div class="fork-me">
-            <a class="fork-me-link" href="https://github.com/Jiasm/jiasm.github.io">
-              <span class="fork-me-text">F**k Me On GitHub</span>
-            </a>
-          </div>
-        </section>
-    </section>
+  <section id="root">
   </section>
-  <script type="text/javascript" src="resource/js/main.js"></script>
+  <script src="https://cdn.bootcss.com/zepto/1.1.4/zepto.min.js"></script>
+  <script>
+  // 引入百度统计 & 多说
+
+  var _hmt = _hmt || [];
+  var duoshuoQuery = {
+    short_name: "jiasm"
+  };
+  (function () {
+    var hm = document.createElement('script');
+    var ds = document.createElement('script');
+    hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091';
+    ds.src = '//static.duoshuo.com/embed.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(hm, s);
+    s.parentNode.insertBefore(ds, s);
+  })();
+  </script>
+  <script type="text/javascript" src="resource/js/prism.js"></script>
+  <script type="text/javascript" src="resource/js/lib.js"></script>
+  <script type="text/javascript" src="resource/js/index.js"></script>
 </body>
 
 </html>

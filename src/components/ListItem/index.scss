@@ -1,0 +1,49 @@
+$height: 48px;
+.item {
+  border-bottom: 1px dotted #E0E0E0;
+  font-size: 16px;
+  line-height: $height;
+}
+.itemButton {
+  display: flex;
+  height: $height;
+}
+.itemTitle {
+  flex: 1;
+  flex-flow: row;
+  padding-left: .5em;
+  a {
+    color: #039BE5;
+  }
+}
+.itemDate {
+  width: 9em;
+  padding: 0 .5em;
+  text-align: right;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.itemDs {
+  width: 80px;
+  text-align: right;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.54);
+  font-family: monospace, sans-serif;
+}
+
+@media (max-width: 480px) {
+  .itemButton {
+    display: block;
+    height: ($height * 2 - 25px);
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .itemDate {
+    display: block;
+    width: 100%;
+    line-height: ($height - 25px);
+  }
+}
