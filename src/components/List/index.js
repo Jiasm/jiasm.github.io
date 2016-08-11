@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 import ListItem from '../ListItem'
-import style from './index.css'
+import {warp} from './index.css'
 
 class List extends Component {
   constructor (props) {
@@ -16,9 +16,9 @@ class List extends Component {
     let { blogList } = this.state
 
     return (
-      <ul>
+      <ul className={warp}>
       {
-        blogList.map((item, index) => <ListItem index={index}key={index} {...item}/>)
+        blogList.map((item, index) => <ListItem index={index} key={index} {...item}/>)
       }
       </ul>
     )
@@ -29,6 +29,9 @@ class List extends Component {
         blogList: this.state.blogList.concat(list)
       })
     })
+  }
+  componentDidUpdate () {
+    window.DUOSHUO.init()
   }
 }
 

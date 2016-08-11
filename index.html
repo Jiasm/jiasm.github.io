@@ -6,14 +6,42 @@
     <meta charset="utf-8">
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
     <meta content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" name="viewport">
-    <!-- <link rel="stylesheet" type="text/css" href="resource/css/main.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="resource/css/prism.css" />
+    <link rel="stylesheet" href="https://dn-web-blued-cn.qbox.me/web/static/reset/reset-0a9cb7ab.css">
     <link rel="Shortcut Icon" href="https://avatars2.githubusercontent.com/u/9568094?v=3&s=40">
+    <style media="screen">
+      *, *::before, *::after {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        max-width: none;
+      }
+    </style>
 </head>
 
 <body>
   <section id="root">
   </section>
   <script src="https://cdn.bootcss.com/zepto/1.1.4/zepto.min.js"></script>
+  <script>
+  // 引入百度统计 & 多说
+
+  var _hmt = _hmt || [];
+  var duoshuoQuery = {
+    short_name: "jiasm"
+  };
+  (function () {
+    var hm = document.createElement('script');
+    var ds = document.createElement('script');
+    hm.src = '//hm.baidu.com/hm.js?4d095165e26e8e13e47c1b7eda944091';
+    ds.src = '//static.duoshuo.com/embed.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(hm, s);
+    s.parentNode.insertBefore(ds, s);
+  })();
+  </script>
+  <script type="text/javascript" src="resource/js/prism.js"></script>
   <script type="text/javascript" src="resource/js/lib.js"></script>
   <script type="text/javascript" src="resource/js/index.js"></script>
 </body>

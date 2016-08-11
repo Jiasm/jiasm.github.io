@@ -1,0 +1,16 @@
+.wrap {
+  min-height: 480px;
+  position: relative;
+  width: (100% / 12 * 8);
+  margin: 0 auto;
+  padding: 0 8px;
+
+  @media (max-width: 480px) {
+    width: (100% / 12 * 10);
+  }
+
+  @media (max-width: 320px) {
+    width: 100%;
+    padding: 0 16px;
+  }
+}
