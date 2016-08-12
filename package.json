@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node system/index.js",
-    "show": "anywhere --port 12306"
+    "show": "anywhere --port 23333"
   },
   "repository": {
     "type": "git",
