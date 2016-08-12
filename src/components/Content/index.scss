@@ -14,3 +14,7 @@
     padding: 0 16px;
   }
 }
+
+:global(.onFixed) .wrap {
+  padding-top: 266px;
+}

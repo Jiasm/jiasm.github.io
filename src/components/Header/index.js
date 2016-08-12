@@ -25,10 +25,14 @@ class Header extends Component {
       let key
       if (window.scrollY >= 192) {
         key = 'scrollHeader'
-      } else if (window.scrollY >= 80) {
-        key = 'overHeader'
+        document.body.classList.add('onFixed')
       } else {
-        key = defaultKey
+        if (window.scrollY >= 80) {
+          key = 'overHeader'
+        } else {
+          key = defaultKey
+        }
+        document.body.classList.remove('onFixed')
       }
       this.setState({
         headerKey: key
