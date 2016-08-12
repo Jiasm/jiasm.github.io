@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node system/index.js",
-    "test": "NODE_ENV='local' nodemon --ignore node_modules/ -e js,html,css system/index.js",
-    "deploy": "shipit production deploy",
-    "rollback": "shipit production rollback"
+    "show": "anywhere --port 12306"
   },
   "repository": {
     "type": "git",
