@@ -37,6 +37,16 @@ $themeColor: #039BE5;
     margin-bottom: 8px;
   }
 
+  ul {
+    padding-left: 20px;
+    border-left: 5px solid $themeColor;
+
+    li {
+      font-size: 16px;
+      line-height: 32px;
+    }
+  }
+
   blockquote {
     margin-bottom: 40px;
 
