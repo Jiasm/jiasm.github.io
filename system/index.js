@@ -4,9 +4,10 @@ var app = require('koa')()
 var router = require('koa-router')()
 var serve = require('koa-static')
 var views = require('co-views')
-let bodyParser = require('koa-body-parser')
+var bodyParser = require('koa-body-parser')
 var uuid = uuid = require('node-uuid')
 var fs = require('fs')
+var moment = require('moment')
 var execSync = require('child_process').execSync
 
 var render = views('./system/views', {
@@ -32,12 +33,11 @@ router.get('/new', function * () {
 })
 router.post('/new', function * () {
   var blogId = uuid.v1()
-  var now = new Date()
   var body = this.request.body
   var json = {
     id: blogId,
     title: body.blogTitle,
-    postDate: `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}}`,
+    postDate: moment().format('YYYY/MM/DD HH:mm'),
     content: body.blogContent.replace(/\\/g, '\\\\')
   }
   var indexFile = fs.readFileSync('./feed/index.js').toString()
