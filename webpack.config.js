@@ -1,6 +1,10 @@
 let webpack = require('webpack')
+// let Dashboard = require('webpack-dashboard')
+// let DashboardPlugin = require('webpack-dashboard/plugin')
 let path = require('path')
 let fs = require('fs')
+
+// let dashboard = new Dashboard()
 
 const entryPath = path.resolve(__dirname, 'src/js')
 
@@ -52,6 +56,7 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     })
+    // new DashboardPlugin(dashboard.setData)
   ],
   devtool: 'source-map'
 }
