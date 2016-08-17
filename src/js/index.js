@@ -8,7 +8,11 @@ import List from '../components/List'
 import Blog from '../components/Blog'
 import Loading from '../components/Loading'
 import Footer from '../components/Footer'
-import { hashHistory, Router, Route, IndexRoute } from 'react-router'
+import { hashHistory, Router, Route } from 'react-router'
+
+var changeTitle = str => {
+  document.title = str || '首页'
+}
 
 var staticConfig = {
   title: 'Jarvis'
@@ -31,6 +35,7 @@ var getBlogList = (cb) => {
   $.ajax({
     url: 'feed/index.js',
     success: function (result) {
+      changeTitle()
       cb(result.data.reverse())
     },
     dataType: 'json'
@@ -41,6 +46,7 @@ var getBlogContent = (id) => (cb) => {
   $.ajax({
     url: `feed/${id}.js`,
     success: function (result) {
+      changeTitle(result.title)
       cb(
         <Layout>
           <Header text={result.title} navList={navList} navTitle={staticConfig.title}/>
