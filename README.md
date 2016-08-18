@@ -6,6 +6,7 @@
 ```shell
 npm install
 npm start
+npm show
 ```
 
 http://localhost:12306/list
