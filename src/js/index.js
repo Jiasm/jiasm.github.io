@@ -8,6 +8,8 @@ import List from '../components/List'
 import Blog from '../components/Blog'
 import Loading from '../components/Loading'
 import Footer from '../components/Footer'
+import ForkMe from '../components/ForkMe'
+import Go2Top from '../components/Go2Top'
 import { hashHistory, Router, Route } from 'react-router'
 
 var changeTitle = str => {
@@ -50,9 +52,11 @@ var getBlogContent = (id) => (cb) => {
       cb(
         <Layout>
           <Header text={result.title} navList={navList} navTitle={staticConfig.title}/>
+          <ForkMe />
           <Content>
             <Blog {...result}/>
           </Content>
+          <Go2Top />
           <Footer />
         </Layout>
       )
@@ -64,10 +68,12 @@ var getBlogContent = (id) => (cb) => {
 var ListLayout = () => (
   <Layout>
     <Header text={staticConfig.title} navList={navList}/>
+    <ForkMe />
     <Content>
       <List getData={getBlogList}/>
     </Content>
     <Loading />
+    <Go2Top />
     <Footer />
   </Layout>
 )
@@ -76,9 +82,11 @@ var BlogLayout = ({params: {id}}) => {
   return (
     <LazyLayout loadData={getBlogContent(id)} >
       <Header text={staticConfig.title} navList={navList} navTitle={staticConfig.title}/>
+      <ForkMe />
       <Content>
         <Loading visible={true} />
       </Content>
+      <Go2Top />
       <Footer />
     </LazyLayout>
   )

@@ -1,0 +1,59 @@
+/*
+  fork git 样式
+*/
+$color: #fff;
+.forkMeWrapper {
+  $width: 180px;
+  width: $width;
+  height: $width;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 9999;
+  position: fixed;
+  font-family: monospace;
+}
+
+.forkMe {
+  color: $color;
+  font-size: 16px;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  white-space: nowrap;
+  width: auto;
+  height: auto;
+  top: 50px;
+  right: -65px;
+  padding: 2px 0;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,.5) ;
+  transform: rotate(45deg);
+}
+
+.forkMeLink,
+.forkMeLink:link,
+.forkMeLink:visited,
+.forkMeLink:hover,
+.forkMeLink:focus,
+.forkMeLink:active {
+  color: $color;
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px 50px;
+  border: 2px solid $color;
+  background-color: #039be5;
+}
+
+.forkMeLeft {
+  left: 0;
+  right: auto;
+}
+
+.forkMeLeft .forkMe {
+  left: -55px;
+  right: auto;
+  transform: rotate(-45deg);
+}

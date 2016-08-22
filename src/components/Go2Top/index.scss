@@ -1,0 +1,38 @@
+.go2top {
+  $width: 40px;
+  position: fixed;
+  width: $width;
+  height: $width;
+  border-radius: 50%;
+  background-color: #039be5;
+  z-index: 2;
+  right: 60px;
+  bottom: 120px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.258824);
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    height: 15px;
+    width: 15px;
+    display: block;
+    border: 3px solid #fff;
+    border-left-width: 0;
+    border-bottom-width: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%) rotate(-45deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .go2top {
+    right: 20px;
+  }
+}
+
+.hide {
+  composes: go2top;
+  display: none;
+}
