@@ -18,10 +18,86 @@
         max-width: none;
         font-family: "苹方", "微软雅黑", arial, Hiragino Sans GB, sans-serif;
       }
+
+      #mask {
+        display: block;
+        position: fixed;
+        z-index: 20;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgb(3, 155, 229);
+        overflow: hidden;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+      }
+
+      #mask::before,
+      #mask::after {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        top: 50%;
+        left: 50%;
+        margin-top: -40px;
+        margin-left: -40px;
+        border-radius: 50%;
+        background-color: #FFF;
+        opacity: 1;
+        transform: scale(0);
+        animation: ballPulse 1.6s ease-in-out infinite;
+      }
+
+      .completed #mask::before,
+      .completed #mask::after {
+        display: none;
+      }
+
+      #mask::after {
+        animation-delay: 1s;
+      }
+
+      @keyframes ballPulse {
+        0% {
+          opacity: 1;
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 0;
+        }
+      }
+
+      .completed #mask {
+        animation: hide-mask 1.2s;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes hide-mask {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+          z-index: -1;
+        }
+      }
+
+      #root {
+        display: none;
+      }
+
+      .completed #root {
+        display: block;
+      }
+
     </style>
 </head>
 
 <body>
+  <section id="mask"></section>
   <section id="root">
   </section>
   <script src="https://cdn.bootcss.com/zepto/1.1.4/zepto.min.js"></script>
@@ -41,6 +117,15 @@
     s.parentNode.insertBefore(hm, s);
     s.parentNode.insertBefore(ds, s);
   })();
+
+  window.loadComplete = function () {
+    document.body.classList.add('completed')
+  }
+
+  window.addEventListener('load', function () {
+    loadComplete()
+  })
+
   </script>
   <script type="text/javascript" src="resource/js/prism.js"></script>
   <script type="text/javascript" src="resource/js/lib.js"></script>
