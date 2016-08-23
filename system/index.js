@@ -38,8 +38,9 @@ router.post('/new', function * () {
     id: blogId,
     title: body.blogTitle,
     postDate: moment().format('YYYY/MM/DD HH:mm'),
-    content: body.blogContent.replace(/\\/g, '\\\\')
+    content: body.blogContent.replace(/\\/g, '\\\\').replace(/"(language-\w+)?"/g, (_, $1) => `"${$1} line-numbers"`)
   }
+
   var indexFile = fs.readFileSync('./feed/index.js').toString()
   while (new RegExp(blogId).test(indexFile)) { // 防止重名
     blogId = uuid.v1()
