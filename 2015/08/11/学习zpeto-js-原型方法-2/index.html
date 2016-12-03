@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="接着昨天的来,继续说原型方法,昨天的传送阵(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);
+$.grep():作用与Array.filter类似(其实就是调用的filter方法- -)
+通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;
+">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="学习zpeto.js(原型方法)[2]"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>学习zpeto.js(原型方法)[2] - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2015/08/11/学习zpeto-js-原型方法-2/">
+                学习zpeto.js(原型方法)[2]
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-08-11</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <p>接着昨天的来,继续说原型方法,<a href="http://www.cnblogs.com/jiasm/p/4718610.html" target="_blank" rel="external">昨天的传送阵</a>(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);</p>
+<h3 id="grep"><a href="#grep" class="headerlink" title="$.grep():"></a>$.grep():</h3><p>作用与Array.filter类似(其实就是调用的filter方法- -)</p>
+<p>通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> even = $.grep(array, <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> value % <span class="number">2</span> === <span class="number">0</span>;</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(even); <span class="comment">// --&gt; [2,4]</span></div></pre></td></tr></table></figure>
+<p>函数可以接收到三个传递来的参数,上边只接收了一个,第二个是当前item在array中的下标,从0开始- -,第三个是array本身;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-1.png" alt=""></p>
+<p>//filter的值为 [].filter</p>
+<h3 id="inArray"><a href="#inArray" class="headerlink" title="$.inArray():"></a>$.inArray():</h3><p>接收两到三个参数,第一个是item(中文不知道该如何形容,子项?就是),第二个是一个数组对象,第三个是可选的开始下标,该方法用来检查第一个参数是否存在与自身.返回值是一个下标,从0开始的.</p>
+<p>如果没有找到,就会返回-1;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$.inArray(<span class="string">"aaa"</span>, [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>, <span class="string">"ccc"</span>]);<span class="comment">// --&gt;0</span></div><div class="line">$.inArray(<span class="string">"aaa"</span>, [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>, <span class="string">"ccc"</span>, <span class="string">"ccc"</span>, <span class="string">"aaa"</span>], <span class="number">3</span>) <span class="comment">// --&gt;4</span></div></pre></td></tr></table></figure>
+<p>inArray方法也是直接调用了Array的idnexOf方法,这些都是ES5的新方法,在zepto里边是没有做兼容处理的,只是简单的call方法,毕竟是为了移动端而生的;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-2.png" alt=""></p>
+<p>//jQuery1.x的版本是做了兼容的处理,2.x以后也是直接调用的indexOf方法.</p>
+<h3 id="isArray"><a href="#isArray" class="headerlink" title="$.isArray():"></a>$.isArray():</h3><p>该方法只接收一个参数,一个对象,用来判断该对象是否为Array,返回一个boolean值,</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$.isArray([]);<span class="comment">// --&gt; true</span></div></pre></td></tr></table></figure>
+<p>该方法是做了一个兼容处理的,如果Array存在isArray方法,则直接调用,否则赋值为自定义的一个函数:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-3.png" alt=""></p>
+<h3 id="isFunction"><a href="#isFunction" class="headerlink" title="$.isFunction():"></a>$.isFunction():</h3><p>方法只接收一个参数,一个对象,判断是否为function对象,别看这方法只是用来检查参数是否为function,里边衍生出的几个变量和方法还是挺有意思的.</p>
+<p>用法如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test1</span> (<span class="params"></span>)</span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> test2 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line"><span class="built_in">console</span>.log($.isFunction(test1)); <span class="comment">// --&gt;true</span></div><div class="line"><span class="built_in">console</span>.log($.isFunction(test2)); <span class="comment">// --&gt;true</span></div></pre></td></tr></table></figure>
+<p>贴上几块代码:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-5.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-6.png" alt=""></p>
+<p>首先在isFunction函数内部调用了type函数,type函数返回一个字符串,</p>
+<p>type函数通过一个三元运算符来判断是否为空,然后调用对象的toString方法,返回一个类似[object Array]这种格式的字符串,</p>
+<p>再放入一个Mapping中,就是class2type(class to type),在zepto自执行函数中通过each函数将一个数组,就是第三张图那一串类型,循环放入class2type对象中,</p>
+<p>现在回到第一张图,这样的调用应该能清楚了吧.</p>
+<p>放一张class2type的内容截图<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-7.png" alt=""></p>
+<h3 id="isPlainObject"><a href="#isPlainObject" class="headerlink" title="$.isPlainObject():"></a>$.isPlainObject():</h3><p>该方法判断传入对象是否为一个纯洁粹的对象,就是一个通过”{}”或者 new Object 来创建的对象.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$.isPlainObject(&#123;&#125;); <span class="comment">// ..&gt; true</span></div><div class="line">$.isPlainObject(<span class="keyword">new</span> <span class="built_in">Object</span>()); <span class="comment">// --&gt; true</span></div><div class="line">$.isPlainObject(<span class="number">1</span>); <span class="comment">// --&gt; false</span></div></pre></td></tr></table></figure>
+<p>zepto不认为window对象是一个纯粹的Object,但是通过typeof来看的话,window确实是一个object- -,所以在代码中添加了对window对象的处理<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-8.png" alt=""></p>
+<p>首先判断传入参数为一个对象,并且不是一个window对象,getPrototypeOf方法返回参数的构造方法的prototype.有兴趣的可以移步<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="external">MDN</a></p>
+<h3 id="map"><a href="#map" class="headerlink" title="$.map():"></a>$.map():</h3><p>该函数返回一个数组,传入两个参数,第一个是要遍历的对象,可以使一个类数组,也可以是一个对象,第二个参数是一个回调函数,在回调函数返回的值,会被存入集合并通过$.map来返回,返回的是一个数组;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$.map(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="number">18</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">value, key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (key === <span class="string">'age'</span>)</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">&#125;) <span class="comment">// --&gt; [18]</span></div><div class="line">$.map([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], <span class="function"><span class="keyword">function</span> (<span class="params">item, index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> item * <span class="number">2</span>;</div><div class="line">&#125;) <span class="comment">// --&gt; [2,4,6,8]</span></div></pre></td></tr></table></figure>
+<p><img src="/images/learning-zepto-js-prototype-second/screen-shot-9.png" alt=""><br>方法逻辑不算复杂,在最后返回时,调用的函数用来将传入的类数组对象转换为一个数组,代码如下:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-10.png" alt=""></p>
+<p>剩下两个 $.trim,以及$.parseJSON,这两个就不说了,因为都属于原生函数的别名而已.</p>
+<p>今天先说到了这里,zepto里边的原型方法出了ajax模块的就都已经说完了- -,读源码真的是最快的学习方式.</p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/js/">#js</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

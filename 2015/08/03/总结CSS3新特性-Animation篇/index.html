@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="动画(Animation),是CSS3的亮点.//之一
+通过animation属性指定@keyframe来完成关键帧动画;
+@keyframe用法:　　1234567891011@keyframes name &amp;#123;  0% &amp;#123;    top: 0;  &amp;#125;/*0%可用fro">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="总结CSS3新特性(Animation篇)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>总结CSS3新特性(Animation篇) - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2015/08/03/总结CSS3新特性-Animation篇/">
+                总结CSS3新特性(Animation篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-08-03</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <p>动画(Animation),是CSS3的亮点.//之一</p>
+<p>通过animation属性指定@keyframe来完成关键帧动画;</p>
+<h3 id="keyframe用法"><a href="#keyframe用法" class="headerlink" title="@keyframe用法:　　"></a>@keyframe用法:　　</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">keyframes</span> name &#123;</div><div class="line">  0% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;<span class="comment">/*0%可用from关键字替代*/</span>  50% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">10px</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  100% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;<span class="comment">/*100%可用to关键字替代*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由于是CSS3,所以不出意外的各种前缀:</p>
+<p><img src="http://images0.cnblogs.com/blog2015/731575/201508/031528187517503.png" alt="Image">–图片来自MDN,<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/%40keyframes" target="_blank" rel="external">CSS中的关键帧</a></p>
+<p>单个帧中可填写多个属性,而且不需要保证一致,如:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframes</span> identifier &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  50% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">10px</span>;</div><div class="line">    <span class="attribute">background-color</span>: red;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">20px</span>;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">  &#125;</div><div class="line">&#125;<span class="comment">/*这是一个完全有效的关键帧定义*/</span></div></pre></td></tr></table></figure>
+<p>需要注意的有几点:</p>
+<p>　　关键帧中有效的属性为<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties" target="_blank" rel="external">可动画属性</a>;如出现不可动画属性,会忽略该属性,不影响其余属性的动画,</p>
+<p>　　如属性后跟有 !important,则会忽略该属性,</p>
+<p>　　某个关键帧如果重复定义,则取后定义的帧,　　</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframes</span> identifier &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  50% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">10px</span>;</div><div class="line">    <span class="comment">/*该属性会动画*/</span></div><div class="line">    <span class="attribute">background-color</span>: red <span class="meta">!important</span>;</div><div class="line">    <span class="comment">/*因为有!important字样,所以该条将被忽略*/</span></div><div class="line">    <span class="attribute">text-align</span>: center;</div><div class="line">    <span class="comment">/*由于该属性不为可动画属性,因此也被忽略*/</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">20px</span>;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  100% &#123;</div><div class="line">    <span class="attribute">color</span>: green;</div><div class="line">  &#125;<span class="comment">/*由于to关键字表示100%,所以该动画只会执行改变颜色为green,而to所对应的属性全部被忽略*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>帧数范围为0%-100%,不属于这个范围的则被忽略(经实验,关键帧定义可以不按顺序来,可以正确执行,但是可读性不太好);</p>
+<h3 id="Animation用法"><a href="#Animation用法" class="headerlink" title="Animation用法:"></a>Animation用法:</h3><p>animation-name:设置动画的名称,就是@keyframe后跟的标识;</p>
+<p>animation-duration:设置动画花费的时间,//这两个为必填属性,第一个不解释了,第二个必填的原因为默认值是0s,0s是不会产生动画效果的,所以为必填;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-name</span>: demo;</div><div class="line">  <span class="attribute">animation-duration</span>: <span class="number">2s</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">keyframe</span> demo &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">20px</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-timing-function:设置动画的速度曲线,默认值为 ease,<a href="http://www.w3school.com.cn/cssref/pr_animation-timing-function.asp" target="_blank" rel="external">可选值</a>有数个,可通过cubic-bezier函数来自定义,这里有一些定义好的,可以直接拿来用的函数,<a href="http://easings.net/zh-cn" target="_blank" rel="external">传送阵</a>;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-function</span>: <span class="built_in">cubic-bezier</span>(0.25,0.1,0.25,1);</div><div class="line">  <span class="comment">/*自定义的贝塞尔曲线*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-delay:设置动画开始前的等待时间,默认为0s;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-delay</span>: <span class="number">2s</span>;</div><div class="line">  <span class="comment">/*动画将于2s后执行*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-iteration-count:设置动画执行次数,默认为1,使用 infinite 关键字可以使动画无限循环;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-iteration-count</span>: infinite;</div><div class="line">  <span class="comment">/*动画将无限循环,此时animation-fill-mode将无效*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-direction:设置动画执行完后时候倒序执行,默认为normal,使用 alternate 关键字开启倒序执行</p>
+<p>//仅有animation-iteration-count值为大于1次时才会激活,倒序执行消耗时间为animation-duration设置的时间,奇数次数为正序,偶数次数为倒序;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-direction</span>: alternate;</div><div class="line">  <span class="comment">/*激活倒序播放*/</span></div><div class="line">  <span class="attribute">animation-iteration-count</span>: <span class="number">2</span>;</div><div class="line">  <span class="comment">/*此时该属性须大于1,direction才会有效*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-play-state:设置动画当前状态,默认是 running ,为执行状态,可以设置为 paused 为暂停,</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-play-state</span>: paused;</div><div class="line">  <span class="comment">/*默认不触发动画*/</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-id">#demo</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">animation-play-state</span>: running;</div><div class="line">  <span class="comment">/*悬浮至该元素才执行动画*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-fill-mode:设置动画执行完后的状态(复原(none),保持第一帧(backwards)以及保持最后一帧(forwards),还有一个both值 MDN说是同时backwards和forwards,原谅我没有试出它与forwards的区别…,)</p>
+<p>　　//设置animation-iteration-count值为infinite时将导致该属性失效;</p>
+<p>animation的简写方式对顺序要求特别严格,规格如下:</p>
+<p>animation:name duration timing-function delay iteration-count direction play-state fill-mode;</p>
+<h3 id="使用时需注意"><a href="#使用时需注意" class="headerlink" title="使用时需注意:"></a>使用时需注意:</h3><p>各种前缀…@keyframe里边如果用到了transform,也是需要加前缀的,如:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframe</span> demo &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">-webkit-transform</span>: <span class="built_in">rotate</span>(7deg);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">-webkit-transform</span>: <span class="built_in">rotate</span>(14deg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="部分参考文档"><a href="#部分参考文档" class="headerlink" title="部分参考文档:"></a>部分参考文档:</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/animation" target="_blank" rel="external">MDN的动画</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/%40keyframes" target="_blank" rel="external">CSS3中的关键帧</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_animation.asp" target="_blank" rel="external">W3School的Animation属性</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_keyframes.asp" target="_blank" rel="external">W3School的@Keyframe规则</a></p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/css/">#css</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

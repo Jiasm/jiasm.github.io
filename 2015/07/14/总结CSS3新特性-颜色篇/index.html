@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="颜色:CSS3新增加了hsl(), hsla(), rgb(),rgba()四个函数来创建color值;
+hsl():hsl函数:h(色调),s(饱和度),l(亮度);
+色调:为0-360之间的数值[经实验,可以为小数];
+饱和度与亮度:均为百分比;
+下图截自http://www.w3.org/wi">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="总结CSS3新特性(颜色篇)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>总结CSS3新特性(颜色篇) - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2015/07/14/总结CSS3新特性-颜色篇/">
+                总结CSS3新特性(颜色篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-14</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <h3 id="颜色"><a href="#颜色" class="headerlink" title="颜色:"></a>颜色:</h3><p>CSS3新增加了hsl(), hsla(), rgb(),rgba()四个函数来创建color值;</p>
+<h4 id="hsl"><a href="#hsl" class="headerlink" title="hsl():"></a>hsl():</h4><p>hsl函数:h(色调),s(饱和度),l(亮度);</p>
+<p>色调:为0-360之间的数值[经实验,可以为小数];</p>
+<p>饱和度与亮度:均为百分比;</p>
+<p>下图截自<a href="http://www.w3.org/wiki/CSS/Properties/color/HSL" target="_blank" rel="external">http://www.w3.org/wiki/CSS/Properties/color/HSL</a><br><img src="/images/summary-css-new-feature-colors/screen-shot-1.png" alt=""><br>当亮度为100%时为白色,当亮度为0%为黑色;</p>
+<p>饱和度100%以及亮度50%时生成的颜色均为<a href="http://www.bootcss.com/p/websafecolors/" target="_blank" rel="external">web安全色</a></p>
+<h4 id="rgb"><a href="#rgb" class="headerlink" title="rgb():"></a>rgb():</h4><p>rgb函数:r(red),g(green),b(blue)[计算机三原色];</p>
+<p>值可以为0-255任意整数或百分比;</p>
+<p>如超出范围,取最近的有效值:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">em</span>&#123;<span class="attribute">color</span>:<span class="built_in">rgb</span>(300,0,0)&#125;<span class="comment">/* clipped to rgb(255,0,0) */</span></div><div class="line"><span class="selector-tag">em</span>&#123;<span class="attribute">color</span>:<span class="built_in">rgb</span>(255,-10,0)&#125;<span class="comment">/* clipped to rgb(255,0,0) */</span></div><div class="line"><span class="selector-tag">em</span>&#123;<span class="attribute">color</span>:<span class="built_in">rgb</span>(110%, 0%, 0%)&#125;<span class="comment">/* clipped to rgb(100%,0%,0%) */</span></div></pre></td></tr></table></figure>
+<p>下图截自<a href="http://www.w3.org/wiki/CSS/Properties/color/RGB" target="_blank" rel="external">http://www.w3.org/wiki/CSS/Properties/color/RGB</a><br><img src="/images/summary-css-new-feature-colors/screen-shot-2.png" alt=""><br>有一点需要注意,百分比与数值不能同时出现在一个rgb函数中;</p>
+<h4 id="rgba-与hsla"><a href="#rgba-与hsla" class="headerlink" title="rgba()与hsla():"></a>rgba()与hsla():</h4><p>这两位与上边两位的区别在于后边的a(alpha)透明度;</p>
+<p>透明度为0-1之间的数值,0为全透明,1为全不透明,利用透明度可以做出很多好看的效果</p>
+<p><a href="http://sandbox.runjs.cn/show/kwnceyon" target="_blank" rel="external">一个简单的例子</a>(当然了- -这个例子不算好看)</p>
+<p>上例中用到了一个类似于变量的单词(currentColor[大小写不区分])</p>
+<p>currentColor可用于所有设置颜色属性的地方.</p>
+<p>取值为当前元素的color属性值,如果没有,寻找父级,一直到根元素,如果都没有设置的话,不要担心,还有浏览器代理的默认颜色.</p>
+<p>w3官方有一个简短的解释,如果元素color属性值为currentColor的话,则视为 ‘color:inherit’;</p>
+<p>比较实用的一个地方就是,设置元素边框颜色,颜色(color),等等属性时,只需设置颜色(color);后续更改时也只需修改一处,子元素也可直接继承使用currentColor,但需要确保子元素没有显示声明color属性值;</p>
+<p>还有用到了两个长度单位(vw,vh)取值范围[0-100]</p>
+<p>100vw为屏幕宽度;</p>
+<p>100vh为屏幕高度;</p>
+<p>还存在两个值,vmax与xmin,分别是取出宽高最大或最小值;</p>
+<p>vw与vh可参与<a href="http://www.cnblogs.com/jiasm/p/4633603.html" target="_blank" rel="external">calc()</a>的计算;</p>
+<p>顺便介绍下 opacity:</p>
+<p>opacity用来设置元素的透明度:(取值为0-1)<br><img src="/images/summary-css-new-feature-colors/screen-shot-3.png" alt=""><br>IE8可用替代的<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">filter:Alpha(opacity=50)/*0-100*/</div></pre></td></tr></table></figure></p>
+<p>来实现透明度;</p>
+<p>颜色基本上就这些了,如有错误或补充还请指出(无视transparent…)</p>
+<p><a href="http://www.w3.org/wiki/CSS3/Color" target="_blank" rel="external">参考资料</a></p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/css/">#css</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

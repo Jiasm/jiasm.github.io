@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="贾顺名的博客"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="website" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>page - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+            <h1 id="main-title" class="title">贾顺名的博客</h1>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/08/07/学习zepto-js-Hello-World/">
+                学习zepto.js(Hello World)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-08-07</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <p>Zepto是一个轻量级的针对现代高级浏览器的JavaScript库， 它与jquery有着类似的api。 如果你会用jquery，那么你也会用zepto。</p>
+<p>昨天听说了zepto.js,正好最近也比较闲,所以就学习一下这个著名DOM操作库,由于本人刚接触这个,但又不想单纯的说如何使用,所以本人会按照API顺序来说明方法如何使用并试着将对于源码的理解写上来;</p>
+<h3 id=""><a href="#" class="headerlink" title="$():"></a>$():</h3><p>　　与jQuery的$()几乎一样,但zepto的选择器是直接使用的原生querySelectorAll(),所以,一些jQuery自定义的选择器是不支持的,但可以添加selector.js模块来添加10个(是的,我查了)常用的伪类选择器;</p>
+<p>　　$()选择器有五种用法:</p>
+<p>　　$(选择器,[可选的上下文环境,默认document])</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"#id"</span>);<span class="comment">/*document.getElementById("id")*/</span></div><div class="line">$(<span class="string">"#id time"</span>);<span class="comment">/*document.querySelectorAll("#id time")*/</span></div><div class="line">$(<span class="string">"#id"</span>, $(<span class="string">"head"</span>));<span class="comment">/*如果$('head')只有一个元素,那么就按head[0].querySelectorAll("#id")来取,否则循环$('head')取,返回的都是Zepto对象,可以传入DOM对象*/</span></div><div class="line">$(<span class="string">"&lt;span&gt;hello world&lt;/span&gt;"</span>);<span class="comment">/*将会创建一个span标签,*/</span></div><div class="line">$(<span class="string">"&lt;span&gt;"</span>,&#123;</div><div class="line">  <span class="attr">text</span>: <span class="string">'hello'</span>,</div><div class="line">  <span class="attr">id</span>:<span class="string">'span-ele'</span>,</div><div class="line">  <span class="attr">css</span>: &#123;</div><div class="line">    <span class="attr">color</span>: <span class="string">'red'</span></div><div class="line">  &#125;</div><div class="line">&#125;)<span class="comment">/*创建一个id为span-ele,显示值为hello,红色的span标签*/</span><span class="comment">/*以上为作为选择器的使用方法*/</span></div><div class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">//do...用过jQuery的应该都知道,这是绑定的DOMContentLoaded 事件</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>　　当$变量已经存在时,如引用了jQuery,那么zepto的全局对象将不会指向$,但始终指向window.Zepto<br><img src="/images/learning-zepto-js-hello-world/screen-shot-1.png" alt=""></p>
+<p>　　接下来瞅瞅内部代码是如何实现的;<br><img src="/images/learning-zepto-js-hello-world/screen-shot-2.png" alt=""></p>
+<p>zepto函数最终返回的是一个$符号,$()的调用方式说明了$对象是一个function,所以找到了下图中的代码<br><img src="/images/learning-zepto-js-hello-world/screen-shot-3.png" alt=""></p>
+<p>$函数返回了上图中的zepto.init()函数的执行结果,接收了两个参数,第一个是选择器(selector),第二个是上下文(context),</p>
+<p>　　如果调用时selector为空,则直接返回一个Zepto对象,</p>
+<p>　　如果selector为字符串,先去除两端空格,然后判断selector是否为包含html标签的字符串,</p>
+<p>　　　　如果是则通过fragment方法生成一个dom对象并返回,</p>
+<p>　　当验证selector为dom选择器时,进一步判断context是否为空,</p>
+<p>　　　　不为空时将上下文包装为zepto对象后执行find方法,//这里包装上下文的作用在于,传入的上下文也许是一个dom对象,也许是一个zepto对象,而调用.find方法去执行的目的是为了兼容有些zepto对象数组下有多个对象,其实find里边也是循环调用qsa(zepto封装的query方法,下边都会说)</p>
+<p>　　　　为空时就直接通过document调用query方法了.</p>
+<p>　　当验证selector为一个Function对象时，就会将该方法绑定至DOMContentLoaded事件，</p>
+<p>　　zepto.isZ函数用来验证是否为Zepto对象，如果是就直接返回，不做处理，</p>
+<p>　　其余的情况，基本上属于将基本类型包装为zepto对象的操作了。但有一点令我不理解的地方是，为何在最后又添加了这么一段重复的逻辑，还希望有知道的同学告诉在下。<br><img src="/images/learning-zepto-js-hello-world/screen-shot-4.png" alt=""></p>
+<p>最后返回的一个变量经过Zepto的构造函数摇身一变为Zepto对象。</p>
+<p>接下来说一下$构造器中用到的一些其他函数;</p>
+<p>　　像通过zepto对象调用的方法，都是可以在其他地方通过$（Zepto）.zepto[方法名]调用的， 如 $.zepto.qsa();</p>
+<p>　　而通过$.fn定义的，定制插件也是通过$.fn来完成的，细看代码会发现这一句<br><img src="/images/learning-zepto-js-hello-world/screen-shot-5.png" alt=""></p>
+<p>通过$.fn[方法名]定义的为原型的方法；</p>
+<p>通过$[方法名]定义的为类方法；</p>
+<h3 id="fragment（）："><a href="#fragment（）：" class="headerlink" title="fragment（）："></a>fragment（）：</h3><p>该方法用来生成一个dom节点并返回<br><img src="/images/learning-zepto-js-hello-world/screen-shot-6.png" alt=""></p>
+<p>该方法接收最多三个参数，</p>
+<p>　　第一个为html值，可以只是一个标签，如（“<span>”）、或一个html片段，如（“<span>hello</span>”）；</span></p>
+<p>　　第二个为一个标识符，用来确定标签类型，该变量主要用于对表格类元素进行一些特殊的处理，用于生成节点的一个临时父节点（下边会说的）；</p>
+<p>　　第三个是一些属性值，是一个json结构的，但要注意为驼峰命名法，因为zepto的精简，所以不想jQuery那样的宽容。</p>
+<p>首先，方法内部判断html是否为一个标签：</p>
+<p>　　如果是，直接生成该标签；</p>
+<p>　　如果不是，则通过replace方法将自关闭的标签转换为普通标签，tagExpanderRE正则对象内容如下<br><img src="/images/learning-zepto-js-hello-world/screen-shot-7.png" alt=""></p>
+<p>　　然后判断name变量是否为空，如果为空，通过正则取出标签尖括号内的值。fragmentRE内容如下：<br><img src="/images/learning-zepto-js-hello-world/screen-shot-8.png" alt=""></p>
+<p>　　接下来在数组containers中循环查找看该标签是否为表格类的标签，如果不是就给一个【*】，【*】的临时父容器为div。</p>
+<p>　　containers是一个数组，数组中存放的为数个createElement方法：<br><img src="/images/learning-zepto-js-hello-world/screen-shot-9.png" alt=""></p>
+<p>　　可以看到这基本上是为了表格而做的- -（本人猜测是因为如果直接将div的innerHTML值赋值为”<tr></tr>“的话会在外侧自动生成tbody，table等标签的。懒得试了，应该是的。。。）；</p>
+<p>　　然后就是创建临时父容器，将html变量直接塞进去。</p>
+<p>　　接下来是一个令我凌乱的方法调用。。。（为何人家就是这么叼？？？）</p>
+<p>　　通过$.each循环父容器的所有子节点，然后remove该节点，而dom.removeChild（）会返回该节点。（卧槽- -）$.each()方法又会返回一个数组，所以间接的就创建了dom节点。（真心感觉读源码涨姿势）；</p>
+<p>　　判断properties是否为一个简单的Object，方法如下：<br><img src="/images/learning-zepto-js-hello-world/screen-shot-10.png" alt=""></p>
+<p>　　然后遍历该object，将属性放入dom元素中，那个判断就不多做解释了，因为有一些属性被zepto做成方法了，所以直接调用该方法就可以了，这也是为什么调用$(“”,{text:’显示的值’}),可以通过text设置显示的值，需要做一些样式处理则可以这样写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">""</span>,&#123;</div><div class="line">  <span class="attr">css</span>: &#123;</div><div class="line">    <span class="attr">color</span>: <span class="string">'red'</span>,</div><div class="line">    <span class="attr">backgroundColor</span>: <span class="string">'blue'</span></div><div class="line">  &#125;</div><div class="line">&#125;)<span class="comment">/*因为style会有多个，所以css的值必须为一个json*/</span></div></pre></td></tr></table></figure>
+<p>　　完成以后就可以返回该dom元素了。</p>
+<h3 id="qsa（）："><a href="#qsa（）：" class="headerlink" title="qsa（）："></a>qsa（）：</h3><p>　　跳过find方法- -以后再说。。。；</p>
+<p>　　qsa（querySelectorAll的缩写）；<br><img src="/images/learning-zepto-js-hello-world/screen-shot-11.png" alt=""></p>
+<p>　　<img src="http://images0.cnblogs.com/blog2015/731575/201508/072116295342206.png" alt="Image"></p>
+<p>　　方法接收两个参数，上下文，选择器；</p>
+<p>　　$()方法中如果不传入上下文的话，默认是这样调用的</p>
+<p>zepto.qsa(document,selector)</p>
+<p>　　默认将document作为上下文传入；</p>
+<p>　　作为一个看美剧十句话能听懂三句的人，表示一眼就能看出maybeID,maybeClass变量的含义- -；</p>
+<p>　　关于simpleSelectorRE这个正则就不贴截图了，就是个判断字符串中间是否有空格的。就是说看是不是不包含子选择器的；</p>
+<p>　　上边几个变量都是用来判断的，下边是一大串的三元运算符，看着挺晕的，但是听我解释完，肯定会明白的（说不定就更晕了）；</p>
+<p>　　首先是</p>
+<p>　　　　确定上下文对象支持getElementById方法，该选择器不包含子选择器并且选择器开头是个#号，这说明人家要的是个ID：XXX的标签</p>
+<p>　　　　　　如果满足这种情况，就调用getElementById并将返回结果放入一个数组，这也是为什么获得jQuery对象就算是通过ID选择器也会返回一个length为1的数组的原因，如果没有获取到该元素，则返回一个空数组；</p>
+<p>　　　　如果不满足该条件，则判断上下文是否为一个标签节点，文档对象节点或一个文档片段节点。如果不是这三个，说明他也不会支持下边的一些选择器方法了。直接返回空数组（任性~）；</p>
+<p>　　　　　　但如果满足条件了，继续进行判断，选择器为不包含子选择器的（get√），并且不是通过ID选择的（get√），而且支持getElementsByClassName的（get√），好了 继续判断。。。</p>
+<p>　　　　　　　　mabeyClass（也许是个类选择器），那么咱们就通过getElementsByClass来取它；</p>
+<p>　　　　　　　　maybeNot（没有这个变量的），那么就通过getElementByTagName来取；（的确只有这两种了）</p>
+<p>　　　　　　然后这里是不满足条件的处理</p>
+<p>　　　　　　　　直接通过上下文调用querySelectorAll（）方法，这个是支持子选择器的。（但是jQuery不是这么写的，至少不全是，因为jQuery还有一些自己的伪类，zepto是没有的）；</p>
+<p>　　关于那个slice.call()只是为了将里边返回的dom对象放在一个数组里罢了。</p>
+<p>　　先写那么点吧，快十点了，有点略困；</p>
+<p>　　我是昨天听说，今天才开始接触它，如果有哪里写的不对，还请指出来。谢谢！</p>
+<p>　　　　</p>
+
+        </div>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/08/03/总结CSS3新特性-Animation篇/">
+                总结CSS3新特性(Animation篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-08-03</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <p>动画(Animation),是CSS3的亮点.//之一</p>
+<p>通过animation属性指定@keyframe来完成关键帧动画;</p>
+<h3 id="keyframe用法"><a href="#keyframe用法" class="headerlink" title="@keyframe用法:　　"></a>@keyframe用法:　　</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">keyframes</span> name &#123;</div><div class="line">  0% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;<span class="comment">/*0%可用from关键字替代*/</span>  50% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">10px</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  100% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;<span class="comment">/*100%可用to关键字替代*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由于是CSS3,所以不出意外的各种前缀:</p>
+<p><img src="http://images0.cnblogs.com/blog2015/731575/201508/031528187517503.png" alt="Image">–图片来自MDN,<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/%40keyframes" target="_blank" rel="external">CSS中的关键帧</a></p>
+<p>单个帧中可填写多个属性,而且不需要保证一致,如:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframes</span> identifier &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  50% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">10px</span>;</div><div class="line">    <span class="attribute">background-color</span>: red;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">20px</span>;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">  &#125;</div><div class="line">&#125;<span class="comment">/*这是一个完全有效的关键帧定义*/</span></div></pre></td></tr></table></figure>
+<p>需要注意的有几点:</p>
+<p>　　关键帧中有效的属性为<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties" target="_blank" rel="external">可动画属性</a>;如出现不可动画属性,会忽略该属性,不影响其余属性的动画,</p>
+<p>　　如属性后跟有 !important,则会忽略该属性,</p>
+<p>　　某个关键帧如果重复定义,则取后定义的帧,　　</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframes</span> identifier &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  50% &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">10px</span>;</div><div class="line">    <span class="comment">/*该属性会动画*/</span></div><div class="line">    <span class="attribute">background-color</span>: red <span class="meta">!important</span>;</div><div class="line">    <span class="comment">/*因为有!important字样,所以该条将被忽略*/</span></div><div class="line">    <span class="attribute">text-align</span>: center;</div><div class="line">    <span class="comment">/*由于该属性不为可动画属性,因此也被忽略*/</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">20px</span>;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  100% &#123;</div><div class="line">    <span class="attribute">color</span>: green;</div><div class="line">  &#125;<span class="comment">/*由于to关键字表示100%,所以该动画只会执行改变颜色为green,而to所对应的属性全部被忽略*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>帧数范围为0%-100%,不属于这个范围的则被忽略(经实验,关键帧定义可以不按顺序来,可以正确执行,但是可读性不太好);</p>
+<h3 id="Animation用法"><a href="#Animation用法" class="headerlink" title="Animation用法:"></a>Animation用法:</h3><p>animation-name:设置动画的名称,就是@keyframe后跟的标识;</p>
+<p>animation-duration:设置动画花费的时间,//这两个为必填属性,第一个不解释了,第二个必填的原因为默认值是0s,0s是不会产生动画效果的,所以为必填;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-name</span>: demo;</div><div class="line">  <span class="attribute">animation-duration</span>: <span class="number">2s</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">keyframe</span> demo &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">top</span>: <span class="number">20px</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-timing-function:设置动画的速度曲线,默认值为 ease,<a href="http://www.w3school.com.cn/cssref/pr_animation-timing-function.asp" target="_blank" rel="external">可选值</a>有数个,可通过cubic-bezier函数来自定义,这里有一些定义好的,可以直接拿来用的函数,<a href="http://easings.net/zh-cn" target="_blank" rel="external">传送阵</a>;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-function</span>: <span class="built_in">cubic-bezier</span>(0.25,0.1,0.25,1);</div><div class="line">  <span class="comment">/*自定义的贝塞尔曲线*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-delay:设置动画开始前的等待时间,默认为0s;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-delay</span>: <span class="number">2s</span>;</div><div class="line">  <span class="comment">/*动画将于2s后执行*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-iteration-count:设置动画执行次数,默认为1,使用 infinite 关键字可以使动画无限循环;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-iteration-count</span>: infinite;</div><div class="line">  <span class="comment">/*动画将无限循环,此时animation-fill-mode将无效*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-direction:设置动画执行完后时候倒序执行,默认为normal,使用 alternate 关键字开启倒序执行</p>
+<p>//仅有animation-iteration-count值为大于1次时才会激活,倒序执行消耗时间为animation-duration设置的时间,奇数次数为正序,偶数次数为倒序;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-direction</span>: alternate;</div><div class="line">  <span class="comment">/*激活倒序播放*/</span></div><div class="line">  <span class="attribute">animation-iteration-count</span>: <span class="number">2</span>;</div><div class="line">  <span class="comment">/*此时该属性须大于1,direction才会有效*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-play-state:设置动画当前状态,默认是 running ,为执行状态,可以设置为 paused 为暂停,</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">animation-play-state</span>: paused;</div><div class="line">  <span class="comment">/*默认不触发动画*/</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-id">#demo</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">animation-play-state</span>: running;</div><div class="line">  <span class="comment">/*悬浮至该元素才执行动画*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>animation-fill-mode:设置动画执行完后的状态(复原(none),保持第一帧(backwards)以及保持最后一帧(forwards),还有一个both值 MDN说是同时backwards和forwards,原谅我没有试出它与forwards的区别…,)</p>
+<p>　　//设置animation-iteration-count值为infinite时将导致该属性失效;</p>
+<p>animation的简写方式对顺序要求特别严格,规格如下:</p>
+<p>animation:name duration timing-function delay iteration-count direction play-state fill-mode;</p>
+<h3 id="使用时需注意"><a href="#使用时需注意" class="headerlink" title="使用时需注意:"></a>使用时需注意:</h3><p>各种前缀…@keyframe里边如果用到了transform,也是需要加前缀的,如:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@-<span class="keyword">webkit</span>-<span class="keyword">keyframe</span> demo &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">-webkit-transform</span>: <span class="built_in">rotate</span>(7deg);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">    <span class="attribute">-webkit-transform</span>: <span class="built_in">rotate</span>(14deg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="部分参考文档"><a href="#部分参考文档" class="headerlink" title="部分参考文档:"></a>部分参考文档:</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/animation" target="_blank" rel="external">MDN的动画</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/%40keyframes" target="_blank" rel="external">CSS3中的关键帧</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_animation.asp" target="_blank" rel="external">W3School的Animation属性</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_keyframes.asp" target="_blank" rel="external">W3School的@Keyframe规则</a></p>
+
+        </div>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/07/21/总结CSS3新特性-Transiton篇/">
+                总结CSS3新特性(Transiton篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-21</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <blockquote>
+<p><strong>CSS 过渡（transition）</strong>, 是 <a href="https://developer.mozilla.org/en-US/docs/CSS/CSS3" target="_blank" rel="external">CSS3</a> 规范的一部分, 用来控制 CSS 属性的变化速率。 可以让属性的变化过程持续一段时间，而不是立即生效。比如，将元素的颜色从白色改为黑色，通常这个改变是立即生效的，使用 transition 后，将按一个曲线速率变化。这个过程可以自定义。</p>
+</blockquote>
+<p>Transition是一个简写属性,四个值(单独使用均加transition-前缀)的顺序:</p>
+<p>　　property</p>
+<p>　　duration</p>
+<p>　　timing-function</p>
+<p>　　delay</p>
+<p>过渡就是在一定时间内完成某属性值的改变,所以,transition-duration一定要设置,因为它默认值为0;</p>
+<h3 id="Transition-Property"><a href="#Transition-Property" class="headerlink" title="Transition-Property:"></a>Transition-Property:</h3><p>要过渡的属性值,只有被指定的属性才会在过度时产生动画效果,可以填all,all为所有<a href="https://developer.mozilla.org/en-US/docs/CSS/CSS_animated_properties" target="_blank" rel="external">可动画属性</a>;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">width</span>:<span class="number">20px</span>;</div><div class="line">  <span class="attribute">height</span>:<span class="number">20px</span>;</div><div class="line">  <span class="attribute">background-color</span>:<span class="number">#0080FF</span>;</div><div class="line">  <span class="attribute">transition</span>: width <span class="number">1.5s</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#demo</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">width</span>:<span class="number">30px</span>;</div><div class="line">  <span class="attribute">height</span>:<span class="number">30px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以选择多个属性的值;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">width</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">background-color</span>: <span class="number">#0080FF</span>;</div><div class="line">	<span class="attribute">transition-property</span>: width , height;</div><div class="line">  <span class="comment">/*写多个值用逗号分割*/</span></div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span>;</div><div class="line">  <span class="comment">/*过渡持续时间可以只写一个,也可分别指定,同样用逗号分割*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用简写时指定多个属性:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">width</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">background-color</span>: <span class="number">#0080FF</span>;</div><div class="line">	<span class="attribute">transition</span>: width <span class="number">2s</span>, height <span class="number">4s</span>;</div><div class="line">  <span class="comment">/*两条定义之间用逗号分割,后两个值为选填.*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用子属性时需要注意几点:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height , top;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span>;</div><div class="line">  <span class="comment">/*定义时间个数少于属性个数,会再次循环数组*/</span></div><div class="line">&#125;</div><div class="line"><span class="comment">/*相当于*/</span></div><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height , top;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span> , <span class="number">2s</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span> , <span class="number">2s</span>;</div><div class="line">  <span class="comment">/*定义时间个数多于属性个数,多出的值会被截取*/</span></div><div class="line">&#125;</div><div class="line"><span class="comment">/*相当于*/</span></div><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Transition-duration"><a href="#Transition-duration" class="headerlink" title="Transition-duration:"></a>Transition-duration:</h3><p>设定过渡持续的时间,可以为秒或毫秒,本人理解为过渡就是通过设置的持续时间结合<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition-timing-function#.E8.AF.AD.E6.B3.95" target="_blank" rel="external">缓动函数</a>计算相应的属性值改变的曲线;</p>
+<p>比如4秒内宽度从100px过渡到200px,简单的分为4帧(假设) 125px-150px-175px-200px;原理应该与animation的from to 类似;</p>
+<h3 id="Transition-timing-function"><a href="#Transition-timing-function" class="headerlink" title="Transition-timing-function:"></a>Transition-timing-function:</h3><p>设定过渡动画的曲线,这里是<a href="http://www.w3school.com.cn/tiy/t.asp?f=css3_transition-timing-function2" target="_blank" rel="external">W3School的示例</a>,里边用到了是几个常用的,浏览器里内置的几种动画曲线,还可以通过cubic-bezier(<em>n</em>,<em>n</em>,<em>n</em>,<em>n</em>)来进行定制,n为0-1之间的值;</p>
+<p>挺全的一个<a href="http://easings.net/zh-cn" target="_blank" rel="external">缓动函数</a>集合,默认不设置时,为ease,慢速开始,然后变快再慢速结束;</p>
+<h3 id="Transition-delay"><a href="#Transition-delay" class="headerlink" title="Transition-delay:"></a>Transition-delay:</h3><p>设定动画开始前的等待时间(默认为0,无延迟);</p>
+<p>本文如有不足或错误,还请指出.共同学习;</p>
+<p>部分参考资料:</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition" target="_blank" rel="external">MDNCSS过渡</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Using_CSS_transitions" target="_blank" rel="external">MDN使用CSS过渡</a></p>
+<p><a href="http://www.w3school.com.cn/css3/css3_transition.asp" target="_blank" rel="external">W3School_CSS过渡</a></p>
+<p><a href="http://easings.net/zh-cn" target="_blank" rel="external">缓动函数集合</a></p>
+
+        </div>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/07/20/总结CSS3新特性-Transform篇/">
+                总结CSS3新特性(Transform篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-20</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <h3 id="概述"><a href="#概述" class="headerlink" title="概述:"></a>概述:</h3><p>CSS3新添加的Transform可以改变元素在可视化区域的坐标(这种改变不会引起文档的重排,只有重排),以及形状,还有些3D形变.结合 Animation(这里以后会有个链接的) 能实现酷炫的动画;</p>
+<h3 id="旋转-rotate"><a href="#旋转-rotate" class="headerlink" title="旋转(rotate):"></a>旋转(rotate):</h3><p>rotate支持一个参数,一个角度值 0-360deg</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span>&#123;</div><div class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(180deg);<span class="comment">/*实现旋转,左上角的东西会在右下角显示*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/summary-css-new-feature-transforms/screen-shot-1.png" alt=""></p>
+<h3 id="缩放-scale"><a href="#缩放-scale" class="headerlink" title="缩放(scale):"></a>缩放(scale):</h3><p>scale支持两个参数(x,y),如果没有填y的话,则取x的值;1为正常,&lt;1为缩放,&gt;1为放大;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span>&#123;</div><div class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(1.2);<span class="comment">/*放大1.2倍*/</span></div><div class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(.8);<span class="comment">/*缩小为正常的0.8倍*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/summary-css-new-feature-transforms/screen-shot-2.png" alt=""></p>
+<p>scale提供两个子方法,scaleX,scaleY,用来分别设置x或y的缩放;</p>
+<h3 id="倾斜-skew"><a href="#倾斜-skew" class="headerlink" title="倾斜(skew):"></a>倾斜(skew):</h3><p>skew支持两个参数(x,y),参数类型为角度(deg),如果不填y的话,则默认为0(与缩放不同);</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span>&#123;</div><div class="line">  <span class="attribute">transform</span>:<span class="built_in">skew</span>(45deg);<span class="comment">/*文本沿x轴向左倾斜45°*/</span></div><div class="line">  <span class="attribute">transform</span>:<span class="built_in">skew</span>(0,45deg);<span class="comment">/*文本沿y轴向下倾斜45°*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="/images/summary-css-new-feature-transforms/screen-shot-3.png" alt=""></p>
+<p>如果仅设x或y,可直接使用两个子方法,skewX与skewY;</p>
+<h3 id="平移-translate"><a href="#平移-translate" class="headerlink" title="平移(translate):"></a>平移(translate):</h3><p>translate接收两个参数(x,y)为平移的距离,如不填y值,则默认为0,支持所有CSS内有效的长度单位(使用translate用来移动元素不会触发重排,只有重绘);</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span>&#123;</div><div class="line">  <span class="attribute">transform</span>:<span class="built_in">translate</span>(20px,5vh);<span class="comment">/*向左移动二十像素,向下移动百分之五的视窗高度*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样有两个子方法,translateX,translateY;</p>
+<p>做了一个<a href="http://sandbox.runjs.cn/show/khlxer9k" target="_blank" rel="external">简单的小例子</a>,用了rotate;</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h3><p>用Transform可以做出很多酷炫的事情,(跳过了matrix,matrix3d没有说…)当然了,不要像我这样作死<br><img src="/images/summary-css-new-feature-transforms/screen-shot-4.gif" alt=""></p>
+<p>相关参考文档:</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform" target="_blank" rel="external">MDN的Transform</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_transform.asp" target="_blank" rel="external">w3school的Transform</a></p>
+<p><a href="http://drafts.csswg.org/css-transforms/" target="_blank" rel="external">W3的文档</a></p>
+
+        </div>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/07/16/总结CSS3新特性-媒体查询篇/">
+                总结CSS3新特性(媒体查询篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-16</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <p>###</p>
+<p>CSS3的媒体查询是对CSS2<a href="http://www.w3.org/TR/REC-CSS2/media.html" target="_blank" rel="external">媒体类型</a>的扩展,完善;</p>
+<p>CSS2的媒体类型仅仅定义了一些设备的关键字,CSS3的媒体查询进一步扩展了如width,height,color等具有取值范围的属性;</p>
+<p>media query 与 media type 的区别在于: media query是一个值或一个范围的值,而media type仅仅是设备的匹配(所以media type 是一个单词,而media query 后边需要跟着一个数值,两者可以混合使用);</p>
+<p>media可用于link标签属性 [media]</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span><span class="attr">type</span>=<span class="string">"text/css"</span><span class="attr">href</span>=<span class="string">"../css/print.css"</span><span class="attr">media</span>=<span class="string">"print and (max-width : 600px)"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>以及css文件内,下边代码均是使用css内media;</p>
+<p>介绍一下可用的运算符&amp;常用的media type以及media query:</p>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符:"></a>运算符:</h3><h4 id="and"><a href="#and" class="headerlink" title="and:"></a>and:</h4><p>and运算符用于符号两边规则均满足条件则匹配</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> screen and (max-width: <span class="number">600px</span>)&#123;<span class="comment">/*匹配宽度小于600px的电脑屏幕*/</span>&#125;</div></pre></td></tr></table></figure>
+<h4 id="not"><a href="#not" class="headerlink" title="not:"></a>not:</h4><p>not运算符用于取非,所有不满足该规则的均匹配</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> not print&#123;<span class="comment">/*匹配除了打印机以外的所有设备*/</span>&#125;</div></pre></td></tr></table></figure>
+<p>使用not时请注意,如果不加括号,也许会产生一些奇怪的现象,例:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> not all and (max-width: <span class="number">500px</span>)&#123;&#125;</div><div class="line"><span class="comment">/*等价于*/</span></div><div class="line">@<span class="keyword">media</span> not (all and (max-width: <span class="number">500px</span>))&#123;&#125;</div><div class="line"><span class="comment">/*而不是*/</span></div><div class="line">@<span class="keyword">media</span>(<span class="keyword">not</span> all) and (max-width: <span class="number">500px</span>)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>所以,如果要使用not,还是显式的添加括号比较明确点</p>
+<h4 id="逗号"><a href="#逗号" class="headerlink" title=",(逗号):"></a>,(逗号):</h4><p>相当于 or 用于两边有一条满足则匹配</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> screen , (min-width: <span class="number">800px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配电脑屏幕或者宽度大于800px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Media-Type-只说几个常用的-其余会给出链接"><a href="#Media-Type-只说几个常用的-其余会给出链接" class="headerlink" title="Media Type(只说几个常用的,其余会给出链接):"></a>Media Type(只说几个常用的,其余会给出链接):</h3><h4 id="All"><a href="#All" class="headerlink" title="All:"></a>All:</h4><p>all是默认值,匹配所有设备;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> all&#123;</div><div class="line">  <span class="comment">/* 可以过滤不支持media的浏览器 */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Screen"><a href="#Screen" class="headerlink" title="Screen:"></a>Screen:</h4><p>匹配电脑屏幕;</p>
+<h4 id="Print"><a href="#Print" class="headerlink" title="Print:"></a>Print:</h4><p>匹配打印机(打印预览时也会匹配)[本人简历专门为print做了一套样式~]</p>
+<p>常用的一般就这三个type,其余Media Type 有兴趣的可以看下 <a href="http://www.w3school.com.cn/html5/att_a_media.asp" target="_blank" rel="external">W3School的说明</a>或<a href="http://www.w3.org/TR/REC-CSS2/media.html" target="_blank" rel="external">W3的文档</a></p>
+<h3 id="Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query"><a href="#Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query" class="headerlink" title="Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query"></a>Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query</h3><h4 id="max-width-max-height"><a href="#max-width-max-height" class="headerlink" title="max-width(max-height):"></a>max-width(max-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (max-width: <span class="number">600px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配界面宽度小于600px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="min-width-min-height"><a href="#min-width-min-height" class="headerlink" title="min-width(min-height):"></a>min-width(min-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (min-width: <span class="number">400px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配界面宽度大于400px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="max-device-width-max-device-height"><a href="#max-device-width-max-device-height" class="headerlink" title="max-device-width(max-device-height):"></a>max-device-width(max-device-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (max-device-width: <span class="number">800px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配设备(不是界面)宽度小于800px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="min-device-width-min-device-height"><a href="#min-device-width-min-device-height" class="headerlink" title="min-device-width(min-device-height):"></a>min-device-width(min-device-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (min-device-width: <span class="number">600px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配设备(不是界面)宽度大于600px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>做移动开发时用device-width/device-height,比较好一点吧,因为有些手机浏览器默认会对页面进行一些缩放,所以按照设备宽高来进行匹配会更接近开发时所期望的效果;</p>
+<p>给出全部的Media Query属性值的链接 <a href="http://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/" target="_blank" rel="external">W3的文档</a> 也可以看看MDN的,有志愿者汉化了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Media_queries" target="_blank" rel="external">MDN Media Query 文档</a></p>
+<p>media是可以嵌套的:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> not print&#123;</div><div class="line">  <span class="comment">/*通用样式*/</span></div><div class="line">  @<span class="keyword">media</span> (max-width:<span class="number">600px</span>)&#123;</div><div class="line">    <span class="comment">/*此条匹配宽度小于600px的非打印机设备*/</span></div><div class="line">  &#125;</div><div class="line">  @<span class="keyword">media</span> (min-width:<span class="number">600px</span>)&#123;</div><div class="line">    <span class="comment">/*此条匹配宽度大于600px的非打印机设备*/</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样省去了将 not print 写两遍的冗余.这样写也是有一定好处的,因为有些浏览器也许只支持Media Type 而不支持 Media Query- -(不要问我为什么知道,栽过坑)</p>
+<p>Media Query(仅指上边那几个)的值的单位可以是 px em rem (%/vh/vw/vmin/vmax什么的没有试…感觉应该没什么用吧…);</p>
+<p>Media Query是响应式页面的核心,其实说响应式页面就是在不同分辨率下显示不同的效果;</p>
+<p>编写响应式页面CSS时分为从小到大和从大到小(尺寸);</p>
+<p>本人弱弱的推荐从小尺寸开始写的 Media Query 使用 max-系列,大尺寸的反之;</p>
+<p>本文哪里有错误及不足还请大家指出;</p>
+
+        </div>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/07/15/总结CSS3新特性-选择器篇/">
+                总结CSS3新特性(选择器篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-15</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <p>CSS3新增了<br><img src="/images/summary-css-new-feature-selectors/screen-shot-1.png" alt=""><br>嗯- -21个选择器,脚本通过控制台在<a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="external">这里</a>运行;</p>
+<h4 id=""><a href="#" class="headerlink" title="~:"></a>~:</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span> ~ <span class="selector-tag">p</span>&#123;<span class="attribute">color</span>: red;<span class="comment">/*此条规则将用于p后边所有的p...就是除了第一个p的所有p,规则同p:not(:nth-of-type(1)),但是权重要低于后者*/</span>&#125;</div></pre></td></tr></table></figure>
+<h4 id="attribute-value"><a href="#attribute-value" class="headerlink" title="[attribute^=value]:"></a>[attribute^=value]:</h4><p>选择该属性以特定值开头的元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-2.png" alt=""></p>
+<h4 id="attribute-value-1"><a href="#attribute-value-1" class="headerlink" title="[attribute$=value]:"></a>[attribute$=value]:</h4><p>选择该属性以特定值结尾的元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-3.png" alt=""></p>
+<h4 id="attribute-value-2"><a href="#attribute-value-2" class="headerlink" title="[attribute*=value]:"></a>[attribute*=value]:</h4><p>选择该属性中出现了特定值的元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-4.png" alt=""></p>
+<h5 id="上边三个是可以组合使用的-方法如-↓"><a href="#上边三个是可以组合使用的-方法如-↓" class="headerlink" title="上边三个是可以组合使用的,方法如 ↓ :"></a>上边三个是可以组合使用的,方法如 ↓ :</h5><p><img src="/images/summary-css-new-feature-selectors/screen-shot-5.png" alt=""><br>实际中可以应用在区分本地链接与外部链接,通过判断是否有http.com什么的(等到CSS4选择器问世就不用这么麻烦了[:local-link])</p>
+<h4 id="first-of-type与-last-of-type"><a href="#first-of-type与-last-of-type" class="headerlink" title=":first-of-type与:last-of-type:"></a>:first-of-type与:last-of-type:</h4><p>从字面大概能看出来是干嘛使得,第一个这个类型的/最后一个这个类型的…<br><img src="/images/summary-css-new-feature-selectors/screen-shot-6.png" alt=""></p>
+<p>如上图所示,每个元素内的第一个p与最后一个p都应用了该样式;</p>
+<h4 id="only-of-type"><a href="#only-of-type" class="headerlink" title=":only-of-type:"></a>:only-of-type:</h4><p>选择仅仅仅有一个此类型的子元素,不包含子元素的子元素;<br><img src="/images/summary-css-new-feature-selectors/screen-shot-7.png" alt=""><br>可以利用:not来实现反选<br><img src="/images/summary-css-new-feature-selectors/screen-shot-8.png" alt=""></p>
+<h4 id="only-child"><a href="#only-child" class="headerlink" title=":only-child:"></a>:only-child:</h4><p>选择仅有一个子元素的元素;<br><img src="/images/summary-css-new-feature-selectors/screen-shot-9.png" alt=""><br>如果去掉:only-child前边的p,那个孤独的span也会应用该样式;</p>
+<p>同样可以使用:not反选,<br><img src="/images/summary-css-new-feature-selectors/screen-shot-10.png" alt=""></p>
+<h4 id="nth-child-n"><a href="#nth-child-n" class="headerlink" title=":nth-child(n):"></a>:nth-child(n):</h4><p>选择第n个子元素,可以结合选择器来限制<br><img src="/images/summary-css-new-feature-selectors/screen-shot-11.png" alt=""><br>结合变量n(应该说是关键字吧= =),可以用来在表格里,列表里做隔行换色什么的<br><img src="/images/summary-css-new-feature-selectors/screen-shot-12.png" alt=""></p>
+<h4 id="nth-last-child-n"><a href="#nth-last-child-n" class="headerlink" title=":nth-last-child(n):"></a>:nth-last-child(n):</h4><p>基本同上…只不过是从后往前数</p>
+<h4 id="nth-of-type-n"><a href="#nth-of-type-n" class="headerlink" title=":nth-of-type(n):"></a>:nth-of-type(n):</h4><p>这个跟上边的让我很蛋疼- -这两者的区别一直让人很凌乱,详情看下图<br><img src="/images/summary-css-new-feature-selectors/screen-shot-13.png" alt=""></p>
+<p>通过w3school上边做的.</p>
+<p>p:nth-child(2)将父元素中子元素第二个为p的p的颜色设为红色,</p>
+<p>p:nth-of-type(2)将子元素中的第二个p背景色设为绿色- -好乱的;</p>
+<p>我认为两者的却别在于,nth-of-type计数过滤标签类型,而nth-child计数不过滤;</p>
+<h4 id="nth-last-of-type-n"><a href="#nth-last-of-type-n" class="headerlink" title=":nth-last-of-type(n):"></a>:nth-last-of-type(n):</h4><p>这个不做解释了…反之</p>
+<h4 id="last-child"><a href="#last-child" class="headerlink" title=":last-child:"></a>:last-child:</h4><p>选取父元素中最后一个子元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-14.png" alt=""></p>
+<p><img src="http://images0.cnblogs.com/blog2015/731575/201507/151711256578755.png" alt="Image">注意tr后边伪类的位置,这就是一个空格的差距= =上边那个选择的是最后一个tr,而下边那个是选择的tr中的最后一个元素;</p>
+<h4 id="root"><a href="#root" class="headerlink" title=":root:"></a>:root:</h4><p>选择文档根节点- -相当于 html {},但是权重要比html高,因为人家是伪类,沾点类就比标签高- -;</p>
+<h4 id="empty"><a href="#empty" class="headerlink" title=":empty:"></a>:empty:</h4><p>选择没有子元素的标签,额,这个一般没什么大用,因为文本节点也是节点,一般就是表格有空单元格,列表有空项,然后做点处理,用js选择空元素时这个挺有用的;</p>
+<h4 id="target"><a href="#target" class="headerlink" title=":target:"></a>:target:</h4><p>W3C给的解释是设置活动的id的样式,其实就是浏览器路径上边缀着#什么,就选着什么 <a href="http://www.w3school.com.cn/cssref/selector_target.asp" target="_blank" rel="external">传送阵</a>;</p>
+<h4 id="enabled与-disabled"><a href="#enabled与-disabled" class="headerlink" title=":enabled与:disabled:"></a>:enabled与:disabled:</h4><p>用于表单元素是否可用的伪类;</p>
+<p>:enabled为可用,:disabled反之;</p>
+<h4 id="checked"><a href="#checked" class="headerlink" title=":checked:"></a>:checked:</h4><p>用于多选及单选被选中的伪类;</p>
+<h4 id="not"><a href="#not" class="headerlink" title=":not:"></a>:not:</h4><p>这个就不多说了- -上边用了那么多了;</p>
+<h4 id="selection"><a href="#selection" class="headerlink" title="::selection:"></a>::selection:</h4><p>被选中文本的样式;</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h4><p>CSS3选择器带来了极大的便利,上文有什么不对或不详细,还请指出.有点虎头蛇尾了,哈哈</p>
+<h4 id="部分参考链接"><a href="#部分参考链接" class="headerlink" title="部分参考链接:"></a>部分参考链接:</h4><p><a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="external">http://www.w3school.com.cn/cssref/css_selectors.asp</a></p>
+<p>再来几个CSS4前瞻的</p>
+<p><a href="http://www.admin10000.com/document/5900.html" target="_blank" rel="external">http://www.admin10000.com/document/5900.html</a></p>
+<p><a href="http://www.webhek.com/css4-selectors/" target="_blank" rel="external">http://www.webhek.com/css4-selectors/</a></p>
+<p><a href="http://www.iinterest.net/2011/10/09/css4-selectors-level-4/" target="_blank" rel="external">http://www.iinterest.net/2011/10/09/css4-selectors-level-4/</a></p>
+
+        </div>
+    
+
+</div>
+            
+                
+<div class="post">
+
+    <div class="post-header index">
+        <h1 class="title">
+            <a href="/2015/07/14/总结CSS3新特性-颜色篇/">
+                总结CSS3新特性(颜色篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-14</span>
+            
+            
+            
+        </div>
+    </div>
+
+    
+        <div class="content">
+            <h3 id="颜色"><a href="#颜色" class="headerlink" title="颜色:"></a>颜色:</h3><p>CSS3新增加了hsl(), hsla(), rgb(),rgba()四个函数来创建color值;</p>
+<h4 id="hsl"><a href="#hsl" class="headerlink" title="hsl():"></a>hsl():</h4><p>hsl函数:h(色调),s(饱和度),l(亮度);</p>
+<p>色调:为0-360之间的数值[经实验,可以为小数];</p>
+<p>饱和度与亮度:均为百分比;</p>
+<p>下图截自<a href="http://www.w3.org/wiki/CSS/Properties/color/HSL" target="_blank" rel="external">http://www.w3.org/wiki/CSS/Properties/color/HSL</a><br><img src="/images/summary-css-new-feature-colors/screen-shot-1.png" alt=""><br>当亮度为100%时为白色,当亮度为0%为黑色;</p>
+<p>饱和度100%以及亮度50%时生成的颜色均为<a href="http://www.bootcss.com/p/websafecolors/" target="_blank" rel="external">web安全色</a></p>
+<h4 id="rgb"><a href="#rgb" class="headerlink" title="rgb():"></a>rgb():</h4><p>rgb函数:r(red),g(green),b(blue)[计算机三原色];</p>
+<p>值可以为0-255任意整数或百分比;</p>
+<p>如超出范围,取最近的有效值:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">em</span>&#123;<span class="attribute">color</span>:<span class="built_in">rgb</span>(300,0,0)&#125;<span class="comment">/* clipped to rgb(255,0,0) */</span></div><div class="line"><span class="selector-tag">em</span>&#123;<span class="attribute">color</span>:<span class="built_in">rgb</span>(255,-10,0)&#125;<span class="comment">/* clipped to rgb(255,0,0) */</span></div><div class="line"><span class="selector-tag">em</span>&#123;<span class="attribute">color</span>:<span class="built_in">rgb</span>(110%, 0%, 0%)&#125;<span class="comment">/* clipped to rgb(100%,0%,0%) */</span></div></pre></td></tr></table></figure>
+<p>下图截自<a href="http://www.w3.org/wiki/CSS/Properties/color/RGB" target="_blank" rel="external">http://www.w3.org/wiki/CSS/Properties/color/RGB</a><br><img src="/images/summary-css-new-feature-colors/screen-shot-2.png" alt=""><br>有一点需要注意,百分比与数值不能同时出现在一个rgb函数中;</p>
+<h4 id="rgba-与hsla"><a href="#rgba-与hsla" class="headerlink" title="rgba()与hsla():"></a>rgba()与hsla():</h4><p>这两位与上边两位的区别在于后边的a(alpha)透明度;</p>
+<p>透明度为0-1之间的数值,0为全透明,1为全不透明,利用透明度可以做出很多好看的效果</p>
+<p><a href="http://sandbox.runjs.cn/show/kwnceyon" target="_blank" rel="external">一个简单的例子</a>(当然了- -这个例子不算好看)</p>
+<p>上例中用到了一个类似于变量的单词(currentColor[大小写不区分])</p>
+<p>currentColor可用于所有设置颜色属性的地方.</p>
+<p>取值为当前元素的color属性值,如果没有,寻找父级,一直到根元素,如果都没有设置的话,不要担心,还有浏览器代理的默认颜色.</p>
+<p>w3官方有一个简短的解释,如果元素color属性值为currentColor的话,则视为 ‘color:inherit’;</p>
+<p>比较实用的一个地方就是,设置元素边框颜色,颜色(color),等等属性时,只需设置颜色(color);后续更改时也只需修改一处,子元素也可直接继承使用currentColor,但需要确保子元素没有显示声明color属性值;</p>
+<p>还有用到了两个长度单位(vw,vh)取值范围[0-100]</p>
+<p>100vw为屏幕宽度;</p>
+<p>100vh为屏幕高度;</p>
+<p>还存在两个值,vmax与xmin,分别是取出宽高最大或最小值;</p>
+<p>vw与vh可参与<a href="http://www.cnblogs.com/jiasm/p/4633603.html" target="_blank" rel="external">calc()</a>的计算;</p>
+<p>顺便介绍下 opacity:</p>
+<p>opacity用来设置元素的透明度:(取值为0-1)<br><img src="/images/summary-css-new-feature-colors/screen-shot-3.png" alt=""><br>IE8可用替代的<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">filter:Alpha(opacity=50)/*0-100*/</div></pre></td></tr></table></figure></p>
+<p>来实现透明度;</p>
+<p>颜色基本上就这些了,如有错误或补充还请指出(无视transparent…)</p>
+<p><a href="http://www.w3.org/wiki/CSS3/Color" target="_blank" rel="external">参考资料</a></p>
+
+        </div>
+    
+
+</div>
+            
+        </section>
+    </div>
+</div>
+
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="wrap-pagination">
+                <a class="" href="/">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                </a>
+                <a class="disabled" href="/">
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

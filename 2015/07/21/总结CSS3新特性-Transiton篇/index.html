@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="CSS 过渡（transition）, 是 CSS3 规范的一部分, 用来控制 CSS 属性的变化速率。 可以让属性的变化过程持续一段时间，而不是立即生效。比如，将元素的颜色从白色改为黑色，通常这个改变是立即生效的，使用 transition 后，将按一个曲线速率变化。这个过程可以自定义。
+
+Tra">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="总结CSS3新特性(Transiton篇)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>总结CSS3新特性(Transiton篇) - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2015/07/21/总结CSS3新特性-Transiton篇/">
+                总结CSS3新特性(Transiton篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-21</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <blockquote>
+<p><strong>CSS 过渡（transition）</strong>, 是 <a href="https://developer.mozilla.org/en-US/docs/CSS/CSS3" target="_blank" rel="external">CSS3</a> 规范的一部分, 用来控制 CSS 属性的变化速率。 可以让属性的变化过程持续一段时间，而不是立即生效。比如，将元素的颜色从白色改为黑色，通常这个改变是立即生效的，使用 transition 后，将按一个曲线速率变化。这个过程可以自定义。</p>
+</blockquote>
+<p>Transition是一个简写属性,四个值(单独使用均加transition-前缀)的顺序:</p>
+<p>　　property</p>
+<p>　　duration</p>
+<p>　　timing-function</p>
+<p>　　delay</p>
+<p>过渡就是在一定时间内完成某属性值的改变,所以,transition-duration一定要设置,因为它默认值为0;</p>
+<h3 id="Transition-Property"><a href="#Transition-Property" class="headerlink" title="Transition-Property:"></a>Transition-Property:</h3><p>要过渡的属性值,只有被指定的属性才会在过度时产生动画效果,可以填all,all为所有<a href="https://developer.mozilla.org/en-US/docs/CSS/CSS_animated_properties" target="_blank" rel="external">可动画属性</a>;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">  <span class="attribute">width</span>:<span class="number">20px</span>;</div><div class="line">  <span class="attribute">height</span>:<span class="number">20px</span>;</div><div class="line">  <span class="attribute">background-color</span>:<span class="number">#0080FF</span>;</div><div class="line">  <span class="attribute">transition</span>: width <span class="number">1.5s</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#demo</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">width</span>:<span class="number">30px</span>;</div><div class="line">  <span class="attribute">height</span>:<span class="number">30px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以选择多个属性的值;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">width</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">background-color</span>: <span class="number">#0080FF</span>;</div><div class="line">	<span class="attribute">transition-property</span>: width , height;</div><div class="line">  <span class="comment">/*写多个值用逗号分割*/</span></div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span>;</div><div class="line">  <span class="comment">/*过渡持续时间可以只写一个,也可分别指定,同样用逗号分割*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用简写时指定多个属性:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">width</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">background-color</span>: <span class="number">#0080FF</span>;</div><div class="line">	<span class="attribute">transition</span>: width <span class="number">2s</span>, height <span class="number">4s</span>;</div><div class="line">  <span class="comment">/*两条定义之间用逗号分割,后两个值为选填.*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用子属性时需要注意几点:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height , top;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span>;</div><div class="line">  <span class="comment">/*定义时间个数少于属性个数,会再次循环数组*/</span></div><div class="line">&#125;</div><div class="line"><span class="comment">/*相当于*/</span></div><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height , top;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span> , <span class="number">2s</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span> , <span class="number">2s</span>;</div><div class="line">  <span class="comment">/*定义时间个数多于属性个数,多出的值会被截取*/</span></div><div class="line">&#125;</div><div class="line"><span class="comment">/*相当于*/</span></div><div class="line"><span class="selector-id">#demo</span> &#123;</div><div class="line">	<span class="attribute">transition-property</span>: width , height;</div><div class="line">	<span class="attribute">transition-duration</span>: <span class="number">2s</span> , <span class="number">3s</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Transition-duration"><a href="#Transition-duration" class="headerlink" title="Transition-duration:"></a>Transition-duration:</h3><p>设定过渡持续的时间,可以为秒或毫秒,本人理解为过渡就是通过设置的持续时间结合<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition-timing-function#.E8.AF.AD.E6.B3.95" target="_blank" rel="external">缓动函数</a>计算相应的属性值改变的曲线;</p>
+<p>比如4秒内宽度从100px过渡到200px,简单的分为4帧(假设) 125px-150px-175px-200px;原理应该与animation的from to 类似;</p>
+<h3 id="Transition-timing-function"><a href="#Transition-timing-function" class="headerlink" title="Transition-timing-function:"></a>Transition-timing-function:</h3><p>设定过渡动画的曲线,这里是<a href="http://www.w3school.com.cn/tiy/t.asp?f=css3_transition-timing-function2" target="_blank" rel="external">W3School的示例</a>,里边用到了是几个常用的,浏览器里内置的几种动画曲线,还可以通过cubic-bezier(<em>n</em>,<em>n</em>,<em>n</em>,<em>n</em>)来进行定制,n为0-1之间的值;</p>
+<p>挺全的一个<a href="http://easings.net/zh-cn" target="_blank" rel="external">缓动函数</a>集合,默认不设置时,为ease,慢速开始,然后变快再慢速结束;</p>
+<h3 id="Transition-delay"><a href="#Transition-delay" class="headerlink" title="Transition-delay:"></a>Transition-delay:</h3><p>设定动画开始前的等待时间(默认为0,无延迟);</p>
+<p>本文如有不足或错误,还请指出.共同学习;</p>
+<p>部分参考资料:</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition" target="_blank" rel="external">MDNCSS过渡</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Using_CSS_transitions" target="_blank" rel="external">MDN使用CSS过渡</a></p>
+<p><a href="http://www.w3school.com.cn/css3/css3_transition.asp" target="_blank" rel="external">W3School_CSS过渡</a></p>
+<p><a href="http://easings.net/zh-cn" target="_blank" rel="external">缓动函数集合</a></p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/css/">#css</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

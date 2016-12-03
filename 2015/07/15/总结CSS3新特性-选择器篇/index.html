@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="CSS3新增了嗯- -21个选择器,脚本通过控制台在这里运行;
+~:1p ~ p&amp;#123;color: red;/*此条规则将用于p后边所有的p...就是除了第一个p的所有p,规则同p:not(:nth-of-type(1)),但是权重要低于后者*/&amp;#125;
+[attribute^=value">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="总结CSS3新特性(选择器篇)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>总结CSS3新特性(选择器篇) - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2015/07/15/总结CSS3新特性-选择器篇/">
+                总结CSS3新特性(选择器篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-15</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <p>CSS3新增了<br><img src="/images/summary-css-new-feature-selectors/screen-shot-1.png" alt=""><br>嗯- -21个选择器,脚本通过控制台在<a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="external">这里</a>运行;</p>
+<h4 id=""><a href="#" class="headerlink" title="~:"></a>~:</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span> ~ <span class="selector-tag">p</span>&#123;<span class="attribute">color</span>: red;<span class="comment">/*此条规则将用于p后边所有的p...就是除了第一个p的所有p,规则同p:not(:nth-of-type(1)),但是权重要低于后者*/</span>&#125;</div></pre></td></tr></table></figure>
+<h4 id="attribute-value"><a href="#attribute-value" class="headerlink" title="[attribute^=value]:"></a>[attribute^=value]:</h4><p>选择该属性以特定值开头的元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-2.png" alt=""></p>
+<h4 id="attribute-value-1"><a href="#attribute-value-1" class="headerlink" title="[attribute$=value]:"></a>[attribute$=value]:</h4><p>选择该属性以特定值结尾的元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-3.png" alt=""></p>
+<h4 id="attribute-value-2"><a href="#attribute-value-2" class="headerlink" title="[attribute*=value]:"></a>[attribute*=value]:</h4><p>选择该属性中出现了特定值的元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-4.png" alt=""></p>
+<h5 id="上边三个是可以组合使用的-方法如-↓"><a href="#上边三个是可以组合使用的-方法如-↓" class="headerlink" title="上边三个是可以组合使用的,方法如 ↓ :"></a>上边三个是可以组合使用的,方法如 ↓ :</h5><p><img src="/images/summary-css-new-feature-selectors/screen-shot-5.png" alt=""><br>实际中可以应用在区分本地链接与外部链接,通过判断是否有http.com什么的(等到CSS4选择器问世就不用这么麻烦了[:local-link])</p>
+<h4 id="first-of-type与-last-of-type"><a href="#first-of-type与-last-of-type" class="headerlink" title=":first-of-type与:last-of-type:"></a>:first-of-type与:last-of-type:</h4><p>从字面大概能看出来是干嘛使得,第一个这个类型的/最后一个这个类型的…<br><img src="/images/summary-css-new-feature-selectors/screen-shot-6.png" alt=""></p>
+<p>如上图所示,每个元素内的第一个p与最后一个p都应用了该样式;</p>
+<h4 id="only-of-type"><a href="#only-of-type" class="headerlink" title=":only-of-type:"></a>:only-of-type:</h4><p>选择仅仅仅有一个此类型的子元素,不包含子元素的子元素;<br><img src="/images/summary-css-new-feature-selectors/screen-shot-7.png" alt=""><br>可以利用:not来实现反选<br><img src="/images/summary-css-new-feature-selectors/screen-shot-8.png" alt=""></p>
+<h4 id="only-child"><a href="#only-child" class="headerlink" title=":only-child:"></a>:only-child:</h4><p>选择仅有一个子元素的元素;<br><img src="/images/summary-css-new-feature-selectors/screen-shot-9.png" alt=""><br>如果去掉:only-child前边的p,那个孤独的span也会应用该样式;</p>
+<p>同样可以使用:not反选,<br><img src="/images/summary-css-new-feature-selectors/screen-shot-10.png" alt=""></p>
+<h4 id="nth-child-n"><a href="#nth-child-n" class="headerlink" title=":nth-child(n):"></a>:nth-child(n):</h4><p>选择第n个子元素,可以结合选择器来限制<br><img src="/images/summary-css-new-feature-selectors/screen-shot-11.png" alt=""><br>结合变量n(应该说是关键字吧= =),可以用来在表格里,列表里做隔行换色什么的<br><img src="/images/summary-css-new-feature-selectors/screen-shot-12.png" alt=""></p>
+<h4 id="nth-last-child-n"><a href="#nth-last-child-n" class="headerlink" title=":nth-last-child(n):"></a>:nth-last-child(n):</h4><p>基本同上…只不过是从后往前数</p>
+<h4 id="nth-of-type-n"><a href="#nth-of-type-n" class="headerlink" title=":nth-of-type(n):"></a>:nth-of-type(n):</h4><p>这个跟上边的让我很蛋疼- -这两者的区别一直让人很凌乱,详情看下图<br><img src="/images/summary-css-new-feature-selectors/screen-shot-13.png" alt=""></p>
+<p>通过w3school上边做的.</p>
+<p>p:nth-child(2)将父元素中子元素第二个为p的p的颜色设为红色,</p>
+<p>p:nth-of-type(2)将子元素中的第二个p背景色设为绿色- -好乱的;</p>
+<p>我认为两者的却别在于,nth-of-type计数过滤标签类型,而nth-child计数不过滤;</p>
+<h4 id="nth-last-of-type-n"><a href="#nth-last-of-type-n" class="headerlink" title=":nth-last-of-type(n):"></a>:nth-last-of-type(n):</h4><p>这个不做解释了…反之</p>
+<h4 id="last-child"><a href="#last-child" class="headerlink" title=":last-child:"></a>:last-child:</h4><p>选取父元素中最后一个子元素<br><img src="/images/summary-css-new-feature-selectors/screen-shot-14.png" alt=""></p>
+<p><img src="http://images0.cnblogs.com/blog2015/731575/201507/151711256578755.png" alt="Image">注意tr后边伪类的位置,这就是一个空格的差距= =上边那个选择的是最后一个tr,而下边那个是选择的tr中的最后一个元素;</p>
+<h4 id="root"><a href="#root" class="headerlink" title=":root:"></a>:root:</h4><p>选择文档根节点- -相当于 html {},但是权重要比html高,因为人家是伪类,沾点类就比标签高- -;</p>
+<h4 id="empty"><a href="#empty" class="headerlink" title=":empty:"></a>:empty:</h4><p>选择没有子元素的标签,额,这个一般没什么大用,因为文本节点也是节点,一般就是表格有空单元格,列表有空项,然后做点处理,用js选择空元素时这个挺有用的;</p>
+<h4 id="target"><a href="#target" class="headerlink" title=":target:"></a>:target:</h4><p>W3C给的解释是设置活动的id的样式,其实就是浏览器路径上边缀着#什么,就选着什么 <a href="http://www.w3school.com.cn/cssref/selector_target.asp" target="_blank" rel="external">传送阵</a>;</p>
+<h4 id="enabled与-disabled"><a href="#enabled与-disabled" class="headerlink" title=":enabled与:disabled:"></a>:enabled与:disabled:</h4><p>用于表单元素是否可用的伪类;</p>
+<p>:enabled为可用,:disabled反之;</p>
+<h4 id="checked"><a href="#checked" class="headerlink" title=":checked:"></a>:checked:</h4><p>用于多选及单选被选中的伪类;</p>
+<h4 id="not"><a href="#not" class="headerlink" title=":not:"></a>:not:</h4><p>这个就不多说了- -上边用了那么多了;</p>
+<h4 id="selection"><a href="#selection" class="headerlink" title="::selection:"></a>::selection:</h4><p>被选中文本的样式;</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h4><p>CSS3选择器带来了极大的便利,上文有什么不对或不详细,还请指出.有点虎头蛇尾了,哈哈</p>
+<h4 id="部分参考链接"><a href="#部分参考链接" class="headerlink" title="部分参考链接:"></a>部分参考链接:</h4><p><a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="external">http://www.w3school.com.cn/cssref/css_selectors.asp</a></p>
+<p>再来几个CSS4前瞻的</p>
+<p><a href="http://www.admin10000.com/document/5900.html" target="_blank" rel="external">http://www.admin10000.com/document/5900.html</a></p>
+<p><a href="http://www.webhek.com/css4-selectors/" target="_blank" rel="external">http://www.webhek.com/css4-selectors/</a></p>
+<p><a href="http://www.iinterest.net/2011/10/09/css4-selectors-level-4/" target="_blank" rel="external">http://www.iinterest.net/2011/10/09/css4-selectors-level-4/</a></p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/css/">#css</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
