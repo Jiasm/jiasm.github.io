@@ -1,45 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Head tag -->
-<head>
+  <!-- Head tag -->
+
+  <head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--Description-->
-    
+
 
     <!--Author-->
-    
-        <meta name="author" content="Shunming Jia">
-    
+
+    <meta name="author" content="Shunming Jia">
+
 
     <!--Open Graph Title-->
-    
-        <meta property="og:title" content="贾顺名的博客"/>
-    
+
+    <meta property="og:title" content="贾顺名的博客" />
+
 
     <!--Open Graph Description-->
-    
+
 
     <!--Open Graph Site Name-->
-    <meta property="og:site_name" content="贾顺名的博客"/>
+    <meta property="og:site_name" content="贾顺名的博客" />
 
     <!--Type page-->
-    
-        <meta property="og:type" content="website" />
-    
+
+    <meta property="og:type" content="website" />
+
 
     <!--Page Cover-->
-    
+
 
     <meta name="twitter:card" content="summary" />
-    
+
 
     <!-- Title -->
-    
+
     <title>贾顺名的博客</title>
 
     <!-- Bootstrap Core CSS -->
@@ -62,917 +63,1332 @@
     <link rel="stylesheet" href="/css/style.css">
 
     <!-- Google Analytics -->
-    
 
 
-</head>
+
+  </head>
 
 
-<body>
+  <body>
 
-<div class="bg-gradient"></div>
-<div class="bg-pattern"></div>
+    <div class="bg-gradient"></div>
+    <div class="bg-pattern"></div>
 
-<!-- Menu -->
-<!--Menu Links and Overlay-->
-<div class="menu-bg">
-    <div class="menu-container">
+    <!-- Menu -->
+    <!--Menu Links and Overlay-->
+    <div class="menu-bg">
+      <div class="menu-container">
         <ul>
-            
-            <li class="menu-item">
-                <a href="/">
+
+          <li class="menu-item">
+            <a href="/">
                     Home
                 </a>
-            </li>
-            
-            <li class="menu-item">
-                <a href="/archives">
+          </li>
+
+          <li class="menu-item">
+            <a href="/archives">
                     Archives
                 </a>
-            </li>
-            
-            <li class="menu-item">
-                <a href="/about">
+          </li>
+
+          <li class="menu-item">
+            <a href="/about">
                     About
                 </a>
-            </li>
-            
-            <li class="menu-item">
-                <a href="/contact">
+          </li>
+
+          <li class="menu-item">
+            <a href="/contact">
                     Contact
                 </a>
-            </li>
-            
+          </li>
+
         </ul>
+      </div>
     </div>
-</div>
 
-<!--Hamburger Icon-->
-<nav>
-    <a href="#menu"></a>
-</nav>
+    <!--Hamburger Icon-->
+    <nav>
+      <a href="#menu"></a>
+    </nav>
 
-<div class="container">
+    <div class="container">
 
-    <!-- Main Content -->
-    <div class="row">
-    <div class="col-sm-12">
+      <!-- Main Content -->
+      <div class="row">
+        <div class="col-sm-12">
 
-        <!--Title and Logo-->
-        <header>
-    <div class="logo">
-        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
-        
-            <h1 id="main-title" class="title">贾顺名的博客</h1>
-        
-    </div>
-</header>
+          <!--Title and Logo-->
+          <header>
+            <div class="logo">
+              <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
 
-        <section class="main">
-            
-                
-<div class="post">
+              <h1 id="main-title" class="title">贾顺名的博客</h1>
 
-    <div class="post-header index">
-        <h1 class="title">
+            </div>
+          </header>
+
+          <section class="main">
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2016/11/14/如何在小程序中调用本地接口/">
                 如何在小程序中调用本地接口
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2016-11-14</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3><p>随着微信小程序开始公测，我司也拿到了AppID，所以开始了微信小程序的趟坑之旅。</p>
-<p>由于现在网上已经有很多的《微信小程序从精通到入门》的教程了，所以就不再重复那些，只是讲一下，在开发的过程中，如何使用本地（开发环境）的接口。</p>
-<p>因为小程序的开发文档中写到了，<strong>wx.request</strong> 中的URL只能是一个https请求，本地一般来讲是不会有https的-.-</p>
-<p>所以我们使用Charles代理来实现需求。</p>
-<h3 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h3><p>本人认为你现在已经具备以下几个条件：</p>
-<ol>
-<li><p>具有微信小程序开发的权限</p>
-</li>
-<li><p>知道自家小程序后台配置的信任域名都是什么-.-</p>
-</li>
-<li><p>有一台Mac（阿哈哈…无视…截图来自Mac…Windows党请多担待）</p>
-</li>
-</ol>
-<h3 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h3><p>首先我们需要安装如下两个软件：</p>
-<ol>
-<li><p>安装<a href="https://www.baidu.com/s?wd=charles%E7%A0%B4%E8%A7%A3%E7%89%88" target="_blank" rel="external">Charles</a>，当然了，是个破解版的-.- 破解方法请自行百度，不赘述</p>
-</li>
-<li><p>安装<a href="https://mp.weixin.qq.com/wiki/10/e5f772f4521da17fa0d7304f68b97d7e.html#.E4.B8.8B.E8.BD.BD.E5.9C.B0.E5.9D.80" target="_blank" rel="external">微信web开发者工具</a></p>
-</li>
-</ol>
-<h3 id="操作步骤："><a href="#操作步骤：" class="headerlink" title="操作步骤："></a>操作步骤：</h3><p>到这一步，本人认为你已经安装好了上边两个软件，并且可以正常运行咯。</p>
-<ol>
-<li><p>首先打开Charles，<strong>Help-&gt;SSL Proxying-&gt;Install Charles Root Certificate</strong> 安装证书到本地<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-1.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-2.png" alt=""></p>
-</li>
-<li><p>在钥匙串访问中搜索 Charles 关键字，找到那个证书，点开后将信任选为 <strong>始终信任</strong><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-3.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-4.png" alt=""></p>
-</li>
-<li><p>打开 <strong>Tools-&gt;Map Remote</strong> 添加线上域名于本地（开发环境）服务的映射<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-5.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-6.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-7.png" alt=""></p>
-</li>
-<li><p>打开 <strong>Proxy-&gt;Proxy Settings</strong></p>
-</li>
-<li><p>选择Proxies选项卡，默认的HTTP Proxy的值是8888，这个端口号需要记着，后边在微信web开发者工具里边要用到的<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-8.png" alt=""></p>
-</li>
-<li><p>选择Mac OS X选项卡，点击启用如下两个选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-9.png" alt=""></p>
-</li>
-<li><p>打开 <strong>Proxy-&gt;Mac OS X Proxy</strong> 启用本地的代理服务<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-10.png" alt=""></p>
-</li>
-<li><p>这时，Charles已经完成了本地服务代理线上服务的步骤，接下来就是微信web开发者工具中的一些设置</p>
-</li>
-<li><p>在扫码登录后，点击右上角代理的选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-11.png" alt=""></p>
-</li>
-<li><p>选择手动设置代理，然后填写本地的IP，以及前边在Charles中设置的代理端口号（第5步）<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-12.png" alt=""></p>
-</li>
-<li><p>点击保存后，来到微信小程序的项目中，在 <strong>wx.request</strong> 中直接填写线上域名后，保存运行，你就会发现Charles中已经收到了来自你本地的一些请求😄<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-13.png" alt=""></p>
-</li>
-</ol>
-<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol>
-<li><p><a href="https://mp.weixin.qq.com/debug/wxadoc/dev/?t=20161107" target="_blank" rel="external">微信小程序官方文档</a></p>
-</li>
-<li><p><a href="http://www.waitsun.com/charles-3-11-2.html" target="_blank" rel="external">Charles破解版安装</a></p>
-</li>
-</ol>
-<p>转载请署原文地址： <a href="https://jiasm.github.io/#/blog/36f116c0-aa64-11e6-a1ed-8fca2e8c7bc3" target="_blank" rel="external">https://jiasm.org/#/blog/36f116c0-aa64-11e6-a1ed-8fca2e8c7bc3</a></p>
+                  <span class="date">2016-11-14</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3>
+                <p>随着微信小程序开始公测，我司也拿到了AppID，所以开始了微信小程序的趟坑之旅。</p>
+                <p>由于现在网上已经有很多的《微信小程序从精通到入门》的教程了，所以就不再重复那些，只是讲一下，在开发的过程中，如何使用本地（开发环境）的接口。</p>
+                <p>因为小程序的开发文档中写到了，<strong>wx.request</strong> 中的URL只能是一个https请求，本地一般来讲是不会有https的-.-</p>
+                <p>所以我们使用Charles代理来实现需求。</p>
+                <h3 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h3>
+                <p>本人认为你现在已经具备以下几个条件：</p>
+                <ol>
+                  <li>
+                    <p>具有微信小程序开发的权限</p>
+                  </li>
+                  <li>
+                    <p>知道自家小程序后台配置的信任域名都是什么-.-</p>
+                  </li>
+                  <li>
+                    <p>有一台Mac（阿哈哈…无视…截图来自Mac…Windows党请多担待）</p>
+                  </li>
+                </ol>
+                <h3 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h3>
+                <p>首先我们需要安装如下两个软件：</p>
+                <ol>
+                  <li>
+                    <p>安装<a href="https://www.baidu.com/s?wd=charles%E7%A0%B4%E8%A7%A3%E7%89%88" target="_blank" rel="external">Charles</a>，当然了，是个破解版的-.- 破解方法请自行百度，不赘述</p>
+                  </li>
+                  <li>
+                    <p>安装<a href="https://mp.weixin.qq.com/wiki/10/e5f772f4521da17fa0d7304f68b97d7e.html#.E4.B8.8B.E8.BD.BD.E5.9C.B0.E5.9D.80" target="_blank" rel="external">微信web开发者工具</a></p>
+                  </li>
+                </ol>
+                <h3 id="操作步骤："><a href="#操作步骤：" class="headerlink" title="操作步骤："></a>操作步骤：</h3>
+                <p>到这一步，本人认为你已经安装好了上边两个软件，并且可以正常运行咯。</p>
+                <ol>
+                  <li>
+                    <p>首先打开Charles，<strong>Help-&gt;SSL Proxying-&gt;Install Charles Root Certificate</strong> 安装证书到本地<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-1.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-2.png"
+                          alt=""></p>
+                  </li>
+                  <li>
+                    <p>在钥匙串访问中搜索 Charles 关键字，找到那个证书，点开后将信任选为 <strong>始终信任</strong><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-3.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-4.png" alt=""></p>
+                  </li>
+                  <li>
+                    <p>打开 <strong>Tools-&gt;Map Remote</strong> 添加线上域名于本地（开发环境）服务的映射<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-5.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-6.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-7.png"
+                          alt=""></p>
+                  </li>
+                  <li>
+                    <p>打开 <strong>Proxy-&gt;Proxy Settings</strong></p>
+                  </li>
+                  <li>
+                    <p>选择Proxies选项卡，默认的HTTP Proxy的值是8888，这个端口号需要记着，后边在微信web开发者工具里边要用到的<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-8.png" alt=""></p>
+                  </li>
+                  <li>
+                    <p>选择Mac OS X选项卡，点击启用如下两个选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-9.png" alt=""></p>
+                  </li>
+                  <li>
+                    <p>打开 <strong>Proxy-&gt;Mac OS X Proxy</strong> 启用本地的代理服务<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-10.png" alt=""></p>
+                  </li>
+                  <li>
+                    <p>这时，Charles已经完成了本地服务代理线上服务的步骤，接下来就是微信web开发者工具中的一些设置</p>
+                  </li>
+                  <li>
+                    <p>在扫码登录后，点击右上角代理的选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-11.png" alt=""></p>
+                  </li>
+                  <li>
+                    <p>选择手动设置代理，然后填写本地的IP，以及前边在Charles中设置的代理端口号（第5步）<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-12.png" alt=""></p>
+                  </li>
+                  <li>
+                    <p>点击保存后，来到微信小程序的项目中，在 <strong>wx.request</strong> 中直接填写线上域名后，保存运行，你就会发现Charles中已经收到了来自你本地的一些请求😄<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-13.png" alt=""></p>
+                  </li>
+                </ol>
+                <h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3>
+                <ol>
+                  <li>
+                    <p><a href="https://mp.weixin.qq.com/debug/wxadoc/dev/?t=20161107" target="_blank" rel="external">微信小程序官方文档</a></p>
+                  </li>
+                  <li>
+                    <p><a href="http://www.waitsun.com/charles-3-11-2.html" target="_blank" rel="external">Charles破解版安装</a></p>
+                  </li>
+                </ol>
+                <p>转载请署原文地址： <a href="https://jiasm.github.io/#/blog/36f116c0-aa64-11e6-a1ed-8fca2e8c7bc3" target="_blank" rel="external">https://jiasm.org/#/blog/36f116c0-aa64-11e6-a1ed-8fca2e8c7bc3</a></p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2016/08/23/co源码解读/">
                 co源码解读
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2016-08-23</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3><p>闲来无事，翻了下co的源码来看，源码短小精悍，算上注释，一共240行左右；</p>
-<p>决定写一篇博客来记录下学习的心得。</p>
-<p>TJ大神的co：<a href="https://github.com/tj/co" target="_blank" rel="external">https://github.com/tj/co</a></p>
-<h3 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h3><p>co通过将<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*" target="_blank" rel="external">Generator函数</a>拆成一个<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="external">Promise</a>将码农从<a href="http://callbackhell.com/" target="_blank" rel="external">callback hell</a>中拯救了出来；</p>
-<p>下边放出一段代码，对比下co与普通回调版本的区别：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> *  回调版本</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> fs =<span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"></div><div class="line">fs.readFile(<span class="string">'./package.json'</span>, (err, data) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(data.toString())</div><div class="line">  fs.readFile(<span class="string">'./package.json'</span>, (err, data) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(data.toString())</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"><span class="comment">/**</span></div><div class="line"> *  co版本</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</div><div class="line"><span class="keyword">let</span> fs =<span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">let</span> a = <span class="keyword">yield</span> fs.readFile.bind(<span class="literal">null</span>,<span class="string">'./package.json'</span>)</div><div class="line">  <span class="built_in">console</span>.log(a.toString())</div><div class="line">  <span class="keyword">let</span> b = <span class="keyword">yield</span> fs.readFile.bind(<span class="literal">null</span>,<span class="string">'./package.json'</span>)</div><div class="line">  <span class="built_in">console</span>.log(b.toString())</div><div class="line">&#125;).then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error)</div></pre></td></tr></table></figure>
-<p>从代码上看，貌似co是一个同步执行的过程呢。当然，也只是看起来像而已。</p>
-<h3 id="正题："><a href="#正题：" class="headerlink" title="正题："></a>正题：</h3><p>先来说一下co整个执行的过程：</p>
-<ul>
-<li>调用co，传入一个Generator函数，函数会返回一个Promise对象</li>
-<li>如果传入参数为Generator函数，会执行该函数来进行Generator的初始化</li>
-<li>手动执行一次next() 这时Generator函数就会停在第一次遇到yield关键字的地方</li>
-<li>获取到yield后边的值，将其转换为一个Promise函数，然后执行之</li>
-<li>重复上边两步，直到函数执行完毕</li>
-</ul>
-<p>co关于yield后边的值也是有一定的要求的，只能是一个 Function｜Promise｜Generator ｜ Array | Object；</p>
-<p>而 Array和Object中的item也必须是 Function｜Promise｜Generator。</p>
-<p>并且关于function 普通函数并不一定会得到预期的结果，co需要的是 接收一个回调函数 并执行的函数，类似于这样：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span> (<span class="params">callback</span>)</span>&#123;</div><div class="line">  callback(<span class="literal">null</span>,<span class="string">'hello'</span>)</div><div class="line">&#125;</div><div class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">let</span> result = <span class="keyword">yield</span> doSomething</div><div class="line">  <span class="built_in">console</span>.log(result)<span class="comment">// =&gt; hello</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>总而言之，co执行的肯定是一个Promise，而co会帮你把其他几种类型的值转换为Promise，co绝大部份的代码都是在处理类型的转换；</p>
-<p>当然，在讲类型转换的那一块之前，还是将co执行Generator的那几个函数说一下子，也就是调用co返回的Promise中的那三个函数（onFulfilled、onRejected、next）；</p>
-<p>因next与Generator对象的next方法名相同 这里使用 gen.next 表示 Generator对象的next方法。</p>
-<h4 id="onFulfilled："><a href="#onFulfilled：" class="headerlink" title="onFulfilled："></a>onFulfilled：</h4><p>调用gen.next并将上次执行的结果传入gen.next；</p>
-<p>调用next，将gen.next返回的值传入next。</p>
-<h4 id="onRejected："><a href="#onRejected：" class="headerlink" title="onRejected："></a>onRejected：</h4><p>执行流程与 onFulfilled 一致，只不过是将调用的 gen.next 换为了 gen.throw 用来将错误异常抛出。</p>
-<h4 id="next："><a href="#next：" class="headerlink" title="next："></a>next：</h4><p>函数会判断传入参数的done属性，如果为true（ 则表示该Generator已经执行完毕），会调用co返回的Promise对象的resolve方法，结束代码执行；</p>
-<p>如果done为false 则表示还需要继续执行，这里会将 yield后边的值（参数的value属性）转换为Promise，并调用then方法传入 onFulfilled 和 onRejected两个函数。</p>
-<p>co整个的执行流程其实就是这样的-.- </p>
-<p>剩余代码所完成的事情就是将各种不同的类型转换为可执行的Promise对象。</p>
-<h4 id="thunkToPromise（Function）："><a href="#thunkToPromise（Function）：" class="headerlink" title="thunkToPromise（Function）："></a>thunkToPromise（Function）：</h4><p>函数返回一个Promise对象，在Promise内部执行了传入的function；</p>
-<p>并会认为回调的第一个参数为Error（这个貌似是个标准…）；</p>
-<p>将其余参数打包到一个数组中返回。</p>
-<h4 id="arrayToPromise（Array）："><a href="#arrayToPromise（Array）：" class="headerlink" title="arrayToPromise（Array）："></a>arrayToPromise（Array）：</h4><p>Promise有一个方法叫做all，会返回数组中所有Promise执行后的返回值（如果有其中一项被reject掉，所有的都会被reject）；</p>
-<p>方法会返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="external">Promise.all()</a> 的执行结果</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.all([<span class="built_in">Promise</span>.resolve(<span class="string">'hello'</span>), <span class="built_in">Promise</span>.resolve(<span class="string">'world'</span>)]).then(<span class="function"><span class="params">data</span> =&gt;</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(data) <span class="comment">// =&gt; ['hello', 'world']</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="objectToPromise（Object）："><a href="#objectToPromise（Object）：" class="headerlink" title="objectToPromise（Object）："></a>objectToPromise（Object）：</h4><p>函数用来将一个Object对象转换为Promise；</p>
-<p>应该是co源码中行数最多的一个函数了😜  具体做的事儿呢；</p>
-<p>就是将一个Object的每一个key都转换为Promise，并塞到一个数组中；</p>
-<p>执行Promise.all()将上边的数组塞进去；</p>
-<p>当某一个key所对应的Promise函数执行完毕后，会将执行的结果塞回对应的key中；</p>
-<p>全部执行完毕后，就会返回该Object。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">a</span>: <span class="built_in">Promise</span>.resolve(<span class="string">'hello'</span>),</div><div class="line">  <span class="attr">b</span>: <span class="built_in">Promise</span>.resolve(<span class="string">'world'</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// =&gt;</span></div><div class="line">&#123;</div><div class="line">  <span class="attr">a</span>:<span class="string">'hello'</span>,</div><div class="line">  <span class="attr">b</span>:<span class="string">'world'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>其余的几个函数就是判断类型了， isPromise、isGenerator、isGeneratorFunction、isObject。</p>
-<h3 id="小记："><a href="#小记：" class="headerlink" title="小记："></a>小记：</h3><p>因我司在用koa来搭建web项目，所以会接触到这些东西，就想写点博客记录一下；</p>
-<p>本人文笔简直负分，望各位海涵，如有什么不懂的，欢迎邮件骚扰。</p>
-<p><a href="mailto:jiashunming@outlook.com" target="_blank" rel="external">jiashunming@outlook.com</a> </p>
-<p>文章相关代码会在GitHub更新：</p>
-<p><a href="https://github.com/Jiasm/blog-resource/tree/master/co" target="_blank" rel="external">https://github.com/Jiasm/blog-resource/tree/master/co</a> </p>
+                  <span class="date">2016-08-23</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3>
+                <p>闲来无事，翻了下co的源码来看，源码短小精悍，算上注释，一共240行左右；</p>
+                <p>决定写一篇博客来记录下学习的心得。</p>
+                <p>TJ大神的co：<a href="https://github.com/tj/co" target="_blank" rel="external">https://github.com/tj/co</a></p>
+                <h3 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h3>
+                <p>co通过将<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*" target="_blank" rel="external">Generator函数</a>拆成一个<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
+                      target="_blank" rel="external">Promise</a>将码农从<a href="http://callbackhell.com/" target="_blank" rel="external">callback hell</a>中拯救了出来；</p>
+                <p>下边放出一段代码，对比下co与普通回调版本的区别：</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> *  回调版本</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> fs =<span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"></div><div class="line">fs.readFile(<span class="string">'./package.json'</span>, (err, data) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(data.toString())</div><div class="line">  fs.readFile(<span class="string">'./package.json'</span>, (err, data) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(data.toString())</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"><span class="comment">/**</span></div><div class="line"> *  co版本</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</div><div class="line"><span class="keyword">let</span> fs =<span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">let</span> a = <span class="keyword">yield</span> fs.readFile.bind(<span class="literal">null</span>,<span class="string">'./package.json'</span>)</div><div class="line">  <span class="built_in">console</span>.log(a.toString())</div><div class="line">  <span class="keyword">let</span> b = <span class="keyword">yield</span> fs.readFile.bind(<span class="literal">null</span>,<span class="string">'./package.json'</span>)</div><div class="line">  <span class="built_in">console</span>.log(b.toString())</div><div class="line">&#125;).then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error)</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>从代码上看，貌似co是一个同步执行的过程呢。当然，也只是看起来像而已。</p>
+                <h3 id="正题："><a href="#正题：" class="headerlink" title="正题："></a>正题：</h3>
+                <p>先来说一下co整个执行的过程：</p>
+                <ul>
+                  <li>调用co，传入一个Generator函数，函数会返回一个Promise对象</li>
+                  <li>如果传入参数为Generator函数，会执行该函数来进行Generator的初始化</li>
+                  <li>手动执行一次next() 这时Generator函数就会停在第一次遇到yield关键字的地方</li>
+                  <li>获取到yield后边的值，将其转换为一个Promise函数，然后执行之</li>
+                  <li>重复上边两步，直到函数执行完毕</li>
+                </ul>
+                <p>co关于yield后边的值也是有一定的要求的，只能是一个 Function｜Promise｜Generator ｜ Array | Object；</p>
+                <p>而 Array和Object中的item也必须是 Function｜Promise｜Generator。</p>
+                <p>并且关于function 普通函数并不一定会得到预期的结果，co需要的是 接收一个回调函数 并执行的函数，类似于这样：</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span> (<span class="params">callback</span>)</span>&#123;</div><div class="line">  callback(<span class="literal">null</span>,<span class="string">'hello'</span>)</div><div class="line">&#125;</div><div class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">let</span> result = <span class="keyword">yield</span> doSomething</div><div class="line">  <span class="built_in">console</span>.log(result)<span class="comment">// =&gt; hello</span></div><div class="line">&#125;)</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>总而言之，co执行的肯定是一个Promise，而co会帮你把其他几种类型的值转换为Promise，co绝大部份的代码都是在处理类型的转换；</p>
+                <p>当然，在讲类型转换的那一块之前，还是将co执行Generator的那几个函数说一下子，也就是调用co返回的Promise中的那三个函数（onFulfilled、onRejected、next）；</p>
+                <p>因next与Generator对象的next方法名相同 这里使用 gen.next 表示 Generator对象的next方法。</p>
+                <h4 id="onFulfilled："><a href="#onFulfilled：" class="headerlink" title="onFulfilled："></a>onFulfilled：</h4>
+                <p>调用gen.next并将上次执行的结果传入gen.next；</p>
+                <p>调用next，将gen.next返回的值传入next。</p>
+                <h4 id="onRejected："><a href="#onRejected：" class="headerlink" title="onRejected："></a>onRejected：</h4>
+                <p>执行流程与 onFulfilled 一致，只不过是将调用的 gen.next 换为了 gen.throw 用来将错误异常抛出。</p>
+                <h4 id="next："><a href="#next：" class="headerlink" title="next："></a>next：</h4>
+                <p>函数会判断传入参数的done属性，如果为true（ 则表示该Generator已经执行完毕），会调用co返回的Promise对象的resolve方法，结束代码执行；</p>
+                <p>如果done为false 则表示还需要继续执行，这里会将 yield后边的值（参数的value属性）转换为Promise，并调用then方法传入 onFulfilled 和 onRejected两个函数。</p>
+                <p>co整个的执行流程其实就是这样的-.- </p>
+                <p>剩余代码所完成的事情就是将各种不同的类型转换为可执行的Promise对象。</p>
+                <h4 id="thunkToPromise（Function）："><a href="#thunkToPromise（Function）：" class="headerlink" title="thunkToPromise（Function）："></a>thunkToPromise（Function）：</h4>
+                <p>函数返回一个Promise对象，在Promise内部执行了传入的function；</p>
+                <p>并会认为回调的第一个参数为Error（这个貌似是个标准…）；</p>
+                <p>将其余参数打包到一个数组中返回。</p>
+                <h4 id="arrayToPromise（Array）："><a href="#arrayToPromise（Array）：" class="headerlink" title="arrayToPromise（Array）："></a>arrayToPromise（Array）：</h4>
+                <p>Promise有一个方法叫做all，会返回数组中所有Promise执行后的返回值（如果有其中一项被reject掉，所有的都会被reject）；</p>
+                <p>方法会返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="external">Promise.all()</a> 的执行结果</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="built_in">Promise</span>.all([<span class="built_in">Promise</span>.resolve(<span class="string">'hello'</span>), <span class="built_in">Promise</span>.resolve(<span class="string">'world'</span>)]).then(<span class="function"><span class="params">data</span> =&gt;</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(data) <span class="comment">// =&gt; ['hello', 'world']</span></div><div class="line">&#125;)</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <h4 id="objectToPromise（Object）："><a href="#objectToPromise（Object）：" class="headerlink" title="objectToPromise（Object）："></a>objectToPromise（Object）：</h4>
+                <p>函数用来将一个Object对象转换为Promise；</p>
+                <p>应该是co源码中行数最多的一个函数了😜 具体做的事儿呢；</p>
+                <p>就是将一个Object的每一个key都转换为Promise，并塞到一个数组中；</p>
+                <p>执行Promise.all()将上边的数组塞进去；</p>
+                <p>当某一个key所对应的Promise函数执行完毕后，会将执行的结果塞回对应的key中；</p>
+                <p>全部执行完毕后，就会返回该Object。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">a</span>: <span class="built_in">Promise</span>.resolve(<span class="string">'hello'</span>),</div><div class="line">  <span class="attr">b</span>: <span class="built_in">Promise</span>.resolve(<span class="string">'world'</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// =&gt;</span></div><div class="line">&#123;</div><div class="line">  <span class="attr">a</span>:<span class="string">'hello'</span>,</div><div class="line">  <span class="attr">b</span>:<span class="string">'world'</span></div><div class="line">&#125;</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>其余的几个函数就是判断类型了， isPromise、isGenerator、isGeneratorFunction、isObject。</p>
+                <h3 id="小记："><a href="#小记：" class="headerlink" title="小记："></a>小记：</h3>
+                <p>因我司在用koa来搭建web项目，所以会接触到这些东西，就想写点博客记录一下；</p>
+                <p>本人文笔简直负分，望各位海涵，如有什么不懂的，欢迎邮件骚扰。</p>
+                <p><a href="mailto:jiashunming@outlook.com" target="_blank" rel="external">jiashunming@outlook.com</a> </p>
+                <p>文章相关代码会在GitHub更新：</p>
+                <p><a href="https://github.com/Jiasm/blog-resource/tree/master/co" target="_blank" rel="external">https://github.com/Jiasm/blog-resource/tree/master/co</a> </p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/09/01/学习zpeto-js-对象方法-6/">
                 学习zpeto.js(对象方法)[6]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-09-01</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <h3 id="first"><a href="#first" class="headerlink" title="first:"></a>first:</h3><p>获取当前对象集合中的第一个dom元素。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"div"</span>).first();<span class="comment">// 返回第一个div对象（zepto对象）</span></div><div class="line"><span class="comment">//相当于</span></div><div class="line">$(<span class="string">"div"</span>).eq(<span class="number">0</span>);</div></pre></td></tr></table></figure>
-<p>与之对应的是last</p>
-<h3 id="last"><a href="#last" class="headerlink" title="last:"></a>last:</h3><p>获取当前对象集合中的最后一个dom元素。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"div"</span>).last();<span class="comment">// 返回最后一个div对象（zepto对象）</span></div><div class="line"><span class="comment">//相当于</span></div><div class="line">$(<span class="string">"div"</span>).eq(<span class="number">-1</span>);</div></pre></td></tr></table></figure>
-<p>两方法不接收任何参数。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-1.png" alt=""></p>
-<p>个人认为调用isObject方法没什么用，因为zepto对象集合里存放的都是dom元素。//也许是我无知吧- -</p>
-<p>被大神点醒了。这样做也许是为了这种场景<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-2.png" alt=""></p>
-<h3 id="get"><a href="#get" class="headerlink" title="get:"></a>get:</h3><p>获取当前对象集合对应下标的某元素，传入参数为一个int下标，如果不传入参数，则将对象转换为一个普通数组并返回；</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"div"</span>).get(<span class="number">0</span>); 　　　　<span class="comment">// 第0个。（dom对象,不是zepto对象）</span></div><div class="line">$(<span class="string">"div"</span>).get(); 　　　　 <span class="comment">//所有div对象组成的一个数组</span></div></pre></td></tr></table></figure>
-<p>该方法与eq方法的区别在于，eq返回的是zepto对象，而get返回的是dom对象，$().get(0)相当于$()[0]；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-3.png" alt=""></p>
-<p>slice就是[].slice();</p>
-<p>使用get并且不传入参数的对象前后变化图：<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-4.png" alt=""></p>
-<h3 id="has"><a href="#has" class="headerlink" title="has:"></a>has:</h3><p>传入参数为一个选择器字符串或者一个节点，返回的是对象集合中子节点包含参数的对象。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"div"</span>).has(<span class="string">"a"</span>);<span class="comment">// 会返回集合中所有包含a标签的对象</span></div></pre></td></tr></table></figure>
-<p>上述是传入一个选择器，也可以传入一个node节点作为参数</p>
-<p>$(“div”).has(document.getElementById(“link”));//返回集合中有子项为#link的对象</p>
-<p><img src="/images/learning-zepto-js-object-sixth/screen-shot-5.png" alt=""></p>
-<p>首先，filter方法会将返回值为true的子项装入一个集合。</p>
-<p>在filter方法内，我们通过判断选择器是否为object来进行区分，如果是object，则调用contains方法，判断selector是否属于this。</p>
-<p>否则通过当前对象来调用find方法并将selector传入，并调用size方法获取count（filter会自动将返回值转换为bool类型）。</p>
-<h3 id="parent"><a href="#parent" class="headerlink" title="parent:"></a>parent:</h3><p>获取对象集合所有的直接父节点。可以传入一个选择器，只留下符合选择器的父节点。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"p"</span>).parent(); 　　　　　　<span class="comment">// 获取所有p标签的父节点</span></div><div class="line">$(<span class="string">"p"</span>).parent(<span class="string">".ads"</span>);  　　<span class="comment">// 获取所有p标签的父节点className包含.ads的节点</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-object-sixth/screen-shot-6.png" alt=""></p>
-<p>pluck方法返回一个数组，参数是一个字符串，为属性名，返回的值是调用对象所对应的属性的值；</p>
-<p>然后传入uniq方法，方法做了一个去重处理；</p>
-<p>最外层的方法filtered，如果第二个参数selector不为空，则通过第一个参数调用filter方法并将第二个参数传入filter方法，否则直接返回第一个参数。</p>
-<h3 id="parents"><a href="#parents" class="headerlink" title="parents:"></a>parents:</h3><p>获取所有对象的所有父节点。直至html标签结束。可以传入一个参数，作为选择器筛选；</p>
-<p>参数只能是一个选择器字符串；</p>
-<p>返回的集合不会出现重复的元素；</p>
-<p>如果想取出元素的直接父节点，使用parent；</p>
-<p>如果想取出第一个符合筛选条件的父节点，使用closest。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"p"</span>).parents(); 　　   　　<span class="comment">// 获取所有p标签的所有父节点</span></div><div class="line">$(<span class="string">"p"</span>).parents(<span class="string">".ads"</span>); 　　<span class="comment">// 获取所有p标签的所有父节点className包含ads的节点</span></div></pre></td></tr></table></figure>
-<p>//使用parents如果不传入参数，则始终会包含一个body以及html元素；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-7.png" alt=""></p>
-<p>方法首先声明一个数组用于存放dom元素，将this赋值给nodes变量；</p>
-<p>使用一个while循环，条件为nodes.length &gt; 0；</p>
-<p>在循环内部，通过$.map给nodes进行赋值，map方法内部将node赋值为node的父节点，</p>
-<p>然后判断，如果节点不是document并且该节点不存在于ancestors数组中，则将节点push至数组，并返回node。</p>
-<p>所以说循环停止的条件就是node节点为document时。</p>
-<p>最后调用filtered方法并返回。</p>
-<h3 id="siblings"><a href="#siblings" class="headerlink" title="siblings:"></a>siblings:</h3><p>获取对象所有的兄弟节点。参数可以是一个选择器字符串，如传入参数则根据选择器过滤。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"p"</span>).siblings(); 　　　　　<span class="comment">// 获取所有p标签的同级标签</span></div><div class="line">$(<span class="string">"p"</span>).siblings(<span class="string">".ad"</span>); 　　<span class="comment">// 所有的p标签的同级的className包含ad的元素</span></div></pre></td></tr></table></figure>
-<p>通过siblings获取到的dom元素会重复。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-8.png" alt=""></p>
-<p>方法内部用到了一个children方法。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-9.png" alt=""></p>
-<p>方法内部取出元素的父节点并传入children方法，返回元素的父节点的子节点，相当于自己的所有兄弟节点以及自身。</p>
-<p>通过该返回集合call一下filter方法。</p>
-<p>并将除了自身以外的所有节点返回。</p>
-<p>最后通过filtered方法进行筛选，返回；</p>
-<p>注意，siblings获取的元素会重复，会重复，会重复（重说三）；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-10.png" alt=""><br><img src="/images/learning-zepto-js-object-sixth/screen-shot-11.png" alt=""></p>
-<p>就像这样，script标签出现了两次；</p>
-<p>ok，先说到这里了。写写博客练习一下语言表达能力，感觉自己能理解了，还是说不好，纠结ing…</p>
+                  <span class="date">2015-09-01</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <h3 id="first"><a href="#first" class="headerlink" title="first:"></a>first:</h3>
+                <p>获取当前对象集合中的第一个dom元素。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"div"</span>).first();<span class="comment">// 返回第一个div对象（zepto对象）</span></div><div class="line"><span class="comment">//相当于</span></div><div class="line">$(<span class="string">"div"</span>).eq(<span class="number">0</span>);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>与之对应的是last</p>
+                <h3 id="last"><a href="#last" class="headerlink" title="last:"></a>last:</h3>
+                <p>获取当前对象集合中的最后一个dom元素。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"div"</span>).last();<span class="comment">// 返回最后一个div对象（zepto对象）</span></div><div class="line"><span class="comment">//相当于</span></div><div class="line">$(<span class="string">"div"</span>).eq(<span class="number">-1</span>);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>两方法不接收任何参数。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-1.png" alt=""></p>
+                <p>个人认为调用isObject方法没什么用，因为zepto对象集合里存放的都是dom元素。//也许是我无知吧- -</p>
+                <p>被大神点醒了。这样做也许是为了这种场景<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-2.png" alt=""></p>
+                <h3 id="get"><a href="#get" class="headerlink" title="get:"></a>get:</h3>
+                <p>获取当前对象集合对应下标的某元素，传入参数为一个int下标，如果不传入参数，则将对象转换为一个普通数组并返回；</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"div"</span>).get(<span class="number">0</span>); 　　　　<span class="comment">// 第0个。（dom对象,不是zepto对象）</span></div><div class="line">$(<span class="string">"div"</span>).get(); 　　　　 <span class="comment">//所有div对象组成的一个数组</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>该方法与eq方法的区别在于，eq返回的是zepto对象，而get返回的是dom对象，$().get(0)相当于$()[0]；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-3.png" alt=""></p>
+                <p>slice就是[].slice();</p>
+                <p>使用get并且不传入参数的对象前后变化图：<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-4.png" alt=""></p>
+                <h3 id="has"><a href="#has" class="headerlink" title="has:"></a>has:</h3>
+                <p>传入参数为一个选择器字符串或者一个节点，返回的是对象集合中子节点包含参数的对象。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"div"</span>).has(<span class="string">"a"</span>);<span class="comment">// 会返回集合中所有包含a标签的对象</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>上述是传入一个选择器，也可以传入一个node节点作为参数</p>
+                <p>$(“div”).has(document.getElementById(“link”));//返回集合中有子项为#link的对象</p>
+                <p><img src="/images/learning-zepto-js-object-sixth/screen-shot-5.png" alt=""></p>
+                <p>首先，filter方法会将返回值为true的子项装入一个集合。</p>
+                <p>在filter方法内，我们通过判断选择器是否为object来进行区分，如果是object，则调用contains方法，判断selector是否属于this。</p>
+                <p>否则通过当前对象来调用find方法并将selector传入，并调用size方法获取count（filter会自动将返回值转换为bool类型）。</p>
+                <h3 id="parent"><a href="#parent" class="headerlink" title="parent:"></a>parent:</h3>
+                <p>获取对象集合所有的直接父节点。可以传入一个选择器，只留下符合选择器的父节点。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"p"</span>).parent(); 　　　　　　<span class="comment">// 获取所有p标签的父节点</span></div><div class="line">$(<span class="string">"p"</span>).parent(<span class="string">".ads"</span>);  　　<span class="comment">// 获取所有p标签的父节点className包含.ads的节点</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-object-sixth/screen-shot-6.png" alt=""></p>
+                <p>pluck方法返回一个数组，参数是一个字符串，为属性名，返回的值是调用对象所对应的属性的值；</p>
+                <p>然后传入uniq方法，方法做了一个去重处理；</p>
+                <p>最外层的方法filtered，如果第二个参数selector不为空，则通过第一个参数调用filter方法并将第二个参数传入filter方法，否则直接返回第一个参数。</p>
+                <h3 id="parents"><a href="#parents" class="headerlink" title="parents:"></a>parents:</h3>
+                <p>获取所有对象的所有父节点。直至html标签结束。可以传入一个参数，作为选择器筛选；</p>
+                <p>参数只能是一个选择器字符串；</p>
+                <p>返回的集合不会出现重复的元素；</p>
+                <p>如果想取出元素的直接父节点，使用parent；</p>
+                <p>如果想取出第一个符合筛选条件的父节点，使用closest。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"p"</span>).parents(); 　　   　　<span class="comment">// 获取所有p标签的所有父节点</span></div><div class="line">$(<span class="string">"p"</span>).parents(<span class="string">".ads"</span>); 　　<span class="comment">// 获取所有p标签的所有父节点className包含ads的节点</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>//使用parents如果不传入参数，则始终会包含一个body以及html元素；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-7.png" alt=""></p>
+                <p>方法首先声明一个数组用于存放dom元素，将this赋值给nodes变量；</p>
+                <p>使用一个while循环，条件为nodes.length &gt; 0；</p>
+                <p>在循环内部，通过$.map给nodes进行赋值，map方法内部将node赋值为node的父节点，</p>
+                <p>然后判断，如果节点不是document并且该节点不存在于ancestors数组中，则将节点push至数组，并返回node。</p>
+                <p>所以说循环停止的条件就是node节点为document时。</p>
+                <p>最后调用filtered方法并返回。</p>
+                <h3 id="siblings"><a href="#siblings" class="headerlink" title="siblings:"></a>siblings:</h3>
+                <p>获取对象所有的兄弟节点。参数可以是一个选择器字符串，如传入参数则根据选择器过滤。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"p"</span>).siblings(); 　　　　　<span class="comment">// 获取所有p标签的同级标签</span></div><div class="line">$(<span class="string">"p"</span>).siblings(<span class="string">".ad"</span>); 　　<span class="comment">// 所有的p标签的同级的className包含ad的元素</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>通过siblings获取到的dom元素会重复。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-8.png" alt=""></p>
+                <p>方法内部用到了一个children方法。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-9.png" alt=""></p>
+                <p>方法内部取出元素的父节点并传入children方法，返回元素的父节点的子节点，相当于自己的所有兄弟节点以及自身。</p>
+                <p>通过该返回集合call一下filter方法。</p>
+                <p>并将除了自身以外的所有节点返回。</p>
+                <p>最后通过filtered方法进行筛选，返回；</p>
+                <p>注意，siblings获取的元素会重复，会重复，会重复（重说三）；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-10.png" alt=""><br><img src="/images/learning-zepto-js-object-sixth/screen-shot-11.png" alt=""></p>
+                <p>就像这样，script标签出现了两次；</p>
+                <p>ok，先说到这里了。写写博客练习一下语言表达能力，感觉自己能理解了，还是说不好，纠结ing…</p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/28/学习zpeto-js-对象方法-5/">
                 学习zpeto.js(对象方法)[5]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-28</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <h3 id="clone"><a href="#clone" class="headerlink" title="clone:"></a>clone:</h3><p>该方法不接收任何参数,会返回对象中的所有元素集合,但不会对象绑定的事件.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $temp =$(<span class="string">"div"</span>).clone();<span class="comment">//并不接收任何参数.</span></div></pre></td></tr></table></figure>
-<p>方法的实现就是循环调用方法对象.然后将所有的dom元素克隆并返回<br><img src="/images/learning-zepto-js-object-fifth/screen-shot-1.png" alt=""></p>
-<p>而且使用的深度克隆,就是说,会将节点下方的子节点统统克隆过来.</p>
-<h3 id="closest"><a href="#closest" class="headerlink" title="closest:"></a>closest:</h3><p>方法接收1-2个参数,第一个为selector(选择器),第二个为context(上下文);</p>
-<p>方法会从调用节点开始,逐级向上匹配.</p>
-<p>如果只传入selector,则会返回第一个匹配的元素.如同时传入了context,则只会寻找context的子节点.</p>
-<p>(通俗来说就是如果能被匹配的元素不属于context,那么将会直接返回false)</p>
-<p>selector参数也可以传入一个zepto对象.或一个dom集合.</p>
-<p>而返回的元素则会属于传入的selector对象中的一个.</p>
-<p>context的有效值为一个dom元素.</p>
-<p>注意:返回值是与调用对象中的第一个元素有关的.<br><img src="/images/learning-zepto-js-object-fifth/screen-shot-2.png" alt=""><br>所以说返回值也只会是包含一个节点元素的zepto对象或是一个空对象[没有找到匹配的元素])</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>hello world<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"js/zepto.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">      body *&#123;</div><div class="line">        color: #000;</div><div class="line">      &#125;</div><div class="line">      <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"one"</span> <span class="attr">class</span>=<span class="string">"level-1"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-i"</span>&gt;</span>I<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">id</span>=<span class="string">"ii"</span> <span class="attr">class</span>=<span class="string">"item-ii"</span>&gt;</span>II</div><div class="line">        <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"level-2"</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-a"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-b"</span>&gt;</span>B</div><div class="line">            <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"level-3"</span>&gt;</span></div><div class="line">              <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-1"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">              <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-2"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">              <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-3"</span>&gt;</span>3<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">          <span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-c"</span>&gt;</span>C<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-iii"</span>&gt;</span>III<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">      $(<span class="string">".level-3"</span>).closest(<span class="string">".item-b"</span>).css(<span class="string">"color"</span>,<span class="string">"red"</span>);<span class="comment">//匹配距离对象最近的.item-b元素</span></div><div class="line">      $(<span class="string">".level-3"</span>).closest(<span class="string">".item-ii"</span>).css(<span class="string">"color"</span>,<span class="string">"blue"</span>);<span class="comment">//匹配距离对象最近的.item-ii元素</span></div><div class="line">      $(<span class="string">".level-3"</span>).closest(<span class="string">"#one"</span>,$(<span class="string">"#ii"</span>)[<span class="number">0</span>]).css(<span class="string">"background-color"</span>,<span class="string">"green"</span>);<span class="comment">//匹配距离对象最近的#one元素,并且匹配元素必须属于#ii元素内部</span></div><div class="line">      $(<span class="string">".level-3"</span>).closest($(<span class="string">"ul"</span>)).css(<span class="string">"background-color"</span>,<span class="string">"yellow"</span>);<span class="comment">//匹配距离对象最近的属于$("ul")中其中一个的元素</span></div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-object-fifth/screen-shot-3.png" alt=""></p>
-<p>方法首先取出当前dom对象作为基点并赋值给node.collection默认的为false.如果传入的selector参数为一个object,则认为选择器是一个zepto对象,或者是一个dom对象(集合),并将转换为zepto对象的值赋给collection;</p>
-<p>下边是循环,循环判断的条件为node存在,并且collection中不存在node(selector为object的情况下)或者node不匹配selector选择器(selector为string的情况下)</p>
-<p>循环内部,如果node不等于context(上下文)并且node不为document对象,就将node的父节点赋值给node(直到node满足匹配条件或者循环值文档对象).否则直接赋值false,然后循环终止,返回false;</p>
-<p>最终返回一个zepto对象,空的或者包含一个元素的zepto对象;</p>
-<h3 id="contents"><a href="#contents" class="headerlink" title="contents:"></a>contents:</h3><p>contents用来获取zepto所有对象的子节点（包括文本，注释），或者zepto某对象为一个iframe时，则获取该iframe的document对象引用；</p>
-<p>直接使用zepto对象调用即可；</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"#temp"</span>).contents();<span class="comment">// 如果temp为一个iframe对象，则返回它的contentDocument引用，否则返回该dom对象的所有child节点</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-object-fifth/screen-shot-4.png" alt=""></p>
-<p>首先是遍历zepto对象，然后返回每个对象的子节点或者document对象。contentDocument为iframe对象的属性，与contentWindow性质一样；</p>
-<h3 id="empty"><a href="#empty" class="headerlink" title="empty:"></a>empty:</h3><p>用来清空zepto对象的所有innerHTML值（dom内容，相当于移除所有子节点）。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"#temp"</span>).empty();<span class="comment">//该方法将清除#temp的innerHTML</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-object-fifth/screen-shot-5.png" alt=""></p>
-<p>代码也只是简单的遍历并给innerHTML赋值而已。</p>
-<p>题外话：map方法与each方法的区别。两者回调函数的参数，是一样的。两者的区别在于结束循环的方式。each返回false结束循环，而map （我还真没发现返回null或undefined能停止它）；</p>
-<h3 id="eq"><a href="#eq" class="headerlink" title="eq:"></a>eq:</h3><p>通过index来取出一个对象，如果为-1，则取出最后一个。</p>
-<p>与get方法的区别是，get返回一个dom对象，eq返回一个zepto对象。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"#test"</span>).eq(<span class="number">0</span>);</div><div class="line">$($(<span class="string">"#test"</span>).get(<span class="number">0</span>));</div><div class="line">$($(<span class="string">"#test"</span>).[<span class="number">0</span>]);<span class="comment">//此三条效果一样。</span></div></pre></td></tr></table></figure>
-<h3 id="find"><a href="#find" class="headerlink" title="find:"></a>find:</h3><p>find方法通过传入的一个参数来筛选出zepto对象符合条件的子节点集合并返回。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'#myform'</span>).find(<span class="string">'input, select'</span>);</div><div class="line">$(<span class="string">'input, select'</span>, $(<span class="string">'#myform'</span>));<span class="comment">//这两条的结果是一样的。</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-object-fifth/screen-shot-6.png" alt=""><br>首先判断是否传入选择器，如果没有则直接返回一个空的zepto对象；</p>
-<p>如果选择器为一个对象，则将对象转换为zepto对象，然后通过filter筛选出一些匹配的节点，并存入result集合；</p>
-<p>如果调用find方法的对象为一个单一的对象，则直接用过qsa方法（前几篇说过qsa方法），将选择器作为一个选择器，并将对象作为上下文传入；</p>
-<p>否则循环zepto对象重复上边那一条；</p>
-<p>（find方法可能说的不太细。如果有什么，还请大家一起交流）</p>
+                  <span class="date">2015-08-28</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <h3 id="clone"><a href="#clone" class="headerlink" title="clone:"></a>clone:</h3>
+                <p>该方法不接收任何参数,会返回对象中的所有元素集合,但不会对象绑定的事件.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="keyword">var</span> $temp =$(<span class="string">"div"</span>).clone();<span class="comment">//并不接收任何参数.</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>方法的实现就是循环调用方法对象.然后将所有的dom元素克隆并返回<br><img src="/images/learning-zepto-js-object-fifth/screen-shot-1.png" alt=""></p>
+                <p>而且使用的深度克隆,就是说,会将节点下方的子节点统统克隆过来.</p>
+                <h3 id="closest"><a href="#closest" class="headerlink" title="closest:"></a>closest:</h3>
+                <p>方法接收1-2个参数,第一个为selector(选择器),第二个为context(上下文);</p>
+                <p>方法会从调用节点开始,逐级向上匹配.</p>
+                <p>如果只传入selector,则会返回第一个匹配的元素.如同时传入了context,则只会寻找context的子节点.</p>
+                <p>(通俗来说就是如果能被匹配的元素不属于context,那么将会直接返回false)</p>
+                <p>selector参数也可以传入一个zepto对象.或一个dom集合.</p>
+                <p>而返回的元素则会属于传入的selector对象中的一个.</p>
+                <p>context的有效值为一个dom元素.</p>
+                <p>注意:返回值是与调用对象中的第一个元素有关的.<br><img src="/images/learning-zepto-js-object-fifth/screen-shot-2.png" alt=""><br>所以说返回值也只会是包含一个节点元素的zepto对象或是一个空对象[没有找到匹配的元素])</p>
+                <figure class="highlight html">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>hello world<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"js/zepto.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">      body *&#123;</div><div class="line">        color: #000;</div><div class="line">      &#125;</div><div class="line">      <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"one"</span> <span class="attr">class</span>=<span class="string">"level-1"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-i"</span>&gt;</span>I<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">id</span>=<span class="string">"ii"</span> <span class="attr">class</span>=<span class="string">"item-ii"</span>&gt;</span>II</div><div class="line">        <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"level-2"</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-a"</span>&gt;</span>A<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-b"</span>&gt;</span>B</div><div class="line">            <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"level-3"</span>&gt;</span></div><div class="line">              <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-1"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">              <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-2"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">              <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-3"</span>&gt;</span>3<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">          <span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-c"</span>&gt;</span>C<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item-iii"</span>&gt;</span>III<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">      $(<span class="string">".level-3"</span>).closest(<span class="string">".item-b"</span>).css(<span class="string">"color"</span>,<span class="string">"red"</span>);<span class="comment">//匹配距离对象最近的.item-b元素</span></div><div class="line">      $(<span class="string">".level-3"</span>).closest(<span class="string">".item-ii"</span>).css(<span class="string">"color"</span>,<span class="string">"blue"</span>);<span class="comment">//匹配距离对象最近的.item-ii元素</span></div><div class="line">      $(<span class="string">".level-3"</span>).closest(<span class="string">"#one"</span>,$(<span class="string">"#ii"</span>)[<span class="number">0</span>]).css(<span class="string">"background-color"</span>,<span class="string">"green"</span>);<span class="comment">//匹配距离对象最近的#one元素,并且匹配元素必须属于#ii元素内部</span></div><div class="line">      $(<span class="string">".level-3"</span>).closest($(<span class="string">"ul"</span>)).css(<span class="string">"background-color"</span>,<span class="string">"yellow"</span>);<span class="comment">//匹配距离对象最近的属于$("ul")中其中一个的元素</span></div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-object-fifth/screen-shot-3.png" alt=""></p>
+                <p>方法首先取出当前dom对象作为基点并赋值给node.collection默认的为false.如果传入的selector参数为一个object,则认为选择器是一个zepto对象,或者是一个dom对象(集合),并将转换为zepto对象的值赋给collection;</p>
+                <p>下边是循环,循环判断的条件为node存在,并且collection中不存在node(selector为object的情况下)或者node不匹配selector选择器(selector为string的情况下)</p>
+                <p>循环内部,如果node不等于context(上下文)并且node不为document对象,就将node的父节点赋值给node(直到node满足匹配条件或者循环值文档对象).否则直接赋值false,然后循环终止,返回false;</p>
+                <p>最终返回一个zepto对象,空的或者包含一个元素的zepto对象;</p>
+                <h3 id="contents"><a href="#contents" class="headerlink" title="contents:"></a>contents:</h3>
+                <p>contents用来获取zepto所有对象的子节点（包括文本，注释），或者zepto某对象为一个iframe时，则获取该iframe的document对象引用；</p>
+                <p>直接使用zepto对象调用即可；</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"#temp"</span>).contents();<span class="comment">// 如果temp为一个iframe对象，则返回它的contentDocument引用，否则返回该dom对象的所有child节点</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-object-fifth/screen-shot-4.png" alt=""></p>
+                <p>首先是遍历zepto对象，然后返回每个对象的子节点或者document对象。contentDocument为iframe对象的属性，与contentWindow性质一样；</p>
+                <h3 id="empty"><a href="#empty" class="headerlink" title="empty:"></a>empty:</h3>
+                <p>用来清空zepto对象的所有innerHTML值（dom内容，相当于移除所有子节点）。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"#temp"</span>).empty();<span class="comment">//该方法将清除#temp的innerHTML</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-object-fifth/screen-shot-5.png" alt=""></p>
+                <p>代码也只是简单的遍历并给innerHTML赋值而已。</p>
+                <p>题外话：map方法与each方法的区别。两者回调函数的参数，是一样的。两者的区别在于结束循环的方式。each返回false结束循环，而map （我还真没发现返回null或undefined能停止它）；</p>
+                <h3 id="eq"><a href="#eq" class="headerlink" title="eq:"></a>eq:</h3>
+                <p>通过index来取出一个对象，如果为-1，则取出最后一个。</p>
+                <p>与get方法的区别是，get返回一个dom对象，eq返回一个zepto对象。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"#test"</span>).eq(<span class="number">0</span>);</div><div class="line">$($(<span class="string">"#test"</span>).get(<span class="number">0</span>));</div><div class="line">$($(<span class="string">"#test"</span>).[<span class="number">0</span>]);<span class="comment">//此三条效果一样。</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <h3 id="find"><a href="#find" class="headerlink" title="find:"></a>find:</h3>
+                <p>find方法通过传入的一个参数来筛选出zepto对象符合条件的子节点集合并返回。</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">'#myform'</span>).find(<span class="string">'input, select'</span>);</div><div class="line">$(<span class="string">'input, select'</span>, $(<span class="string">'#myform'</span>));<span class="comment">//这两条的结果是一样的。</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-object-fifth/screen-shot-6.png" alt=""><br>首先判断是否传入选择器，如果没有则直接返回一个空的zepto对象；</p>
+                <p>如果选择器为一个对象，则将对象转换为zepto对象，然后通过filter筛选出一些匹配的节点，并存入result集合；</p>
+                <p>如果调用find方法的对象为一个单一的对象，则直接用过qsa方法（前几篇说过qsa方法），将选择器作为一个选择器，并将对象作为上下文传入；</p>
+                <p>否则循环zepto对象重复上边那一条；</p>
+                <p>（find方法可能说的不太细。如果有什么，还请大家一起交流）</p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/19/学习zpeto-js-对象方法-4/">
                 学习zpeto.js(对象方法)[4]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-19</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <p>今天说说那一套获取元素集合的一些方法:</p>
-<p>[“children”, “clone”, “closest”, “contents”, “empty”, “eq”, “filter”, “find”, “first”, “get”, “has”, “last”, “not”, “parent”, “parents”, “siblings”]</p>
-<h3 id="children"><a href="#children" class="headerlink" title="children:"></a>children:</h3><p>获取对象的所有匹配的直接子元素.</p>
-<p>参数为可选的一个选择器.如果不填则是所有子节点,否则为匹配的所有子节点;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"#demo"</span>).children();<span class="comment">//--&gt;所有的子节点</span></div><div class="line">$(<span class="string">"#demo"</span>).children(<span class="string">"li"</span>);<span class="comment">//--&gt;所有的li子节点</span></div></pre></td></tr></table></figure>
-<p>返回的是一个zepto对象,里边存储的是匹配的子节点的集合.<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-fourth/screen-shot-2.png" alt=""></p>
-<p>上边那个过滤方法用的地方比较多,所以给它放在上边;</p>
-<p>children方法调用的filtered传入的是两个参数,第一个是一个集合,将所有对象的所有的子节点取出,并放入一个集合;children方法内部调用的children方法不是自身,而是另有一个children方法;↓<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-3.png" alt=""></p>
-<p>我们调用的是对象方法,而对象方法调用的那个就是一个普通的内部私有函数- -(望理解它们之间的区别);</p>
-<p>返回的是做一个兼容处理的获取子元素的实现,如果节点存在children属性就直接取出,不存在的话,就循环childNodes并将nodeType为1的元素筛选出来;</p>
-<p>在filtered方法中,第二个参数就是children方法可选的那个选择器,而filtered方法又会牵扯到下边要说的两个方法,这里先把代码贴上</p>
-<p>filter与not的作用相反.</p>
-<p>从源码来看,能发现一个children的隐藏功能,这是api里边没说的.而我们的确能用的</p>
-<p>也就是说,我们可以在children参数中传入一个function,function有一个实参,就是下标.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> temp =$(<span class="string">"li"</span>).children(<span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> (index % <span class="number">2</span> === <span class="number">0</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>返回的是一个boolean值.为true则放入集合;</p>
-<h3 id="filter"><a href="#filter" class="headerlink" title="filter:"></a>filter:</h3><p>filter方法接收一个参数,可以为选择器,也可以为一个function,function返回true则视为匹配.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">".item"</span>).filter(<span class="string">".nav"</span>);<span class="comment">// 相当于</span></div><div class="line">$(<span class="string">".item.nav"</span>);$(<span class="string">".item"</span>).filter(<span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> index % <span class="number">2</span> === <span class="number">0</span>;<span class="comment">//函数内部 this指向集合中的当前元素</span></div><div class="line">&#125;); <span class="comment">//将集合中偶数位的元素取出并放入一个集合</span></div></pre></td></tr></table></figure>
-<p>直接说实现,省得上边那一大串children白说了.<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-4.png" alt=""></p>
-<p>首先进入方法判断传入选择器是否为一个function类型,如果是,则执行this.not(this.not(function));看起来可能有点乱.但结果是对的.</p>
-<p>not方法与filter相反,先简单的说它的作用.下边再介绍它</p>
-<p>内层not参数为一个function,not方法内部会执行该function,并将所有不满足的元素返回,</p>
-<p>外层not方法的参数就是内层not的返回值,也就是所有不满足的元素的集合,然后再经过筛选,取出所有不存在于参数集合中的元素.</p>
-<p>也就变相的取出了所有满足条件的元素;</p>
-<h3 id="not"><a href="#not" class="headerlink" title="not:"></a>not:</h3><p>not方法用法与filter相同,返回值相反.</p>
-<p>用法直接pass.<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-5.png" alt=""></p>
-<p>首先函数内部判断传入选择器类型,如果是个functin,妥妥的循环对象并执行它.</p>
-<p>否则就判断选择器类型是否为字符串,如果是,则调用filter方法.</p>
-<p>如果不是一个字符串,就判断是否是一个类数组,并且对象的item是一个方法,(是的,变相的判断为一个zepto对象.)</p>
-<p>其余的情况,直接通过参数构建一个zepto对象.</p>
-<p>以上操作均为给excludes变量赋值;</p>
-<p>在最后,通过循环对象.将对象中不存在于excludes变量中的所有元素取出.并构件为一个zepto对象.</p>
-<p>也就是说,not方法传入的参数类型是可以比filter更丰富一些的.</p>
-<p>可以传入一个zepto对象,或者一个dom标签数组.一个html片段.等等……</p>
-<p>当然最后返回的对象决不会存在于not的参数中.</p>
-<p>//indexOf就是数组的原生方法</p>
+                  <span class="date">2015-08-19</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <p>今天说说那一套获取元素集合的一些方法:</p>
+                <p>[“children”, “clone”, “closest”, “contents”, “empty”, “eq”, “filter”, “find”, “first”, “get”, “has”, “last”, “not”, “parent”, “parents”, “siblings”]</p>
+                <h3 id="children"><a href="#children" class="headerlink" title="children:"></a>children:</h3>
+                <p>获取对象的所有匹配的直接子元素.</p>
+                <p>参数为可选的一个选择器.如果不填则是所有子节点,否则为匹配的所有子节点;</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"#demo"</span>).children();<span class="comment">//--&gt;所有的子节点</span></div><div class="line">$(<span class="string">"#demo"</span>).children(<span class="string">"li"</span>);<span class="comment">//--&gt;所有的li子节点</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>返回的是一个zepto对象,里边存储的是匹配的子节点的集合.<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-fourth/screen-shot-2.png" alt=""></p>
+                <p>上边那个过滤方法用的地方比较多,所以给它放在上边;</p>
+                <p>children方法调用的filtered传入的是两个参数,第一个是一个集合,将所有对象的所有的子节点取出,并放入一个集合;children方法内部调用的children方法不是自身,而是另有一个children方法;↓<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-3.png" alt=""></p>
+                <p>我们调用的是对象方法,而对象方法调用的那个就是一个普通的内部私有函数- -(望理解它们之间的区别);</p>
+                <p>返回的是做一个兼容处理的获取子元素的实现,如果节点存在children属性就直接取出,不存在的话,就循环childNodes并将nodeType为1的元素筛选出来;</p>
+                <p>在filtered方法中,第二个参数就是children方法可选的那个选择器,而filtered方法又会牵扯到下边要说的两个方法,这里先把代码贴上</p>
+                <p>filter与not的作用相反.</p>
+                <p>从源码来看,能发现一个children的隐藏功能,这是api里边没说的.而我们的确能用的</p>
+                <p>也就是说,我们可以在children参数中传入一个function,function有一个实参,就是下标.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="keyword">var</span> temp =$(<span class="string">"li"</span>).children(<span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> (index % <span class="number">2</span> === <span class="number">0</span>);</div><div class="line">&#125;)</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>返回的是一个boolean值.为true则放入集合;</p>
+                <h3 id="filter"><a href="#filter" class="headerlink" title="filter:"></a>filter:</h3>
+                <p>filter方法接收一个参数,可以为选择器,也可以为一个function,function返回true则视为匹配.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">".item"</span>).filter(<span class="string">".nav"</span>);<span class="comment">// 相当于</span></div><div class="line">$(<span class="string">".item.nav"</span>);$(<span class="string">".item"</span>).filter(<span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> index % <span class="number">2</span> === <span class="number">0</span>;<span class="comment">//函数内部 this指向集合中的当前元素</span></div><div class="line">&#125;); <span class="comment">//将集合中偶数位的元素取出并放入一个集合</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>直接说实现,省得上边那一大串children白说了.<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-4.png" alt=""></p>
+                <p>首先进入方法判断传入选择器是否为一个function类型,如果是,则执行this.not(this.not(function));看起来可能有点乱.但结果是对的.</p>
+                <p>not方法与filter相反,先简单的说它的作用.下边再介绍它</p>
+                <p>内层not参数为一个function,not方法内部会执行该function,并将所有不满足的元素返回,</p>
+                <p>外层not方法的参数就是内层not的返回值,也就是所有不满足的元素的集合,然后再经过筛选,取出所有不存在于参数集合中的元素.</p>
+                <p>也就变相的取出了所有满足条件的元素;</p>
+                <h3 id="not"><a href="#not" class="headerlink" title="not:"></a>not:</h3>
+                <p>not方法用法与filter相同,返回值相反.</p>
+                <p>用法直接pass.<br><img src="/images/learning-zepto-js-object-fourth/screen-shot-5.png" alt=""></p>
+                <p>首先函数内部判断传入选择器类型,如果是个functin,妥妥的循环对象并执行它.</p>
+                <p>否则就判断选择器类型是否为字符串,如果是,则调用filter方法.</p>
+                <p>如果不是一个字符串,就判断是否是一个类数组,并且对象的item是一个方法,(是的,变相的判断为一个zepto对象.)</p>
+                <p>其余的情况,直接通过参数构建一个zepto对象.</p>
+                <p>以上操作均为给excludes变量赋值;</p>
+                <p>在最后,通过循环对象.将对象中不存在于excludes变量中的所有元素取出.并构件为一个zepto对象.</p>
+                <p>也就是说,not方法传入的参数类型是可以比filter更丰富一些的.</p>
+                <p>可以传入一个zepto对象,或者一个dom标签数组.一个html片段.等等……</p>
+                <p>当然最后返回的对象决不会存在于not的参数中.</p>
+                <p>//indexOf就是数组的原生方法</p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/18/学习zpeto-js-对象方法-3/">
                 学习zpeto.js(对象方法)[3]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-18</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <p>继续说zepto里attributes的相关操作.</p>
-<p>attr,removeAttr,prop这三个方法.</p>
-<h3 id="attr"><a href="#attr" class="headerlink" title="attr():"></a>attr():</h3><p>三种用途</p>
-<h4 id="get"><a href="#get" class="headerlink" title="get:"></a>get:</h4><p>返回值为一个string字符串</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"&lt;span id="</span>special<span class="string">"&gt;&lt;/span&gt;"</span>).attr(<span class="string">"id"</span>); <span class="comment">//--&gt; "special"</span></div></pre></td></tr></table></figure>
-<p>注意:只能返回对象中第一个节点的属性值</p>
-<h4 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h4><p>返回值为一个zepto对象</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"&lt;span&gt;"</span>).attr(<span class="string">"id"</span>,<span class="string">"special"</span>); <span class="comment">//--&gt; [&lt;span id="special"&gt;&lt;/span&gt;]</span></div></pre></td></tr></table></figure>
-<p>第二个参数也可以传入一个function,有两个参数可以使用</p>
-<p>1:index,zepto对象dom元素数组的下标</p>
-<p>2:value,该对象对应属性的值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"&lt;div id='demo1'&gt;&lt;/div&gt;"</span>).attr(<span class="string">"id"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">index, value</span>) </span>&#123;    </div><div class="line">  <span class="built_in">console</span>.log(index, value);<span class="comment">// --&gt; 0 demo1</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>上边那段代码如果执行了.那么该zepto对象的id属性值就会被清除,因为该函数没有返回字符串用来设置值.</p>
-<p>或者也可以直接传入一个json串来修改多个属性.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"&lt;span&gt;"</span>).attr(&#123;    </div><div class="line">  <span class="attr">id</span>:<span class="string">'special'</span>,    </div><div class="line">  <span class="attr">name</span>:<span class="string">'special'</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="remove"><a href="#remove" class="headerlink" title="remove:"></a>remove:</h4><p>返回值也是一个zepto对象,作用相当于调用removeAttr()</p>
-<p>$(“<span id="special"></span>“).attr(“id”,null);//–&gt; [<span></span>]</p>
-<p>需注意的只能传入null才能触发remove效果.</p>
-<p>传入function与json都可以,只要是返回值或者值为null,都会触发remove;</p>
-<h3 id="removeAttr"><a href="#removeAttr" class="headerlink" title="removeAttr:"></a>removeAttr:</h3><p>removeAttr相当于(功能)是attr的一部分.但是代码实现是分开的.这个函数应用场景比较单一,所以省去了很多判断.但最终都是调用的function getAttribute(){};</p>
-<p>只接收一个参数,就是name</p>
-<p>返回值是一个zepto对象.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"&lt;span id="</span>special<span class="string">"&gt;&lt;/span&gt;"</span>).removeAttr(<span class="string">"id"</span>);<span class="comment">//--&gt; [&lt;span&gt;&lt;/span&gt;]</span></div></pre></td></tr></table></figure>
-<p>移除多个属性请用空格分开</p>
-<h3 id="prop"><a href="#prop" class="headerlink" title="prop:"></a>prop:</h3><p>prop用来设置或取出dom元素的属性值.功能相当于 (prop = attr - removeAttr);</p>
-<p>prop用法与attr相同.只不过没有remove功能.两者的区别在这里</p>
-<p>读取或设置dom元素的属性值。它在读取属性值的情况下优先于 <a href="http://www.css88.com/doc/zeptojs/#attr" target="_blank" rel="external">attr</a>，因为这些属性值会因为用户的交互发生改变，如checked 和 selected。</p>
-<p>那是zepto.js中文api中所说的.本人认为,在判断有关交互的属性时,应优先使用prop,比如checked和selected;<br><img src="/images/learning-zepto-js-object-third/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-third/screen-shot-2.png" alt=""></p>
-<p>之所以为出现差异,是因为两者底层实现的区别.<br><img src="/images/learning-zepto-js-object-third/screen-shot-3.png" alt=""></p>
-<p>prop采用的是上边那种,而attr是两种都用到了;</p>
-<p>getAttribute()方法只能取出存在于标签中的属性”<div id="" name=""></div>“ // 只能取出id与name.隐式的属性是取不出来的,比如style<br><img src="/images/learning-zepto-js-object-third/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-object-third/screen-shot-5.png" alt=""></p>
-<p>来说说实现吧.</p>
-<h4 id="attr-1"><a href="#attr-1" class="headerlink" title="attr"></a>attr</h4><p>attr返回的那个三元运算符嵌套写的有点虎…待我细细说来;</p>
-<p>–首先判断name参数是否为字符串,并且只有一个实参.这样来讲就是get功能.</p>
-<p>—-如果this.length不存在.则说明不是一个zepto对象(理论上),如果数组中第一个对象的nodeType值不为1,则说明不是节点对象.直接返回undefined</p>
-<p>—-否则就从调用该节点的getAttribute方法,并赋值给result变量. name in this[0] 这个表达式返回一个bool值.同时将result使用!来转换为bool值.如果没有通过getAttribute方法取出来值,并且该属性存在于节点,</p>
-<p>——通过节点直接取值.</p>
-<p>——否则直接返回getAttribute的返回值.</p>
-<p>–剩下来的就是set与remove功能的实现,这两个是支持多对象的操作.返回值均为调用者本身(调用者调用了each循环,循环所有节点对象).</p>
-<p>—-如果对象不是一个节点对象,则直接跳过本次循环;</p>
-<p>—-如果name为一个object,就是说我们一次性更改多个属性值.这时就循环object对象,来调用setAttribute方法</p>
-<p>—-剩下的条件就是给单个属性赋值,之前说过那个funcArg方法,判断第二个参数是否为function类型,如果是则通过当前节点为作用域执行方法,否则直接返回第二个参数.</p>
-<p>关于是否进行set还是remove,这些是在setAttribute方法中做的处理.一个简单的三元运算符;</p>
-<h4 id="removeAttr-1"><a href="#removeAttr-1" class="headerlink" title="removeAttr"></a>removeAttr</h4><p>参数只有一个,name,就是要移除的属性的名称,</p>
-<p>大体执行过程为,循环调用方法的对象,并将传入的name按空格分割为数组并执行forEach循环,forEach循环传入第二个参数为循环内部this的指向.然后在内部调用setAttribute方法.只传入两个参数,则执行removeAttribute方法;</p>
-<h4 id="prop-1"><a href="#prop-1" class="headerlink" title="prop"></a>prop</h4><p>参数为两个.第一个固定为属性的名称,第二个可以为一个function,一个字符串.同样,如果不传第二个参数则认为是get,否则是set.</p>
-<p>执行过程与attr的类似,但是attr赋值是通过setAttribute()方法,取值是getAttribute()与对象属性取值的结合.而prop完全操作的是对象的属性;</p>
-<p>再来点吧.说说data方法与val方法.都是操作dom属性的.一气儿说完它;</p>
-<h3 id="data"><a href="#data" class="headerlink" title="data:"></a>data:</h3><p>方法接受两个参数,第一个是name,第二个为值,如果不填第二个则执行取值,否则为赋值</p>
-<p>用法与attr类似,但是会将传入的name值加上”data-“的前缀,并且会将驼峰命名转换为全小写连字符的格式;</p>
-<p>取值时也不需要加”data-“前缀.</p>
-<p>就是说,</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">""</span>).data(<span class="string">"id"</span>);<span class="comment">//取的是 data-id属性的值</span></div><div class="line">$(<span class="string">""</span>).data(<span class="string">"userName"</span>,<span class="string">"scott"</span>);<span class="comment">//给data-user-name属性赋值</span></div></pre></td></tr></table></figure>
-<p>第二个参数也可以是一个function;</p>
-<p>actually,data方法内部调用的就是attr方法<br><img src="/images/learning-zepto-js-object-third/screen-shot-6.png" alt=""></p>
-<p>deserializeValue是一个反序列化函数,如果有其他地方需要,不妨将该方法copy出去;</p>
-<p><img src="/images/learning-zepto-js-object-third/screen-shot-7.png" alt=""></p>
-<h3 id="val"><a href="#val" class="headerlink" title="val:"></a>val:</h3><p>方法接收一个参数,如果不填,则视为取value值,否则为设置value值.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">""</span>).val();<span class="comment">// getter</span></div><div class="line">$(<span class="string">""</span>).val(<span class="string">""</span>);<span class="comment">// setter</span></div></pre></td></tr></table></figure>
-<p>参数可以是一个字符串,function;function接收的参数为(index[对象的下标],value[对象之前的值]),function需返回一个字符串;</p>
-<p><img src="/images/learning-zepto-js-object-third/screen-shot-8.png" alt=""></p>
-<p>方法本身无亮点,但是返回值有三种;</p>
-<p>一:</p>
-<p>　　返回一个字符串,作为get值时返回;</p>
-<p>二:</p>
-<p>　　返回一个字符串数组,作为get值时返回;</p>
-<p>三:</p>
-<p>　　返回对象本身,作为set值时返回;</p>
-<p>之所以会存在第二种情况,那是因为select(下拉选项)是可以多选的.而开启多选的属性开关名字叫multiple;</p>
-<p>当下拉选项开启多选时,直接通过value属性只会取到第一个值,其余的取不到.所以在代码中就做了处理;</p>
-<p>取出对象所有的option子节点.通过filter方法返回被选中的节点集合,并调用pluck方法</p>
-<p><img src="/images/learning-zepto-js-object-third/screen-shot-9.png" alt="">一个来自prototype.js大表哥中的方法;</p>
-<p>传入一个属性名,将调用者集合中所有的该属性的值作为一个数组返回;</p>
-<p>其余的没什么了.</p>
-<p>如果有什么疑惑的地方还请留言问我.大家共同学习;</p>
-<p>或者<a href="tencent://QQInterLive/?Cmd=2&amp;Uin=812788037" target="_blank" rel="external">我的扣扣</a></p>
+                  <span class="date">2015-08-18</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <p>继续说zepto里attributes的相关操作.</p>
+                <p>attr,removeAttr,prop这三个方法.</p>
+                <h3 id="attr"><a href="#attr" class="headerlink" title="attr():"></a>attr():</h3>
+                <p>三种用途</p>
+                <h4 id="get"><a href="#get" class="headerlink" title="get:"></a>get:</h4>
+                <p>返回值为一个string字符串</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"&lt;span id="</span>special<span class="string">"&gt;&lt;/span&gt;"</span>).attr(<span class="string">"id"</span>); <span class="comment">//--&gt; "special"</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>注意:只能返回对象中第一个节点的属性值</p>
+                <h4 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h4>
+                <p>返回值为一个zepto对象</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"&lt;span&gt;"</span>).attr(<span class="string">"id"</span>,<span class="string">"special"</span>); <span class="comment">//--&gt; [&lt;span id="special"&gt;&lt;/span&gt;]</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>第二个参数也可以传入一个function,有两个参数可以使用</p>
+                <p>1:index,zepto对象dom元素数组的下标</p>
+                <p>2:value,该对象对应属性的值</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"&lt;div id='demo1'&gt;&lt;/div&gt;"</span>).attr(<span class="string">"id"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">index, value</span>) </span>&#123;    </div><div class="line">  <span class="built_in">console</span>.log(index, value);<span class="comment">// --&gt; 0 demo1</span></div><div class="line">&#125;);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>上边那段代码如果执行了.那么该zepto对象的id属性值就会被清除,因为该函数没有返回字符串用来设置值.</p>
+                <p>或者也可以直接传入一个json串来修改多个属性.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"&lt;span&gt;"</span>).attr(&#123;    </div><div class="line">  <span class="attr">id</span>:<span class="string">'special'</span>,    </div><div class="line">  <span class="attr">name</span>:<span class="string">'special'</span></div><div class="line">&#125;);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <h4 id="remove"><a href="#remove" class="headerlink" title="remove:"></a>remove:</h4>
+                <p>返回值也是一个zepto对象,作用相当于调用removeAttr()</p>
+                <p>$(“<span id="special"></span>“).attr(“id”,null);//–&gt; [<span></span>]</p>
+                <p>需注意的只能传入null才能触发remove效果.</p>
+                <p>传入function与json都可以,只要是返回值或者值为null,都会触发remove;</p>
+                <h3 id="removeAttr"><a href="#removeAttr" class="headerlink" title="removeAttr:"></a>removeAttr:</h3>
+                <p>removeAttr相当于(功能)是attr的一部分.但是代码实现是分开的.这个函数应用场景比较单一,所以省去了很多判断.但最终都是调用的function getAttribute(){};</p>
+                <p>只接收一个参数,就是name</p>
+                <p>返回值是一个zepto对象.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"&lt;span id="</span>special<span class="string">"&gt;&lt;/span&gt;"</span>).removeAttr(<span class="string">"id"</span>);<span class="comment">//--&gt; [&lt;span&gt;&lt;/span&gt;]</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>移除多个属性请用空格分开</p>
+                <h3 id="prop"><a href="#prop" class="headerlink" title="prop:"></a>prop:</h3>
+                <p>prop用来设置或取出dom元素的属性值.功能相当于 (prop = attr - removeAttr);</p>
+                <p>prop用法与attr相同.只不过没有remove功能.两者的区别在这里</p>
+                <p>读取或设置dom元素的属性值。它在读取属性值的情况下优先于 <a href="http://www.css88.com/doc/zeptojs/#attr" target="_blank" rel="external">attr</a>，因为这些属性值会因为用户的交互发生改变，如checked 和 selected。</p>
+                <p>那是zepto.js中文api中所说的.本人认为,在判断有关交互的属性时,应优先使用prop,比如checked和selected;<br><img src="/images/learning-zepto-js-object-third/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-third/screen-shot-2.png" alt=""></p>
+                <p>之所以为出现差异,是因为两者底层实现的区别.<br><img src="/images/learning-zepto-js-object-third/screen-shot-3.png" alt=""></p>
+                <p>prop采用的是上边那种,而attr是两种都用到了;</p>
+                <p>getAttribute()方法只能取出存在于标签中的属性”
+                  <div id="" name=""></div>“ // 只能取出id与name.隐式的属性是取不出来的,比如style<br><img src="/images/learning-zepto-js-object-third/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-object-third/screen-shot-5.png" alt=""></p>
+                <p>来说说实现吧.</p>
+                <h4 id="attr-1"><a href="#attr-1" class="headerlink" title="attr"></a>attr</h4>
+                <p>attr返回的那个三元运算符嵌套写的有点虎…待我细细说来;</p>
+                <p>–首先判断name参数是否为字符串,并且只有一个实参.这样来讲就是get功能.</p>
+                <p>—-如果this.length不存在.则说明不是一个zepto对象(理论上),如果数组中第一个对象的nodeType值不为1,则说明不是节点对象.直接返回undefined</p>
+                <p>—-否则就从调用该节点的getAttribute方法,并赋值给result变量. name in this[0] 这个表达式返回一个bool值.同时将result使用!来转换为bool值.如果没有通过getAttribute方法取出来值,并且该属性存在于节点,</p>
+                <p>——通过节点直接取值.</p>
+                <p>——否则直接返回getAttribute的返回值.</p>
+                <p>–剩下来的就是set与remove功能的实现,这两个是支持多对象的操作.返回值均为调用者本身(调用者调用了each循环,循环所有节点对象).</p>
+                <p>—-如果对象不是一个节点对象,则直接跳过本次循环;</p>
+                <p>—-如果name为一个object,就是说我们一次性更改多个属性值.这时就循环object对象,来调用setAttribute方法</p>
+                <p>—-剩下的条件就是给单个属性赋值,之前说过那个funcArg方法,判断第二个参数是否为function类型,如果是则通过当前节点为作用域执行方法,否则直接返回第二个参数.</p>
+                <p>关于是否进行set还是remove,这些是在setAttribute方法中做的处理.一个简单的三元运算符;</p>
+                <h4 id="removeAttr-1"><a href="#removeAttr-1" class="headerlink" title="removeAttr"></a>removeAttr</h4>
+                <p>参数只有一个,name,就是要移除的属性的名称,</p>
+                <p>大体执行过程为,循环调用方法的对象,并将传入的name按空格分割为数组并执行forEach循环,forEach循环传入第二个参数为循环内部this的指向.然后在内部调用setAttribute方法.只传入两个参数,则执行removeAttribute方法;</p>
+                <h4 id="prop-1"><a href="#prop-1" class="headerlink" title="prop"></a>prop</h4>
+                <p>参数为两个.第一个固定为属性的名称,第二个可以为一个function,一个字符串.同样,如果不传第二个参数则认为是get,否则是set.</p>
+                <p>执行过程与attr的类似,但是attr赋值是通过setAttribute()方法,取值是getAttribute()与对象属性取值的结合.而prop完全操作的是对象的属性;</p>
+                <p>再来点吧.说说data方法与val方法.都是操作dom属性的.一气儿说完它;</p>
+                <h3 id="data"><a href="#data" class="headerlink" title="data:"></a>data:</h3>
+                <p>方法接受两个参数,第一个是name,第二个为值,如果不填第二个则执行取值,否则为赋值</p>
+                <p>用法与attr类似,但是会将传入的name值加上”data-“的前缀,并且会将驼峰命名转换为全小写连字符的格式;</p>
+                <p>取值时也不需要加”data-“前缀.</p>
+                <p>就是说,</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">""</span>).data(<span class="string">"id"</span>);<span class="comment">//取的是 data-id属性的值</span></div><div class="line">$(<span class="string">""</span>).data(<span class="string">"userName"</span>,<span class="string">"scott"</span>);<span class="comment">//给data-user-name属性赋值</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>第二个参数也可以是一个function;</p>
+                <p>actually,data方法内部调用的就是attr方法<br><img src="/images/learning-zepto-js-object-third/screen-shot-6.png" alt=""></p>
+                <p>deserializeValue是一个反序列化函数,如果有其他地方需要,不妨将该方法copy出去;</p>
+                <p><img src="/images/learning-zepto-js-object-third/screen-shot-7.png" alt=""></p>
+                <h3 id="val"><a href="#val" class="headerlink" title="val:"></a>val:</h3>
+                <p>方法接收一个参数,如果不填,则视为取value值,否则为设置value值.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">""</span>).val();<span class="comment">// getter</span></div><div class="line">$(<span class="string">""</span>).val(<span class="string">""</span>);<span class="comment">// setter</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>参数可以是一个字符串,function;function接收的参数为(index[对象的下标],value[对象之前的值]),function需返回一个字符串;</p>
+                <p><img src="/images/learning-zepto-js-object-third/screen-shot-8.png" alt=""></p>
+                <p>方法本身无亮点,但是返回值有三种;</p>
+                <p>一:</p>
+                <p>　　返回一个字符串,作为get值时返回;</p>
+                <p>二:</p>
+                <p>　　返回一个字符串数组,作为get值时返回;</p>
+                <p>三:</p>
+                <p>　　返回对象本身,作为set值时返回;</p>
+                <p>之所以会存在第二种情况,那是因为select(下拉选项)是可以多选的.而开启多选的属性开关名字叫multiple;</p>
+                <p>当下拉选项开启多选时,直接通过value属性只会取到第一个值,其余的取不到.所以在代码中就做了处理;</p>
+                <p>取出对象所有的option子节点.通过filter方法返回被选中的节点集合,并调用pluck方法</p>
+                <p><img src="/images/learning-zepto-js-object-third/screen-shot-9.png" alt="">一个来自prototype.js大表哥中的方法;</p>
+                <p>传入一个属性名,将调用者集合中所有的该属性的值作为一个数组返回;</p>
+                <p>其余的没什么了.</p>
+                <p>如果有什么疑惑的地方还请留言问我.大家共同学习;</p>
+                <p>或者<a href="tencent://QQInterLive/?Cmd=2&amp;Uin=812788037" target="_blank" rel="external">我的扣扣</a></p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/13/学习zpeto-js-对象方法-2/">
                 学习zpeto.js(对象方法)[2]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-13</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <p>今天来说下zepto那一套dom操作方法,</p>
-<p>prepend,append,prependTo,appendTo,before,after,insertBefore,insertAfter;</p>
-<p>按着从内到外,从主到从,从前到后的顺序来说这八个方法.</p>
-<p>这些方法的参数可以是一个dom节点,也可是是一个html片段,或者Zepto对象;</p>
-<h3 id="prepend"><a href="#prepend" class="headerlink" title="prepend():"></a>prepend():</h3><p>将参数插入对象内部的头部;<br><img src="/images/learning-zepto-js-object-second/screen-shot-1.png" alt=""></p>
-<h3 id="append"><a href="#append" class="headerlink" title="append():"></a>append():</h3><p>将参数插入对象内部的尾部;<br><img src="/images/learning-zepto-js-object-second/screen-shot-2.png" alt=""></p>
-<h3 id="prependTo"><a href="#prependTo" class="headerlink" title="prependTo():"></a>prependTo():</h3><p>将对象插入到参数内部的头部(可以理解为将prepend的参数变为调用方法的对象,将对象变为方法的参数);<br><img src="/images/learning-zepto-js-object-second/screen-shot-3.png" alt=""></p>
-<h3 id="appendTo"><a href="#appendTo" class="headerlink" title="appendTo():"></a>appendTo():</h3><p>将对象插入到参数内部的尾部;<br><img src="/images/learning-zepto-js-object-second/screen-shot-4.png" alt=""></p>
-<p>以上四个全都是元素内部的插入,接下来的四个全部是元素外部插入的.</p>
-<h3 id="before"><a href="#before" class="headerlink" title="before():"></a>before():</h3><p>将参数插入到对象的前边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-5.png" alt=""></p>
-<h3 id="after"><a href="#after" class="headerlink" title="after():"></a>after():</h3><p>将参数插入到对象的后边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-6.png" alt=""></p>
-<h3 id="insertBefore"><a href="#insertBefore" class="headerlink" title="insertBefore():"></a>insertBefore():</h3><p>将对象插入到参数的前边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-7.png" alt=""></p>
-<h3 id="insertAfter"><a href="#insertAfter" class="headerlink" title="insertAfter():"></a>insertAfter():</h3><p>将对象插入到参数的后边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-8.png" alt=""></p>
-<p>之所以将这八个方法放在一块说,是因为这八个方法是通过循环动态生成的.首先要先会用,才可以去试着了解内部结构.了解完了以后,你会发现,你会很熟练的使用它;<br><img src="/images/learning-zepto-js-object-second/screen-shot-9.png" alt=""><br><img src="/images/learning-zepto-js-object-second/screen-shot-10.png" alt=""></p>
-<p>上边那个数组是储存的几个操作的名称,下边的forEach循环是在zepto自执行函数中执行的,就是说,在构件zepto原型的是否就创建了这几个方法;</p>
-<p>forEach方法回调返回的参数,第一个是值,第二个是值的下标;</p>
-<p>map方法回调返回的参数同上,在方法内部第一个参数名使用了_(下划线),表示在该函数中并未使用到,但必须要占位(某群某大神就是这么干的),注意数组中存储的,</p>
-<p>只有四个值(四个将参数插入至对象中的方法名[就叫它主动方法吧,原创名字,可以随意使用,不受任何版权约束]),还有数组的顺序也是很重要(根据数组顺序决定插入的位置);</p>
-<p>inside变量存储了该方法是否为内部插入的bool值,这也是为什么上边说数组的顺序很重要;</p>
-<p>跳过map方法中的处理,不多做解释,因为这个是转换参数为DOm节点的;</p>
-<p>在方法返回时执行的each方法,</p>
-<p>方法首先会判断该方法是否为对象内部的操作,如果是,将parent变量赋值为当前对象,如果不是,就说明是对象外部操作,就将parent赋值为对象的parentNode;</p>
-<p>然后根据方法名字在操作集合中的下标来判断去什么dom节点,</p>
-<p>把八个操作带进去,因为这八个方法最后使用的都是insertBefore方法,</p>
-<p>顺便说一下原生的insertBefore方法使用方式.</p>
-<p>首先调用该方法的为要被插入的对象,接收两个参数,第一个是要插入的对象,第二个是要插谁的前边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-11.png" alt=""></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">售票处.insertBefore(李四,张三);</div></pre></td></tr></table></figure>
-<p>思考一下为什么要这么做.</p>
-<h3 id="after-1"><a href="#after-1" class="headerlink" title="after"></a>after</h3><p>首先after是第一个,after是外部的操作,而且是插入到当前调用的对象的后边,</p>
-<p>要想使用insertBefore来实现插入到某对象的后边,我们需要三个对象,一个是当前对象,还有要插入的对象,以及当前对象的容器,也就是他的parent;</p>
-<p>在进入方法时,我们通过inside变量获取到了该方法是否为内部插入,然后通过inside变量来给对象的容器赋值(自身或者parent);</p>
-<p>在这里,三个所需的变量我们就都拿到了.</p>
-<p>after执行的是插入到当前对象后,所以说</p>
-<p>我们通过下标取出after操作执行所需的dom元素,对象的nextSibling,就是对象的后一个元素.插入到对象.nextSibling前边就相当于插入到对象的后边,</p>
-<p>(就是说,超过了第二名,你就是第二名,绕不过来的自行撞墙);</p>
-<p>parent(容器).insertBefore(要插入的对象,当前对象的后一个节点);一个dom树中同一个dom节点不会出现两次,就是说,移动对象属于剪切操作,而不是复制操作,</p>
-<p>这也是为什么方法内不会进行判断调用方法的对象是否为多个,如果是多个,则需要将对象进行copy;</p>
-<h3 id="prepend-1"><a href="#prepend-1" class="headerlink" title="prepend"></a>prepend</h3><p>第二个是prepend,prepend是内部插入,将参数插入到对象内部最前边,与append相反(append插入到内部的尾部);</p>
-<p>由于是内部操作,所以parent我们会取自身.然后再判断下标得到是prepend.然后我们取出用来确定位置的dom元素,就是对象的第一个子节点,插入到该节点前,就是取代了该节点成为firstChild(干掉熊猫,我就是国宝);</p>
-<p>调用方式就是:</p>
-<p>parent(这里是对象自身).insertBefore(要插入的对象,当前对象的第一个子节点);</p>
-<h3 id="before-1"><a href="#before-1" class="headerlink" title="before"></a>before</h3><p>before,插入到对象前(外部操作),这个就没什么好解释的了.insertBefore本来就是干这个使得.</p>
-<h3 id="append-1"><a href="#append-1" class="headerlink" title="append"></a>append</h3><p>append,插入到对象内尾部,<br><img src="/images/learning-zepto-js-object-second/screen-shot-12.png" alt=""><br>其实,区分这几个方法的核心就在这里,如果执行insertBefore方法,第二个参数为null,则会直接将第一个元素插入到容器的最后,相当于原生的appendChild方法.</p>
-<p>关于下边那四个方法,就不做多解释了.<br><img src="/images/learning-zepto-js-object-second/screen-shot-13.png" alt=""></p>
-<p>只是简单的将对象以及参数掉了个(个儿);</p>
-<p>如果让我来实现这八个方法,我也许会写一个switch,更好点了也许会动态判断内部外部插入,里边会使用appendChild等等一系列方法,但绝对不会想到这种写法,所以说,读源码真心的学习最快的途径.</p>
-<p>今天先写到这里,八个dom插入方法,自己也消化一下.里边也许说的还有点不太详细,如果有什么不明白的,欢迎留言,大家一起探讨.</p>
-<p>//明日面试,求祝福</p>
+                  <span class="date">2015-08-13</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <p>今天来说下zepto那一套dom操作方法,</p>
+                <p>prepend,append,prependTo,appendTo,before,after,insertBefore,insertAfter;</p>
+                <p>按着从内到外,从主到从,从前到后的顺序来说这八个方法.</p>
+                <p>这些方法的参数可以是一个dom节点,也可是是一个html片段,或者Zepto对象;</p>
+                <h3 id="prepend"><a href="#prepend" class="headerlink" title="prepend():"></a>prepend():</h3>
+                <p>将参数插入对象内部的头部;<br><img src="/images/learning-zepto-js-object-second/screen-shot-1.png" alt=""></p>
+                <h3 id="append"><a href="#append" class="headerlink" title="append():"></a>append():</h3>
+                <p>将参数插入对象内部的尾部;<br><img src="/images/learning-zepto-js-object-second/screen-shot-2.png" alt=""></p>
+                <h3 id="prependTo"><a href="#prependTo" class="headerlink" title="prependTo():"></a>prependTo():</h3>
+                <p>将对象插入到参数内部的头部(可以理解为将prepend的参数变为调用方法的对象,将对象变为方法的参数);<br><img src="/images/learning-zepto-js-object-second/screen-shot-3.png" alt=""></p>
+                <h3 id="appendTo"><a href="#appendTo" class="headerlink" title="appendTo():"></a>appendTo():</h3>
+                <p>将对象插入到参数内部的尾部;<br><img src="/images/learning-zepto-js-object-second/screen-shot-4.png" alt=""></p>
+                <p>以上四个全都是元素内部的插入,接下来的四个全部是元素外部插入的.</p>
+                <h3 id="before"><a href="#before" class="headerlink" title="before():"></a>before():</h3>
+                <p>将参数插入到对象的前边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-5.png" alt=""></p>
+                <h3 id="after"><a href="#after" class="headerlink" title="after():"></a>after():</h3>
+                <p>将参数插入到对象的后边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-6.png" alt=""></p>
+                <h3 id="insertBefore"><a href="#insertBefore" class="headerlink" title="insertBefore():"></a>insertBefore():</h3>
+                <p>将对象插入到参数的前边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-7.png" alt=""></p>
+                <h3 id="insertAfter"><a href="#insertAfter" class="headerlink" title="insertAfter():"></a>insertAfter():</h3>
+                <p>将对象插入到参数的后边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-8.png" alt=""></p>
+                <p>之所以将这八个方法放在一块说,是因为这八个方法是通过循环动态生成的.首先要先会用,才可以去试着了解内部结构.了解完了以后,你会发现,你会很熟练的使用它;<br><img src="/images/learning-zepto-js-object-second/screen-shot-9.png" alt=""><br><img src="/images/learning-zepto-js-object-second/screen-shot-10.png" alt=""></p>
+                <p>上边那个数组是储存的几个操作的名称,下边的forEach循环是在zepto自执行函数中执行的,就是说,在构件zepto原型的是否就创建了这几个方法;</p>
+                <p>forEach方法回调返回的参数,第一个是值,第二个是值的下标;</p>
+                <p>map方法回调返回的参数同上,在方法内部第一个参数名使用了_(下划线),表示在该函数中并未使用到,但必须要占位(某群某大神就是这么干的),注意数组中存储的,</p>
+                <p>只有四个值(四个将参数插入至对象中的方法名[就叫它主动方法吧,原创名字,可以随意使用,不受任何版权约束]),还有数组的顺序也是很重要(根据数组顺序决定插入的位置);</p>
+                <p>inside变量存储了该方法是否为内部插入的bool值,这也是为什么上边说数组的顺序很重要;</p>
+                <p>跳过map方法中的处理,不多做解释,因为这个是转换参数为DOm节点的;</p>
+                <p>在方法返回时执行的each方法,</p>
+                <p>方法首先会判断该方法是否为对象内部的操作,如果是,将parent变量赋值为当前对象,如果不是,就说明是对象外部操作,就将parent赋值为对象的parentNode;</p>
+                <p>然后根据方法名字在操作集合中的下标来判断去什么dom节点,</p>
+                <p>把八个操作带进去,因为这八个方法最后使用的都是insertBefore方法,</p>
+                <p>顺便说一下原生的insertBefore方法使用方式.</p>
+                <p>首先调用该方法的为要被插入的对象,接收两个参数,第一个是要插入的对象,第二个是要插谁的前边;<br><img src="/images/learning-zepto-js-object-second/screen-shot-11.png" alt=""></p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">售票处.insertBefore(李四,张三);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>思考一下为什么要这么做.</p>
+                <h3 id="after-1"><a href="#after-1" class="headerlink" title="after"></a>after</h3>
+                <p>首先after是第一个,after是外部的操作,而且是插入到当前调用的对象的后边,</p>
+                <p>要想使用insertBefore来实现插入到某对象的后边,我们需要三个对象,一个是当前对象,还有要插入的对象,以及当前对象的容器,也就是他的parent;</p>
+                <p>在进入方法时,我们通过inside变量获取到了该方法是否为内部插入,然后通过inside变量来给对象的容器赋值(自身或者parent);</p>
+                <p>在这里,三个所需的变量我们就都拿到了.</p>
+                <p>after执行的是插入到当前对象后,所以说</p>
+                <p>我们通过下标取出after操作执行所需的dom元素,对象的nextSibling,就是对象的后一个元素.插入到对象.nextSibling前边就相当于插入到对象的后边,</p>
+                <p>(就是说,超过了第二名,你就是第二名,绕不过来的自行撞墙);</p>
+                <p>parent(容器).insertBefore(要插入的对象,当前对象的后一个节点);一个dom树中同一个dom节点不会出现两次,就是说,移动对象属于剪切操作,而不是复制操作,</p>
+                <p>这也是为什么方法内不会进行判断调用方法的对象是否为多个,如果是多个,则需要将对象进行copy;</p>
+                <h3 id="prepend-1"><a href="#prepend-1" class="headerlink" title="prepend"></a>prepend</h3>
+                <p>第二个是prepend,prepend是内部插入,将参数插入到对象内部最前边,与append相反(append插入到内部的尾部);</p>
+                <p>由于是内部操作,所以parent我们会取自身.然后再判断下标得到是prepend.然后我们取出用来确定位置的dom元素,就是对象的第一个子节点,插入到该节点前,就是取代了该节点成为firstChild(干掉熊猫,我就是国宝);</p>
+                <p>调用方式就是:</p>
+                <p>parent(这里是对象自身).insertBefore(要插入的对象,当前对象的第一个子节点);</p>
+                <h3 id="before-1"><a href="#before-1" class="headerlink" title="before"></a>before</h3>
+                <p>before,插入到对象前(外部操作),这个就没什么好解释的了.insertBefore本来就是干这个使得.</p>
+                <h3 id="append-1"><a href="#append-1" class="headerlink" title="append"></a>append</h3>
+                <p>append,插入到对象内尾部,<br><img src="/images/learning-zepto-js-object-second/screen-shot-12.png" alt=""><br>其实,区分这几个方法的核心就在这里,如果执行insertBefore方法,第二个参数为null,则会直接将第一个元素插入到容器的最后,相当于原生的appendChild方法.</p>
+                <p>关于下边那四个方法,就不做多解释了.<br><img src="/images/learning-zepto-js-object-second/screen-shot-13.png" alt=""></p>
+                <p>只是简单的将对象以及参数掉了个(个儿);</p>
+                <p>如果让我来实现这八个方法,我也许会写一个switch,更好点了也许会动态判断内部外部插入,里边会使用appendChild等等一系列方法,但绝对不会想到这种写法,所以说,读源码真心的学习最快的途径.</p>
+                <p>今天先写到这里,八个dom插入方法,自己也消化一下.里边也许说的还有点不太详细,如果有什么不明白的,欢迎留言,大家一起探讨.</p>
+                <p>//明日面试,求祝福</p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/12/学习zpeto-js-对象方法-1/">
                 学习zpeto.js(对象方法)[1]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-12</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <p>zepto也是使用的链式操作,链式操作:函数返回调用函数的对象.</p>
-<p>但并不是所有的对象方法都可以进行链式操作,举几个例子:.size(),.html()|.text()//不传参数的情况下;</p>
-<p>若非特殊说明,下边介绍的方法都会返回zepto对象;</p>
-<h3 id="add"><a href="#add" class="headerlink" title="add():"></a>add():</h3><p>支持一到二个参数,第一个为选择器,与$()的规则相同,甚至是,第一个参数传进去一个function,它也会正确执行(后果自负- -),所以说,正确的使用方式是传入选择器,dom对象,或者一段html,这都是可以的,如果有多个,请用数组括起来,</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> temp = $([<span class="string">"li"</span>,<span class="string">"span"</span>,<span class="string">"div"</span>]).add([<span class="string">"p"</span>,<span class="string">"p"</span>]).size();<span class="comment">// --&gt; size为4,因为会对返回的集合进行去重处理</span></div></pre></td></tr></table></figure>
-<p>第二个参数是匹配的上下文,默认不传就按着document来.<br><img src="/images/learning-zepto-js-object-first/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-first/screen-shot-2.png" alt=""><br><img src="/images/learning-zepto-js-object-first/screen-shot-3.png" alt=""></p>
-<p>add函数本身无任何亮点- -,将两个参数原封不动的传入$()然后返回一个Zepto对象,执行concat函数,该函数会将所有参数添加至调用函数对象的末尾,</p>
-<p>toArray方法会调用get方法,当get方法执行时而没有传入参数,会将该对象所有的匹配元素以数组的形式返回;</p>
-<p>uniq方法是一个数组去重的方法,返回的还是一个数组,然后回到add方法再次通过$()构造一个zepto对象并返回;</p>
-<h3 id="addClass"><a href="#addClass" class="headerlink" title="addClass():"></a>addClass():</h3><p>该方法接收一个参数,可以直接传入一个字符串作为类名,如有多个,使用空格分开.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"p"</span>).addClass(<span class="string">"content title"</span>);<span class="comment">// --&gt; content title</span></div></pre></td></tr></table></figure>
-<p>还有一种调用方式是传入一个函数,函数可以接收到两个参数,第一个是当前循环到的下标,第二个是当前对象之前的className.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'p1'</span>,<span class="string">'p2'</span>,<span class="string">'p3'</span>).addClass(<span class="function"><span class="keyword">function</span> (<span class="params">index, oldClass</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">'dynamic'</span> + index;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// p1 --&gt; dynamic0</span></div><div class="line"><span class="comment">// p2 --&gt; dynamic1</span></div><div class="line"><span class="comment">// p3 --&gt; dynamic2</span></div></pre></td></tr></table></figure>
-<p>函数必须返回一个字符串,否则会运行异常.<br><img src="/images/learning-zepto-js-object-first/screen-shot-4.png" alt=""></p>
-<p>通过each方法循环遍历对象,each方法会返回一个zepto对象.首先会判断元素是否存在className属性,</p>
-<p>通过className方法获取到当前元素的所有className信息的字符串;<img src="/images/learning-zepto-js-object-first/screen-shot-5.png" alt=""></p>
-<p>className方法用来取信息或者存入信息都是可以的,就像.css()方法一样,有一个参数就是get,有两个参数就是set;</p>
-<p>(关于这个svg的属性…本人才疏学浅,没有接触过…)</p>
-<p>无视掉那个svg相关的东西来说,该方法就是获取到传入的第一个参数的className属性,如果第二个参数不存在,则返回node的className信息,如果存在值,就将值赋给node的className属性;</p>
-<p>再回到addClass方法的each循环中,变量cls拿到了该元素的className,<br><img src="/images/learning-zepto-js-object-first/screen-shot-6.png" alt=""></p>
-<p>该方法判断第二个参数是否为function,如果是,就通过上下文(context)来执行,并传入两个参数,idx(下标),payload(在addClass里边,这个值为元素之前的className)</p>
-<p>通过funcArg取到要增加的className,我们的newName变量拿到了要add的className.然后将newName以空格分割(\s表示空格,\s+表示连续的一个及一个以上的空格),split分割返回一个数组,</p>
-<p>然后调用forEach方法,这里注意forEach方法传入了第二个参数,第二个参数的用途是设置forEach中this的指向.详情可以看MDN <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach" target="_blank" rel="external">Array.prototype.forEach()</a></p>
-<p>在循环内部,我们使用hasClass函数来判断该元素是否存在这个类,如果不存在,则将该className装入数组;<br><img src="/images/learning-zepto-js-object-first/screen-shot-7.png" alt=""></p>
-<p>Array对象的一系列循环方法第二个参数貌似都是设置函数内部this指向的(没有资料可以证明我说的话,用之前查文档,错了别找我- -)</p>
-<p>classRE函数是一个使用缓存的动态生成正则对象的函数<br><img src="/images/learning-zepto-js-object-first/screen-shot-8.png" alt=""></p>
-<p>className方法上边已经提过了,只传入一个参数表示get,所以hasClass的作用就是判断该元素className中是否存在我们要插入的这个值.</p>
-<p>正则对象调用的test()方法会返回一个bool值,匹配成功为true,匹配失败为false;</p>
-<p>最后在addClass方法中,调用className传入两个参数,第一个是元素对象,第二个是原有class加上className集合转换的字符串.</p>
-<h3 id="removeClass"><a href="#removeClass" class="headerlink" title="removeClass():"></a>removeClass():</h3><p>//没有按照API的顺序来,直接把class操作的这一套装说完它- -</p>
-<p>removeClass函数只有一个可选的参数,可以为一个字符串(要移除的className),或者是一个function,用法同addClass,函数也必须要返回一个字符串</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'&lt;p class="test test2 test3"&gt;&lt;/p&gt;'</span>).removeClass(<span class="string">"test test3"</span>);</div><div class="line"><span class="comment">// --&gt; &lt;p class="test2"&gt;&lt;/p&gt;/*&lt;li&gt;list item 1&lt;/li&gt;&lt;li&gt;list item 2&lt;/li&gt;&lt;li&gt;list item 3&lt;/li&gt;*/</span></div><div class="line">$(<span class="string">'li'</span>).addClass(<span class="string">"test"</span>);</div><div class="line">$(<span class="string">'li'</span>).removeClass(<span class="function"><span class="keyword">function</span> (<span class="params">index, oldClass</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> index % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">"test"</span> : <span class="string">""</span>;</div><div class="line">&#125;)<span class="comment">// --&gt; [li, li.test, li]</span></div><div class="line"><span class="comment">//或者可以不填参数,直接调用,直接调用会清除对象的所有className</span></div><div class="line">$(<span class="string">'&lt;p class="test test2 test3"&gt;'</span>).removeClass();<span class="comment">// --&gt; &lt;p&gt;&lt;/p&gt;</span></div></pre></td></tr></table></figure>
-<p>removeClass相对于addClass简单点;<br><img src="/images/learning-zepto-js-object-first/screen-shot-9.png" alt=""></p>
-<p>大体相同,唯有在forEach循环中,addClass是给集合push值,而removeClass是从一个字符串中replace掉值;</p>
-<h3 id="toggleClass"><a href="#toggleClass" class="headerlink" title="toggleClass():"></a>toggleClass():</h3><p>方法使用与前两个类似,只不过多了第二个参数,第二个参数为true时,执行addClass,第二个参数为false时,执行removeClass(感觉用处不算太大额…)<br><img src="/images/learning-zepto-js-object-first/screen-shot-10.png" alt=""></p>
-<p>直接贴代码.如果第二个参数没有传,就按照有了删,没了填的方案来走,如果第二个参数有值,(有种走后门既视感),则不执行hasClass方法,直接通过when变量的值来决定使用什么方法.</p>
-<p>关于class的几个方法算是说完了.个人认为,这是用的比较多的一套方法了.比如结合交互时做一个动画效果,在CSS无法实现的情况下,就可以将animation写到一个class中,触发某个事件时给元素add该class,就可以完成动画了.</p>
-<p>今天就先说到这,本来想把后边的append也看了呢- -仔细一研究,码量有点足…另开一篇吧.</p>
+                  <span class="date">2015-08-12</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <p>zepto也是使用的链式操作,链式操作:函数返回调用函数的对象.</p>
+                <p>但并不是所有的对象方法都可以进行链式操作,举几个例子:.size(),.html()|.text()//不传参数的情况下;</p>
+                <p>若非特殊说明,下边介绍的方法都会返回zepto对象;</p>
+                <h3 id="add"><a href="#add" class="headerlink" title="add():"></a>add():</h3>
+                <p>支持一到二个参数,第一个为选择器,与$()的规则相同,甚至是,第一个参数传进去一个function,它也会正确执行(后果自负- -),所以说,正确的使用方式是传入选择器,dom对象,或者一段html,这都是可以的,如果有多个,请用数组括起来,</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="keyword">var</span> temp = $([<span class="string">"li"</span>,<span class="string">"span"</span>,<span class="string">"div"</span>]).add([<span class="string">"p"</span>,<span class="string">"p"</span>]).size();<span class="comment">// --&gt; size为4,因为会对返回的集合进行去重处理</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>第二个参数是匹配的上下文,默认不传就按着document来.<br><img src="/images/learning-zepto-js-object-first/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-first/screen-shot-2.png" alt=""><br><img src="/images/learning-zepto-js-object-first/screen-shot-3.png"
+                      alt=""></p>
+                <p>add函数本身无任何亮点- -,将两个参数原封不动的传入$()然后返回一个Zepto对象,执行concat函数,该函数会将所有参数添加至调用函数对象的末尾,</p>
+                <p>toArray方法会调用get方法,当get方法执行时而没有传入参数,会将该对象所有的匹配元素以数组的形式返回;</p>
+                <p>uniq方法是一个数组去重的方法,返回的还是一个数组,然后回到add方法再次通过$()构造一个zepto对象并返回;</p>
+                <h3 id="addClass"><a href="#addClass" class="headerlink" title="addClass():"></a>addClass():</h3>
+                <p>该方法接收一个参数,可以直接传入一个字符串作为类名,如有多个,使用空格分开.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">"p"</span>).addClass(<span class="string">"content title"</span>);<span class="comment">// --&gt; content title</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>还有一种调用方式是传入一个函数,函数可以接收到两个参数,第一个是当前循环到的下标,第二个是当前对象之前的className.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">'p1'</span>,<span class="string">'p2'</span>,<span class="string">'p3'</span>).addClass(<span class="function"><span class="keyword">function</span> (<span class="params">index, oldClass</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">'dynamic'</span> + index;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// p1 --&gt; dynamic0</span></div><div class="line"><span class="comment">// p2 --&gt; dynamic1</span></div><div class="line"><span class="comment">// p3 --&gt; dynamic2</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>函数必须返回一个字符串,否则会运行异常.<br><img src="/images/learning-zepto-js-object-first/screen-shot-4.png" alt=""></p>
+                <p>通过each方法循环遍历对象,each方法会返回一个zepto对象.首先会判断元素是否存在className属性,</p>
+                <p>通过className方法获取到当前元素的所有className信息的字符串;<img src="/images/learning-zepto-js-object-first/screen-shot-5.png" alt=""></p>
+                <p>className方法用来取信息或者存入信息都是可以的,就像.css()方法一样,有一个参数就是get,有两个参数就是set;</p>
+                <p>(关于这个svg的属性…本人才疏学浅,没有接触过…)</p>
+                <p>无视掉那个svg相关的东西来说,该方法就是获取到传入的第一个参数的className属性,如果第二个参数不存在,则返回node的className信息,如果存在值,就将值赋给node的className属性;</p>
+                <p>再回到addClass方法的each循环中,变量cls拿到了该元素的className,<br><img src="/images/learning-zepto-js-object-first/screen-shot-6.png" alt=""></p>
+                <p>该方法判断第二个参数是否为function,如果是,就通过上下文(context)来执行,并传入两个参数,idx(下标),payload(在addClass里边,这个值为元素之前的className)</p>
+                <p>通过funcArg取到要增加的className,我们的newName变量拿到了要add的className.然后将newName以空格分割(\s表示空格,\s+表示连续的一个及一个以上的空格),split分割返回一个数组,</p>
+                <p>然后调用forEach方法,这里注意forEach方法传入了第二个参数,第二个参数的用途是设置forEach中this的指向.详情可以看MDN <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach" target="_blank" rel="external">Array.prototype.forEach()</a></p>
+                <p>在循环内部,我们使用hasClass函数来判断该元素是否存在这个类,如果不存在,则将该className装入数组;<br><img src="/images/learning-zepto-js-object-first/screen-shot-7.png" alt=""></p>
+                <p>Array对象的一系列循环方法第二个参数貌似都是设置函数内部this指向的(没有资料可以证明我说的话,用之前查文档,错了别找我- -)</p>
+                <p>classRE函数是一个使用缓存的动态生成正则对象的函数<br><img src="/images/learning-zepto-js-object-first/screen-shot-8.png" alt=""></p>
+                <p>className方法上边已经提过了,只传入一个参数表示get,所以hasClass的作用就是判断该元素className中是否存在我们要插入的这个值.</p>
+                <p>正则对象调用的test()方法会返回一个bool值,匹配成功为true,匹配失败为false;</p>
+                <p>最后在addClass方法中,调用className传入两个参数,第一个是元素对象,第二个是原有class加上className集合转换的字符串.</p>
+                <h3 id="removeClass"><a href="#removeClass" class="headerlink" title="removeClass():"></a>removeClass():</h3>
+                <p>//没有按照API的顺序来,直接把class操作的这一套装说完它- -</p>
+                <p>removeClass函数只有一个可选的参数,可以为一个字符串(要移除的className),或者是一个function,用法同addClass,函数也必须要返回一个字符串</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td>
+                      <td class="code"><pre><div class="line">$(<span class="string">'&lt;p class="test test2 test3"&gt;&lt;/p&gt;'</span>).removeClass(<span class="string">"test test3"</span>);</div><div class="line"><span class="comment">// --&gt; &lt;p class="test2"&gt;&lt;/p&gt;/*&lt;li&gt;list item 1&lt;/li&gt;&lt;li&gt;list item 2&lt;/li&gt;&lt;li&gt;list item 3&lt;/li&gt;*/</span></div><div class="line">$(<span class="string">'li'</span>).addClass(<span class="string">"test"</span>);</div><div class="line">$(<span class="string">'li'</span>).removeClass(<span class="function"><span class="keyword">function</span> (<span class="params">index, oldClass</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> index % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">"test"</span> : <span class="string">""</span>;</div><div class="line">&#125;)<span class="comment">// --&gt; [li, li.test, li]</span></div><div class="line"><span class="comment">//或者可以不填参数,直接调用,直接调用会清除对象的所有className</span></div><div class="line">$(<span class="string">'&lt;p class="test test2 test3"&gt;'</span>).removeClass();<span class="comment">// --&gt; &lt;p&gt;&lt;/p&gt;</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>removeClass相对于addClass简单点;<br><img src="/images/learning-zepto-js-object-first/screen-shot-9.png" alt=""></p>
+                <p>大体相同,唯有在forEach循环中,addClass是给集合push值,而removeClass是从一个字符串中replace掉值;</p>
+                <h3 id="toggleClass"><a href="#toggleClass" class="headerlink" title="toggleClass():"></a>toggleClass():</h3>
+                <p>方法使用与前两个类似,只不过多了第二个参数,第二个参数为true时,执行addClass,第二个参数为false时,执行removeClass(感觉用处不算太大额…)<br><img src="/images/learning-zepto-js-object-first/screen-shot-10.png" alt=""></p>
+                <p>直接贴代码.如果第二个参数没有传,就按照有了删,没了填的方案来走,如果第二个参数有值,(有种走后门既视感),则不执行hasClass方法,直接通过when变量的值来决定使用什么方法.</p>
+                <p>关于class的几个方法算是说完了.个人认为,这是用的比较多的一套方法了.比如结合交互时做一个动画效果,在CSS无法实现的情况下,就可以将animation写到一个class中,触发某个事件时给元素add该class,就可以完成动画了.</p>
+                <p>今天就先说到这,本来想把后边的append也看了呢- -仔细一研究,码量有点足…另开一篇吧.</p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/11/学习zpeto-js-原型方法-2/">
                 学习zpeto.js(原型方法)[2]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-11</span>
-            
-            
-            
-        </div>
-    </div>
+                <div class="post-info">
 
-    
-        <div class="content">
-            <p>接着昨天的来,继续说原型方法,<a href="http://www.cnblogs.com/jiasm/p/4718610.html" target="_blank" rel="external">昨天的传送阵</a>(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);</p>
-<h3 id="grep"><a href="#grep" class="headerlink" title="$.grep():"></a>$.grep():</h3><p>作用与Array.filter类似(其实就是调用的filter方法- -)</p>
-<p>通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> even = $.grep(array, <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> value % <span class="number">2</span> === <span class="number">0</span>;</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(even); <span class="comment">// --&gt; [2,4]</span></div></pre></td></tr></table></figure>
-<p>函数可以接收到三个传递来的参数,上边只接收了一个,第二个是当前item在array中的下标,从0开始- -,第三个是array本身;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-1.png" alt=""></p>
-<p>//filter的值为 [].filter</p>
-<h3 id="inArray"><a href="#inArray" class="headerlink" title="$.inArray():"></a>$.inArray():</h3><p>接收两到三个参数,第一个是item(中文不知道该如何形容,子项?就是),第二个是一个数组对象,第三个是可选的开始下标,该方法用来检查第一个参数是否存在与自身.返回值是一个下标,从0开始的.</p>
-<p>如果没有找到,就会返回-1;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$.inArray(<span class="string">"aaa"</span>, [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>, <span class="string">"ccc"</span>]);<span class="comment">// --&gt;0</span></div><div class="line">$.inArray(<span class="string">"aaa"</span>, [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>, <span class="string">"ccc"</span>, <span class="string">"ccc"</span>, <span class="string">"aaa"</span>], <span class="number">3</span>) <span class="comment">// --&gt;4</span></div></pre></td></tr></table></figure>
-<p>inArray方法也是直接调用了Array的idnexOf方法,这些都是ES5的新方法,在zepto里边是没有做兼容处理的,只是简单的call方法,毕竟是为了移动端而生的;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-2.png" alt=""></p>
-<p>//jQuery1.x的版本是做了兼容的处理,2.x以后也是直接调用的indexOf方法.</p>
-<h3 id="isArray"><a href="#isArray" class="headerlink" title="$.isArray():"></a>$.isArray():</h3><p>该方法只接收一个参数,一个对象,用来判断该对象是否为Array,返回一个boolean值,</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$.isArray([]);<span class="comment">// --&gt; true</span></div></pre></td></tr></table></figure>
-<p>该方法是做了一个兼容处理的,如果Array存在isArray方法,则直接调用,否则赋值为自定义的一个函数:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-3.png" alt=""></p>
-<h3 id="isFunction"><a href="#isFunction" class="headerlink" title="$.isFunction():"></a>$.isFunction():</h3><p>方法只接收一个参数,一个对象,判断是否为function对象,别看这方法只是用来检查参数是否为function,里边衍生出的几个变量和方法还是挺有意思的.</p>
-<p>用法如下:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test1</span> (<span class="params"></span>)</span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> test2 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line"><span class="built_in">console</span>.log($.isFunction(test1)); <span class="comment">// --&gt;true</span></div><div class="line"><span class="built_in">console</span>.log($.isFunction(test2)); <span class="comment">// --&gt;true</span></div></pre></td></tr></table></figure>
-<p>贴上几块代码:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-5.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-6.png" alt=""></p>
-<p>首先在isFunction函数内部调用了type函数,type函数返回一个字符串,</p>
-<p>type函数通过一个三元运算符来判断是否为空,然后调用对象的toString方法,返回一个类似[object Array]这种格式的字符串,</p>
-<p>再放入一个Mapping中,就是class2type(class to type),在zepto自执行函数中通过each函数将一个数组,就是第三张图那一串类型,循环放入class2type对象中,</p>
-<p>现在回到第一张图,这样的调用应该能清楚了吧.</p>
-<p>放一张class2type的内容截图<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-7.png" alt=""></p>
-<h3 id="isPlainObject"><a href="#isPlainObject" class="headerlink" title="$.isPlainObject():"></a>$.isPlainObject():</h3><p>该方法判断传入对象是否为一个纯洁粹的对象,就是一个通过”{}”或者 new Object 来创建的对象.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$.isPlainObject(&#123;&#125;); <span class="comment">// ..&gt; true</span></div><div class="line">$.isPlainObject(<span class="keyword">new</span> <span class="built_in">Object</span>()); <span class="comment">// --&gt; true</span></div><div class="line">$.isPlainObject(<span class="number">1</span>); <span class="comment">// --&gt; false</span></div></pre></td></tr></table></figure>
-<p>zepto不认为window对象是一个纯粹的Object,但是通过typeof来看的话,window确实是一个object- -,所以在代码中添加了对window对象的处理<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-8.png" alt=""></p>
-<p>首先判断传入参数为一个对象,并且不是一个window对象,getPrototypeOf方法返回参数的构造方法的prototype.有兴趣的可以移步<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="external">MDN</a></p>
-<h3 id="map"><a href="#map" class="headerlink" title="$.map():"></a>$.map():</h3><p>该函数返回一个数组,传入两个参数,第一个是要遍历的对象,可以使一个类数组,也可以是一个对象,第二个参数是一个回调函数,在回调函数返回的值,会被存入集合并通过$.map来返回,返回的是一个数组;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$.map(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="number">18</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">value, key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (key === <span class="string">'age'</span>)</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">&#125;) <span class="comment">// --&gt; [18]</span></div><div class="line">$.map([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], <span class="function"><span class="keyword">function</span> (<span class="params">item, index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> item * <span class="number">2</span>;</div><div class="line">&#125;) <span class="comment">// --&gt; [2,4,6,8]</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-prototype-second/screen-shot-9.png" alt=""><br>方法逻辑不算复杂,在最后返回时,调用的函数用来将传入的类数组对象转换为一个数组,代码如下:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-10.png" alt=""></p>
-<p>剩下两个 $.trim,以及$.parseJSON,这两个就不说了,因为都属于原生函数的别名而已.</p>
-<p>今天先说到了这里,zepto里边的原型方法出了ajax模块的就都已经说完了- -,读源码真的是最快的学习方式.</p>
+                  <span class="date">2015-08-11</span>
 
-        </div>
-    
 
-</div>
-            
-                
-<div class="post">
 
-    <div class="post-header index">
-        <h1 class="title">
+                </div>
+              </div>
+
+
+              <div class="content">
+                <p>接着昨天的来,继续说原型方法,<a href="http://www.cnblogs.com/jiasm/p/4718610.html" target="_blank" rel="external">昨天的传送阵</a>(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);</p>
+                <h3 id="grep"><a href="#grep" class="headerlink" title="$.grep():"></a>$.grep():</h3>
+                <p>作用与Array.filter类似(其实就是调用的filter方法- -)</p>
+                <p>通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="keyword">var</span> array =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> even = $.grep(array, <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> value % <span class="number">2</span> === <span class="number">0</span>;</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(even); <span class="comment">// --&gt; [2,4]</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>函数可以接收到三个传递来的参数,上边只接收了一个,第二个是当前item在array中的下标,从0开始- -,第三个是array本身;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-1.png" alt=""></p>
+                <p>//filter的值为 [].filter</p>
+                <h3 id="inArray"><a href="#inArray" class="headerlink" title="$.inArray():"></a>$.inArray():</h3>
+                <p>接收两到三个参数,第一个是item(中文不知道该如何形容,子项?就是),第二个是一个数组对象,第三个是可选的开始下标,该方法用来检查第一个参数是否存在与自身.返回值是一个下标,从0开始的.</p>
+                <p>如果没有找到,就会返回-1;</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$.inArray(<span class="string">"aaa"</span>, [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>, <span class="string">"ccc"</span>]);<span class="comment">// --&gt;0</span></div><div class="line">$.inArray(<span class="string">"aaa"</span>, [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>, <span class="string">"ccc"</span>, <span class="string">"ccc"</span>, <span class="string">"aaa"</span>], <span class="number">3</span>) <span class="comment">// --&gt;4</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>inArray方法也是直接调用了Array的idnexOf方法,这些都是ES5的新方法,在zepto里边是没有做兼容处理的,只是简单的call方法,毕竟是为了移动端而生的;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-2.png" alt=""></p>
+                <p>//jQuery1.x的版本是做了兼容的处理,2.x以后也是直接调用的indexOf方法.</p>
+                <h3 id="isArray"><a href="#isArray" class="headerlink" title="$.isArray():"></a>$.isArray():</h3>
+                <p>该方法只接收一个参数,一个对象,用来判断该对象是否为Array,返回一个boolean值,</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div></pre></td>
+                      <td class="code"><pre><div class="line">$.isArray([]);<span class="comment">// --&gt; true</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>该方法是做了一个兼容处理的,如果Array存在isArray方法,则直接调用,否则赋值为自定义的一个函数:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-3.png" alt=""></p>
+                <h3 id="isFunction"><a href="#isFunction" class="headerlink" title="$.isFunction():"></a>$.isFunction():</h3>
+                <p>方法只接收一个参数,一个对象,判断是否为function对象,别看这方法只是用来检查参数是否为function,里边衍生出的几个变量和方法还是挺有意思的.</p>
+                <p>用法如下:</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test1</span> (<span class="params"></span>)</span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> test2 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</div><div class="line"><span class="built_in">console</span>.log($.isFunction(test1)); <span class="comment">// --&gt;true</span></div><div class="line"><span class="built_in">console</span>.log($.isFunction(test2)); <span class="comment">// --&gt;true</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>贴上几块代码:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-5.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-6.png"
+                      alt=""></p>
+                <p>首先在isFunction函数内部调用了type函数,type函数返回一个字符串,</p>
+                <p>type函数通过一个三元运算符来判断是否为空,然后调用对象的toString方法,返回一个类似[object Array]这种格式的字符串,</p>
+                <p>再放入一个Mapping中,就是class2type(class to type),在zepto自执行函数中通过each函数将一个数组,就是第三张图那一串类型,循环放入class2type对象中,</p>
+                <p>现在回到第一张图,这样的调用应该能清楚了吧.</p>
+                <p>放一张class2type的内容截图<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-7.png" alt=""></p>
+                <h3 id="isPlainObject"><a href="#isPlainObject" class="headerlink" title="$.isPlainObject():"></a>$.isPlainObject():</h3>
+                <p>该方法判断传入对象是否为一个纯洁粹的对象,就是一个通过”{}”或者 new Object 来创建的对象.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td>
+                      <td class="code"><pre><div class="line">$.isPlainObject(&#123;&#125;); <span class="comment">// ..&gt; true</span></div><div class="line">$.isPlainObject(<span class="keyword">new</span> <span class="built_in">Object</span>()); <span class="comment">// --&gt; true</span></div><div class="line">$.isPlainObject(<span class="number">1</span>); <span class="comment">// --&gt; false</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>zepto不认为window对象是一个纯粹的Object,但是通过typeof来看的话,window确实是一个object- -,所以在代码中添加了对window对象的处理<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-8.png" alt=""></p>
+                <p>首先判断传入参数为一个对象,并且不是一个window对象,getPrototypeOf方法返回参数的构造方法的prototype.有兴趣的可以移步<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="external">MDN</a></p>
+                <h3 id="map"><a href="#map" class="headerlink" title="$.map():"></a>$.map():</h3>
+                <p>该函数返回一个数组,传入两个参数,第一个是要遍历的对象,可以使一个类数组,也可以是一个对象,第二个参数是一个回调函数,在回调函数返回的值,会被存入集合并通过$.map来返回,返回的是一个数组;</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line">$.map(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="number">18</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">value, key</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (key === <span class="string">'age'</span>)</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">&#125;) <span class="comment">// --&gt; [18]</span></div><div class="line">$.map([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], <span class="function"><span class="keyword">function</span> (<span class="params">item, index</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> item * <span class="number">2</span>;</div><div class="line">&#125;) <span class="comment">// --&gt; [2,4,6,8]</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-prototype-second/screen-shot-9.png" alt=""><br>方法逻辑不算复杂,在最后返回时,调用的函数用来将传入的类数组对象转换为一个数组,代码如下:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-10.png" alt=""></p>
+                <p>剩下两个 $.trim,以及$.parseJSON,这两个就不说了,因为都属于原生函数的别名而已.</p>
+                <p>今天先说到了这里,zepto里边的原型方法出了ajax模块的就都已经说完了- -,读源码真的是最快的学习方式.</p>
+
+              </div>
+
+
+            </div>
+
+
+            <div class="post">
+
+              <div class="post-header index">
+                <h1 class="title">
             <a href="/2015/08/10/学习zpeto-js-原型方法-1/">
                 学习zpeto.js(原型方法)[1]
             </a>
         </h1>
-        <div class="post-info">
-            
-                <span class="date">2015-08-10</span>
-            
-            
-            
+                <div class="post-info">
+
+                  <span class="date">2015-08-10</span>
+
+
+
+                </div>
+              </div>
+
+
+              <div class="content">
+                <p>新的一周,新的开始,今天来学习一下zepto里边的原型方法,就是通过$.进行调用的方法,也是可以通过$.fn进行扩展的方法:</p>
+                <h3 id="camelCase"><a href="#camelCase" class="headerlink" title="$.camelCase():"></a>$.camelCase():</h3>
+                <p>方法接收一个字符串,将连字符格式的字符串转为驼峰格式的字符串:</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td>
+                      <td class="code"><pre><div class="line">$.camelCase(<span class="string">"login-name"</span>); <span class="comment">// -&gt;loginName</span></div><div class="line">$.camelCase(<span class="string">"loginName"</span>); <span class="comment">// -&gt;不作处理</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-prototype-first/screen-shot-1.png" alt=""></p>
+                <p>(本人发现zepto中的原型方法都是通过将匿名函数赋值给变量的方式来进行声明的,而直接使用function声明的函数在外部是获取不到的)解释的不详细，是因为原型方法都有一个原型的引用，而那些普通函数没有做这个引用，好区分而已</p>
+                <p>通过一个正则匹配连字符及后边的一个字符(如果有的话);</p>
+                <h3 id="contains"><a href="#contains" class="headerlink" title="$.contains():"></a>$.contains():</h3>
+                <p>方法接受两个参数,均为Dom节点类型,检查第一个参数是否包含第二个参数;</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td>
+                      <td class="code"><pre><div class="line">$.contains(<span class="built_in">document</span>.getElementsByTagName(<span class="string">"html"</span>)[<span class="number">0</span>],<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>])<span class="comment">// 返回true</span></div><div class="line"></div><div class="line">$.contains(<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>],<span class="built_in">document</span>.getElementsByTagName(<span class="string">"html"</span>)[<span class="number">0</span>])<span class="comment">// 返回false</span></div><div class="line"></div><div class="line">$.contains(<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>],<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>])<span class="comment">// 返回false</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-prototype-first/screen-shot-1.png" alt=""></p>
+                <p>高性能JavaScript里边曾经提到过这种写法,一个方法需要做兼容处理时,写成这样会比较节省资源,而不是在方法内部判断并执行,因为用户在使用的过程中不可能更换浏览器(原话忘记了,差不多就是这意思.);</p>
+                <p>如果存在contains方法,这个就不多做解释了,浏览器内置了处理方法,包含为true,其余为false,</p>
+                <p>如果不存在,那么就需要自己去做一个方法来实现同样的功能(这应该就是兼容的意义所在吧)</p>
+                <p>只有一个问题,如果将两个参数位置颠倒或两个参数相等,则函数会循环至html元素才会停止(虽说这种情况会很少出现);</p>
+                <h3 id="each"><a href="#each" class="headerlink" title="$.each():"></a>$.each():</h3>
+                <p>方法用于循环数组或json,传入两个参数,第一个是要循环的对象,第二个是回调函数(每次循环都会执行一次迭代),zepto会通过当前循环对象执行回调并传入两个参数,第一个是数组中的下标或者json中的key,第二个参数为当前对象的值,回调中可以返回一个bool值,如果返回false,则会终止当前循环并返回当前对象(第一个参数);</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line">$.each([<span class="number">123</span>], <span class="function"><span class="keyword">function</span> (<span class="params">index, item</span>)</span>&#123;</div><div class="line">　　<span class="built_in">console</span>.log(<span class="keyword">this</span>+ <span class="string">"|"</span> + index + <span class="string">"|"</span> + item); <span class="comment">//123|0|123</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">$.each(&#123;<span class="attr">name</span>: <span class="string">'niko'</span>,<span class="attr">age</span>: <span class="number">18</span>&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">key, value</span>)</span>&#123;</div><div class="line">　　<span class="built_in">console</span>.log(<span class="keyword">this</span> + <span class="string">"|"</span> + key + <span class="string">"|"</span> + value); <span class="comment">//niko|name|niko</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">$.each([<span class="number">123</span>, <span class="number">233</span>], <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">　　<span class="keyword">if</span>(<span class="keyword">this</span>===<span class="number">233</span>) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//有效值仅仅为false,其余均忽视</span></div><div class="line">&#125;);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>//回调函数中的命名是无所谓的,a|b都是可以的,但是合理的命名能让其他看到这段代码的同学明白你要做的事情;</p>
+                <p><img src="/images/learning-zepto-js-prototype-first/screen-shot-3.png" alt=""><br>likeArray函数就不贴了,判断传入参数的length属性是否为number,所以说,像一些nodeList之类的也是可以放心使用$.each而不用担心方法会走for-in循环,如果数组顺序对逻辑的执行没有影响还是推荐自己写一个for循环或while循环,如下:</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="keyword">var</span> array =[<span class="number">1</span>,<span class="number">2</span>];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> length = array.length - <span class="number">1</span>; length &gt;= <span class="number">0</span>; length--)&#123;</div><div class="line">  <span class="comment">//do..  </span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> length = array.length;</div><div class="line"><span class="keyword">while</span> (length--) &#123;</div><div class="line">  <span class="comment">//do...  </span></div><div class="line">&#125;</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>//递减的性能要比递增的性能好点(说话不说那么绝对,不留下一个喷点- -)</p>
+                <h3 id="extend"><a href="#extend" class="headerlink" title="$.extend():"></a>$.extend():</h3>
+                <p>该方法用来继承,也是扩展插件所需的方法,方法有效执行须接收两个以上的参数,第一个参数为目标对象,第二个以后的为来源,来源会覆盖目标的原有属性,默认为浅复制,如果想要深度复制,则将第一个参数设为true,然后是目标对象.来源…</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td>
+                      <td class="code"><pre><div class="line"><span class="keyword">var</span> target = &#123;&#125;;</div><div class="line">$.extend(traget, &#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span></div><div class="line">&#125;); <span class="comment">//浅复制</span></div><div class="line"></div><div class="line">$.extend(<span class="literal">true</span>, target, &#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span></div><div class="line">&#125;); <span class="comment">//深度复制()</span></div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p><img src="/images/learning-zepto-js-prototype-first/screen-shot-4.png" alt=""><br>方法的执行过程为先将除了第一个参数以外所有的参数取出作为来源值(默认认为是浅复制),然后判断target是否为boolean类型的值,如果是,则将deep变量赋值为target,并将target赋值为来源值数组中的第一个([].shift(),将数组中第一个元素从数组中删除并返回);接下来循环来源值,调用extend方法;</p>
+                <p>extend方法接收三个参数,第一个为目标对象,第二个为来源值,第三个是标识是否深度复制的.</p>
+                <p>方法将会枚举来源值,并判断是否为深度复制以及值是否为一个Object对象或数组,如果是的话,将会新创建一个Object或数组,然后递归调用extend方法,脱离引用关系(注:自定义对象将不会脱离引用关系);</p>
+                <p>否则就执行普通的复制;</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line"><span class="keyword">var</span> target1 = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> target2 = &#123;&#125;;</div><div class="line">target1.quote = &#123;</div><div class="line">　<span class="attr">name</span>: <span class="string">"name"</span>,</div><div class="line">　<span class="attr">array</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</div><div class="line">&#125;;</div><div class="line">target2.quote = &#123;</div><div class="line">　<span class="attr">name</span>: <span class="string">"name"</span>,</div><div class="line">　<span class="attr">array</span>: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> copy = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> copy_deep = &#123;&#125;;</div><div class="line">$.extend(copy, target1);</div><div class="line">$.extend(<span class="literal">true</span>, copy_deep, target2);</div><div class="line">copy.quote.name = <span class="string">"change"</span>;</div><div class="line">copy_deep.quote.name = <span class="string">"change"</span>;</div><div class="line">copy.quote.array.push(<span class="number">4</span>);</div><div class="line">copy_deep.quote.array.push(<span class="number">4</span>);</div><div class="line"><span class="built_in">console</span>.log(target1.quote);</div><div class="line"><span class="built_in">console</span>.log(target2.quote);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>该方法返回值接收不接收是无所谓的- -方法返回目标对象的原因是为了链式操作,经过extend以后直接使用即可.</p>
+                <h3 id="fn"><a href="#fn" class="headerlink" title="$.fn:"></a>$.fn:</h3>
+                <p>这个不是一个方法,而是一个对象,指向Zepto对象的prototype,所以说,使用$.extend来使$.fn继承某些方法,进行扩展插件.</p>
+                <figure class="highlight javascript">
+                  <table>
+                    <tr>
+                      <td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td>
+                      <td
+                          class="code"><pre><div class="line">$.fn.alert = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;　　</div><div class="line">  alert(<span class="keyword">this</span>.html());<span class="comment">//this指向调用该方法的Zepto对象</span></div><div class="line">&#125;</div><div class="line">$(<span class="string">"&lt;span&gt;hello&lt;/span&gt;"</span>).alert();<span class="comment">//--&gt;hello /*这种是直接给key赋值,如果有多个,须结合$.extend使用*/</span></div><div class="line">$.extend($.fn, &#123;</div><div class="line">  <span class="attr">alert</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.html());<span class="comment">//this指向调用该方法的Zepto对象</span></div><div class="line">　&#125;,</div><div class="line">  <span class="attr">confirm</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    confirm(<span class="keyword">this</span>.html());<span class="comment">//this指向调用该方法的Zepto对象  </span></div><div class="line">　&#125;</div><div class="line">&#125;);</div></pre></td>
+                    </tr>
+                  </table>
+                </figure>
+                <p>PS:为了配合链式操作,扩展的方法最好将this返回;</p>
+                <p>因为是个对象,所以就不贴码了.</p>
+                <p>今天先写这么点儿,快下班了.收工.每天自学一点.</p>
+
+              </div>
+
+
+            </div>
+
+          </section>
         </div>
-    </div>
-
-    
-        <div class="content">
-            <p>新的一周,新的开始,今天来学习一下zepto里边的原型方法,就是通过$.进行调用的方法,也是可以通过$.fn进行扩展的方法:</p>
-<h3 id="camelCase"><a href="#camelCase" class="headerlink" title="$.camelCase():"></a>$.camelCase():</h3><p>方法接收一个字符串,将连字符格式的字符串转为驼峰格式的字符串:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$.camelCase(<span class="string">"login-name"</span>); <span class="comment">// -&gt;loginName</span></div><div class="line">$.camelCase(<span class="string">"loginName"</span>); <span class="comment">// -&gt;不作处理</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-prototype-first/screen-shot-1.png" alt=""></p>
-<p>(本人发现zepto中的原型方法都是通过将匿名函数赋值给变量的方式来进行声明的,而直接使用function声明的函数在外部是获取不到的)解释的不详细，是因为原型方法都有一个原型的引用，而那些普通函数没有做这个引用，好区分而已</p>
-<p>通过一个正则匹配连字符及后边的一个字符(如果有的话);</p>
-<h3 id="contains"><a href="#contains" class="headerlink" title="$.contains():"></a>$.contains():</h3><p>方法接受两个参数,均为Dom节点类型,检查第一个参数是否包含第二个参数;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$.contains(<span class="built_in">document</span>.getElementsByTagName(<span class="string">"html"</span>)[<span class="number">0</span>],<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>])<span class="comment">// 返回true</span></div><div class="line"></div><div class="line">$.contains(<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>],<span class="built_in">document</span>.getElementsByTagName(<span class="string">"html"</span>)[<span class="number">0</span>])<span class="comment">// 返回false</span></div><div class="line"></div><div class="line">$.contains(<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>],<span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>])<span class="comment">// 返回false</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-prototype-first/screen-shot-1.png" alt=""></p>
-<p>高性能JavaScript里边曾经提到过这种写法,一个方法需要做兼容处理时,写成这样会比较节省资源,而不是在方法内部判断并执行,因为用户在使用的过程中不可能更换浏览器(原话忘记了,差不多就是这意思.);</p>
-<p>如果存在contains方法,这个就不多做解释了,浏览器内置了处理方法,包含为true,其余为false,</p>
-<p>如果不存在,那么就需要自己去做一个方法来实现同样的功能(这应该就是兼容的意义所在吧)</p>
-<p>只有一个问题,如果将两个参数位置颠倒或两个参数相等,则函数会循环至html元素才会停止(虽说这种情况会很少出现);</p>
-<h3 id="each"><a href="#each" class="headerlink" title="$.each():"></a>$.each():</h3><p>方法用于循环数组或json,传入两个参数,第一个是要循环的对象,第二个是回调函数(每次循环都会执行一次迭代),zepto会通过当前循环对象执行回调并传入两个参数,第一个是数组中的下标或者json中的key,第二个参数为当前对象的值,回调中可以返回一个bool值,如果返回false,则会终止当前循环并返回当前对象(第一个参数);</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$.each([<span class="number">123</span>], <span class="function"><span class="keyword">function</span> (<span class="params">index, item</span>)</span>&#123;</div><div class="line">　　<span class="built_in">console</span>.log(<span class="keyword">this</span>+ <span class="string">"|"</span> + index + <span class="string">"|"</span> + item); <span class="comment">//123|0|123</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">$.each(&#123;<span class="attr">name</span>: <span class="string">'niko'</span>,<span class="attr">age</span>: <span class="number">18</span>&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">key, value</span>)</span>&#123;</div><div class="line">　　<span class="built_in">console</span>.log(<span class="keyword">this</span> + <span class="string">"|"</span> + key + <span class="string">"|"</span> + value); <span class="comment">//niko|name|niko</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">$.each([<span class="number">123</span>, <span class="number">233</span>], <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">　　<span class="keyword">if</span>(<span class="keyword">this</span>===<span class="number">233</span>) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//有效值仅仅为false,其余均忽视</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>//回调函数中的命名是无所谓的,a|b都是可以的,但是合理的命名能让其他看到这段代码的同学明白你要做的事情;</p>
-<p><img src="/images/learning-zepto-js-prototype-first/screen-shot-3.png" alt=""><br>likeArray函数就不贴了,判断传入参数的length属性是否为number,所以说,像一些nodeList之类的也是可以放心使用$.each而不用担心方法会走for-in循环,如果数组顺序对逻辑的执行没有影响还是推荐自己写一个for循环或while循环,如下:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array =[<span class="number">1</span>,<span class="number">2</span>];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> length = array.length - <span class="number">1</span>; length &gt;= <span class="number">0</span>; length--)&#123;</div><div class="line">  <span class="comment">//do..  </span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> length = array.length;</div><div class="line"><span class="keyword">while</span> (length--) &#123;</div><div class="line">  <span class="comment">//do...  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>//递减的性能要比递增的性能好点(说话不说那么绝对,不留下一个喷点- -)</p>
-<h3 id="extend"><a href="#extend" class="headerlink" title="$.extend():"></a>$.extend():</h3><p>该方法用来继承,也是扩展插件所需的方法,方法有效执行须接收两个以上的参数,第一个参数为目标对象,第二个以后的为来源,来源会覆盖目标的原有属性,默认为浅复制,如果想要深度复制,则将第一个参数设为true,然后是目标对象.来源…</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> target = &#123;&#125;;</div><div class="line">$.extend(traget, &#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span></div><div class="line">&#125;); <span class="comment">//浅复制</span></div><div class="line"></div><div class="line">$.extend(<span class="literal">true</span>, target, &#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'niko'</span></div><div class="line">&#125;); <span class="comment">//深度复制()</span></div></pre></td></tr></table></figure>
-<p><img src="/images/learning-zepto-js-prototype-first/screen-shot-4.png" alt=""><br>方法的执行过程为先将除了第一个参数以外所有的参数取出作为来源值(默认认为是浅复制),然后判断target是否为boolean类型的值,如果是,则将deep变量赋值为target,并将target赋值为来源值数组中的第一个([].shift(),将数组中第一个元素从数组中删除并返回);接下来循环来源值,调用extend方法;</p>
-<p>extend方法接收三个参数,第一个为目标对象,第二个为来源值,第三个是标识是否深度复制的.</p>
-<p>方法将会枚举来源值,并判断是否为深度复制以及值是否为一个Object对象或数组,如果是的话,将会新创建一个Object或数组,然后递归调用extend方法,脱离引用关系(注:自定义对象将不会脱离引用关系);</p>
-<p>否则就执行普通的复制;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> target1 = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> target2 = &#123;&#125;;</div><div class="line">target1.quote = &#123;</div><div class="line">　<span class="attr">name</span>: <span class="string">"name"</span>,</div><div class="line">　<span class="attr">array</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</div><div class="line">&#125;;</div><div class="line">target2.quote = &#123;</div><div class="line">　<span class="attr">name</span>: <span class="string">"name"</span>,</div><div class="line">　<span class="attr">array</span>: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> copy = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> copy_deep = &#123;&#125;;</div><div class="line">$.extend(copy, target1);</div><div class="line">$.extend(<span class="literal">true</span>, copy_deep, target2);</div><div class="line">copy.quote.name = <span class="string">"change"</span>;</div><div class="line">copy_deep.quote.name = <span class="string">"change"</span>;</div><div class="line">copy.quote.array.push(<span class="number">4</span>);</div><div class="line">copy_deep.quote.array.push(<span class="number">4</span>);</div><div class="line"><span class="built_in">console</span>.log(target1.quote);</div><div class="line"><span class="built_in">console</span>.log(target2.quote);</div></pre></td></tr></table></figure>
-<p>该方法返回值接收不接收是无所谓的- -方法返回目标对象的原因是为了链式操作,经过extend以后直接使用即可.</p>
-<h3 id="fn"><a href="#fn" class="headerlink" title="$.fn:"></a>$.fn:</h3><p>这个不是一个方法,而是一个对象,指向Zepto对象的prototype,所以说,使用$.extend来使$.fn继承某些方法,进行扩展插件.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$.fn.alert = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;　　</div><div class="line">  alert(<span class="keyword">this</span>.html());<span class="comment">//this指向调用该方法的Zepto对象</span></div><div class="line">&#125;</div><div class="line">$(<span class="string">"&lt;span&gt;hello&lt;/span&gt;"</span>).alert();<span class="comment">//--&gt;hello /*这种是直接给key赋值,如果有多个,须结合$.extend使用*/</span></div><div class="line">$.extend($.fn, &#123;</div><div class="line">  <span class="attr">alert</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>.html());<span class="comment">//this指向调用该方法的Zepto对象</span></div><div class="line">　&#125;,</div><div class="line">  <span class="attr">confirm</span> : <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    confirm(<span class="keyword">this</span>.html());<span class="comment">//this指向调用该方法的Zepto对象  </span></div><div class="line">　&#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>PS:为了配合链式操作,扩展的方法最好将this返回;</p>
-<p>因为是个对象,所以就不贴码了.</p>
-<p>今天先写这么点儿,快下班了.收工.每天自学一点.</p>
-
-        </div>
-    
-
-</div>
-            
-        </section>
-    </div>
-</div>
+      </div>
 
 
 
-    <div class="row">
+      <div class="row">
         <div class="col-sm-12">
-            <div class="wrap-pagination">
-                <a class="disabled" href="/">
-                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                </a>
-                <a class="" href="/page/2/">
-                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                </a>
-            </div>
+          <div class="wrap-pagination">
+            <a class="disabled" href="/">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            </a>
+            <a class="" href="/page/2/">
+              <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </a>
+          </div>
         </div>
+      </div>
+
+
+
+
     </div>
 
+    <!-- Footer -->
+    <div class="push"></div>
 
-
-
-</div>
-
-<!-- Footer -->
-<div class="push"></div>
-
-<footer class="footer-content">
-    <div class="container">
+    <footer class="footer-content">
+      <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
-                <h2>About</h2>
-                <p>
-                    技术=坚持+积累+学习+分享
-                </p>
-            </div>
-            
-    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
-        <h2>Recent Posts</h2>
-        <ul>
-            
-            <li>
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+            <h2>About</h2>
+            <p>
+              技术=坚持+积累+学习+分享
+            </p>
+          </div>
+
+          <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+            <h2>Recent Posts</h2>
+            <ul>
+
+              <li>
                 <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
-            </li>
-            
-            <li>
+              </li>
+
+              <li>
                 <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
-            </li>
-            
-            <li>
+              </li>
+
+              <li>
                 <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
-            </li>
-            
-            <li>
+              </li>
+
+              <li>
                 <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
-            </li>
-            
-        </ul>
-    </div>
+              </li>
+
+            </ul>
+          </div>
 
 
 
-            
+
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <ul class="list-inline footer-social-icons">
-                    
-                    <li class="list-inline-item">
-                        <a href="https://github.com/jiasm">
-                            <span class="footer-icon-container">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="list-inline footer-social-icons">
+
+              <li class="list-inline-item">
+                <a href="https://github.com/jiasm">
+                  <span class="footer-icon-container">
                                 <i class="fa fa-github"></i>
                             </span>
-                        </a>
-                    </li>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <li class="list-inline-item">
-                        <a href="mailto:jiashunming@outlook.com">
-                            <span class="footer-icon-container">
+                </a>
+              </li>
+
+
+
+
+
+
+
+
+
+              <li class="list-inline-item">
+                <a href="mailto:jiashunming@outlook.com">
+                  <span class="footer-icon-container">
                                 <i class="fa fa-envelope-o"></i>
                             </span>
-                        </a>
-                    </li>
-                    
-                    
-                    <li class="list-inline-item">
-                        <a href="\#">
-                            <span class="footer-icon-container">
+                </a>
+              </li>
+
+
+              <li class="list-inline-item">
+                <a href="\#">
+                  <span class="footer-icon-container">
                                 <i class="fa fa-rss"></i>
                             </span>
-                        </a>
-                    </li>
-                    
-                </ul>
-            </div>
+                </a>
+              </li>
+
+            </ul>
+          </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="footer-copyright">
-                    @jiashunming
-                </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="footer-copyright">
+              @jiashunming
             </div>
+          </div>
         </div>
-    </div>
-</footer>
+      </div>
+    </footer>
 
-<!-- After footer scripts -->
+    <!-- After footer scripts -->
 
-<!-- jQuery -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
-<!-- Tween Max -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+    <!-- Tween Max -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
 
-<!-- Gallery -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+    <!-- Gallery -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 
-<!-- Custom JavaScript -->
-<script src="/js/main.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/js/main.js"></script>
 
-<!-- Disqus Comments -->
+    <!-- Disqus Comments -->
 
 
 
-</body>
+  </body>
 
 </html>
