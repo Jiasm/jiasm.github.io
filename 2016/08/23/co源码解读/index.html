@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="背景：闲来无事，翻了下co的源码来看，源码短小精悍，算上注释，一共240行左右；
+决定写一篇博客来记录下学习的心得。
+TJ大神的co：https://github.com/tj/co
+作用：co通过将Generator函数拆成一个Promise将码农从callback hell中拯救了出来；
+下边放">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="co源码解读"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>co源码解读 - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2016/08/23/co源码解读/">
+                co源码解读
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2016-08-23</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3><p>闲来无事，翻了下co的源码来看，源码短小精悍，算上注释，一共240行左右；</p>
+<p>决定写一篇博客来记录下学习的心得。</p>
+<p>TJ大神的co：<a href="https://github.com/tj/co" target="_blank" rel="external">https://github.com/tj/co</a></p>
+<h3 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h3><p>co通过将<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*" target="_blank" rel="external">Generator函数</a>拆成一个<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="external">Promise</a>将码农从<a href="http://callbackhell.com/" target="_blank" rel="external">callback hell</a>中拯救了出来；</p>
+<p>下边放出一段代码，对比下co与普通回调版本的区别：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> *  回调版本</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> fs =<span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"></div><div class="line">fs.readFile(<span class="string">'./package.json'</span>, (err, data) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(data.toString())</div><div class="line">  fs.readFile(<span class="string">'./package.json'</span>, (err, data) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(data.toString())</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"><span class="comment">/**</span></div><div class="line"> *  co版本</div><div class="line"> */</div><div class="line"><span class="keyword">let</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</div><div class="line"><span class="keyword">let</span> fs =<span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">let</span> a = <span class="keyword">yield</span> fs.readFile.bind(<span class="literal">null</span>,<span class="string">'./package.json'</span>)</div><div class="line">  <span class="built_in">console</span>.log(a.toString())</div><div class="line">  <span class="keyword">let</span> b = <span class="keyword">yield</span> fs.readFile.bind(<span class="literal">null</span>,<span class="string">'./package.json'</span>)</div><div class="line">  <span class="built_in">console</span>.log(b.toString())</div><div class="line">&#125;).then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error)</div></pre></td></tr></table></figure>
+<p>从代码上看，貌似co是一个同步执行的过程呢。当然，也只是看起来像而已。</p>
+<h3 id="正题："><a href="#正题：" class="headerlink" title="正题："></a>正题：</h3><p>先来说一下co整个执行的过程：</p>
+<ul>
+<li>调用co，传入一个Generator函数，函数会返回一个Promise对象</li>
+<li>如果传入参数为Generator函数，会执行该函数来进行Generator的初始化</li>
+<li>手动执行一次next() 这时Generator函数就会停在第一次遇到yield关键字的地方</li>
+<li>获取到yield后边的值，将其转换为一个Promise函数，然后执行之</li>
+<li>重复上边两步，直到函数执行完毕</li>
+</ul>
+<p>co关于yield后边的值也是有一定的要求的，只能是一个 Function｜Promise｜Generator ｜ Array | Object；</p>
+<p>而 Array和Object中的item也必须是 Function｜Promise｜Generator。</p>
+<p>并且关于function 普通函数并不一定会得到预期的结果，co需要的是 接收一个回调函数 并执行的函数，类似于这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span> (<span class="params">callback</span>)</span>&#123;</div><div class="line">  callback(<span class="literal">null</span>,<span class="string">'hello'</span>)</div><div class="line">&#125;</div><div class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">let</span> result = <span class="keyword">yield</span> doSomething</div><div class="line">  <span class="built_in">console</span>.log(result)<span class="comment">// =&gt; hello</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>总而言之，co执行的肯定是一个Promise，而co会帮你把其他几种类型的值转换为Promise，co绝大部份的代码都是在处理类型的转换；</p>
+<p>当然，在讲类型转换的那一块之前，还是将co执行Generator的那几个函数说一下子，也就是调用co返回的Promise中的那三个函数（onFulfilled、onRejected、next）；</p>
+<p>因next与Generator对象的next方法名相同 这里使用 gen.next 表示 Generator对象的next方法。</p>
+<h4 id="onFulfilled："><a href="#onFulfilled：" class="headerlink" title="onFulfilled："></a>onFulfilled：</h4><p>调用gen.next并将上次执行的结果传入gen.next；</p>
+<p>调用next，将gen.next返回的值传入next。</p>
+<h4 id="onRejected："><a href="#onRejected：" class="headerlink" title="onRejected："></a>onRejected：</h4><p>执行流程与 onFulfilled 一致，只不过是将调用的 gen.next 换为了 gen.throw 用来将错误异常抛出。</p>
+<h4 id="next："><a href="#next：" class="headerlink" title="next："></a>next：</h4><p>函数会判断传入参数的done属性，如果为true（ 则表示该Generator已经执行完毕），会调用co返回的Promise对象的resolve方法，结束代码执行；</p>
+<p>如果done为false 则表示还需要继续执行，这里会将 yield后边的值（参数的value属性）转换为Promise，并调用then方法传入 onFulfilled 和 onRejected两个函数。</p>
+<p>co整个的执行流程其实就是这样的-.- </p>
+<p>剩余代码所完成的事情就是将各种不同的类型转换为可执行的Promise对象。</p>
+<h4 id="thunkToPromise（Function）："><a href="#thunkToPromise（Function）：" class="headerlink" title="thunkToPromise（Function）："></a>thunkToPromise（Function）：</h4><p>函数返回一个Promise对象，在Promise内部执行了传入的function；</p>
+<p>并会认为回调的第一个参数为Error（这个貌似是个标准…）；</p>
+<p>将其余参数打包到一个数组中返回。</p>
+<h4 id="arrayToPromise（Array）："><a href="#arrayToPromise（Array）：" class="headerlink" title="arrayToPromise（Array）："></a>arrayToPromise（Array）：</h4><p>Promise有一个方法叫做all，会返回数组中所有Promise执行后的返回值（如果有其中一项被reject掉，所有的都会被reject）；</p>
+<p>方法会返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="external">Promise.all()</a> 的执行结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.all([<span class="built_in">Promise</span>.resolve(<span class="string">'hello'</span>), <span class="built_in">Promise</span>.resolve(<span class="string">'world'</span>)]).then(<span class="function"><span class="params">data</span> =&gt;</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(data) <span class="comment">// =&gt; ['hello', 'world']</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="objectToPromise（Object）："><a href="#objectToPromise（Object）：" class="headerlink" title="objectToPromise（Object）："></a>objectToPromise（Object）：</h4><p>函数用来将一个Object对象转换为Promise；</p>
+<p>应该是co源码中行数最多的一个函数了😜  具体做的事儿呢；</p>
+<p>就是将一个Object的每一个key都转换为Promise，并塞到一个数组中；</p>
+<p>执行Promise.all()将上边的数组塞进去；</p>
+<p>当某一个key所对应的Promise函数执行完毕后，会将执行的结果塞回对应的key中；</p>
+<p>全部执行完毕后，就会返回该Object。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">a</span>: <span class="built_in">Promise</span>.resolve(<span class="string">'hello'</span>),</div><div class="line">  <span class="attr">b</span>: <span class="built_in">Promise</span>.resolve(<span class="string">'world'</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// =&gt;</span></div><div class="line">&#123;</div><div class="line">  <span class="attr">a</span>:<span class="string">'hello'</span>,</div><div class="line">  <span class="attr">b</span>:<span class="string">'world'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其余的几个函数就是判断类型了， isPromise、isGenerator、isGeneratorFunction、isObject。</p>
+<h3 id="小记："><a href="#小记：" class="headerlink" title="小记："></a>小记：</h3><p>因我司在用koa来搭建web项目，所以会接触到这些东西，就想写点博客记录一下；</p>
+<p>本人文笔简直负分，望各位海涵，如有什么不懂的，欢迎邮件骚扰。</p>
+<p><a href="mailto:jiashunming@outlook.com" target="_blank" rel="external">jiashunming@outlook.com</a> </p>
+<p>文章相关代码会在GitHub更新：</p>
+<p><a href="https://github.com/Jiasm/blog-resource/tree/master/co" target="_blank" rel="external">https://github.com/Jiasm/blog-resource/tree/master/co</a> </p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/node-js/">#node.js</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

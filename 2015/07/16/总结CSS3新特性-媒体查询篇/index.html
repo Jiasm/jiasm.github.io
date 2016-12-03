@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="###
+CSS3的媒体查询是对CSS2媒体类型的扩展,完善;
+CSS2的媒体类型仅仅定义了一些设备的关键字,CSS3的媒体查询进一步扩展了如width,height,color等具有取值范围的属性;
+media query 与 media type 的区别在于: media query是一个值或一个">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Shunming Jia">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="总结CSS3新特性(媒体查询篇)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="贾顺名的博客"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+    <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>总结CSS3新特性(媒体查询篇) - 贾顺名的博客</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-pattern"></div>
+
+<!-- Menu -->
+<!--Menu Links and Overlay-->
+<div class="menu-bg">
+    <div class="menu-container">
+        <ul>
+            
+            <li class="menu-item">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/archives">
+                    Archives
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/about">
+                    About
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="/contact">
+                    Contact
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+<!--Hamburger Icon-->
+<nav>
+    <a href="#menu"></a>
+</nav>
+
+<div class="container">
+
+    <!-- Main Content -->
+    <div class="row">
+    <div class="col-sm-12">
+
+        <!--Title and Logo-->
+        <header>
+    <div class="logo">
+        <a href="/"><i class="logo-icon fa fa-cube" aria-hidden="true"></i></a>
+        
+    </div>
+</header>
+
+        <section class="main">
+            
+<div class="post">
+
+    <div class="post-header">
+        <h1 class="title">
+            <a href="/2015/07/16/总结CSS3新特性-媒体查询篇/">
+                总结CSS3新特性(媒体查询篇)
+            </a>
+        </h1>
+        <div class="post-info">
+            
+                <span class="date">2015-07-16</span>
+            
+            <a href="#disqus_thread" class="comments">Kommentare</a>
+            
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Gallery -->
+        
+
+        <!-- Post Content -->
+        <p>###</p>
+<p>CSS3的媒体查询是对CSS2<a href="http://www.w3.org/TR/REC-CSS2/media.html" target="_blank" rel="external">媒体类型</a>的扩展,完善;</p>
+<p>CSS2的媒体类型仅仅定义了一些设备的关键字,CSS3的媒体查询进一步扩展了如width,height,color等具有取值范围的属性;</p>
+<p>media query 与 media type 的区别在于: media query是一个值或一个范围的值,而media type仅仅是设备的匹配(所以media type 是一个单词,而media query 后边需要跟着一个数值,两者可以混合使用);</p>
+<p>media可用于link标签属性 [media]</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span><span class="attr">type</span>=<span class="string">"text/css"</span><span class="attr">href</span>=<span class="string">"../css/print.css"</span><span class="attr">media</span>=<span class="string">"print and (max-width : 600px)"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>以及css文件内,下边代码均是使用css内media;</p>
+<p>介绍一下可用的运算符&amp;常用的media type以及media query:</p>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符:"></a>运算符:</h3><h4 id="and"><a href="#and" class="headerlink" title="and:"></a>and:</h4><p>and运算符用于符号两边规则均满足条件则匹配</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> screen and (max-width: <span class="number">600px</span>)&#123;<span class="comment">/*匹配宽度小于600px的电脑屏幕*/</span>&#125;</div></pre></td></tr></table></figure>
+<h4 id="not"><a href="#not" class="headerlink" title="not:"></a>not:</h4><p>not运算符用于取非,所有不满足该规则的均匹配</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> not print&#123;<span class="comment">/*匹配除了打印机以外的所有设备*/</span>&#125;</div></pre></td></tr></table></figure>
+<p>使用not时请注意,如果不加括号,也许会产生一些奇怪的现象,例:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> not all and (max-width: <span class="number">500px</span>)&#123;&#125;</div><div class="line"><span class="comment">/*等价于*/</span></div><div class="line">@<span class="keyword">media</span> not (all and (max-width: <span class="number">500px</span>))&#123;&#125;</div><div class="line"><span class="comment">/*而不是*/</span></div><div class="line">@<span class="keyword">media</span>(<span class="keyword">not</span> all) and (max-width: <span class="number">500px</span>)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>所以,如果要使用not,还是显式的添加括号比较明确点</p>
+<h4 id="逗号"><a href="#逗号" class="headerlink" title=",(逗号):"></a>,(逗号):</h4><p>相当于 or 用于两边有一条满足则匹配</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> screen , (min-width: <span class="number">800px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配电脑屏幕或者宽度大于800px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Media-Type-只说几个常用的-其余会给出链接"><a href="#Media-Type-只说几个常用的-其余会给出链接" class="headerlink" title="Media Type(只说几个常用的,其余会给出链接):"></a>Media Type(只说几个常用的,其余会给出链接):</h3><h4 id="All"><a href="#All" class="headerlink" title="All:"></a>All:</h4><p>all是默认值,匹配所有设备;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> all&#123;</div><div class="line">  <span class="comment">/* 可以过滤不支持media的浏览器 */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Screen"><a href="#Screen" class="headerlink" title="Screen:"></a>Screen:</h4><p>匹配电脑屏幕;</p>
+<h4 id="Print"><a href="#Print" class="headerlink" title="Print:"></a>Print:</h4><p>匹配打印机(打印预览时也会匹配)[本人简历专门为print做了一套样式~]</p>
+<p>常用的一般就这三个type,其余Media Type 有兴趣的可以看下 <a href="http://www.w3school.com.cn/html5/att_a_media.asp" target="_blank" rel="external">W3School的说明</a>或<a href="http://www.w3.org/TR/REC-CSS2/media.html" target="_blank" rel="external">W3的文档</a></p>
+<h3 id="Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query"><a href="#Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query" class="headerlink" title="Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query"></a>Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query</h3><h4 id="max-width-max-height"><a href="#max-width-max-height" class="headerlink" title="max-width(max-height):"></a>max-width(max-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (max-width: <span class="number">600px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配界面宽度小于600px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="min-width-min-height"><a href="#min-width-min-height" class="headerlink" title="min-width(min-height):"></a>min-width(min-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (min-width: <span class="number">400px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配界面宽度大于400px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="max-device-width-max-device-height"><a href="#max-device-width-max-device-height" class="headerlink" title="max-device-width(max-device-height):"></a>max-device-width(max-device-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (max-device-width: <span class="number">800px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配设备(不是界面)宽度小于800px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="min-device-width-min-device-height"><a href="#min-device-width-min-device-height" class="headerlink" title="min-device-width(min-device-height):"></a>min-device-width(min-device-height):</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> (min-device-width: <span class="number">600px</span>)&#123;</div><div class="line">  <span class="comment">/*匹配设备(不是界面)宽度大于600px的设备*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>做移动开发时用device-width/device-height,比较好一点吧,因为有些手机浏览器默认会对页面进行一些缩放,所以按照设备宽高来进行匹配会更接近开发时所期望的效果;</p>
+<p>给出全部的Media Query属性值的链接 <a href="http://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/" target="_blank" rel="external">W3的文档</a> 也可以看看MDN的,有志愿者汉化了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Media_queries" target="_blank" rel="external">MDN Media Query 文档</a></p>
+<p>media是可以嵌套的:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">media</span> not print&#123;</div><div class="line">  <span class="comment">/*通用样式*/</span></div><div class="line">  @<span class="keyword">media</span> (max-width:<span class="number">600px</span>)&#123;</div><div class="line">    <span class="comment">/*此条匹配宽度小于600px的非打印机设备*/</span></div><div class="line">  &#125;</div><div class="line">  @<span class="keyword">media</span> (min-width:<span class="number">600px</span>)&#123;</div><div class="line">    <span class="comment">/*此条匹配宽度大于600px的非打印机设备*/</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样省去了将 not print 写两遍的冗余.这样写也是有一定好处的,因为有些浏览器也许只支持Media Type 而不支持 Media Query- -(不要问我为什么知道,栽过坑)</p>
+<p>Media Query(仅指上边那几个)的值的单位可以是 px em rem (%/vh/vw/vmin/vmax什么的没有试…感觉应该没什么用吧…);</p>
+<p>Media Query是响应式页面的核心,其实说响应式页面就是在不同分辨率下显示不同的效果;</p>
+<p>编写响应式页面CSS时分为从小到大和从大到小(尺寸);</p>
+<p>本人弱弱的推荐从小尺寸开始写的 Media Query 使用 max-系列,大尺寸的反之;</p>
+<p>本文哪里有错误及不足还请大家指出;</p>
+
+    </div>
+
+    
+
+    
+        <div class="post-tags">
+            <i class="fa fa-tags" aria-hidden="true"></i>
+            <a href="/tags/css/">#css</a>
+        </div>
+    
+
+    <!-- Comments -->
+    
+
+</div>
+        </section>
+
+    </div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="push"></div>
+
+<footer class="footer-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-about">
+                <h2>About</h2>
+                <p>
+                    技术=坚持+积累+学习+分享
+                </p>
+            </div>
+            
+    <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 recent-posts">
+        <h2>Recent Posts</h2>
+        <ul>
+            
+            <li>
+                <a class="footer-post" href="/2016/11/14/如何在小程序中调用本地接口/">如何在小程序中调用本地接口</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2016/08/23/co源码解读/">co源码解读</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/09/01/学习zpeto-js-对象方法-6/">学习zpeto.js(对象方法)[6]</a>
+            </li>
+            
+            <li>
+                <a class="footer-post" href="/2015/08/28/学习zpeto-js-对象方法-5/">学习zpeto.js(对象方法)[5]</a>
+            </li>
+            
+        </ul>
+    </div>
+
+
+
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline footer-social-icons">
+                    
+                    <li class="list-inline-item">
+                        <a href="https://github.com/jiasm">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-github"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="mailto:jiashunming@outlook.com">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="list-inline-item">
+                        <a href="\#">
+                            <span class="footer-icon-container">
+                                <i class="fa fa-rss"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="footer-copyright">
+                    @jiashunming
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Tween Max -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/main.js"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
