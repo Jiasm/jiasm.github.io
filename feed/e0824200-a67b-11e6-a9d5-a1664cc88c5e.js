@@ -1,6 +1,0 @@
-{
-  "id": "e0824200-a67b-11e6-a9d5-a1664cc88c5e",
-  "title": "使用React制作一个可配置的页面生成器[0]",
-  "postDate": "2016/11/09 20:56",
-  "content": "<h2>背景</h2>\r\n<p>上班两年多，终于来到一家互联网公司，告别之前的朝九晚六的腐败生活，开始了11116的码农之旅。</p>\r\n<p>因为公司做的是直播相关的业务，所以伴随着直播，不定期的就会有运营活动-.-</p>\r\n<p>但是这类活动留给码农的开发周期都不太长，上半年比较激烈，基本一个月要上个三四个的活动。。。</p>\r\n<p>由于这些活动页面基本类似，所以就萌生了做一个能够让运营、产品、设计同学直接去通过界面操作配置来生成一个活动页面。（其实是我下半年的KPI了...）</p>\r\n<p>于是就有了本项目。（目前项目刚刚起步）</p>\r\n<h2>需要实现的功能</h2>\r\n<p>&nbsp; &nbsp; &nbsp;1. 有一个操作界面来进行组件的添加修改</p>\r\n<p>&nbsp; &nbsp; &nbsp;2. 可以针对组件来配置数据的来源</p>\r\n<p>&nbsp; &nbsp; &nbsp;3. 发布配置好的页面到线上环境</p>\r\n<p>由于自己是写Node的，所以做起来比较舒服，不会涉及到前后端沟通的障碍。。。</p>\r\n<p>待系统完工后的页面上线流程大致为：</p>\r\n<p>&nbsp; &nbsp; &nbsp;1. 新建页面</p>\r\n<p>&nbsp; &nbsp; &nbsp;2. 配置组件，绑定数据来源</p>\r\n<p>&nbsp; &nbsp; &nbsp;3. 点击发布</p>\r\n<p>&nbsp; &nbsp; &nbsp;4. 将本次配置生成一个json文件推到活动页面的展示服务器上并将配置存入MySQL中备份</p>\r\n<p>&nbsp; &nbsp; &nbsp;5. ...后续步骤暂时省略，就是拿到json配置后的生成router相关事宜了</p>\r\n<h2>目前实现的功能</h2>\r\n<p>&nbsp; &nbsp; &nbsp;1. 添加组件、组件中添加组件</p>\r\n<p>&nbsp; &nbsp; &nbsp;2. 改变组件的位置</p>\r\n<p>&nbsp; &nbsp; &nbsp;3. 删除组件</p>\r\n<p>&nbsp; &nbsp; &nbsp;4. 编辑组件的属性和样式</p>\r\n<p>目前有两个可以看到效果的组件。。Container和Text</p>\r\n<p>预计11月15日会实现一个较为完整的配置系统、11月20日实现上线部署相关事宜。</p>\r\n<p>项目地址： <a href=\"https://github.com/Precursors/ultron-stage\">https://github.com/Precursors/ultron-stage</a></p>"
-}
