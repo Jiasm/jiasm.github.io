@@ -1,4 +1,5 @@
 ---
+uuid: 8b1dbf30-b97a-11e6-ac0b-47a7072af775
 title: 学习zepto.js(Hello World)
 date: 2015-08-07 21:39
 tags: js

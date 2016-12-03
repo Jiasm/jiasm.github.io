@@ -1,4 +1,5 @@
 ---
+uuid: 968f9640-b97a-11e6-9c2c-e5317ab687e9
 title: 总结CSS3新特性(Transiton篇)
 date: 2015-07-21 14:06
 tags: css

@@ -1,4 +1,5 @@
 ---
+uuid: 892300a0-b97a-11e6-8d94-e70f0eca18da
 title: co源码解读
 date: 2016/08/23 17:16
 tags: node.js

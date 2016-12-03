@@ -1,4 +1,5 @@
 ---
+uuid: 91527df0-b97a-11e6-8bab-73a75d1c2eee
 title: '学习zpeto.js(原型方法)[1]'
 date: 2015-08-10 17:24
 tags: js

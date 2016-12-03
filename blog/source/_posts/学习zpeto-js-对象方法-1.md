@@ -1,4 +1,5 @@
 ---
+uuid: 8c070dc0-b97a-11e6-90f9-bfb0abbec78c
 title: '学习zpeto.js(对象方法)[1]'
 date: 2015-08-12 15:44
 tags: js

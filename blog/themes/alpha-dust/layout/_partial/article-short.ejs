@@ -19,6 +19,7 @@
                     <a href="<%- config.root + item.categories.first().path  %>"><%- item.categories.first().name %></a>
                 </span>
             <% } %>
+            <span class="ds-thread-count" data-thread-key="<%= item.uuid %>" data-count-type="comments"></span>
         </div>
     </div>
 
