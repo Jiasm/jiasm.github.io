@@ -70,4 +70,4 @@ theme: alpha-dust
 deploy:
   type: git
   repository: https://github.com/Jiasm/jiasm.github.io.git
-  branch: hexo
+  branch: master
