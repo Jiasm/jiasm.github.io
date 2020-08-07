@@ -1,0 +1,49 @@
+.friends-wrap {
+  padding: 40px paddingJustify;
+  display: flex;
+  flex-wrap: wrap;
+}
+.friends-wrap li {
+  width: 33.333333333333336%;
+  list-style-type: none;
+  margin-bottom: 1em;
+  transition: all 0.3s linear;
+}
+.friends-wrap li > a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.friends-wrap li:hover {
+  background-color: footerBackColor;
+}
+.friends-wrap .avatar-wrap {
+  display: inline-block;
+  width: 72px;
+  height: 72px;
+}
+.friends-wrap .avatar-wrap img {
+  width: 100%;
+}
+.friends-wrap .friends-title {
+  padding-left: 1em;
+  color: linkColor;
+}
+@media (max-width: 768px) {
+  .friends-wrap {
+    padding: 40px paddingJustifyMiddle;
+  }
+}
+@media (max-width: 600px) {
+  .friends-wrap li {
+    width: 50%;
+  }
+}
+@media (max-width: 480px) {
+  .friends-wrap {
+    padding: 20px paddingJustifyMobile;
+  }
+  .friends-wrap li {
+    width: 100%;
+  }
+}

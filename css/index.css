@@ -1,0 +1,95 @@
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+}
+.posts .post {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 70px paddingJustify 40px;
+  transition: all 0.3s linear;
+  text-decoration: none;
+}
+.posts .post:hover {
+  background-color: footerBackColor;
+}
+@media (max-width: 768px) {
+  .posts .post {
+    width: 100%;
+    padding-left: paddingJustifyMiddle;
+    padding-right: paddingJustifyMiddle;
+  }
+}
+@media (max-width: 600px) {
+  .posts .post {
+    padding-top: 30px;
+  }
+}
+@media (max-width: 480px) {
+  .posts .post {
+    padding-left: paddingJustifyMobile;
+    padding-right: paddingJustifyMobile;
+  }
+}
+.posts .post-title {
+  position: relative;
+  font-size: 22px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  color: #333;
+}
+.posts .post-title .post-title-link {
+  color: #333;
+  text-decoration: none;
+}
+.posts .post-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 50px;
+  background-color: #dfdfdf;
+}
+.posts .post-content {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.posts .post-content a {
+  color: #333;
+  text-decoration: none;
+}
+.posts .post-meta {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  color: #666;
+  align-items: flex-end;
+}
+.goto-top {
+  position: fixed;
+  right: 20px;
+  bottom: 200px;
+  padding: 0 0.5em;
+  text-align: center;
+  font-size: 24px;
+  z-index: 4;
+  color: #ddd;
+  transition: color 0.3s linear;
+}
+.goto-top:hover {
+  color: #000;
+}
+@media (max-width: 768px) {
+  .goto-top {
+    bottom: 230px;
+  }
+}
+@media (min-width: 1920px) {
+  .goto-top {
+    right: 50%;
+    transform: translate(760px);
+  }
+}
