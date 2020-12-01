@@ -481,6 +481,9 @@ emitter<span class="token punctuation">.</span>call <span class="token operator"
 <p>整个的流程细化以后大概是这个样子的：  </p>
 <p><img src="/images/grpc-code-read/grpc-client-request-process.png" alt="">  </p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>上边整体的记录就是关于 Client 这一侧是如何实现的了。<br>主要涉及到 Client 的构建、发送请求时做的事情、拦截器的作用。<br>而更深入的一些逻辑其实是在 c++ 版本的 gRPC 库里所实现，所以本次笔记并没有过多的涉及。  </p>
+<blockquote>
+<p>文章涉及到的部分示例代码仓库地址：<a href="https://github.com/Jiasm/grpc-example" target="_blank" rel="noopener">https://github.com/Jiasm/grpc-example</a></p>
+</blockquote>
 
 </div>
 
