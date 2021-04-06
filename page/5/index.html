@@ -63,6 +63,43 @@
 <body>
   <section class="posts">
     
+      <a class="post" href="/2018/05/06/JavaScript异步编程-Generator与Async/">
+        <div class="post-title">
+          JavaScript异步编程：Generator与Async
+        </div>
+        <div class="post-content">
+          从Promise开始，JavaScript就在引入新功能，来帮助更简单的方法来处理异步编程，帮助我们远离回调地狱。Promise是下边要讲的Generator/yield与async/await的基础，希望你已经提前了解了它。  
+在大概ES6的时代，推出了Generator/yield两个关键字，使用Generator可以很方便的帮助我们建立一个处理Promise的解释器。
+然后，在ES7左右，我们又得到了async/await这样的语法，可以让我们以接近编写同步代码的方式来编写异步代码（无需使用.then()或者回调函数）。
+两者都能够帮助我们很方便的进行异步编程，但同样，这两者之间也是有不少区别的。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="2a74d0b0-4a83-11e8-9c98-c52ae31e6eed">0 Comments</span>
+          <span class="post-time">
+            2018-05-06 18:06
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/04/25/数组的遍历你都会用了，那Promise版本的呢/">
+        <div class="post-title">
+          数组的遍历你都会用了，那Promise版本的呢
+        </div>
+        <div class="post-content">
+          
+这里指的遍历方法包括：map、reduce、reduceRight、forEach、filter、some、every因为最近要进行了一些数据汇总，node版本已经是8.11.1了，所以直接写了个async/await的脚本。但是在对数组进行一些遍历操作时，发现有些遍历方法对Promise的反馈并不是我们想要的结果。
+
+当然，有些严格来讲并不能算是遍历，比如说some，every这些的。但确实，这些都会根据我们数组的元素来进行多次的调用传入的回调。
+这些方法都是比较常见的，但是当你的回调函数是一个Promise时，一切都变了。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="6d32e140-4898-11e8-8c86-e715c1f87b28">0 Comments</span>
+          <span class="post-time">
+            2018-04-25 22:53
+          </span>
+        </div>
+      </a>
+      
       <a class="post" href="/2018/04/19/NPM实用指北/">
         <div class="post-title">
           NPM实用指北
@@ -207,46 +244,12 @@ JavaScript中的比较运算符粗略的可以分为两种：
         </div>
       </a>
       
-      <a class="post" href="/2018/03/09/函数节流与函数防抖/">
-        <div class="post-title">
-          函数节流与函数防抖
-        </div>
-        <div class="post-content">
-          
-函数节流和函数防抖是一个老生常谈的话题了，两者都是对大量频繁重复调用代码的一种优化方案今天在某群和大家讨论时，顺便搜了一些相关博客发现有一篇关于两者的定义竟然写反了。。。所以决定自己来写一下-.-权当加深记忆了
-
-        </div>
-        <div class="post-meta">
-          <span class="disqus-comment-count" data-disqus-identifier="f5253c60-23ae-11e8-bba7-eb8126ebe6f3">0 Comments</span>
-          <span class="post-time">
-            2018-03-09 23:31
-          </span>
-        </div>
-      </a>
-      
-      <a class="post" href="/2017/12/30/2017年终总结/">
-        <div class="post-title">
-          2017年终总结
-        </div>
-        <div class="post-content">
-          
-又到了一年做总结的时候了；2017年充满了惊喜，去年的目标也完成个80%左右；现在回想起来一年其实过得是非常快的，非常充实的一年。
-
-        </div>
-        <div class="post-meta">
-          <span class="disqus-comment-count" data-disqus-identifier="bf947150-ed2c-11e7-9b5a-1fb729037c84">0 Comments</span>
-          <span class="post-time">
-            2017-12-30 23:44
-          </span>
-        </div>
-      </a>
-      
   </section>
 
   
     <!-- Index nav -->
     <nav class="paginator-wrap">
-      <a class="extend prev" rel="prev" href="/page/4/"><div class="paginator-item"><i class="fa fa-angle-left"></i></div></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/"><div class="paginator-item"><i class="fa fa-angle-right"></i></div></a>
+      <a class="extend prev" rel="prev" href="/page/4/"><div class="paginator-item"><i class="fa fa-angle-left"></i></div></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/"><div class="paginator-item"><i class="fa fa-angle-right"></i></div></a>
     </nav>
     
 </body>
@@ -261,7 +264,7 @@ JavaScript中的比较运算符粗略的可以分为两种：
     <footer class="footer">
   <div class="footer-content">
     <div class="footer-info" class="inner">
-      <p class="copyright">&copy; 2020 ShunMing Jia<br></p>
+      <p class="copyright">&copy; 2021 ShunMing Jia<br></p>
       powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
     </div>
