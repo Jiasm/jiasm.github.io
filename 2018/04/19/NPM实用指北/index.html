@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>NPM实用指北 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载相关的操作"><span class="toc-number">1.</span> <span class="toc-text">下载相关的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装原有的依赖包"><span class="toc-number">1.1.</span> <span class="toc-text">安装原有的依赖包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新增依赖的安装"><span class="toc-number">1.2.</span> <span class="toc-text">新增依赖的安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传相关的操作"><span class="toc-number">2.</span> <span class="toc-text">上传相关的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#npm-init"><span class="toc-number">2.1.</span> <span class="toc-text">npm init</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发包的过程"><span class="toc-number">2.2.</span> <span class="toc-text">开发包的过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何进行本地debug"><span class="toc-number">2.2.1.</span> <span class="toc-text">如何进行本地debug</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何创建命令行可执行模块"><span class="toc-number">2.2.2.</span> <span class="toc-text">如何创建命令行可执行模块</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#npm-show"><span class="toc-number">2.3.</span> <span class="toc-text">npm show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#npm-publish"><span class="toc-number">2.4.</span> <span class="toc-text">npm publish</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#之后的版本更新"><span class="toc-number">2.4.1.</span> <span class="toc-text">之后的版本更新</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#patch"><span class="toc-number">2.4.1.1.</span> <span class="toc-text">patch</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#minor"><span class="toc-number">2.4.1.2.</span> <span class="toc-text">minor</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#major"><span class="toc-number">2.4.1.3.</span> <span class="toc-text">major</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#npm-scripts"><span class="toc-number">2.5.</span> <span class="toc-text">npm scripts</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#publish"><span class="toc-number">2.5.1.</span> <span class="toc-text">publish</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#install"><span class="toc-number">2.5.2.</span> <span class="toc-text">install</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#uninstall"><span class="toc-number">2.5.3.</span> <span class="toc-text">uninstall</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">3.</span> <span class="toc-text">小记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">3.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>NPM实用指北</h1>
+  <p><code>npm</code>作为下载<code>node</code>附送的大礼包，大家一定不会陌生。<br>然而关于<code>npm</code>，估计大量的只是用到<code>npm install XXX</code>以及<code>npm run XXX</code>。</p>
+<p>其实这里边还有很多有意思的命令&amp;参数。<br>关于<code>npm</code>，大概有两个作用：</p>
+<ol>
+<li>能让我们很方便的从网上下载第三方包进行实现功能</li>
+<li>能够让我们自己编写包，并上传到网上供其他人下载</li>
+</ol>
+<a id="more"></a>
+<h2 id="下载相关的操作"><a href="#下载相关的操作" class="headerlink" title="下载相关的操作"></a>下载相关的操作</h2><p>下载主要就是围绕着<code>install</code>这一个命令来的。</p>
+<blockquote>
+<p>install 可以简写为 i</p>
+</blockquote>
+<h3 id="安装原有的依赖包"><a href="#安装原有的依赖包" class="headerlink" title="安装原有的依赖包"></a>安装原有的依赖包</h3><p>当我们处于一个项目下时，执行<code>npm i</code>即可安装当前项目所有的依赖包。<br>包含<code>dependencies</code>、<code>devDependencies</code>、<code>optionalDependencies</code>和<code>bundleDependencies</code>中的所有。<br>如果我们在执行<code>npm i</code>时添加<code>--production</code>的参数，则表示是线上环境，将会忽略<code>devDependencies</code>下的所有依赖。</p>
+<p>现在我们有如下的<code>package.json</code>文件：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  <span class="token string">"dependencies"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"koa"</span><span class="token punctuation">:</span> <span class="token string">"^2.5.0"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string">"devDependencies"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"eslint"</span><span class="token punctuation">:</span> <span class="token string">"^4.19.1"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果执行<code>npm i</code>，则会安装所有的依赖。</p>
+<pre class="line-numbers language-shell"><code class="language-shell">> npm ls --depth=0
+├── eslint@4.19.1
+└── koa@2.5.0
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>然后我们再尝试添加<code>--production</code>参数，使用<code>--only=prod[uction]</code>同样可以实现效果。</p>
+<pre class="line-numbers language-shell"><code class="language-shell">> npm ls --depth=0
+└── koa@2.5.0
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>使用<code>--only=dev[elopment]</code>则用来仅安装<code>devDependencies</code>的依赖。</p>
+<blockquote>
+<p>–depth=XXX 用来设置显示路径的深度，默认会递归将所有的依赖都打印出来。</p>
+</blockquote>
+<h3 id="新增依赖的安装"><a href="#新增依赖的安装" class="headerlink" title="新增依赖的安装"></a>新增依赖的安装</h3><p>上边是直接安装项目原有依赖的操作，如果我们要新增一些依赖，这里有一些选项可以了解一下。<br>如果我们在执行<code>install</code>添加<code>--no-save</code>、<code>--save-dev</code>之类的<code>flag</code>时，不会直接写入到<code>dependencies</code>中，而是有一些其他的处理。</p>
+<p>各种选项：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">flag</th>
+<th style="text-align:left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>--save-prod</code></td>
+<td style="text-align:left">默认选项 对应<code>dependencies</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--no-save</code></td>
+<td style="text-align:left">不将依赖写进<code>package.json</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--save-dev</code>、<code>-D</code></td>
+<td style="text-align:left">对应<code>devDependencies</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--save-optional</code>、<code>-O</code></td>
+<td style="text-align:left">对应<code>optionalDependencies</code>，在安装时可以通过指定<code>--no-optional</code>来忽略该模块下的依赖</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--save-bundle</code>、<code>-B</code></td>
+<td style="text-align:left">对应<code>bundleDependencies</code>，<em>貌似已经被废弃了-.-</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--save-exact</code>、<code>-E</code></td>
+<td style="text-align:left">安装精准的某个版本，在版本号处不会添加<code>^</code>之类的标识</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--global</code>、<code>-g</code></td>
+<td style="text-align:left">全局安装包，一般来说需要管理员权限</td>
+</tr>
+</tbody>
+</table>
+<p><em>更多的参数请查阅：<a href="https://docs.npmjs.com/cli/install" target="_blank" rel="noopener">https://docs.npmjs.com/cli/install</a></em></p>
+<blockquote>
+<p>在<code>package.json</code>中经常能看到依赖的版本号前边有一个<code>^</code>或<code>~</code>。<br><code>^</code>和<code>~</code>会导致重新安装依赖的时候，按照规则安装最新版。<br>比如版本号为<code>^2.1.0</code>，则会匹配<code>&gt;=2.1.0 &lt;3.0.0</code>的所有包<br>如果版本号为<code>~2.1.0</code>，则会匹配<code>&gt;=2.1.0 &lt;2.2.0</code>的所有包<br>这两个标识的好处是：一个包进行修复<code>bug</code>，只更新了最后一位版本号，所有依赖它的包不需要重新上传自己的<code>package.json</code><br>所以说，涉及到可能产生不兼容后果的更新，请一定要修改前两位版本号。。否则就是坑人了-.-</p>
+</blockquote>
+<p>以及我们可以指定安装包时候的<code>tag</code>或者<code>version</code></p>
+<pre class="line-numbers language-shell"><code class="language-shell">npm i koa@next
+npm i koa@2.0.0
+npm i koa@">=2.0.0 <2.5.0"
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这里的<code>next</code>就是一个<code>tag</code> <em>如果不指定的话，有一个默认的<code>latest</code></em>。<br>以及第二条指定安装<code>2.0.0</code>版本的<code>koa</code>。<br>最后一条则会在范围规则内选择最新的版本进行安装。</p>
+<h2 id="上传相关的操作"><a href="#上传相关的操作" class="headerlink" title="上传相关的操作"></a>上传相关的操作</h2><p>要上传，肯定就要先进行开发。<br>所以我们上传的整个流程大概是这样的：</p>
+<ol>
+<li><code>npm init</code>创建<code>package.json</code></li>
+<li>进行开发</li>
+<li><code>npm show &lt;你的包名&gt;</code>，如果404，那么恭喜你，这个名字还没有被占用。</li>
+<li><code>npm publish</code>，上传包。</li>
+</ol>
+<h3 id="npm-init"><a href="#npm-init" class="headerlink" title="npm init"></a>npm init</h3><p>其实有很多情况下，我们创建<code>package.json</code>只是为了安装依赖，但是执行了<code>npm init</code>以后却要确认好多次选填内容。<br>其实如果你添加了一个参数以后，<code>npm</code>就不会让你确认这些选填内容了。<br><code>npm init -f</code>，<code>--force</code>、<code>-y</code>和<code>--yes</code>都可以实现这个效果。<br>当然，如果你是要将这个文件夹作为一个<code>pacakge</code>发出去，则这些选填内容都是需要的。</p>
+<h3 id="开发包的过程"><a href="#开发包的过程" class="headerlink" title="开发包的过程"></a>开发包的过程</h3><h4 id="如何进行本地debug"><a href="#如何进行本地debug" class="headerlink" title="如何进行本地debug"></a>如何进行本地debug</h4><p>在开发过程中，为了本地快速进行调试，可以执行这样的命令：<br><code>npm link &lt;你的包名&gt;</code><br>如果在当前包的文件夹中，可以直接执行<code>npm link</code></p>
+<blockquote>
+<p>可以简写为<code>npm ln</code></p>
+</blockquote>
+<p>然后在要调试的项目中执行<code>npm link &lt;你的包名&gt;</code><br>即可创建一个引用本地的链接。<br>在调试完毕后，执行<code>npm unlink</code>来删除链接。</p>
+<h4 id="如何创建命令行可执行模块"><a href="#如何创建命令行可执行模块" class="headerlink" title="如何创建命令行可执行模块"></a>如何创建命令行可执行模块</h4><p>我们可以在<code>package.json</code>中添加<code>bin</code>字段，用来指定一个文件。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  <span class="token string">"bin"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"sayhi"</span><span class="token punctuation">:</span> <span class="token string">"bin/hi"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>文件<code>./bin/hi</code>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">#<span class="token operator">!</span><span class="token operator">/</span>usr<span class="token operator">/</span>bin<span class="token operator">/</span>env node
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hi there'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>如果用过<code>-g</code>进行全局安装，就会注册对应的命令，我们在<code>terminal</code>中就可以直接执行了。<br><strong><code>#!/usr/bin/env node</code>为必须的，路径可能会变</strong></p>
+<h3 id="npm-show"><a href="#npm-show" class="headerlink" title="npm show"></a>npm show</h3><p>这个方法貌似没有被写在文档里。。但它确实是存在的。<br>执行<code>npm show XXX</code>会返回这个包对应的信息，也可以直接在后边按照<code>JSON</code>的格式来进行取值：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">npm show koa version
+npm show koa dist-tags.latest
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="npm-publish"><a href="#npm-publish" class="headerlink" title="npm publish"></a>npm publish</h3><p>当我们的包开发完毕后，就可以执行<code>publish</code>来进行上传了。</p>
+<pre class="line-numbers language-shell"><code class="language-shell">npm publish
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>你同样可以在后边指定一个文件夹路径或者压缩包，但都需要这两者包含<code>package.json</code>文件（npm包的信息都在这里）</p>
+<p>以及，我们可以在后边拼接<code>--tag=XXX</code>来上传一个对应的<code>tag</code>，如果不写的话，默认会上传到<code>latest</code>下。<br>写<code>tag</code>的好处是，我们可以同时维护多份代码，两者互不影响（但是要小心<code>publish</code>的时候一定不要忘记<code>tag</code>）<br>就比如去年的<code>node.js</code>稳定版还是6，但是<code>koa</code>已经开始使用<code>7.6+</code>的<code>async</code>/<code>await</code>特性，所以他们就发布了<code>koa@next</code>，也就是现在的<code>2.x</code>，用来支持新的语法。</p>
+<h4 id="之后的版本更新"><a href="#之后的版本更新" class="headerlink" title="之后的版本更新"></a>之后的版本更新</h4><p>如果我们的包放到线上以后，发现了<code>bug</code>，我们需要修复它，因为<code>npm</code>的限制，所以每次<code>publish</code>必须保证<code>version</code>的一致性。<br><code>npm</code>给我们提供了这样三个命令：</p>
+<ol>
+<li><code>npm version patch</code></li>
+<li><code>npm version minor</code></li>
+<li><code>npm version major</code></li>
+</ol>
+<p>三个命令依次会修改<code>version</code>的第<code>3.2.1</code>位。<br><code>major.minor.patch</code></p>
+<h5 id="patch"><a href="#patch" class="headerlink" title="patch"></a>patch</h5><p><code>patch</code>为改动最小的，也就是我们上边提到过的<code>bug</code>修复，<code>^</code>和<code>~</code>都会兼容的版本号。</p>
+<h5 id="minor"><a href="#minor" class="headerlink" title="minor"></a>minor</h5><p>如果是<code>minor</code>，则会修改中间的版本号，一般来讲，新功能的增加需要修改这个版本号，因为可能会造成之前的使用方式改变。</p>
+<h5 id="major"><a href="#major" class="headerlink" title="major"></a>major</h5><p>最后一个则是很大的更新才会去修改的版本号，例如我们亲爱的<code>koa</code>，在抛弃<code>Generator</code>拥抱<code>async</code>/<code>await</code>就是直接发布了<code>koa2.x</code>。</p>
+<p>执行这三个命令的先提条件是，你当前仓库是不存在未提交的修改的。<br>因为<code>npm</code>会直接帮你修改<code>version</code>并增加一条<code>commit</code>记录，如果有未提交的修改，可能会导致版本冲突。<br>在执行完这些命令（或者手动修改版本号也是没问题的），再执行<code>npm publish</code>即可上传更新包了。</p>
+<blockquote>
+<p>如果想要自定义这次提交的信息的话，可以这样：<br><code>npm version patch -m &quot;Upgrade version to %s&quot;</code><br><code>%s</code>会自动被<code>npm</code>替换为更新后的版本号提交上去。</p>
+</blockquote>
+<p><strong>更新时一定记得加对应的<code>--tag</code>，否则默认会推到<code>@latest</code>上</strong></p>
+<h3 id="npm-scripts"><a href="#npm-scripts" class="headerlink" title="npm scripts"></a>npm scripts</h3><p>关于<code>package.json</code>中的<code>scripts</code>，不知道大家了解多少。<br>如果你的包是上传到<code>npm</code>上的，那么其实有很多<code>scripts</code>是类似钩子的存在。</p>
+<h4 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h4><p>当你的包执行了<code>publish</code>上传到服务器后，这个脚本会执行。<br>其实我们可以在这个地方执行<code>git push</code>操作来将本次的修改直接推到<code>GitHub</code>仓库上，节省了一次不必要的命令键入。<br>或者如果你这个包同时还上传到<code>apm</code>或者之类的同类型仓库，也可以直接在这里进行处理（省去多次繁琐的操作）</p>
+<h4 id="install"><a href="#install" class="headerlink" title="install"></a>install</h4><p>这个脚本会在包被安装后执行。<br>比如说我们使用<code>Flowtype</code>开发了一个包，我们可以直接将源码传到<code>npm</code>上，然后在<code>install</code>命令中执行编译，去除<code>flow comments</code>。</p>
+<blockquote>
+<p>一些依赖于<code>node-gyp</code>的包都会有<code>install: node-gyp rebuild</code>的操作。</p>
+</blockquote>
+<h4 id="uninstall"><a href="#uninstall" class="headerlink" title="uninstall"></a>uninstall</h4><p>如果你的包会对一些全局的数据造成影响（比如某些包可能会去改写<code>.bashrc</code>之类的文件）。<br>这时你可以在<code>uninstall</code>脚本中将那些修改项进行还原（<em>良心操作</em>）。</p>
+<blockquote>
+<p>更多的<code>scripts</code>钩子：<a href="https://docs.npmjs.com/misc/scripts" target="_blank" rel="noopener">https://docs.npmjs.com/misc/scripts</a></p>
+</blockquote>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>最近翻看了一下<code>npm</code>的文档，发现了很多之前很少用的命令&amp;参数。<br>觉得<code>npm</code>做的真心很不错，原来的一些重复性的工作，其实可以很轻松的使用<code>npm</code>相关的命令来解决。<br>希望大家不要只拿来进行<code>npm install</code>。<br>最后：<code>NPM Loves You</code>。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://docs.npmjs.com/cli/init" target="_blank" rel="noopener">https://docs.npmjs.com/cli/init</a><br><a href="https://docs.npmjs.com/misc/developers" target="_blank" rel="noopener">https://docs.npmjs.com/misc/developers</a><br><a href="https://docs.npmjs.com/cli/version" target="_blank" rel="noopener">https://docs.npmjs.com/cli/version</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/04/19/NPM实用指北/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '38c6d450-43e0-11e8-bdca-5b2c3f44a5f0'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

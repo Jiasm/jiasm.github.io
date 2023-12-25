@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>Chrome设置断点的各种姿势 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#在JavaScript代码中设置断点"><span class="toc-number">1.</span> <span class="toc-text">在JavaScript代码中设置断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在JavaScript代码中设置条件断点"><span class="toc-number">2.</span> <span class="toc-text">在JavaScript代码中设置条件断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除或禁用JavaScript断点"><span class="toc-number">3.</span> <span class="toc-text">删除或禁用JavaScript断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在DOM元素上设置断点"><span class="toc-number">4.</span> <span class="toc-text">在DOM元素上设置断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR请求的断点"><span class="toc-number">5.</span> <span class="toc-text">XHR请求的断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#各种事件的断点"><span class="toc-number">6.</span> <span class="toc-text">各种事件的断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常断点"><span class="toc-number">7.</span> <span class="toc-text">异常断点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小记"><span class="toc-number">8.</span> <span class="toc-text">小记</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>Chrome设置断点的各种姿势</h1>
+  <blockquote>
+<p>最近在翻看Chrome devtools的文档，刚看到了关于断点调试这里，感觉发现了新大陆-。-<br>本文记录一下如何在Chrome上设置断点，以及可以设置哪些断点，并不涉及具体调试相关的操作。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="在JavaScript代码中设置断点"><a href="#在JavaScript代码中设置断点" class="headerlink" title="在JavaScript代码中设置断点"></a>在JavaScript代码中设置断点</h3><blockquote>
+<p>刚工作时被leader安利了Chrome浏览器，那时一说到调试，就知道这一个操作<br>以为在行号上单击一下就是打断点，就是会调试了:)</p>
+</blockquote>
+<p>当然这也是最最基本的打断点的方式了，当然了，相较于 <em>调试全靠alert</em> 已经高端很多了。<br>首先需要打开<code>Devtools</code>切换到<code>Source</code>页签，然后在左侧<code>file navigation</code>中找到我们要设置断点的文件并打开。<br>在打开的页面上单击对应的行号即可设置断点。<br>同时也可以通过在行号上右键点击<code>Add breakpoint</code>来设置断点。<br>当断点触发时，整个页面会处于暂停状态，并会切换到Source页签断点处方便调试，直到终止该断点调试后页面才会继续运行。<br>设置断点的行号上会显示一个蓝色的矩形来告诉你这里有一个断点。</p>
+<p><em>P.S. 当一个表达式跨行时，添加的断点会默认下移到该表达式结束后的一行</em></p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-1.png" alt=""></p>
+<h3 id="在JavaScript代码中设置条件断点"><a href="#在JavaScript代码中设置条件断点" class="headerlink" title="在JavaScript代码中设置条件断点"></a>在JavaScript代码中设置条件断点</h3><blockquote>
+<p>当知道了如何在行号上单击来添加断点，已经能满足最最最基本的调试了。</p>
+</blockquote>
+<p>但如果遇到一些特殊情况，断点添加起来不是那么的舒服的时候要肿么办呢？<br>比如说我写了一个循环，该循环会执行<code>10</code>次，可是我发现程序在第<code>8</code>次执行时的结果并不是我想要的。<strong>（不禁回想起刚工作时，有类似的问题，我当时的处理方式就是一手托腮，另一只手放在F8键上，狂按数十下后正襟危坐，开始调试）</strong><br>显然，<code>Chrome</code>已经帮我们想到了这种场景，我们可以通过添加一些条件断点来避免一些无意义的断点。</p>
+<p>我们可以通过右键行号，选择<code>Add conditional breakpoint</code>来添加一个带有条件的断点。</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-2.png" alt=""></p>
+<p>这是我们会看到界面上多出了一个输入框，并提示我们将在XXX行设置一个只会满足下列表达式的时候才会暂停的断点-.-</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-3.png" alt=""></p>
+<p>结合上边的场景，我们就在输入框中键入如下表达式，当循环计数器<code>count</code>全等于<code>8</code>时，会暂停页面并进入调试。<br>回车确认后我们就得到了一个金黄色的矩形来标识。</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-4.png" alt=""></p>
+<h3 id="删除或禁用JavaScript断点"><a href="#删除或禁用JavaScript断点" class="headerlink" title="删除或禁用JavaScript断点"></a>删除或禁用JavaScript断点</h3><p>删除断点的方式，选择菜单栏中的<code>Remove breakpoint</code>。<br>禁用断点的方式，选择菜单栏中的<code>Disable breakpoint</code> 或者直接在设置了断点的行号上单击即可。</p>
+<p>或者我们也可以通过<code>debugger</code>模块来统一管理所有的断点。<br>点击断点对应的复选框可以禁用断点，右键选择<code>Remove breakpoint</code>也可删除断点。</p>
+<p>以及一些对断点的其他操作也可以通过右键菜单来实现，禁用激活所有的断点之类的。</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-5.png" alt=""></p>
+<h3 id="在DOM元素上设置断点"><a href="#在DOM元素上设置断点" class="headerlink" title="在DOM元素上设置断点"></a>在DOM元素上设置断点</h3><blockquote>
+<p>断点不仅仅可以设置在JS代码上，还可以在DOM元素上设置断点<br>刚刚看到时我都惊呆了，没想到竟然还有这种操作。</p>
+</blockquote>
+<p><img src="/images/how-to-add-breakpoints/screenshot-6.png" alt=""></p>
+<p>我们可以设置三种断点</p>
+<ul>
+<li><code>subtree modifications</code>子节点内容的的修改删除新增（子节点的属性修改不会触发，当前节点的修改不会触发）</li>
+<li><code>attribute modifications</code>当前节点的属性修改删除新增</li>
+<li><code>node removal</code>当前节点被移除</li>
+</ul>
+<p>我们需要切换到<code>Elements</code>页签，在想要添加断点的DOM节点上右键点击，在最下边的<code>Break on</code>菜单项可以找到这三个选项</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-6.png" alt=""></p>
+<p>当我们的脚本触发了DOM的修改时，<code>devtools</code>会直接跳转到<code>Source</code>页签并定位到修改DOM的那行代码上</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-8.png" alt=""></p>
+<p>同时我们还可以通过<code>debugger</code>模块来管理所有的DOM断点，<br>可以看到所有的DOM断点，以及他们所监听的类型，<br>也可以进行一键删除之类的操作。</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-7.png" alt=""></p>
+<h3 id="XHR请求的断点"><a href="#XHR请求的断点" class="headerlink" title="XHR请求的断点"></a>XHR请求的断点</h3><p>我们可以通过<code>debugger</code>下的<code>XHR Breakpoints</code>来管理<code>XHR</code>请求相关的断点。<br>点击➕新增一个断点，我们可以选择输入一个链接地址，当一个<code>XHR</code>请求的链接与所输入的值匹配时，便会中断进程进入断点。</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-9.png" alt=""></p>
+<p>或者我们可以选择直接回车，监听所有的<code>XHR</code>请求</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-10.png" alt=""></p>
+<p><em>P.S.如果想要监听<code>XHR</code>请求的某个状态，可以参考下文</em></p>
+<h3 id="各种事件的断点"><a href="#各种事件的断点" class="headerlink" title="各种事件的断点"></a>各种事件的断点</h3><blockquote>
+<p>用了这个再也不用担心多人开发时找不到事件处理的代码写在哪里了。</p>
+</blockquote>
+<p>这里边可以监听的事件挺全的。。就是勾选复选框即可，当触发某个事件时，便会跳转到对应的代码中去。<br>截图展开部分就是<code>XHR</code>请求周期的各种状态事件</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-11.png" alt=""></p>
+<h3 id="异常断点"><a href="#异常断点" class="headerlink" title="异常断点"></a>异常断点</h3><p>当代码出现异常时，我们会在<code>Console</code>页签看到错误提醒，并可以通过后边的锚点找到对应的文件以及定位到出错的代码行。</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-12.png" alt=""></p>
+<p>但是这时代码已经抛出了异常，我们可以通过设置异常断点，在抛出异常前进入断点进行调试。<br>点击<code>debugger</code>上边的的这个小图标，就可以设置在程序抛出异常时进入断点。（灰色为禁用-.-悬浮icon会有提示）</p>
+<p><img src="/images/how-to-add-breakpoints/screenshot-13.png" alt=""><br><img src="/images/how-to-add-breakpoints/screenshot-14.png" alt=""></p>
+<h3 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h3><p>只想说，<code>Chrome</code>真的很强大。<br>平时能用到<code>Chrome Devtools</code>的功能也是少之又少。<br>仅仅一个打断点就能搞出这么多花来，很期待接下来能够在文档中发现什么。</p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2017/08/10/chrome设置断点的各种姿势/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '8eb139c0-7dc8-11e7-af2c-134eac7c3914'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

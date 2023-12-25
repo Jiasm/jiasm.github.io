@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>记一次Node项目的优化 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关环境"><span class="toc-number">1.1.</span> <span class="toc-text">相关环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些小提示"><span class="toc-number">1.2.</span> <span class="toc-text">一些小提示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个优化的地方"><span class="toc-number">2.</span> <span class="toc-text">几个优化的地方</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据结构相关的优化"><span class="toc-number">2.1.</span> <span class="toc-text">数据结构相关的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#过滤来自另一份数据源的优化"><span class="toc-number">2.1.1.</span> <span class="toc-text">过滤来自另一份数据源的优化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关于来自Redis的过滤"><span class="toc-number">2.1.2.</span> <span class="toc-text">关于来自Redis的过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#这里有一点小建议可供参考"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">这里有一点小建议可供参考</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关于Set两种实际的场景"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">关于Set两种实际的场景</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#降低网络传输成本"><span class="toc-number">2.2.</span> <span class="toc-text">降低网络传输成本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#杜绝Hash的滥用"><span class="toc-number">2.2.1.</span> <span class="toc-text">杜绝Hash的滥用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步代码相关的优化"><span class="toc-number">2.3.</span> <span class="toc-text">异步代码相关的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#将串行改为并行带来的额外好处"><span class="toc-number">2.3.1.</span> <span class="toc-text">将串行改为并行带来的额外好处</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">3.</span> <span class="toc-text">后记</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>记一次Node项目的优化</h1>
+  <blockquote>
+<p>这两天针对一个Node项目进行了一波代码层面的优化，从响应时间上看，是一次很显著的提升。<br>一个纯粹给客户端提供接口的服务，没有涉及到页面渲染相关。  </p>
+</blockquote>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>首先这个项目是一个几年前的项目了，期间一直在新增需求，导致代码逻辑变得也比较复杂，接口响应时长也在跟着上涨。<br>之前有过一次针对服务器环境方面的优化（<em>node版本升级</em>），确实性能提升不少，但是本着“青春在于作死”的理念，这次就从代码层面再进行一次优化。  </p>
+<a id="more"></a>
+<h3 id="相关环境"><a href="#相关环境" class="headerlink" title="相关环境"></a>相关环境</h3><p>由于是一个几年前的项目，所以使用的是<code>Express</code>+<code>co</code>这样的。<br>因为早年<code>Node.js</code>版本为<code>4.x</code>，遂异步处理使用的是<code>yield</code>+<code>generator</code>这种方式进行的。<br>确实相对于一些更早的<code>async.waterfall</code>来说，代码可读性已经很高了。  </p>
+<p>关于数据存储方面，因为是一些实时性要求很高的数据，所以数据均来自<code>Redis</code>。<br><code>Node.js</code>版本由于前段时间的升级，现在为<code>8.11.1</code>，这让我们可以合理的使用一些新的语法来简化代码。  </p>
+<p>因为访问量一直在上涨，一些早年没有什么问题的代码在请求达到一定量级以后也会成为拖慢程序的原因之一，这次优化主要也是为了填这部分坑。    </p>
+<h3 id="一些小提示"><a href="#一些小提示" class="headerlink" title="一些小提示"></a>一些小提示</h3><p>本次优化笔记，并不会有什么<code>profile</code>文件的展示。<br>我这次做优化也没有依赖于性能分析，只是简单的添加了接口的响应时长，汇总后进行对比得到的结果。(异步的写文件<code>appendFile</code>了开始结束的时间戳)<br><em>依据<code>profile</code>的优化可能会作为三期来进行。</em><br><em><code>profile</code>主要会用于查找内存泄漏、函数调用堆栈内存大小之类的问题，所以本次优化没有考虑<code>profile</code>的使用</em><br><em>而且我个人觉得贴那么几张内存快照没有任何意义(在本次优化中)，不如拿出些实际的优化前后代码对比来得实在。</em>  </p>
+<h2 id="几个优化的地方"><a href="#几个优化的地方" class="headerlink" title="几个优化的地方"></a>几个优化的地方</h2><p>这里列出了在本次优化中涉及到的地方：</p>
+<ol>
+<li>一些不太合理的数据结构（用的姿势有问题）</li>
+<li>串行的异步代码（类似<code>callback</code>地狱那种格式的）</li>
+</ol>
+<h3 id="数据结构相关的优化"><a href="#数据结构相关的优化" class="headerlink" title="数据结构相关的优化"></a>数据结构相关的优化</h3><p>这里说的结构都是与<code>Redis</code>相关的，基本上是指部分数据过滤的实现<br>过滤相关的主要体现在一些列表数据接口中，因为要根据业务逻辑进行一些过滤之类的操作：  </p>
+<ol>
+<li>过滤的参考来自于另一份生成好的数据集</li>
+<li>过滤的参考来自于Redis</li>
+</ol>
+<p><em>其实第一种数据也是通过<code>Redis</code>生成的。:)</em>  </p>
+<h4 id="过滤来自另一份数据源的优化"><a href="#过滤来自另一份数据源的优化" class="headerlink" title="过滤来自另一份数据源的优化"></a>过滤来自另一份数据源的优化</h4><p>就像第一种情况，在代码中可能是类似这样的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> data1 <span class="token operator">=</span> <span class="token function">getData1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// [{id: XXX, name: XXX}, ...]</span>
+
+<span class="token keyword">let</span> data2 <span class="token operator">=</span> <span class="token function">getData2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// [{id: XXX, name: XXX}, ...]</span>
+
+data2 <span class="token operator">=</span> data2<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> target <span class="token keyword">of</span> data1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>target<span class="token punctuation">.</span>id <span class="token operator">===</span> item<span class="token punctuation">.</span>id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>有两个列表，要保证第一个列表中的数据不会出现在第二个列表中<br><em>当然，这个最优的解决方案一定是服务端不进行处理，由客户端进行过滤，但是这样就失去了灵活性，而且很难去兼容旧版本</em><br>上面的代码在遍历<code>data2</code>中的每一个元素时，都会尝试遍历<code>data1</code>，然后再进行两者的对比。<br>这样做的缺点在于，每次都会重新生成一个迭代器，且因为判断的是<code>id</code>属性，每次都会去查找对象属性，所以我们对代码进行如下优化：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 在外层创建一个用于过滤的数组</span>
+<span class="token keyword">let</span> filterData <span class="token operator">=</span> data1<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> item<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+
+data2 <span class="token operator">=</span> data2<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span>
+  filterData<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样我们在遍历<code>data2</code>时只是对<code>filterData</code>对象进行调用了<code>includes</code>进行查找，而不是每次都去生成一个新的迭代器。<br>当然，其实关于这一块还是有可以再优化的地方，因为我们上边创建的<code>filterData</code>其实是一个<code>Array</code>，这是一个<code>List</code>，使用<code>includes</code>,可以认为其时间复杂度为<code>O(N)</code>了，<code>N</code>为<code>length</code>。<br>所以我们可以尝试将上边的<code>Array</code>切换为<code>Object</code>或者<code>Map</code>对象。<br>因为后边两个都是属于<code>hash</code>结构的，对于这种结构的查找可以认为时间复杂度为<code>O(1)</code>了，<em>有或者没有</em>。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> filterData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+data<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span>
+  filterData<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 填充null占位，我们并不需要它的实际值</span>
+<span class="token punctuation">)</span>
+
+data2 <span class="token operator">=</span> data2<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span>
+  filterData<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>P.S. 跟同事讨论过这个问题，并做了一个测试脚本实验，证明了在针对大量数据进行判断item是否存在的操作时，<code>Set</code>和<code>Array</code>表现是最差的，而<code>Map</code>和<code>Object</code>基本持平。</em>  </p>
+<h4 id="关于来自Redis的过滤"><a href="#关于来自Redis的过滤" class="headerlink" title="关于来自Redis的过滤"></a>关于来自Redis的过滤</h4><p>关于这个的过滤，需要考虑优化的<code>Redis</code>数据结构一般是<code>Set</code>、<code>SortedSet</code>。<br>比如<code>Set</code>调用<code>sismember</code>来进行判断某个<code>item</code>是否存在，<br>或者是<code>SortedSet</code>调用<code>zscore</code>来判断某个<code>item</code>是否存在（<em>是否有对应的<code>score</code>值</em>）  </p>
+<p>这里就是需要权衡一下的地方了，如果我们在循环中用到了上述的两个方法。<br>是应该在循环外层直接获取所有的<code>item</code>，直接在内存中判断元素是否存在<br>还是在循环中依次调用<code>Redis</code>进行获取某个<code>item</code>是否存在呢？  </p>
+<h5 id="这里有一点小建议可供参考"><a href="#这里有一点小建议可供参考" class="headerlink" title="这里有一点小建议可供参考"></a>这里有一点小建议可供参考</h5><ul>
+<li>如果是<code>SortedSet</code>，建议在循环中使用<code>zscore</code>进行判断（这个时间复杂度为<code>O(1)</code>）</li>
+<li>如果是<code>Set</code>，如果已知的<code>Set</code>基数基本都会大于循环的次数，建议在循环中使用<code>sismember</code>进行判断<br>如果代码会循环很多次，而<code>Set</code>基数并不大，可以取出来放到循环外部使用（<code>smembers</code>时间复杂度为<code>O(N)</code>，<code>N</code>为集合的基数）<br><em>而且，还有一点儿，网络传输成本也需要包含在我们权衡的范围内，因为像<code>sismbers</code>的返回值只是<code>1|0</code>，而<code>smembers</code>则会把整个集合都传输过来</em></li>
+</ul>
+<h5 id="关于Set两种实际的场景"><a href="#关于Set两种实际的场景" class="headerlink" title="关于Set两种实际的场景"></a>关于Set两种实际的场景</h5><ol>
+<li>如果现在有一个列表数据，需要针对某些省份进行过滤掉一些数据。<br>我们可以选择在循环外层取出集合中所有的值，然后在循环内部直接通过内存中的对象来判断过滤。  </li>
+<li>如果这个列表数据是要针对用户进行黑名单过滤的，考虑到有些用户可能会拉黑很多人，这个<code>Set</code>的基数就很难估，这时候就建议使用循环内判断的方式了。</li>
+</ol>
+<h3 id="降低网络传输成本"><a href="#降低网络传输成本" class="headerlink" title="降低网络传输成本"></a>降低网络传输成本</h3><h4 id="杜绝Hash的滥用"><a href="#杜绝Hash的滥用" class="headerlink" title="杜绝Hash的滥用"></a>杜绝Hash的滥用</h4><p>确实，使用<code>hgetall</code>是一件非常省心的事情，不管<code>Redis</code>的这个<code>Hash</code>里边有什么，我都会获取到。<br>但是，这个确实会造成一些性能上的问题。<br>比如，我有一个<code>Hash</code>，数据结构如下：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span>
+  age<span class="token punctuation">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
+  sex<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token operator">...</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>现在在一个列表接口中需要用到这个<code>hash</code>中的<code>name</code>和<code>age</code>字段。<br>最省心的方法就是：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> info <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">let</span> results <span class="token operator">=</span> <span class="token keyword">await</span> redisClient<span class="token punctuation">.</span><span class="token function">hgetall</span><span class="token punctuation">(</span><span class="token string">'hash'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">return</span> <span class="token punctuation">{</span>
+  <span class="token operator">...</span>info<span class="token punctuation">,</span>
+  name<span class="token punctuation">:</span> results<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+  age<span class="token punctuation">:</span> results<span class="token punctuation">.</span>age
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在<code>hash</code>很小的情况下，<code>hgetall</code>并不会对性能造成什么影响，<br>可是当我们的<code>hash</code>数量很大时，这样的<code>hgetall</code>就会造成很大的影响。  </p>
+<ol>
+<li><code>hgetall</code>时间复杂度为<code>O(N)</code>，<code>N</code>为<code>hash</code>的大小</li>
+<li>且不说上边的时间复杂度，我们实际仅用到了<code>name</code>和<code>age</code>，而其他的值通过网络传输过来其实是一种浪费  </li>
+</ol>
+<p>所以我们需要对类似的代码进行修改：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> results <span class="token operator">=</span> <span class="token keyword">await</span> redisClient<span class="token punctuation">.</span><span class="token function">hgetall</span><span class="token punctuation">(</span><span class="token string">'hash'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// == ></span>
+<span class="token keyword">let</span> <span class="token punctuation">[</span>name<span class="token punctuation">,</span> age<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">await</span> redisClient<span class="token punctuation">.</span><span class="token function">hmget</span><span class="token punctuation">(</span><span class="token string">'hash'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><strong>P.S. 如果<code>hash</code>的item数量超过一定量以后会改变<code>hash</code>的存储结构，<br>此时使用<code>hgetall</code>性能会优于<code>hmget</code>，可以简单的理解为，20个以下的<code>hmget</code>都是没有问题的</strong></p>
+<h3 id="异步代码相关的优化"><a href="#异步代码相关的优化" class="headerlink" title="异步代码相关的优化"></a>异步代码相关的优化</h3><p>从<code>co</code>开始，到现在的<code>async</code>、<code>await</code>，在<code>Node.js</code>中的异步编程就变得很清晰，我们可以将异步函数写成如下格式：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> func <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> data1 <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">getData1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">let</span> data2 <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">getData2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> data1<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>data2<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">await</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看起来是很舒服对吧？<br>你舒服了程序也舒服，程序只有在<code>getData1</code>获取到返回值以后才会去执行<code>getData2</code>的请求，然后又陷入了等待回调的过程中。<br>这个就是很常见的滥用异步函数的地方。将异步改为了串行，丧失了<code>Node.js</code>作为异步事件流的优势。  </p>
+<p>像这种类似的毫无相关的异步请求，一个建议：<br>能合并就合并，这个合并不是指让你去修改数据提供方的逻辑，而是要更好的去利用异步事件流的优势，同时注册多个异步事件。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> func <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> <span class="token punctuation">[</span>
+    data1<span class="token punctuation">,</span>
+    data2
+  <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">await</span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token function">getData1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">getData2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样的做法能够让<code>getData1</code>与<code>getData2</code>的请求同时发出去，并统一处理回调结果。</p>
+<p><em>最理想的情况下，我们将所有的异步请求一并发出，然后等待返回结果。</em>  </p>
+<p>然而一般来讲不太可能实现这样的，就像上边的几个例子，我们可能要在循环中调用<code>sismember</code>，亦或者我们的一个数据集依赖于另一个数据集的过滤。<br>这里就又是一个权衡取舍的地方了，就像本次优化的一个例子，有两份数据集，一个有固定长度的数据（个位数），第二个为不固定长度的数据。  </p>
+<p>第一个数据集在生成数据后会进行裁剪，保证长度为固定的个数。<br>第二个数据集长度则不固定，且需要根据第一个集合的元素进行过滤。</p>
+<p>此时第一个集合的异步调用会占用很多的时间，而如果我们在第二个集合的数据获取中不依据第一份数据进行过滤的话，就会造成一些无效的请求（重复的数据获取）。<br>但是在对比了以后，还是觉得将两者改为并发性价比更高。<br>因为上边也提到了，第一个集合的数量大概是个位数，也就是说，第二个集合即使重复了，也不会重复很多数据，两者相比较，果断选择了并发。<br>在获取到两个数据集以后，在拿第一个集合去过滤第二个集合的数据。<br>如果两者异步执行的时间差不太多的话，这样的优化基本可以节省<code>40%</code>的时间成本（<em>当然缺点就是数据提供方的压力会增大一倍</em>）。  </p>
+<h4 id="将串行改为并行带来的额外好处"><a href="#将串行改为并行带来的额外好处" class="headerlink" title="将串行改为并行带来的额外好处"></a>将串行改为并行带来的额外好处</h4><p>如果串行执行多次异步操作，任何一个操作的缓慢都会导致整体时间的拉长。<br>而如果选择了并行多个异步代码，其中的一个操作时间过长，但是它可能在整个队列中不是最长的，所以说并不会影响到整体的时间。  </p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>总体来说，本次优化在于以下几点：</p>
+<ol>
+<li>合理利用数据结构（善用<code>hash</code>结构来代替某些<code>list</code>）</li>
+<li>减少不必要的网络请求（<code>hgetall</code> to <code>hmget</code>）</li>
+<li>将串行改为并行（拥抱异步事件）</li>
+</ol>
+<p>以及一个新鲜的刚出炉的接口响应时长对比图：<br><img src="https://os4ty6tab.qnssl.com/test/atom-editor/enql.png" alt="">  </p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/06/08/记一次Node项目的优化/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '2271eac0-6ac6-11e8-aa06-fb703a95d82c'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

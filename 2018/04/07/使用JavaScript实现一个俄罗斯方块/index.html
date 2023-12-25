@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>使用JavaScript实现一个俄罗斯方块 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目结构"><span class="toc-number">1.</span> <span class="toc-text">项目结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model"><span class="toc-number">2.</span> <span class="toc-text">model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#左右移动的处理"><span class="toc-number">2.1.</span> <span class="toc-text">左右移动的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速向下的处理"><span class="toc-number">2.2.</span> <span class="toc-text">快速向下的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#旋转方块的处理"><span class="toc-number">2.3.</span> <span class="toc-text">旋转方块的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#触底检测"><span class="toc-number">2.4.</span> <span class="toc-text">触底检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#移除行"><span class="toc-number">2.5.</span> <span class="toc-text">移除行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#utils"><span class="toc-number">3.</span> <span class="toc-text">utils</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#enum"><span class="toc-number">4.</span> <span class="toc-text">enum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data"><span class="toc-number">5.</span> <span class="toc-text">data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controller"><span class="toc-number">6.</span> <span class="toc-text">controller</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#view"><span class="toc-number">7.</span> <span class="toc-text">view</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">8.</span> <span class="toc-text">小记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tips"><span class="toc-number">8.1.</span> <span class="toc-text">Tips</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>使用JavaScript实现一个俄罗斯方块</h1>
+  <blockquote>
+<p>清明假期期间，闲的无聊，就做了一个小游戏玩玩，目前游戏逻辑上暂未发现bug，只不过样子稍微丑了一些-.-<br>项目地址：<a href="https://github.com/Jiasm/tetris" target="_blank" rel="noopener">https://github.com/Jiasm/tetris</a><br>在线Demo：<a href="http://blog.jiasm.org/tetris/?width=16&amp;height=40" target="_blank" rel="noopener">http://blog.jiasm.org/tetris/?width=16&amp;height=40</a> (修改URL参数可以调整难度)</p>
+</blockquote>
+<a id="more"></a>
+<p>整体分成三块进行开发，使用面向对象式编程进行开发（其实我更喜欢用函数式编程，但苦于游戏的一些状态用对象来存储会更直观一些）：</p>
+<ol>
+<li><code>Game</code>：<ol>
+<li>负责生成新的方块</li>
+<li>负责方块移动的处理</li>
+<li>方块触底的判断</li>
+<li>移除满足清除条件的行</li>
+</ol>
+</li>
+<li><code>Render</code>：<ol>
+<li>负责用<code>Game</code>的数据来渲染整个游戏界面</li>
+</ol>
+</li>
+<li><code>Controller</code>：<ol>
+<li>负责接受用户输入（上下左右各种操作）并处理</li>
+<li>向用户反馈当前游戏的状态</li>
+</ol>
+</li>
+</ol>
+<p>这样分层带来了一个好处，我们游戏的逻辑<code>Game</code>模块并不依赖于当前程序运行的环境，而<code>Render</code>可以是<code>Canvas</code>、<code>DOM</code>，甚至是控制台输出。我们要移植到其他平台，只需要修改<code>Render</code>即可。</p>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><blockquote>
+<p>忽略了一些与游戏没有直接关系的结构</p>
+</blockquote>
+<pre class="line-numbers language-shell"><code class="language-shell">.
+├── model
+│   ├── Brick.js
+│   ├── Game.js
+│   └── index.js
+├── utils
+│   ├── buildEnum.js
+│   ├── deepCopy.js
+│   ├── getShape.js
+│   ├── index.js
+│   ├── lineIndex.js
+│   ├── matrixString.js
+│   └── rotateArray.js
+├── enum
+│   ├── gameType.js
+│   ├── index.js
+│   └── pointType.js
+├── data
+│   └── shapes.js
+├── controller
+│   └── index.js
+└── view
+    ├── RenderCanvas.js
+    └── index.js
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>各目录下的index.js是为了方便同时引用多个文件，大致长这个样子：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token punctuation">{</span> <span class="token keyword">default</span> <span class="token keyword">as</span> model1 <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./model1'</span>
+<span class="token keyword">export</span> <span class="token punctuation">{</span> <span class="token keyword">default</span> <span class="token keyword">as</span> model2 <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./model2'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>然后我们就可以在用到的地方写：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> model1<span class="token punctuation">,</span> model2 <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./XXX'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</blockquote>
+<h2 id="model"><a href="#model" class="headerlink" title="model"></a>model</h2><p>这里是游戏的核心逻辑所在位置。</p>
+<p>像俄罗斯方块这种的矩阵类游戏，存储数据最合适的方法就是一个二维数组了。<br>为了更直观一些，我们选择了游戏的高度作为第一层数组的长度：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">matrix <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Array</span><span class="token punctuation">(</span>height<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Array</span><span class="token punctuation">(</span>width<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// width: 2 height: 4</span>
+<span class="token punctuation">[</span>
+  <span class="token punctuation">[</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>
+<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而且这样选择在一些逻辑处理上也会更方便一些：</p>
+<ol>
+<li>下移操作时，我们只需改变元素的第一层下标</li>
+<li>判断是否触底时，我们只需将当前下标 + 1 判断是否有元素即可</li>
+</ol>
+<p>我们对数组中的元素进行了定义：</p>
+<ul>
+<li><code>0</code>: 空，表示当前坐标为空白</li>
+<li><code>1</code>: 新的方块，表示当前活动的方块</li>
+<li><code>2</code>: 老的方块，已经触底固定的方块</li>
+</ul>
+<p>接下来，我们就遇到了一个问题，如何处理方块的放置。<br>我们知道，游戏会不停的向棋盘中加载新的方块。<br>如果我们每次处理下移的时候，都将当前二维数组中对应的方块元素移除，然后在塞入到新的位置，未免太过繁琐了。</p>
+<p>所以我们在初始化数据时，初始化两个二维数组。<br>当我们加载一个新的方块后，将方块对应的元素塞入其中的一个二维数组。<br>然后等到我们有进行其他的操作时，比如左右移动，向下之类的。<br>我们直接使用第二个二维数组覆盖到当前的数组中去，然后再将更改下标后的方块塞入数组。<br>这样在数据上，我们就完成了方块的移动。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">Game</span> <span class="token punctuation">{</span>
+  init <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 初始化两个矩阵</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>matrix <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>oldMatrix <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+  move <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 重置当前矩阵数据</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>matrix <span class="token operator">=</span> <span class="token function">deepCopy</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>oldMatrix<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 解除引用</span>
+    <span class="token comment" spellcheck="true">// 加载方块数据</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>matrix<span class="token punctuation">[</span>y<span class="token punctuation">]</span><span class="token punctuation">[</span>x1<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>matrix<span class="token punctuation">[</span>y<span class="token punctuation">]</span><span class="token punctuation">[</span>x2<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="左右移动的处理"><a href="#左右移动的处理" class="headerlink" title="左右移动的处理"></a>左右移动的处理</h3><p>左右的移动不能像向下移动一样，单纯的下标+1。<br>我们需要判断当前的操作是否有效。<br>比如右侧如果遇到了障碍物或者到达边缘，我们肯定是不能够再进行移动的。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// blend 为活动砖块的形状描述 [[1, 1, 1], [0, 1, 0]] 类似这样的结构</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>
+  x <span class="token operator">>=</span> width <span class="token operator">-</span> brickWidth <span class="token operator">||</span>
+  blend<span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span><span class="token punctuation">(</span>row<span class="token punctuation">,</span> rowIndex<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> _pos <span class="token operator">=</span> oldMatrix<span class="token punctuation">[</span>y <span class="token operator">+</span> rowIndex<span class="token punctuation">]</span>
+    <span class="token keyword">return</span> row <span class="token operator">&amp;&amp;</span> row<span class="token punctuation">[</span>brickWidth <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> _pos <span class="token operator">&amp;&amp;</span> _pos<span class="token punctuation">[</span>x <span class="token operator">+</span> brickWidth<span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token comment" spellcheck="true">// 右侧有障碍物，无法移动</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用类似这样的逻辑进行判断，保证当前方块向右移动后不会覆盖之前的方块。</p>
+<h3 id="快速向下的处理"><a href="#快速向下的处理" class="headerlink" title="快速向下的处理"></a>快速向下的处理</h3><blockquote>
+<p>我看有些游戏实现的，貌似下降触发只是加速下降而已（这种情况只需要改变定时下降的速度即可）-.-这里的实现是，直接触底</p>
+</blockquote>
+<p>所以就会遇到一个问题，当前砖块最多可以下降到什么位置？</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>就像这样的一个数据，<code>0|2</code>这两列都可以向下移动两列，但是这样就会导致中间一列的重叠。<br>我们一定要取出下降幅度最小的那个值。<br>所以我们就要算出<strong>最后一行1</strong>的下标以及<strong>第一行2</strong>的下标，将这两个下标进行相减，最小值即为我们当前方块可下降的距离。</p>
+<h3 id="旋转方块的处理"><a href="#旋转方块的处理" class="headerlink" title="旋转方块的处理"></a>旋转方块的处理</h3><p>旋转方块应该是游戏中比较复杂的一块逻辑了。<br>绝不是仅仅简单的将方块的二维数组由行改为列，在有些时候，我们还需要判断方块是否可以进行旋转。<br><img src="/images/tetris/tetris-pic-2.png" alt=""><br>就像这样的，中间的长条是不能够进行旋转的。<br>所以我们要先拿到旋转后的数据，来与当前游戏中的数据进行比较，检验是否会出现重叠的情况，如果出现了，则表示不能够进行旋转。</p>
+<h3 id="触底检测"><a href="#触底检测" class="headerlink" title="触底检测"></a>触底检测</h3><p>每完成一个移动的动作后，我们都需要进行方块的触底检测。<br>也就是判断当前方块下，是否已经有元素占位，如果有的话，则表示已经触底了，当前元素就会被固定进矩阵数组中。<br>同样的，我们在判断时，不需要将方块所有的下标都检查一遍，只需要检查最底部一层的有效元素即可。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>像这样的一个方块，我们仅需要判断第一列的第二行&amp;第二列的第四行是否有元素即可完成检查。</p>
+<h3 id="移除行"><a href="#移除行" class="headerlink" title="移除行"></a>移除行</h3><p>当某一行被填满元素后，我们就要将它进行移除。<br>在触底检测触发后，如果有方块被固定进数组，此时我们再进行移除行的操作。<br>因为如果没有新的方块进入，移除行的这步操作就不是必要的。<br>同时，得分的计数也应该在此处进行，我们将移除的行数进行记录，获取到的行数便是得分了。</p>
+<p>至此，所有有关矩阵数据的操作就结束了。<br><code>Game</code>对象只去维护这么一个二维数组，对象本身不包含任何游戏相关的操作，只会在被调用时进行对应的处理。<br>然后生成新的二维数组。</p>
+<h2 id="utils"><a href="#utils" class="headerlink" title="utils"></a>utils</h2><p>这里放置了一些比较通用的方法，用来提高开发效率使用。<br>比如获取方块最底部一层的下标之类的工具函数。</p>
+<h2 id="enum"><a href="#enum" class="headerlink" title="enum"></a>enum</h2><p>存放了一些状态的枚举，游戏状态以及方块所对应的状态，类似这样的数据：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  empty<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+  newBrick<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  oldBrick<span class="token punctuation">:</span> <span class="token number">2</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="data"><a href="#data" class="headerlink" title="data"></a>data</h2><p>存放了游戏中各种使用到的方块信息。<br>正方形，梯形之类的方块在二维数组中所对应的描述。</p>
+<h2 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h2><p>就是上边我们所说的，用来与用户交互的模块，由<code>Controller</code>来获取游戏相关的信息，并调用<code>Render</code>进行渲染。<br>监听键盘事件，在页面中渲染一些控制按钮。<br>以及定时触发<code>Game</code>的下落方法。</p>
+<h2 id="view"><a href="#view" class="headerlink" title="view"></a>view</h2><p>游戏界面的渲染部分，目前选定的是使用<code>canvas</code>，所以只写了<code>RenderCanvas</code>。<br>在渲染的这部分，稍微做了一些优化处理，将活动中的方块与固定的方块进行分开渲染。<br>这样在用户操作上下左右移动时，并不会重新渲染整个游戏布局，而只是渲染活动方块的<code>canvas</code>。</p>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>两天多的时间进行开发，其中有半天时间在修复<code>FlowType</code>的Warning提示。。。<br>搞完了以后，觉得实现这个的主要难点就在于方块旋转&amp;触底的判断这里了。<br>能够清晰的管理游戏对应的二维数组，这个游戏开发起来就会很顺畅。</p>
+<p><em>界面还有待优化。</em></p>
+<h3 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h3><p>我的博客即将搬运同步至腾讯云+社区，邀请大家一同入驻：<a href="https://cloud.tencent.com/developer/support-plan?invite_code=1vas1z072yivn" target="_blank" rel="noopener">https://cloud.tencent.com/developer/support-plan?invite_code=1vas1z072yivn</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/04/07/使用JavaScript实现一个俄罗斯方块/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '3334d350-3a1e-11e8-a066-6b3589f0db19'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>node.js - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          <html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <title>
+    
+  </title>
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+  <section class="posts">
+    
+      <a class="post" href="/2019/05/30/GitLab-CI-CD-在-Node-js-项目中的实践/">
+        <div class="post-title">
+          GitLab CI/CD 在 Node.js 项目中的实践
+        </div>
+        <div class="post-content">
+          
+近期在按照业务划分项目时，我们组被分了好多的项目过来，大量的是基于 Node.js 的，也是我们组持续在使用的语言。  
+
+现有流程中的一些问题在维护多个项目的时候，会暴露出一些问题： 
+
+如何有效的使用 测试用例
+如何有效的使用 ESLint
+部署上线还能再快一些吗
+使用了 TypeScript 以后带来的额外成本
+
+
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8f045d80-8285-11e9-9a0d-dfce6aad8719">0 Comments</span>
+          <span class="post-time">
+            2019-05-30 10:49
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2019/04/22/使用JSDoc提高代码的可读性/">
+        <div class="post-title">
+          使用JSDoc提高代码的可读性
+        </div>
+        <div class="post-content">
+          
+工作了四年多，基本上都在围绕着 JavaScript 做事情。写的代码多了，看的代码也多了，由衷的觉得，写出别人看不懂的代码并不是什么能力，写出所有人都能读懂的代码，才是真的牛X。众所周知， JavaScript 是一个弱类型的脚本语言，这就意味着，从编辑器中并不能直观的看出这段代码的作用是什么，有些事情只有等到代码真正的运行起来才能够确定。所以为了解决大型项目中 JavaScript 维护成本高的问题，前段时间我们团队开始使用 TypeScript，但是由前几年所积累下来的代码，并不是说改立马都能全部改完的，所以这个重构将是一个漫长的过程。在重构同时我们还是需要继续维护原有的 JavaScript 项目的，而 JSDoc 恰好是一个中间过渡的方案，可以让我们以注释的形式来降低 JavaScript 项目的维护难度，提升可读性。  
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="1c7f8ea0-633c-11e9-a718-110d12e52263">0 Comments</span>
+          <span class="post-time">
+            2019-04-22 10:15
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2019/01/17/Node程序debug小记/">
+        <div class="post-title">
+          Node程序debug小记
+        </div>
+        <div class="post-content">
+          有时候，所见并不是所得，有些包，你需要去翻他的源码才知道为什么会这样。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="991aeb80-19a4-11e9-ab96-39034b5ef7f1">0 Comments</span>
+          <span class="post-time">
+            2019-01-17 01:37
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/11/10/基于游标的分页接口实现/">
+        <div class="post-title">
+          基于游标的分页接口实现
+        </div>
+        <div class="post-content">
+          分页接口的实现，在偏业务的服务端开发中应该很常见，PC时代的各种表格，移动时代的各种feed流、timeline。  
+出于对流量的控制，或者用户的体验，大批量的数据都不会直接返回给客户端，而是通过分页接口，多次请求返回数据。  
+而最常用的分页接口定义大概是这样的：
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="a457dd60-e492-11e8-b8ee-b9334326368d">0 Comments</span>
+          <span class="post-time">
+            2018-11-10 10:45
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/10/26/了解可执行的NPM包/">
+        <div class="post-title">
+          了解可执行的NPM包
+        </div>
+        <div class="post-content">
+          NPM是Node.js的包管理工具，随着Node.js的出现，以及前端开发开始使用gulp、webpack、rollup以及其他各种优秀的编译打包工具（大多数采用Node.js来实现），大家都开始接触到一些Node.js，发现了使用NPM来管理一些第三方模块会很方便。大家搬砖的模式也是从之前的去插件官网下载XXX.min.js改为了npm install XXX，然后在项目中require或者import。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="eb8d4ca0-d8e0-11e8-8d2c-232ee9f7a7bf">0 Comments</span>
+          <span class="post-time">
+            2018-10-26 13:35
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/09/19/适配器在JavaScript中的体现/">
+        <div class="post-title">
+          适配器在JavaScript中的体现
+        </div>
+        <div class="post-content">
+          适配器设计模式在JavaScript中非常有用，在处理跨浏览器兼容问题、整合多个第三方SDK的调用，都可以看到它的身影。其实在日常开发中，很多时候会不经意间写出符合某种设计模式的代码，毕竟设计模式就是老前辈们总结提炼出来的一些能够帮助提升开发效率的一些模版，源于日常的开发中。而适配器其实在JavaScript中应该是比较常见的一种了。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="4492f470-bb41-11e8-9792-c7582ddcf0d2">0 Comments</span>
+          <span class="post-time">
+            2018-09-19 13:49
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/08/14/微任务、宏任务与Event-Loop/">
+        <div class="post-title">
+          微任务、宏任务与Event-Loop
+        </div>
+        <div class="post-content">
+          首先，JavaScript是一个单线程的脚本语言。所以就是说在一行代码执行的过程中，必然不会存在同时执行的另一行代码，就像使用alert()以后进行疯狂console.log，如果没有关闭弹框，控制台是不会显示出一条log信息的。亦或者有些代码执行了大量计算，比方说在前端暴力破解密码之类的鬼操作，这就会导致后续代码一直在等待，页面处于假死状态，因为前边的代码并没有执行完。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="e1236d30-9f9c-11e8-96c0-5f943fdd21d6">0 Comments</span>
+          <span class="post-time">
+            2018-08-14 16:34
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/05/06/JavaScript异步编程-Generator与Async/">
+        <div class="post-title">
+          JavaScript异步编程：Generator与Async
+        </div>
+        <div class="post-content">
+          从Promise开始，JavaScript就在引入新功能，来帮助更简单的方法来处理异步编程，帮助我们远离回调地狱。Promise是下边要讲的Generator/yield与async/await的基础，希望你已经提前了解了它。  
+在大概ES6的时代，推出了Generator/yield两个关键字，使用Generator可以很方便的帮助我们建立一个处理Promise的解释器。
+然后，在ES7左右，我们又得到了async/await这样的语法，可以让我们以接近编写同步代码的方式来编写异步代码（无需使用.then()或者回调函数）。
+两者都能够帮助我们很方便的进行异步编程，但同样，这两者之间也是有不少区别的。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="2a74d0b0-4a83-11e8-9c98-c52ae31e6eed">0 Comments</span>
+          <span class="post-time">
+            2018-05-06 18:06
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/04/19/NPM实用指北/">
+        <div class="post-title">
+          NPM实用指北
+        </div>
+        <div class="post-content">
+          npm作为下载node附送的大礼包，大家一定不会陌生。然而关于npm，估计大量的只是用到npm install XXX以及npm run XXX。
+其实这里边还有很多有意思的命令&amp;参数。关于npm，大概有两个作用：
+
+能让我们很方便的从网上下载第三方包进行实现功能
+能够让我们自己编写包，并上传到网上供其他人下载
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="38c6d450-43e0-11e8-bdca-5b2c3f44a5f0">0 Comments</span>
+          <span class="post-time">
+            2018-04-19 22:44
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2017/08/17/记一个node实现的图形验证码从0到1/">
+        <div class="post-title">
+          记一个node实现的图形验证码从0到1
+        </div>
+        <div class="post-content">
+          
+最近做了一个项目，需要用到给用户发送短信验证码，短信必然走的是第三方的服务。。so 每一条都是收费的，所以在短信验证码之前，我们需要有一个图形验证码的验证来确定获取短信验证码的是一个人类防止被人抓到接口无限刷-.-  
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8488a940-7cd0-11e7-b645-fdad58d33ca7">0 Comments</span>
+          <span class="post-time">
+            2017-08-17 23:03
+          </span>
+        </div>
+      </a>
+      
+  </section>
+
+  
+    <!-- Index nav -->
+    <nav class="paginator-wrap">
+      <span class="page-number current">1</span><a class="page-number" href="/tags/node-js/page/2/">2</a><a class="extend next" rel="next" href="/tags/node-js/page/2/"><div class="paginator-item"><i class="fa fa-angle-right"></i></div></a>
+    </nav>
+    
+</body>
+
+</html>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

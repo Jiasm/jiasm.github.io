@@ -1,0 +1,62 @@
+.paginator-wrap {
+  display: flex;
+  padding: 20px paddingJustify;
+  font-size: 18px;
+  justify-content: flex-end;
+  align-items: center;
+}
+.paginator-wrap a {
+  text-decoration: none;
+}
+.paginator-wrap .page-number {
+  color: linkColor;
+  cursor: pointer;
+  padding: 0 0.5em;
+}
+.paginator-wrap .page-number.current,
+.paginator-wrap .page-number.current:hover {
+  cursor: default;
+  color: tipsColor;
+}
+.paginator-wrap .paginator-item {
+  font-size: 1.4em;
+}
+.paginator-wrap .paginator-item,
+.paginator-wrap .page-number {
+  color: textColor;
+  transition: all 0.3s linear;
+}
+.paginator-wrap .paginator-item:hover,
+.paginator-wrap .page-number:hover {
+  color: linkColor;
+}
+.paginator-wrap .extend.prev {
+  padding-right: 1em;
+}
+.paginator-wrap .extend.next {
+  padding-left: 1em;
+}
+@media (max-width: 768px) {
+  .paginator-wrap {
+    padding-left: paddingJustifyMiddle;
+    padding-right: paddingJustifyMiddle;
+    font-size: 22px;
+  }
+  .paginator-wrap .paginator-item,
+  .paginator-wrap .page-number {
+    color: linkColor;
+  }
+}
+@media (max-width: 600px) {
+  .paginator-wrap {
+    font-size: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .paginator-wrap {
+    font-size: 26px;
+    padding-left: paddingJustifyMobile;
+    padding-right: paddingJustifyMobile;
+    justify-content: center;
+  }
+}

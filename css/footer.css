@@ -1,0 +1,73 @@
+.footer {
+  height: 180px;
+  padding: 60px paddingJustify 0;
+  background: footerBackColor;
+  font-size: textSize;
+}
+.footer .footer-content {
+  display: flex;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.footer a {
+  color: linkColor;
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+.footer .copyright {
+  color: linkColor;
+  margin-bottom: 1em;
+}
+.footer .footer-info {
+  color: tipsColor;
+  font-size: textSize;
+}
+.footer .contact-info {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+.footer .contact-info .contact-link {
+  font-size: 2em;
+  color: textColor;
+  transition: all 0.3s linear;
+  padding: 0 0.5em;
+}
+.footer .contact-info .contact-link:hover {
+  color: linkColor;
+  text-decoration: none;
+}
+.footer .contact-info .contact-link:last-of-type {
+  padding-right: 0;
+}
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px paddingJustifyMiddle 0;
+    height: 150px;
+  }
+}
+@media (max-width: 480px) {
+  .footer {
+    flex-wrap: wrap-reverse;
+    padding-top: 20px;
+  }
+  .footer .contact-info {
+    justify-content: flex-start;
+  }
+  .footer .contact-info .contact-link:first-of-type {
+    padding-left: 0;
+  }
+  .footer .footer-content {
+    flex-direction: column;
+  }
+  .footer .footer-info {
+    margin-bottom: 10px;
+  }
+}
+.fixed .footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}

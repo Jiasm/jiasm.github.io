@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>React-native踩坑小记 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发过程中遇到了如下几个问题（android环境下）："><span class="toc-number">1.</span> <span class="toc-text">开发过程中遇到了如下几个问题（android环境下）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何填平这几个坑："><span class="toc-number">2.</span> <span class="toc-text">如何填平这几个坑：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-swiper插件无法显示："><span class="toc-number">2.1.</span> <span class="toc-text">1.  swiper插件无法显示：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-listview没有弹性边界，无法实现线上的下拉刷新效果："><span class="toc-number">2.2.</span> <span class="toc-text">2.  listview没有弹性边界，无法实现线上的下拉刷新效果：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-swiper插件和tab-view插件手势冲突"><span class="toc-number">2.3.</span> <span class="toc-text">3.  swiper插件和tab-view插件手势冲突</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#在React-native中，View组件有如下几个常用事件："><span class="toc-number">2.3.1.</span> <span class="toc-text">在React-native中，View组件有如下几个常用事件：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#触发顺序为（以Start为例）："><span class="toc-number">2.3.2.</span> <span class="toc-text">触发顺序为（以Start为例）：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#所使用插件的链接："><span class="toc-number">3.</span> <span class="toc-text">所使用插件的链接：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结束语："><span class="toc-number">4.</span> <span class="toc-text">结束语：</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>React-native踩坑小记</h1>
+  <blockquote>
+<p>最近开始研究ReactNative咯，大概一两周了吧已经，略略说一下遇到的一些坑爹问题<br>问题一般都出在<code>android</code>上。。。最近看GitHub issues最多的一句就是。<br>everything is ok on iOS…  </p>
+</blockquote>
+<a id="more"></a>
+<p>目前我们所做的一个页面，组件嵌套大致如下图：</p>
+<p><img src="/images/react-native-guide/image-react-native-touch-event.png" alt=""></p>
+<p>tab切换的在最外层，每一个tab页签对应一个<code>listview</code>，同时在<code>listview</code>中还嵌套了一个轮播图<code>swiper</code></p>
+<h3 id="开发过程中遇到了如下几个问题（android环境下）："><a href="#开发过程中遇到了如下几个问题（android环境下）：" class="headerlink" title="开发过程中遇到了如下几个问题（android环境下）："></a>开发过程中遇到了如下几个问题（<code>android</code>环境下）：</h3><ol>
+<li><code>swiper</code>插件无法显示；</li>
+<li><code>listview</code>没有弹性边界，无法实现线上的下拉刷新效果；</li>
+<li><code>swiper</code>插件和tab-view插件手势冲突；</li>
+</ol>
+<h3 id="如何填平这几个坑："><a href="#如何填平这几个坑：" class="headerlink" title="如何填平这几个坑："></a>如何填平这几个坑：</h3><h4 id="1-swiper插件无法显示："><a href="#1-swiper插件无法显示：" class="headerlink" title="1.  swiper插件无法显示："></a>1.  swiper插件无法显示：</h4><p>因为<code>android</code>下，<code>scrollview</code>与<code>listview</code>组件嵌套后会导致<code>scrollview</code>内容无法被渲染，所以无法显示。<br>所以我们将<code>swiper</code>挪到了<code>listview</code>的header中。（因为<code>header</code>被下拉刷新的组件所使用，所以我们重写了插件部分代码，将<code>swiper</code>塞了进去）</p>
+<h4 id="2-listview没有弹性边界，无法实现线上的下拉刷新效果："><a href="#2-listview没有弹性边界，无法实现线上的下拉刷新效果：" class="headerlink" title="2.  listview没有弹性边界，无法实现线上的下拉刷新效果："></a>2.  listview没有弹性边界，无法实现线上的下拉刷新效果：</h4><p>因为<code>android</code>本身就没有滚动到边界还能继续滚动的策略。。这里使用一些<code>java</code>补丁代码(列表插件所提供)，来实现弹性边界-。-</p>
+<h4 id="3-swiper插件和tab-view插件手势冲突"><a href="#3-swiper插件和tab-view插件手势冲突" class="headerlink" title="3.  swiper插件和tab-view插件手势冲突"></a>3.  swiper插件和tab-view插件手势冲突</h4><p>因为最外层tab和<code>swiper</code>，都用到了滑动切换的特性，然而这个需求在<code>android</code>上边实现。。会导致直接滑动外层tab，而不是<code>swiper</code>。。。</p>
+<p>于是我们开始研究<code>android</code>的触摸事件到底是怎么个执行法。<br>大致是一个先捕获，再冒泡的过程：</p>
+<ol>
+<li>最外层组件触发回调，询问是否捕获事件，并阻止事件继续传递。 返回<code>ture</code>则是表明捕获事件，事件结束， 返回<code>false</code>则事件继续向下询问。</li>
+<li>等到捕获阶段全部走完以后，最内层的组件会触发回调，询问是否作为此次触摸操作的事件执行者（消费者），返回<code>true</code>则表明对此次事件负责，返回<code>false</code>事件则继续向外层冒泡。</li>
+</ol>
+<h5 id="在React-native中，View组件有如下几个常用事件："><a href="#在React-native中，View组件有如下几个常用事件：" class="headerlink" title="在React-native中，View组件有如下几个常用事件："></a>在React-native中，View组件有如下几个常用事件：</h5><p><small><em>争权的几个事件（通过返回值来确定这次操作应该由谁来响应）</em></small><br><code>onStartShouldSetResponder</code><br><code>onMoveShouldSetResponder</code><br><code>onStartShouldSetResponderCapture</code><br><code>onMoveShouldSetResponderCapture</code>  </p>
+<h5 id="触发顺序为（以Start为例）："><a href="#触发顺序为（以Start为例）：" class="headerlink" title="触发顺序为（以Start为例）："></a>触发顺序为（以Start为例）：</h5><ol>
+<li>外层 <code>onStartShouldSetResponderCapture</code> (如果返回true 跳到第4步)</li>
+<li>内层 <code>onStartShouldSetResponderCapture</code></li>
+<li>内层 <code>onStartShouldSetResponder</code> (如果返回true 终止)</li>
+<li>外层 <code>onStartShouldSetResponder</code></li>
+</ol>
+<p>由于Swiper组件中的广告图涉及到跳转打开网页之类的操作，所以我们引入了<code>Touch*</code>组件。<br><code>Touch*</code> 组件有两个事件是这里我们需要用到的：<code>onPressIn</code>和<code>onPressOut</code><br>这两个事件会在手指按下和抬起时触发；<br>所以我们需要做的就是在这两个事件中触发锁定和解锁外层<code>scrollview</code>的可滚动性。<br>我们这里使用了<code>setNativeProps</code>方法进行锁定<code>scrollview</code>。<br><code>setNativeProps</code>不会触发重绘，直接改变React对象的props值。（为了时效性，等待render的重绘就太慢了。。虽说有的时候手快了，还是会拦截不到事件-.- 然而当我下载了我司客户端后发现有时也会存在这个问题我就坦然了，233333333）<br>一个简单的阻止外层<code>scrollview</code>滑动的<a href="https://github.com/Jiasm/code-tips/blob/master/React-Native/android-fixs/scrollview-inside-scrollview.js" target="_blank" rel="noopener">栗子</a></p>
+<h3 id="所使用插件的链接："><a href="#所使用插件的链接：" class="headerlink" title="所使用插件的链接："></a>所使用插件的链接：</h3><ol>
+<li><a href="https://github.com/react-native-component/react-native-smart-pull-to-refresh-listview" target="_blank" rel="noopener">当下最好用的列表插件，可高度自定义的上拉刷新和下拉加载样式</a>  </li>
+<li><a href="https://github.com/skv-headless/react-native-scrollable-tab-view" target="_blank" rel="noopener">支持触摸滑动切换的tab页签，头部可自定义</a>  </li>
+<li><a href="https://github.com/leecade/react-native-swiper" target="_blank" rel="noopener">目前支持度最高的一个Swiper插件</a>  </li>
+</ol>
+<h3 id="结束语："><a href="#结束语：" class="headerlink" title="结束语："></a>结束语：</h3><p>目前研究ReactNative所遇到的坑就这么几个咯，所幸能够解决这种问题（其实已经耽误了很久了）。<br>这个页面用到了三个插件。。有两个源码都被针对<code>android</code>进行修改（淡淡的忧伤）</p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2017/02/18/React-native踩坑小记/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'cd734610-f5ad-11e6-8494-53e907e74ea6'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

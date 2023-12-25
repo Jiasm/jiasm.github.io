@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>使用postman进行API自动化测试 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PostMan的安装"><span class="toc-number">1.</span> <span class="toc-text">PostMan的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#发送一个请求"><span class="toc-number">2.</span> <span class="toc-text">发送一个请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Collections"><span class="toc-number">3.</span> <span class="toc-text">Collections</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始API测试"><span class="toc-number">4.</span> <span class="toc-text">开始API测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试脚本位置"><span class="toc-number">4.1.</span> <span class="toc-text">测试脚本位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些简单的语法"><span class="toc-number">4.2.</span> <span class="toc-text">一些简单的语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在测试脚本中发送请求"><span class="toc-number">4.3.</span> <span class="toc-text">在测试脚本中发送请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何处理大量重复的断言逻辑"><span class="toc-number">4.4.</span> <span class="toc-text">如何处理大量重复的断言逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量的使用"><span class="toc-number">4.5.</span> <span class="toc-text">变量的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#global"><span class="toc-number">4.5.1.</span> <span class="toc-text">global</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#environment"><span class="toc-number">4.5.2.</span> <span class="toc-text">environment</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个简单的示例："><span class="toc-number">4.6.</span> <span class="toc-text">一个简单的示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>使用postman进行API自动化测试</h1>
+  <blockquote>
+<p>最近在进行一个老项目的升级，第一步是先将node版本从<code>4.x</code>升级到<code>8.x</code>，担心升级会出现问题，所以需要将服务的接口进行验证；<br>如果手动输入各种URL，人肉check，一个两个还行，整个服务。。大几十个接口，未免太浪费时间了-.-；<br>因为是一个纯接口服务的项目，所以打算针对对应的API进行一波自动化测试；<br>所以就开始寻找对应的工具，突然发现，平时使用的<code>PostMan</code>貌似也是支持写测试用例的-.-，所以就照着文档怼了一波；<br>一下午的时间，很是激动，之前使用<code>PostMan</code>仅限于修改<code>Header</code>，添加<code>Body</code>发送请求，从来没有考虑过拿<code>PostMan</code>来进行测试，一下午的使用，感觉发现了新大陆。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="PostMan的安装"><a href="#PostMan的安装" class="headerlink" title="PostMan的安装"></a>PostMan的安装</h2><p>貌似下载和使用<code>PostMan</code>必须要翻墙-.-<br>因为现在提供两种形态的App：</p>
+<ol>
+<li><code>chrome</code>的插件 <em>（已经快要被废弃了，推荐使用独立App）</em></li>
+<li>独立的App</li>
+</ol>
+<p>而且在使用时需要登录账号，我这边是直接登录的<code>Google</code>账号-。-貌似有其它方式，但是我并没有去尝试。</p>
+<p>独立App版云盘地址（<code>Mac</code>版本，今天刚下载的6.0.10，需要的请自取）：<br>链接:<a href="https://pan.baidu.com/s/18CDp2MUQCLgk_USlmVc-Gw" target="_blank" rel="noopener">https://pan.baidu.com/s/18CDp2MUQCLgk_USlmVc-Gw</a>  密码:<code>mrpf</code></p>
+<p>下载完毕解压后直接运行即可，然后就是注册账号之类的，目测账号这一块主要是用于后续的小组分享需要（可以直接将你的调用记录分享给其他人）。</p>
+<h2 id="发送一个请求"><a href="#发送一个请求" class="headerlink" title="发送一个请求"></a>发送一个请求</h2><p>这是<code>PostMan</code>最基础的一个用法，用来发送一个请求。<br>可以设置<code>Header</code>，<code>Body</code>等信息。<br><img src="/images/postman-usage/postman-pic-1.png" alt=""></p>
+<h2 id="Collections"><a href="#Collections" class="headerlink" title="Collections"></a>Collections</h2><p>我们可以将每次发送的请求进行保存，方便下次请求该接口时，直接调用即可，<br>如果保存请求的话，会被保存到一个<code>Collections</code>里去，类似一个集合。<br><code>PostMan</code>提供了方法，能够一键运行整个<code>Collections</code>中所有的请求。<br><img src="/images/postman-usage/postman-pic-2.png" alt=""><br><img src="/images/postman-usage/postman-pic-3.png" alt=""></p>
+<p>然后我们就可以在需要的时候，直接运行集合中所有的请求了。<br><img src="/images/postman-usage/postman-pic-4.png" alt=""></p>
+<p>保存请求记录的时候，在下边选择对应的<code>Collection</code>即可<br><img src="/images/postman-usage/postman-pic-5.png" alt=""></p>
+<h2 id="开始API测试"><a href="#开始API测试" class="headerlink" title="开始API测试"></a>开始API测试</h2><h3 id="测试脚本位置"><a href="#测试脚本位置" class="headerlink" title="测试脚本位置"></a>测试脚本位置</h3><p><img src="/images/postman-usage/postman-pic-6.png" alt=""><br><code>PostMan</code>针对请求编写的测试脚本，在这个位置，采用的是<code>JavaScript</code>语法，右侧是一些预先配置的代码片段。<br>以及我们可以在<code>Pre-request Script</code>中编写脚本，用于在发送请求前执行。</p>
+<h3 id="一些简单的语法"><a href="#一些简单的语法" class="headerlink" title="一些简单的语法"></a>一些简单的语法</h3><p><code>PostMan</code>也提供了一种断言，来帮助做一些验证。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">tests<span class="token punctuation">[</span><span class="token string">'Status code is 200'</span><span class="token punctuation">]</span> <span class="token operator">=</span> responseCode<span class="token punctuation">.</span>code <span class="token operator">===</span> <span class="token number">200</span>
+
+tests<span class="token punctuation">[</span><span class="token string">'Data length >= 10'</span><span class="token punctuation">]</span> <span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>responseBody<span class="token punctuation">)</span><span class="token punctuation">.</span>data<span class="token punctuation">.</span>length <span class="token operator">>=</span> <span class="token number">10</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>赋值为<code>true</code>即表示通过，<code>false</code>为失败。<br><code>tests</code>的直接赋值作用比较局限，如果在脚本中进行一些其他异步操作，则需要用到<code>pm.test</code>了。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  pm<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"test check"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pm<span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">.</span>be<span class="token punctuation">.</span><span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>只用上边的<code>tests</code>赋值+<code>pm.test/pm.expect</code>已经能够满足我们的需求了，其余的一些只是在这之上的语法糖而已。<br><a href="https://www.getpostman.com/docs/v6/postman/scripts/test_examples" target="_blank" rel="noopener">各种语法示例</a></p>
+<h3 id="在测试脚本中发送请求"><a href="#在测试脚本中发送请求" class="headerlink" title="在测试脚本中发送请求"></a>在测试脚本中发送请求</h3><p>我们可以在拿到一个<code>API</code>返回结果后，根据该结果发送一些新的请求，然后添加断言。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> responseJSON <span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>responseBody<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 获取关注的第一个用户，并请求他的用户信息</span>
+pm<span class="token punctuation">.</span><span class="token function">sendRequest</span><span class="token punctuation">(</span>responseJSON<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>url<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> responseJSON <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  pm<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'has email'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    pm<span class="token punctuation">.</span><span class="token function">expect</span><span class="token punctuation">(</span>responseJSON<span class="token punctuation">.</span>email<span class="token punctuation">)</span><span class="token punctuation">.</span>is<span class="token punctuation">.</span>be<span class="token punctuation">.</span><span class="token boolean">true</span> <span class="token comment" spellcheck="true">// 如果用户email不存在，断言则会失败</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果我们有一些动态接口要进行测试，可以尝试这种写法。<br>一级接口返回<code>List</code><br>二级接口根据<code>List</code>的<code>ID</code>进行获取对应信息。</p>
+<h3 id="如何处理大量重复的断言逻辑"><a href="#如何处理大量重复的断言逻辑" class="headerlink" title="如何处理大量重复的断言逻辑"></a>如何处理大量重复的断言逻辑</h3><p>针对单个API，去编写对应的断言脚本，这个是没有什么问题的。<br>但是如果是针对一个项目的所有<code>API</code>去编写，类似于判断<code>statusCode</code>这样的断言就会显得很冗余，所以<code>PostMan</code>也考虑到了这点。<br>在我们创建的<code>Collection</code>以及下层的文件夹中，我们可以直接编写针对这个目录下的所有请求的断言脚本。<br><img src="/images/postman-usage/postman-pic-8.png" alt=""><br><img src="/images/postman-usage/postman-pic-7.png" alt=""><br>这里的脚本会作用于目录下所有的请求。<br>这样我们就可以将一些通用性的断言挪到这里了，在每个请求的<code>Tests</code>下编写针对性的断言脚本。</p>
+<h3 id="变量的使用"><a href="#变量的使用" class="headerlink" title="变量的使用"></a>变量的使用</h3><p><code>PostMan</code>提供了两种变量使用，一个是<code>global</code>，一个是<code>environment</code>。</p>
+<h4 id="global"><a href="#global" class="headerlink" title="global"></a>global</h4><p>代码操作的方式：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">pm<span class="token punctuation">.</span>globals<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">"variable_key"</span><span class="token punctuation">,</span> <span class="token string">"variable_value"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// set variable</span>
+pm<span class="token punctuation">.</span>globals<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">"variable_key"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// get variable</span>
+pm<span class="token punctuation">.</span>globals<span class="token punctuation">.</span><span class="token function">unset</span><span class="token punctuation">(</span><span class="token string">"variable_key"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// remove variable</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>通过GUI设置：<br><img src="/images/postman-usage/postman-pic-9.png" alt=""><br><img src="/images/postman-usage/postman-pic-10.png" alt=""></p>
+<p>设置完后我们就可以这样使用了：<br><img src="/images/postman-usage/postman-pic-11.png" alt=""></p>
+<p>基本上在所有的可输入的地方，我们都能够使用这些变量。</p>
+<h4 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h4><p>环境变量，这个是权重比<code>global</code>要高一些的变量，是针对某些环境来进行设置的值。<br>操作方式类似。</p>
+<p>在使用代码操作的方式时，只需将<code>globals</code>替换为<code>environment</code>即可。<br>在发起一个请求，或者一键发送所有请求时，我们可以勾选对应的环境，来使用不同的变量。<br><img src="/images/postman-usage/postman-pic-12.png" alt=""></p>
+<p>在针对大量API测试时，拿<code>environment</code>来设置一个<code>domain</code>将是一个不错的选择。<br>这样在请求中我们只需这样写即可：</p>
+<pre><code>{{domain}}/res1
+{{domain}}/res2
+
+domain: https://api.github.com
+</code></pre><h3 id="一个简单的示例："><a href="#一个简单的示例：" class="headerlink" title="一个简单的示例："></a>一个简单的示例：</h3><p>通过直接运行一个<code>Collection</code>，我们可以很直观的看到所有的接口验证情况。<br><img src="/images/postman-usage/postman-pic-13.png" alt=""><br><img src="/images/postman-usage/postman-pic-14.png" alt=""></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.getpostman.com/docs/v6/" target="_blank" rel="noopener">https://www.getpostman.com/docs/v6/</a></p>
+<p>之前使用<code>PostMan</code>，最多就是模拟一下<code>POST</code>请求，最近刚好碰到类似的需求，发现原来<code>PostMan</code>还可以做的更多。<br>这篇只是使用<code>PostMan</code>进行API测试的最基础操作，还有一些功能目前我并没有用到，例如集成测试、生成<code>API</code>文档之类的。</p>
+<p>接口相当于是获取和操作服务资源的方式，肯定属于产品的核心。<br>所以测试是必须的，在交付QA同学之前，自己进行一遍测试，想必一定能节省一部分的时间。</p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/04/02/使用postman进行API自动化测试/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'fa201a70-3658-11e8-b2c2-2562c4b51f69'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

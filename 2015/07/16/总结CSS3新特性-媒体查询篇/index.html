@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>总结CSS3新特性(媒体查询篇) - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#运算符"><span class="toc-number">1.</span> <span class="toc-text">运算符:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#and"><span class="toc-number">1.1.</span> <span class="toc-text">and:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#not"><span class="toc-number">1.2.</span> <span class="toc-text">not:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#逗号"><span class="toc-number">1.3.</span> <span class="toc-text">,(逗号):</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Media-Type-只说几个常用的-其余会给出链接"><span class="toc-number">2.</span> <span class="toc-text">Media Type(只说几个常用的,其余会给出链接):</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#All"><span class="toc-number">2.1.</span> <span class="toc-text">All:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Screen"><span class="toc-number">2.2.</span> <span class="toc-text">Screen:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Print"><span class="toc-number">2.3.</span> <span class="toc-text">Print:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query"><span class="toc-number">3.</span> <span class="toc-text">Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#max-width-max-height"><span class="toc-number">3.1.</span> <span class="toc-text">max-width(max-height):</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#min-width-min-height"><span class="toc-number">3.2.</span> <span class="toc-text">min-width(min-height):</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#max-device-width-max-device-height"><span class="toc-number">3.3.</span> <span class="toc-text">max-device-width(max-device-height):</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#min-device-width-min-device-height"><span class="toc-number">3.4.</span> <span class="toc-text">min-device-width(min-device-height):</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>总结CSS3新特性(媒体查询篇)</h1>
+  <p>CSS3的媒体查询是对CSS2<a href="http://www.w3.org/TR/REC-CSS2/media.html" target="_blank" rel="noopener">媒体类型</a>的扩展,完善;</p>
+<p>CSS2的媒体类型仅仅定义了一些设备的关键字,CSS3的媒体查询进一步扩展了如width,height,color等具有取值范围的属性;</p>
+<p>media query 与 media type 的区别在于: media query是一个值或一个范围的值,而media type仅仅是设备的匹配(所以media type 是一个单词,而media query 后边需要跟着一个数值,两者可以混合使用);</p>
+<p>media可用于link标签属性 [media]<br><a id="more"></a></p>
+<pre class="line-numbers language-html"><code class="language-html">&lt;link rel="stylesheet"type="text/css"href="../css/print.css"media="print and (max-width : 600px)"/>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>以及css文件内,下边代码均是使用css内media;</p>
+<p>介绍一下可用的运算符&amp;常用的media type以及media query:</p>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符:"></a>运算符:</h3><h4 id="and"><a href="#and" class="headerlink" title="and:"></a>and:</h4><p>and运算符用于符号两边规则均满足条件则匹配</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> screen and <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span> 600px<span class="token punctuation">)</span></span><span class="token punctuation">{</span><span class="token comment" spellcheck="true">/*匹配宽度小于600px的电脑屏幕*/</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="not"><a href="#not" class="headerlink" title="not:"></a>not:</h4><p>not运算符用于取非,所有不满足该规则的均匹配</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> not print</span><span class="token punctuation">{</span><span class="token comment" spellcheck="true">/*匹配除了打印机以外的所有设备*/</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>使用not时请注意,如果不加括号,也许会产生一些奇怪的现象,例:</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> not all and <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span> 500px<span class="token punctuation">)</span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/*等价于*/</span>
+<span class="token atrule"><span class="token rule">@media</span> not <span class="token punctuation">(</span>all and <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span> 500px<span class="token punctuation">)</span><span class="token punctuation">)</span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/*而不是*/</span>
+<span class="token atrule"><span class="token rule">@media</span><span class="token punctuation">(</span>not all<span class="token punctuation">)</span> and <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span> 500px<span class="token punctuation">)</span></span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所以,如果要使用not,还是显式的添加括号比较明确点</p>
+<h4 id="逗号"><a href="#逗号" class="headerlink" title=",(逗号):"></a>,(逗号):</h4><p>相当于 or 用于两边有一条满足则匹配</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> screen , <span class="token punctuation">(</span><span class="token property">min-width</span><span class="token punctuation">:</span> 800px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/*匹配电脑屏幕或者宽度大于800px的设备*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="Media-Type-只说几个常用的-其余会给出链接"><a href="#Media-Type-只说几个常用的-其余会给出链接" class="headerlink" title="Media Type(只说几个常用的,其余会给出链接):"></a>Media Type(只说几个常用的,其余会给出链接):</h3><h4 id="All"><a href="#All" class="headerlink" title="All:"></a>All:</h4><p>all是默认值,匹配所有设备;</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> all</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/* 可以过滤不支持media的浏览器 */</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="Screen"><a href="#Screen" class="headerlink" title="Screen:"></a>Screen:</h4><p>匹配电脑屏幕;</p>
+<h4 id="Print"><a href="#Print" class="headerlink" title="Print:"></a>Print:</h4><p>匹配打印机(打印预览时也会匹配)[本人简历专门为print做了一套样式~]</p>
+<p>常用的一般就这三个type,其余Media Type 有兴趣的可以看下 <a href="http://www.w3school.com.cn/html5/att_a_media.asp" target="_blank" rel="noopener">W3School的说明</a>或<a href="http://www.w3.org/TR/REC-CSS2/media.html" target="_blank" rel="noopener">W3的文档</a></p>
+<h3 id="Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query"><a href="#Media-Query-也是说一些常用的-需要注意的是-Media-Query必须要加括号-一个括号是一个query" class="headerlink" title="Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query"></a>Media Query(也是说一些常用的): //需要注意的是,Media Query必须要加括号,一个括号是一个query</h3><h4 id="max-width-max-height"><a href="#max-width-max-height" class="headerlink" title="max-width(max-height):"></a>max-width(max-height):</h4><pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span> 600px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/*匹配界面宽度小于600px的设备*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="min-width-min-height"><a href="#min-width-min-height" class="headerlink" title="min-width(min-height):"></a>min-width(min-height):</h4><pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">min-width</span><span class="token punctuation">:</span> 400px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/*匹配界面宽度大于400px的设备*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="max-device-width-max-device-height"><a href="#max-device-width-max-device-height" class="headerlink" title="max-device-width(max-device-height):"></a>max-device-width(max-device-height):</h4><pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">max-device-width</span><span class="token punctuation">:</span> 800px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/*匹配设备(不是界面)宽度小于800px的设备*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="min-device-width-min-device-height"><a href="#min-device-width-min-device-height" class="headerlink" title="min-device-width(min-device-height):"></a>min-device-width(min-device-height):</h4><pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">min-device-width</span><span class="token punctuation">:</span> 600px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/*匹配设备(不是界面)宽度大于600px的设备*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>做移动开发时用device-width/device-height,比较好一点吧,因为有些手机浏览器默认会对页面进行一些缩放,所以按照设备宽高来进行匹配会更接近开发时所期望的效果;</p>
+<p>给出全部的Media Query属性值的链接 <a href="http://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/" target="_blank" rel="noopener">W3的文档</a> 也可以看看MDN的,有志愿者汉化了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Media_queries" target="_blank" rel="noopener">MDN Media Query 文档</a></p>
+<p>media是可以嵌套的:</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@media</span> not print</span><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/*通用样式*/</span>
+  <span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span>600px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/*此条匹配宽度小于600px的非打印机设备*/</span>
+  <span class="token punctuation">}</span>
+  <span class="token atrule"><span class="token rule">@media</span> <span class="token punctuation">(</span><span class="token property">min-width</span><span class="token punctuation">:</span>600px<span class="token punctuation">)</span></span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/*此条匹配宽度大于600px的非打印机设备*/</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样省去了将 not print 写两遍的冗余.这样写也是有一定好处的,因为有些浏览器也许只支持Media Type 而不支持 Media Query- -(不要问我为什么知道,栽过坑)</p>
+<p>Media Query(仅指上边那几个)的值的单位可以是 px em rem (%/vh/vw/vmin/vmax什么的没有试…感觉应该没什么用吧…);</p>
+<p>Media Query是响应式页面的核心,其实说响应式页面就是在不同分辨率下显示不同的效果;</p>
+<p>编写响应式页面CSS时分为从小到大和从大到小(尺寸);</p>
+<p>本人弱弱的推荐从小尺寸开始写的 Media Query 使用 max-系列,大尺寸的反之;</p>
+<p>本文哪里有错误及不足还请大家指出;</p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2015/07/16/总结CSS3新特性-媒体查询篇/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '931a6cb0-b97a-11e6-8577-9502afb180f1'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

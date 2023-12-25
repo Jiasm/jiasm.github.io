@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>柯里化与反柯里化 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#两种方案的通用代码实现"><span class="toc-number">1.</span> <span class="toc-text">两种方案的通用代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两种方案的简单示意"><span class="toc-number">2.</span> <span class="toc-text">两种方案的简单示意</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#currying"><span class="toc-number">2.1.</span> <span class="toc-text">currying</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unCurrying"><span class="toc-number">2.2.</span> <span class="toc-text">unCurrying</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#柯里化currying"><span class="toc-number">3.</span> <span class="toc-text">柯里化currying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反柯里化unCurrying"><span class="toc-number">4.</span> <span class="toc-text">反柯里化unCurrying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网上流传的一个有趣的面试题"><span class="toc-number">5.</span> <span class="toc-text">网上流传的一个有趣的面试题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">6.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>柯里化与反柯里化</h1>
+  <blockquote>
+<p>最近在看一本书<a href="https://book.douban.com/subject/26579320/" target="_blank" rel="noopener">《JavaScript函数式编程》</a><br>里边提到了一个名词，<code>柯里化(currying)</code>，阅读后发现在日常开发中经常会用到<code>柯里化</code>函数。<br>以及还有他的反义词<code>反柯里化(unCurrying)</code><br><code>柯里化</code>被称为部分计算函数，也就是会固定一部分参数，然后返回一个接收剩余参数的函数。目的是为了缩小适用范围，创建一个针对性更强的函数。<br><code>反柯里化</code>正好与之相反，我们是要扩大一个函数的适用范围，比如将<code>Array</code>独有的<code>push</code>应用到一个<code>Object</code>上去。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="两种方案的通用代码实现"><a href="#两种方案的通用代码实现" class="headerlink" title="两种方案的通用代码实现"></a>两种方案的通用代码实现</h2><pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> currying <span class="token punctuation">(</span>func<span class="token punctuation">,</span> <span class="token operator">...</span>preArgs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> self <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> func<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>preArgs<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> unCurrying <span class="token punctuation">(</span>func<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>reference<span class="token punctuation">,</span> <span class="token operator">...</span>args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> func<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>reference<span class="token punctuation">,</span> args<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="两种方案的简单示意"><a href="#两种方案的简单示意" class="headerlink" title="两种方案的简单示意"></a>两种方案的简单示意</h2><h3 id="currying"><a href="#currying" class="headerlink" title="currying"></a>currying</h3><pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">foo</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// =></span>
+<span class="token function">foo</span><span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">(</span>arg2<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="unCurrying"><a href="#unCurrying" class="headerlink" title="unCurrying"></a>unCurrying</h3><pre class="line-numbers language-javascript"><code class="language-javascript">obj<span class="token punctuation">.</span><span class="token function">foo</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// =></span>
+<span class="token function">foo</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="柯里化currying"><a href="#柯里化currying" class="headerlink" title="柯里化currying"></a>柯里化currying</h2><p>一个柯里化函数的简单应用，我们有一个进行三个参数求和的函数。<br>我们可以调用<code>currying</code>传入<code>sum</code>获得<code>sum1</code>，一个固定了第一个参数为<code>10</code>的求和函数<br>然后我们又调用<code>currying</code>传入<code>sum1</code>获得<code>sum2</code>，在原有的固定了一个参数的基础上，再次固定一个参数<code>20</code></p>
+<p>这时我们调用<code>sum2</code>时仅需传入一个参数即可完成三个参数的求和：<code>10 + 20 + n</code></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> sum <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> a <span class="token operator">+</span> b <span class="token operator">+</span> c <span class="token comment" spellcheck="true">// 一个进行三个参数求和的函数</span>
+<span class="token keyword">let</span> sum1 <span class="token operator">=</span> <span class="token function">currying</span><span class="token punctuation">(</span>sum<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>     <span class="token comment" spellcheck="true">// 固定第一个参数</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">sum1</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>          <span class="token comment" spellcheck="true">// 12</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">sum1</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>          <span class="token comment" spellcheck="true">// 14</span>
+
+<span class="token keyword">let</span> sum2 <span class="token operator">=</span> <span class="token function">currying</span><span class="token punctuation">(</span>sum1<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">// 固定第二个参数</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">sum2</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>             <span class="token comment" spellcheck="true">// 31</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">sum2</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>             <span class="token comment" spellcheck="true">// 32</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>帮助人理解<code>currying</code>最简单的例子就是<code>XXX.bind(this, yourArgs)()</code><br>写过<code>React</code>的人应该都知道，在一些列表需要绑定事件时，我们大致会有这样的代码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// ...</span>
+  clickHandler <span class="token punctuation">(</span>id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`trigger with: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  render <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token operator">&lt;</span>ul<span class="token operator">></span>
+      <span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>data<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>li onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>clickHandler<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> item<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">{</span>item<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+      <span class="token punctuation">)</span><span class="token punctuation">}</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样我们就能在点击事件被触发时拿到对应的<code>ID</code>了。这其实就是一个函数柯里化的操作<br>我们通过<code>bind</code>生成了多个函数，每个函数都固定了第一个参数<code>index</code>，然后第二个参数才是<code>event</code>对象。</p>
+<p>又或者我们有如下结构的数据，我们需要新增一列数据的展示<code>description</code>，要求格式为<code>所在部门-姓名</code>。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+  section<span class="token punctuation">:</span> <span class="token string">'S1'</span><span class="token punctuation">,</span>
+  personnel<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'Niko'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'Bellic'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  section<span class="token punctuation">:</span> <span class="token string">'S2'</span><span class="token punctuation">,</span>
+  personnel<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'Roman'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果用普通函数的处理方法，可能是这样的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> result <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>sections <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  sections<span class="token punctuation">.</span>personnel <span class="token operator">=</span> sections<span class="token punctuation">.</span>personnel<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>people <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    people<span class="token punctuation">.</span>description <span class="token operator">=</span> <span class="token template-string"><span class="token string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>sections<span class="token punctuation">.</span>section<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">-</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>people<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+
+    <span class="token keyword">return</span> people
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> sections
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>或者我们可以用<code>currying</code>的方式来实现</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> result <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>sections <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  sections<span class="token punctuation">.</span>personnel <span class="token operator">=</span> sections<span class="token punctuation">.</span>personnel<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token function">currying</span><span class="token punctuation">(</span><span class="token punctuation">(</span>section<span class="token punctuation">,</span> people<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    people<span class="token punctuation">.</span>description <span class="token operator">=</span> <span class="token template-string"><span class="token string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>section<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">-</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>people<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+
+    <span class="token keyword">return</span> people
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> sections<span class="token punctuation">.</span>section<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> sections
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用柯里化还有一种好处，就是可以帮助我们明确调用函数的参数。<br>我们创建一个如下函数，一个看似非常鸡肋的函数，大致作用如下：</p>
+<ul>
+<li>接收一个函数</li>
+<li>返回一个只接收一个参数的函数</li>
+</ul>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> curry <span class="token punctuation">(</span>func<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">func</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们应该都用过一个全局函数<code>parseInt</code><br>用来将<code>String</code>转换为<code>Number</code><br><code>parseInt(&#39;10&#39;) // 10</code><br>但其实，<code>parseInt</code>不止接收一个参数。<br><code>parseInt(&#39;10&#39;, 2) // 2</code><br>第二个参数可以用来标识给定值的基数，告诉我们用<code>N</code>进制来处理这个字符串</p>
+<p>所以当我们直接将一个<code>parseInt</code>传入<code>map</code>中时就会遇到一些问题：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token string">'1'</span><span class="token punctuation">,</span> <span class="token string">'2'</span><span class="token punctuation">,</span> <span class="token string">'3'</span><span class="token punctuation">,</span> <span class="token string">'4'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>parseInt<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => 1, NaN, NaN, NaN</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>因为<code>map</code>回调的返回值有三个参数<code>当前item</code>、<code>当前item对应的index</code>、<code>调用map的对象引用</code><br>所以我们可以用上边的<code>curry</code>函数来解决这个问题，限制<code>parseInt</code>只接收一个参数</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token string">'1'</span><span class="token punctuation">,</span> <span class="token string">'2'</span><span class="token punctuation">,</span> <span class="token string">'3'</span><span class="token punctuation">,</span> <span class="token string">'4'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token function">curry</span><span class="token punctuation">(</span>parseInt<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => 1, 2, 3, 4</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>缩小适用范围，创建一个针对性更强的函数</strong></p>
+<h2 id="反柯里化unCurrying"><a href="#反柯里化unCurrying" class="headerlink" title="反柯里化unCurrying"></a>反柯里化unCurrying</h2><blockquote>
+<p>虽说名字叫反柯里化。。但是我觉得也只是部分理念上相反，而不是向<code>Math.max</code>和<code>Math.min</code>，又或者<code>[].pop</code>和<code>[].push</code>这样的完全相反。<br>就像柯里化是缩小了适用范围，所以反柯里化所做的就是扩大适用范围。</p>
+</blockquote>
+<p>这个在开发中也会经常用到，比如某宝有一个经典的面试题：<br><em>如何获取一个页面中所用到的所有标签，并将其输出？</em></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 普通函数的写法</span>
+<span class="token keyword">let</span> tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'*'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> tags<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>tagName<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>tags<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true">// => [a, b, div, ...]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为<code>qsa</code>返回的是一个<code>NodeList</code>对象，一个类数组的对象，他是没有直接实现<code>map</code>方法的。<br>而<code>反柯里化</code>就是用来帮助它实现这个的，<strong>扩大适用范围</strong>，让一些原本无法调用的函数变得可用</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> map <span class="token operator">=</span> <span class="token function">unCurrying</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span>map<span class="token punctuation">)</span>
+<span class="token keyword">let</span> tags <span class="token operator">=</span> <span class="token function">map</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'*'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> item <span class="token operator">=</span><span class="token operator">></span> item<span class="token punctuation">.</span>tagName<span class="token punctuation">)</span>
+
+tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>tags<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true">// 其实可以合并到上边那一行代码去，但是这样看起来更清晰一些</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>又或者早期写<code>JavaScript</code>时对<code>arguments</code>对象的处理，这也是一个类数组对象。<br>比如一些早期版本的<code>currying</code>函数实现（手动斜眼）：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> old_currying <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> self <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token keyword">let</span> func <span class="token operator">=</span> arguments<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+  <span class="token keyword">let</span> preArgs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span>slice<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    func<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>preArgs<span class="token punctuation">,</span> arguments<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>里边用到的<code>[].slice.call</code>经过一层封装后，其实就是实现的<code>unCurrying</code>的效果</p>
+<h2 id="网上流传的一个有趣的面试题"><a href="#网上流传的一个有趣的面试题" class="headerlink" title="网上流传的一个有趣的面试题"></a>网上流传的一个有趣的面试题</h2><p>有大概这么一道题，如何实现下面的函数：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token operator">+</span>a<span class="token punctuation">)</span>       <span class="token comment" spellcheck="true">// => 1</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token operator">+</span><span class="token function">a</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">// => 3</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token operator">+</span><span class="token function">a</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 6</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里是一个实现的方案：<a href="https://github.com/Jiasm/notebook/blob/master/currying.js" target="_blank" rel="noopener">https://github.com/Jiasm/notebook/blob/master/currying.js</a></p>
+<p><em>一个柯里化实现的变体。</em></p>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>在《JavaScript函数式编程》中提到了，高阶函数的几个特性：</p>
+<ol>
+<li>以一个函数作为参数</li>
+<li>以一个函数作为返回值</li>
+</ol>
+<p>柯里化/反柯里化只是其中的一小部分。<br>其实柯里化还分为了<code>向右柯里化</code>、<code>向左柯里化</code>（大概就是<code>preArgs</code>和<code>args</code>的调用顺序问题了）</p>
+<p>用函数构建出新的函数，将函数组合在一起，这个是贯穿这本书的一个理念，在现在大量的面向对象编程开发中，能够看到这么一本书，感觉很是清新。从另一个角度看待<code>JavaScript</code>这门语言，<strong>强烈推荐，值得一看</strong>。</p>
+<p>文章部分示例代码：<a href="https://github.com/Jiasm/currying-uncurrying" target="_blank" rel="noopener">https://github.com/Jiasm/currying-uncurrying</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://2ality.com/2011/11/uncurrying-this.html" target="_blank" rel="noopener">http://2ality.com/2011/11/uncurrying-this.html</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/03/24/柯里化与反柯里化/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '1a80ec30-2f61-11e8-8355-89242d68c2d1'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2023 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>
