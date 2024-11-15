@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>JavaScript中的比较运算符 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#相等运算符"><span class="toc-number">1.</span> <span class="toc-text">相等运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#与"><span class="toc-number">1.1.</span> <span class="toc-text">==与!=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与-1"><span class="toc-number">1.2.</span> <span class="toc-text">===与!==</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系运算符"><span class="toc-number">2.</span> <span class="toc-text">关系运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文档"><span class="toc-number">3.</span> <span class="toc-text">参考文档</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>JavaScript中的比较运算符</h1>
+  <blockquote>
+<p>JavaScript中的比较运算符粗略的可以分为两种：</p>
+<ol>
+<li>相等运算符（==、===、!==）这些</li>
+<li>关系运算符（&gt;、&lt;、&gt;=）<br>在平时开发中，基本不会太关注这两者的差异，我们几乎总是可以获取到我们想要的结果-。-</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<p>前几天在群里一个小伙伴问了个问题：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => false</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => false</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => false</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => ?</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后一个<code>null &gt;= 0</code>的结果为true。<br>刚看到这个代码的时候，下意识地会认为结果应该也是<code>false</code>，毕竟上边标明了三种情况都为<code>false</code>。<br>然而这个就露出了<strong>相等运算符</strong>和<strong>关系运算符</strong>两者执行的差异。</p>
+<p>在相等运算符中，如果是非严格相等，则会尝试将两边的值转换为相同类型进行比较。<br>在关系运算符中，会尝试将运算符两边的值转换为<code>Number</code>再进行比较。</p>
+<p>所以在执行<code>null &gt;= 0</code>的时候<code>null</code>被转换为<code>Number</code>随后值就变为了<code>0</code>，所以第四个运算符实际的执行为<code>0 &gt;= 0</code>。</p>
+<p>觉得这个题挺有意思的，所以就去翻了下文档，看看这几个比较运算符在执行的时候都做了些什么。</p>
+<h2 id="相等运算符"><a href="#相等运算符" class="headerlink" title="相等运算符"></a>相等运算符</h2><p>相等运算符有四个，<code>==</code>、<code>!=</code>、<code>===</code>、<code>!==</code>，前两个会对运算符两边的表达式进行类型转换，试图转换为相同的类型。</p>
+<h3 id="与"><a href="#与" class="headerlink" title="==与!="></a><code>==</code>与<code>!=</code></h3><p>执行时会先检查两者类型是否一致，如一致则相当于调用<code>===</code>、<code>!==</code><br>随后判断两者是否都为<code>null</code>或<code>undefined</code>,如果均为这两个值，则会直接返回<code>true</code></p>
+<p>接下来就会进行一些类型转换，绝大多数情况是会转换为<code>Number</code>，但是主要转换类型的依赖还是在于运算符左侧表达式的类型。</p>
+<p>如果一边类型为<code>String</code>另一边类型为<code>Number</code>，则会将<code>String</code>转换为<code>Number</code>对两者进行比较。<br>如果其中一个为<code>Boolean</code>，则会将该表达式转换为<code>Number</code></p>
+<p>上边的是一些比较常规的类型转换，但是如果都不满足上边的条件，后续还会有其他的转换。<br>如果其中一个为<code>Object</code>，另一个类型为<code>Number</code>、<code>String</code>或者是<code>Symbol</code>中的任意一个。<br>则会获取<code>Object</code>的原始值，然后对两者进行比较。</p>
+<p><img src="/images/comparison-operators/pic-1.png" alt="ToPrimitive转换表格"></p>
+<p>然后表格中对<code>Object</code>类型又有一些额外的处理</p>
+<p><img src="/images/comparison-operators/pic-2.png" alt="Object类型的额外处理"><br><img src="/images/comparison-operators/pic-3.png" alt="针对==运算的Object类型的额外处理"></p>
+<p>在最后我们可以看到，会针对<code>Object</code>类型的变量进行调用<code>valueOf</code>与<code>toString</code><br>而两个函数调用的顺序取决于上边一些判断的过程，目前还木有找到会先执行<code>toString</code>的例子。。。（因为原始类型无法直接添加<code>toString</code>和<code>valueOf</code>事件的代理）</p>
+<p>我们可以用<code>Object.assign</code>来实现某个对象的<code>toString</code>和<code>valueOf</code>方法来观察执行的过程。<br><img src="/images/comparison-operators/pic-4.png" alt="valueOf的实现"></p>
+<p>如果<code>valueOf</code>返回值还是<code>Object</code>的话，则会继续调用<code>toString</code></p>
+<p><img src="/images/comparison-operators/pic-5.png" alt="toString的实现"></p>
+<p>如果两个函数都返回<code>Object</code>，这时就会抛出一个类型异常的错误</p>
+<p><img src="/images/comparison-operators/pic-6.png" alt="Throw-TypeError"></p>
+<h3 id="与-1"><a href="#与-1" class="headerlink" title="===与!=="></a><code>===</code>与<code>!==</code></h3><p>相较<code>==</code>，<code>===</code>的逻辑就很清晰了，因为没有了不同类型之间的转换，就是拿到两个表达式进行比较即可。</p>
+<p>首先就是获取两侧表达式的类型，如果不同则返回<code>false</code>，相同则进行后续的比较。</p>
+<p>关于<code>Number</code>类型步骤的描述，有一点我很是疑惑，就是关于<code>+0 === -0</code>，因为一元正负运算符的优先级肯定是高于<code>===</code>的，不知为何会写在这里-.-<br><img src="/images/comparison-operators/pic-7.png" alt="Throw-TypeError"></p>
+<h2 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h2><p>关系运算符的执行过程，是尽可能的将两边的表达式转换为<code>Number</code>进行比较。（也确实，其他类型木有什么可比性的）</p>
+<p>运算符刚开始会尝试将两侧表达式转换为原始值，并且在转换的过程中会优先选择转换为<code>Number</code>类型。</p>
+<p>转换完成后，如果两边表达式都为<code>String</code>，则会先判断一侧表达式是否包含另一侧。<br>例如：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token string">'abc'</span> <span class="token operator">></span> <span class="token string">'ab'</span> <span class="token comment" spellcheck="true">// abc 包含 ab 所以 abc 比 ab 大，结果为true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果两者不为包含关系，则会从第一个字符开始获取对应的<code>Unicode</code>编码，来进行比大小，如果大小相同，则顺移至下一位。<br><img src="/images/comparison-operators/pic-8.png" alt="check-Unicode"></p>
+<p>其余情况下，则会将两侧表达式直接转换为<code>Number</code>求值。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">Number</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token function">Number</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token function">Number</span><span class="token punctuation">(</span>undefined<span class="token punctuation">)</span>
+<span class="token function">Number</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// ...</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当任意一个结果为<code>NaN</code>时，运算符的结果都为<code>false</code>（而且文档中给出的，返回值为<code>undefined</code>，并不是<code>false</code>。。。）</p>
+<p>然后针对<code>&lt;</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>&gt;=</code>进行各自的判断。</p>
+<p>所以到最后就解释了，为什么那个问题的<code>null &gt;= 0</code>为<code>true</code>。<br>因为关系运算符是会将值转换为<code>Number</code>来进行比较的。<br>而相等运算符只在极少数的情况下会将值转换为<code>Number</code>来进行比较（例如：一个为<code>Number</code>另一个为<code>String</code>）</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://www.ecma-international.org/ecma-262/6.0/ECMA-262.pdf" target="_blank" rel="noopener">http://www.ecma-international.org/ecma-262/6.0/ECMA-262.pdf</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/03/17/JavaScript中的比较运算符/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '5957c0e0-29db-11e8-87c1-d1f395e30166'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

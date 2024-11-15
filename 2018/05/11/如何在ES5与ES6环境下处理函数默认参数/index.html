@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>如何在ES5与ES6环境下处理函数默认参数 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ES5"><span class="toc-number">1.</span> <span class="toc-text">ES5</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用逻辑或-来实现"><span class="toc-number">1.1.</span> <span class="toc-text">使用逻辑或||来实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正确的姿势"><span class="toc-number">1.2.</span> <span class="toc-text">正确的姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用三元运算符简化操作"><span class="toc-number">1.2.1.</span> <span class="toc-text">使用三元运算符简化操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用函数进行封装"><span class="toc-number">1.2.2.</span> <span class="toc-text">使用函数进行封装</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#one-momre-things"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">one momre things</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ES6"><span class="toc-number">2.</span> <span class="toc-text">ES6</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何针对某些必填参数抛出异常"><span class="toc-number">2.1.</span> <span class="toc-text">如何针对某些必填参数抛出异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复杂结构参数的默认值处理"><span class="toc-number">2.2.</span> <span class="toc-text">复杂结构参数的默认值处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>如何在ES5与ES6环境下处理函数默认参数</h1>
+  <blockquote>
+<p>函数默认值是一个很提高鲁棒性的东西（就是让程序更健壮）<br>MDN关于函数默认参数的描述：函数默认参数允许在没有值或<code>undefined</code>被传入时使用默认形参。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="ES5"><a href="#ES5" class="headerlink" title="ES5"></a>ES5</h2><h3 id="使用逻辑或-来实现"><a href="#使用逻辑或-来实现" class="headerlink" title="使用逻辑或||来实现"></a>使用逻辑或<code>||</code>来实现</h3><p>众所周知，在ES5版本中，并没有提供的直接方法供我们我们处理函数默认值<br>所以只能够自己去增强函数的功能，一般会这么来做：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> doSomething <span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  name <span class="token operator">=</span> name <span class="token operator">||</span> <span class="token string">'default name'</span>
+  age  <span class="token operator">=</span> age  <span class="token operator">||</span> <span class="token number">18</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们将函数的两个参数<code>name</code>与<code>age</code>进行默认值的处理，如果没有则使用默认值。<br>在执行一下函数后，好像并没有什么不对：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>       <span class="token comment" spellcheck="true">// default name, 18</span>
+<span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token string">'Niko'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Niko        , 18</span>
+<span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span>   <span class="token comment" spellcheck="true">// default name, 12</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>然而当我们执行这样的代码时，就会获得一些超出预期的结果：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token string">'Niko'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Niko, 18</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><em>能够发现，对于参数<code>0</code>，我们上边的默认参数实现方法是有问题的</em></p>
+<p>就像下边的四个表达式，都会输出<code>wrong</code>，这很显然不能够满足上边MDN关于函数默认参数的定义：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">0</span>         <span class="token operator">||</span> <span class="token string">'wrong'</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">''</span>        <span class="token operator">||</span> <span class="token string">'wrong'</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span>      <span class="token operator">||</span> <span class="token string">'wrong'</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token boolean">false</span>     <span class="token operator">||</span> <span class="token string">'wrong'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="正确的姿势"><a href="#正确的姿势" class="headerlink" title="正确的姿势"></a>正确的姿势</h3><p>所以，在<code>ES5</code>中正确的默认值处理应该是这样：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> doSomething <span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>name <span class="token operator">===</span> undefined<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    name <span class="token operator">=</span> <span class="token string">'default name'</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>age <span class="token operator">===</span> undefined<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    age <span class="token operator">=</span> <span class="token number">18</span>
+  <span class="token punctuation">}</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="使用三元运算符简化操作"><a href="#使用三元运算符简化操作" class="headerlink" title="使用三元运算符简化操作"></a>使用三元运算符简化操作</h4><p>或者我们简写成三元运算符形式的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> doSomething <span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  name <span class="token operator">=</span> name <span class="token operator">===</span> undefined <span class="token operator">?</span> <span class="token string">'default name'</span> <span class="token punctuation">:</span> name
+  age  <span class="token operator">=</span> age  <span class="token operator">===</span> undefined <span class="token operator">?</span> <span class="token number">18</span>             <span class="token punctuation">:</span> age
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="使用函数进行封装"><a href="#使用函数进行封装" class="headerlink" title="使用函数进行封装"></a>使用函数进行封装</h4><p>但是如果我们每写一个函数，都要重复的去做这些操作<br>未免太麻烦了，所以，我们对这个逻辑进行一个简单的封装：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> defaultValue <span class="token punctuation">(</span>val<span class="token punctuation">,</span> defaultVal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> val <span class="token operator">===</span> undefined <span class="token operator">?</span> defaultVal <span class="token punctuation">:</span> val
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> doSomething <span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  name <span class="token operator">=</span> <span class="token function">defaultValue</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token string">'default name'</span><span class="token punctuation">)</span>
+  age  <span class="token operator">=</span> <span class="token function">defaultValue</span><span class="token punctuation">(</span>age <span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">)</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就很简洁的在<code>ES5</code>实现了函数默认参数的逻辑  </p>
+<h5 id="one-momre-things"><a href="#one-momre-things" class="headerlink" title="one momre things"></a>one momre things</h5><p>关于上边的<code>defaultValue</code>函数实现方法，我们在合理的使用弱类型语言的优势后<br>可以使用这种方式来省去三元运算符的操作：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> defaultValue <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> arguments<span class="token punctuation">[</span><span class="token operator">+</span><span class="token punctuation">(</span>arguments<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">===</span> undefined<span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>我们知道，<code>arguments</code>表示函数所有的实参<br>我们使用<code>arguments[0]</code>获取第一个实参，然后与<code>undefined</code>进行全等比较<br>在外层将表达式的结果转换为<code>Number</code>，然后将这个值作为下标获取<code>arguments</code>中对应的参数。<br>因为是由<code>Boolean</code>值转变而来，所以只会存在<code>0</code>、<code>1</code>两种选项。<br>也就实现了上边三元运算符的功能。  </p>
+<h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><p>ES6版本的函数默认值基本上就是我们上边实现的那种套路了<br>但是因为是原生的，所以会有相应的新语法，能够更简洁的使用：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> doSomething <span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">'default name'</span><span class="token punctuation">,</span> age <span class="token operator">=</span> <span class="token number">18</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><code>ES6</code>中提供了新的语法，可以让我们在函数声明参数后边直接写<code>= [defaultValue]</code>的这种形式来设置某个参数的默认值。<br>直接使用这种方式，省去了在函数内部进行默认值的检查，能够让函数专注的做它应该做的事情。  </p>
+<h3 id="如何针对某些必填参数抛出异常"><a href="#如何针对某些必填参数抛出异常" class="headerlink" title="如何针对某些必填参数抛出异常"></a>如何针对某些必填参数抛出异常</h3><p><code>ES6</code>这种新语法能够让我们很好的针对某个必填参数进行错误提醒：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> requireParams <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'required params'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> doSomething <span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token function">requireParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> age <span class="token operator">=</span> <span class="token number">18</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// do something</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果<code>name</code>参数为<code>undefined</code>，就会触发默认值规则<br>然后调用<code>requireParams</code>函数，而我们在函数中直接<code>throw</code>了一个<code>Error</code></p>
+<h3 id="复杂结构参数的默认值处理"><a href="#复杂结构参数的默认值处理" class="headerlink" title="复杂结构参数的默认值处理"></a>复杂结构参数的默认值处理</h3><p>上边的处理都是针对简单的基本类型数据进行处理的，但如果我们有如下的一个函数：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> init <span class="token punctuation">(</span><span class="token punctuation">{</span>id<span class="token punctuation">,</span> value<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  id<span class="token punctuation">:</span> <span class="token string">'tagId'</span><span class="token punctuation">,</span>
+  value<span class="token punctuation">:</span> <span class="token number">1</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果在<code>ES5</code>环境下，针对这种参数的默认值处理将会变得无比复杂<br>首先要判断这一个参数是否存在，然后在判断参数中的所有<code>key</code>是否存在<br>而在<code>ES6</code>中，可以这样来做：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> init <span class="token punctuation">(</span><span class="token punctuation">{</span>
+  id    <span class="token operator">=</span> <span class="token string">'defaultId'</span><span class="token punctuation">,</span>
+  value <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先在解构函数的后边添加默认值<code>= {}</code>，然后针对每一项参数添加默认值，很简洁的就实现了我们的需求。  </p>
+<blockquote>
+<p>ES5版本的polyfill代码在仓库中的位置：<a href="https://github.com/Jiasm/notebook/blob/master/javascript/es5-default-value-polyfill.js" target="_blank" rel="noopener">defaultValue</a></p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters" target="_blank" rel="noopener">MDN</a></li>
+</ol>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/05/11/如何在ES5与ES6环境下处理函数默认参数/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'cae48080-551f-11e8-a90b-0524de3ad077'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

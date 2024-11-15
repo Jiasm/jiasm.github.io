@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>原生ES-Module在浏览器中的尝试 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用方式"><span class="toc-number">1.</span> <span class="toc-text">使用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优雅降级"><span class="toc-number">1.1.</span> <span class="toc-text">优雅降级</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些要注意的细节"><span class="toc-number">2.</span> <span class="toc-text">一些要注意的细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#有效的module路径定义"><span class="toc-number">2.1.</span> <span class="toc-text">有效的module路径定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#module的文件默认为defer"><span class="toc-number">2.2.</span> <span class="toc-text">module的文件默认为defer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行内script也会默认添加defer特性"><span class="toc-number">2.2.1.</span> <span class="toc-text">行内script也会默认添加defer特性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可以对module类型的脚本添加async属性"><span class="toc-number">2.3.</span> <span class="toc-text">可以对module类型的脚本添加async属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个module只会加载一次"><span class="toc-number">2.4.</span> <span class="toc-text">一个module只会加载一次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#import和export在使用的一些小提示"><span class="toc-number">3.</span> <span class="toc-text">import和export在使用的一些小提示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#export的重命名"><span class="toc-number">3.1.</span> <span class="toc-text">export的重命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#export导出的属性均为可读的"><span class="toc-number">3.2.</span> <span class="toc-text">export导出的属性均为可读的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#export在代码中的顺序并不影响最终导出的结果"><span class="toc-number">3.3.</span> <span class="toc-text">export在代码中的顺序并不影响最终导出的结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#import获取default模块的几种姿势"><span class="toc-number">3.4.</span> <span class="toc-text">import获取default模块的几种姿势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类似index的export文件编写"><span class="toc-number">3.5.</span> <span class="toc-text">类似index的export文件编写</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">4.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>原生ES-Module在浏览器中的尝试</h1>
+  <blockquote>
+<p>其实浏览器原生模块相关的支持也已经出了一两年了（我第一次知道这个事情实在2016年下半年的时候）<br>可以抛开<code>webpack</code>直接使用<code>import</code>之类的语法<br>但因为算是一个比较新的东西，所以现在基本只能自己闹着玩 :p<br>但这并不能成为不去了解它的借口，还是要体验一下的。  </p>
+</blockquote>
+<a id="more"></a>
+<p>首先是各大浏览器从何时开始支持<code>module</code>的：  </p>
+<ul>
+<li>Safari 10.1</li>
+<li>Chrome 61</li>
+<li>Firefox 54 (有可能需要你在<code>about:config</code>页面设置启用<code>dom.moduleScripts.enabled</code>)</li>
+<li>Edge 16</li>
+</ul>
+<blockquote>
+<p>数据来自<a href="https://jakearchibald.com/2017/es-modules-in-browsers/" target="_blank" rel="noopener">https://jakearchibald.com/2017/es-modules-in-browsers/</a></p>
+</blockquote>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>首先在使用上，唯一的区别就是需要在<code>script</code>标签上添加一个<code>type=&quot;module&quot;</code>的属性来表示这个文件是作为<code>module</code>的方式来运行的。  </p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript">
+  <span class="token keyword">import</span> message <span class="token keyword">from</span> <span class="token string">'./message.js'</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// hello world</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在对应的<code>module</code>文件中就是经常会在<code>webpack</code>中用到的那样。<br>语法上并没有什么区别（<em>本来<code>webpack</code>也就是为了让你提前用上新的语法:)</em> ）</p>
+<p><em>message.js</em>  </p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token string">'hello world'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="优雅降级"><a href="#优雅降级" class="headerlink" title="优雅降级"></a>优雅降级</h3><p>这里有一个类似于<code>noscript</code>标签的存在。<br>可以在<code>script</code>标签上添加<code>nomodule</code>属性来实现一个回退方案。  </p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript">
+  <span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'./module.js'</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">nomodule</span><span class="token punctuation">></span></span><span class="token script language-javascript">
+  <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'your browsers can not supports es modules! please upgrade it.'</span><span class="token punctuation">)</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><code>nomodule</code>的处理方案是这样的：<br>支持<code>type=&quot;module&quot;</code>的浏览器会忽略包含<code>nomodule</code>属性的<code>script</code>脚本执行。<br>而不支持<code>type=&quot;module&quot;</code>的浏览器则会忽略<code>type=&quot;module&quot;</code>脚本的执行。<br>这是因为浏览器默认只解析<code>type=&quot;text/javascript&quot;</code>的脚本，而如果不填写<code>type</code>属性则默认为<code>text/javascript</code>。<br>也就是说在浏览器不支持<code>module</code>的情况下，<code>nomodule</code>对应的脚本文件就会被执行。  </p>
+</blockquote>
+<h2 id="一些要注意的细节"><a href="#一些要注意的细节" class="headerlink" title="一些要注意的细节"></a>一些要注意的细节</h2><p>但毕竟是浏览器原生提供的，在使用方法上与<code>webpack</code>的版本肯定还是会有一些区别的。<br><em>(至少一个是运行时解析的、一个是本地编译)</em>  </p>
+<h3 id="有效的module路径定义"><a href="#有效的module路径定义" class="headerlink" title="有效的module路径定义"></a>有效的module路径定义</h3><p>因为是在浏览器端的实现，不会像在<code>node</code>中，有全局<code>module</code>一说（全局对象都在<code>window</code>里了）。<br>所以说，<code>from &#39;XXX&#39;</code>这个路径的定义会与之前你所熟悉的稍微有些出入。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 被支持的几种路径写法</span>
+
+<span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'http://XXX/module.js'</span>
+<span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'/XXX/module.js'</span>
+<span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'./XXX/module.js'</span>
+<span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'../XXX/module.js'</span>
+
+<span class="token comment" spellcheck="true">// 不被支持的写法</span>
+<span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'XXX'</span>
+<span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'XXX/module.js'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在<code>webpack</code>打包的文件中，引用全局包是通过<code>import module from &#39;XXX&#39;</code>来实现的。<br>这个实际是一个简写，<code>webpack</code>会根据这个路径去<code>node_modules</code>中找到对应的<code>module</code>并引入进来。<br>但是原生支持的<code>module</code>是不存在<code>node_modules</code>一说的。<br>所以，在使用原生<code>module</code>的时候一定要切记，<code>from</code>后边的路径一定要是一个有效的<code>URL</code>，以及一定不能省略文件后缀（<em>是的，即使是远端文件也是可以使用的，而不像<code>webpack</code>需要将本地文件打包到一起</em>）。  </p>
+<h3 id="module的文件默认为defer"><a href="#module的文件默认为defer" class="headerlink" title="module的文件默认为defer"></a>module的文件默认为defer</h3><p>这是<code>script</code>的另一个属性，用来将文件标识为不会阻塞页面渲染的文件，并且会在页面加载完成后按照文档的顺序进行执行。  </p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>./defer/module.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>./defer/simple.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">defer</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>./defer/defer.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>为了测试上边的观点，在页面中引入了这样三个<code>JS</code>文件，三个文件都会输出一个字符串，在<code>Console</code>面板上看到的顺序是这样的：</p>
+<p><img src="https://os4ty6tab.qnssl.com/test/atom-editor/918j.png" alt="">  </p>
+<h4 id="行内script也会默认添加defer特性"><a href="#行内script也会默认添加defer特性" class="headerlink" title="行内script也会默认添加defer特性"></a>行内script也会默认添加defer特性</h4><p>因为在普通的脚本中，<code>defer</code>关键字是只指针对脚本文件的，如果是<code>inline-script</code>，添加属性是不生效的。<br>但是在<code>type=&quot;module&quot;</code>的情况下，不管是文件还是行内脚本，都会具有<code>defer</code>的特性。  </p>
+<h3 id="可以对module类型的脚本添加async属性"><a href="#可以对module类型的脚本添加async属性" class="headerlink" title="可以对module类型的脚本添加async属性"></a>可以对module类型的脚本添加async属性</h3><p><code>async</code>可以作用于所有的<code>module</code>类型的脚本，无论是行内还是文件形式的。<br>但是添加了<code>async</code>关键字以后并不意味着浏览器在解析到这个脚本文件时就会执行，而是会等到这段脚本所依赖的所有<code>module</code>加载完毕后再执行。<br><em>import的约定，必须在一段代码内的起始位置进行声明，且不能够在函数内部进行</em>  </p>
+<p>也就是说下边的<code>log</code>输出顺序完全取决于<code>module.js</code>加载的时长。  </p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">async</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span><span class="token script language-javascript">
+  <span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">from</span> <span class="token string">'./module.js'</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'module'</span><span class="token punctuation">)</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">async</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>./defer/async.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="一个module只会加载一次"><a href="#一个module只会加载一次" class="headerlink" title="一个module只会加载一次"></a>一个module只会加载一次</h3><p>这个<code>module</code>是否唯一的定义是资源对应的完整路径是否一致。<br>如果当前页面路径为<code>https://www.baidu.com/a/b/c.html</code>，则文件中的<code>/module.js</code>、<code>../../module.js</code>与<code>https://www.baidu.com/module.js</code>都会被认为是同一个<code>module</code>。<br>但是像这个例子中的<code>module1.js</code>与<code>module1.js?a=1</code>就被认定为两个<code>module</code>，所以这个代码执行的结果就是会加载两次<code>module1.js</code>。  </p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://blog.jiasm.org/module-usage/example/modules/module1.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/examples/modules/module1.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>./modules/module1.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>./modules/module1.js?a<span class="token punctuation">=</span>1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript">
+  <span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> module1 <span class="token keyword">from</span> <span class="token string">'./modules/module1.js'</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><a href="https://blog.jiasm.org/module-usage/example/import-once" target="_blank" rel="noopener">在线Demo</a></p>
+</blockquote>
+<h2 id="import和export在使用的一些小提示"><a href="#import和export在使用的一些小提示" class="headerlink" title="import和export在使用的一些小提示"></a>import和export在使用的一些小提示</h2><p>不管是浏览器原生提供的版本，亦或者<code>webpack</code>打包的版本。<br><code>import</code>和<code>export</code>基本上还是共通的，语法上基本没有什么差别。  </p>
+<p>下边列出了一些可能会帮到你更好的去使用<code>modules</code>的一些技巧。</p>
+<h3 id="export的重命名"><a href="#export的重命名" class="headerlink" title="export的重命名"></a>export的重命名</h3><p>在导出某些模块时，也是可以像<code>import</code>时使用<code>as</code>关键字来重命名你要导出的某个值。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// info.js</span>
+<span class="token keyword">let</span> name <span class="token operator">=</span> <span class="token string">'Niko'</span>
+<span class="token keyword">let</span> age <span class="token operator">=</span> <span class="token number">18</span>
+
+<span class="token keyword">export</span> <span class="token punctuation">{</span>
+  name <span class="token keyword">as</span> firstName<span class="token punctuation">,</span>
+  age
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// import</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>firstName<span class="token punctuation">,</span> age<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./info.js'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>Tips: export的调用不像node中的module.exports = {}</em><br>可以进行多次调用，而且不会覆盖（key重名除外）。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token punctuation">{</span> name <span class="token keyword">as</span> firstName <span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token punctuation">{</span> age <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这样的写法两个key都会被导出。</p>
+<h3 id="export导出的属性均为可读的"><a href="#export导出的属性均为可读的" class="headerlink" title="export导出的属性均为可读的"></a>export导出的属性均为可读的</h3><p>也就是说<code>export</code>导出的属性是不能够修改的，如果试图修改则会得到一个异常。<br>但是，类似<code>const</code>的效果，如果某一个导出的值是引用类型的，对象或者数组之类的。<br>你可以操作该对象的一些属性，例如对数组进行<code>push</code>之类的操作。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token punctuation">{</span>
+  firstName<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span>
+  packs<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> results <span class="token keyword">from</span> <span class="token string">'./export-editable.js'</span>
+
+results<span class="token punctuation">.</span>firstName <span class="token operator">=</span> <span class="token string">'Bellic'</span> <span class="token comment" spellcheck="true">// error</span>
+
+results<span class="token punctuation">.</span>packs<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>        <span class="token comment" spellcheck="true">// success</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>这样的修改会导致其他引用该模块都会受到影响，因为使用的是一个地址。</em>  </p>
+<h3 id="export在代码中的顺序并不影响最终导出的结果"><a href="#export在代码中的顺序并不影响最终导出的结果" class="headerlink" title="export在代码中的顺序并不影响最终导出的结果"></a>export在代码中的顺序并不影响最终导出的结果</h3><pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token string">'Niko'</span>
+<span class="token keyword">export</span> <span class="token keyword">let</span> age <span class="token operator">=</span> <span class="token number">18</span>
+
+age <span class="token operator">=</span> <span class="token number">20</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>const 或者 let 对于 调用方来说没有任何区别</em>  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span>name<span class="token punctuation">,</span> age<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./module'</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Niko 20</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="import获取default模块的几种姿势"><a href="#import获取default模块的几种姿势" class="headerlink" title="import获取default模块的几种姿势"></a>import获取default模块的几种姿势</h3><p>获取<code>default</code>有以下几种方式都可以实现：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> defaultItem <span class="token keyword">from</span> <span class="token string">'./import/module.js'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> <span class="token keyword">default</span> <span class="token keyword">as</span> defaultItem2 <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./import/module.js'</span>
+<span class="token keyword">import</span> _<span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token keyword">default</span> <span class="token keyword">as</span> defaultItem3 <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./import/module.js'</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>defaultItem <span class="token operator">===</span> defaultItem2<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>defaultItem <span class="token operator">===</span> defaultItem3<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>默认的规则是第一个为<code>default</code>对应的别名，但如果第一个参数是一个解构的话，就会被解析为针对所有导出项的一个匹配了。<br><em>P.S. 同时存在两个参数表示第一个为default，第二个为全部模块</em>  </p>
+<p>导出全部的语法如下：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> allThings <span class="token keyword">from</span> <span class="token string">'./iport/module.js'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="类似index的export文件编写"><a href="#类似index的export文件编写" class="headerlink" title="类似index的export文件编写"></a>类似index的export文件编写</h3><p>如果你碰到了类似这样的需求，在某些地方会用到十个<code>module</code>，如果每次都<code>import</code>十个，肯定是一种浪费，视觉上也会给人一个不好的感觉。<br>所以你可能会写一个类似<code>index.js</code>的文件，在这个文件中将其引入到一块，然后使用时<code>import index</code>即可。<br>一般来说可能会这么写：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> module1 <span class="token keyword">from</span> <span class="token string">'./module1.js'</span>
+<span class="token keyword">import</span> module2 <span class="token keyword">from</span> <span class="token string">'./module2.js'</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  module1<span class="token punctuation">,</span>
+  module2
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>将所有的<code>module</code>引入，并导出为一个<code>Object</code>，这样确实在使用时已经很方便了。<br>但是这个索引文件依然是很丑陋，所以可以用下面的语法来实现类似的功能：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token punctuation">{</span><span class="token keyword">default</span> <span class="token keyword">as</span> module1<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./module1.js'</span>
+<span class="token keyword">export</span> <span class="token punctuation">{</span><span class="token keyword">default</span> <span class="token keyword">as</span> module2<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./module2.js'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>然后在调用时修改为如下格式即可：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> modules <span class="token keyword">from</span> <span class="token string">'./index.js'</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p><a href="https://blog.jiasm.org/module-usage/example/import-index" target="_blank" rel="noopener">在线Demo</a></p>
+</blockquote>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>想到了最近爆红的<code>deno</code>，其中有一条特性也是提到了，没有<code>node_modules</code>，依赖的第三方库直接通过网络请求的方式来获取。<br>然后浏览器中原生提供的<code>module</code>也是类似的实现，都是朝着更灵活的方向在走。<br>祝愿抛弃<code>webpack</code>来进行开发的那一天早日到来 :)</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://jakearchibald.com/2017/es-modules-in-browsers/" target="_blank" rel="noopener">es modules in browsers</a></li>
+<li><a href="https://ponyfoo.com/articles/es6-modules-in-depth" target="_blank" rel="noopener">es6 modules in depth</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export" target="_blank" rel="noopener">export - JavaScript | MDN</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import" target="_blank" rel="noopener">import - JavaScript | MDN</a></li>
+</ol>
+<p>文中示例代码的GitHub仓库：<a href="https://github.com/jiasm/module-usage" target="_blank" rel="noopener">传送阵</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/06/09/原生ES-Module在浏览器中的尝试/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '30d78680-6baf-11e8-98d8-7f0203e7f955'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          <html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <title>
+    
+  </title>
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+  <section class="posts">
+    
+      <a class="post" href="/2018/06/30/纯原生组件化-模块化的探索/">
+        <div class="post-title">
+          纯原生组件化-模块化的探索
+        </div>
+        <div class="post-content">
+          
+纯原生的组件化、模块化的一次小小的尝试，用到了如下几个新特性：shadown-DOM 对HTML标签结构的一个封装，真正意义上的组件，能保证 shadow-DOM 中的DOM元素不会被外界影响，内部也不会影响到外部的行为，变成了一个独立的模块。custom-elements 可以在浏览器中注册自定义的标签来使用，类似这样的效果&lt;my-tag&gt;&lt;/my-tag&gt;，标签内容基于两种形式：1. 普通子元素 2. shadow-DOMcustom-events 使用各种自定义事件辅助完成组件之间的通讯ES-module 为浏览器原生支持的模块化的一种方案，直接在浏览器里使用import和export这类语法，以 module 的方式来引入 js 文件。几个算是比较新的事物，聚集在一起确实可以做点儿好玩的东西出来。
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="7caf5ef0-7c3c-11e8-b19a-959cd729f554">0 Comments</span>
+          <span class="post-time">
+            2018-06-30 16:06
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/06/23/Web开发生存工具使用指南/">
+        <div class="post-title">
+          Web开发生存工具使用指南
+        </div>
+        <div class="post-content">
+          这里安利两款我认为开发中能够极大的提高生产力的工具，Charles 和 Postman。
+P.S. Charles(查尔斯)。。不要再读查理斯了，金刚狼中被老铁扎心的博士就叫 Charles
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="a3ab9f00-768d-11e8-b3fd-09142d923783">0 Comments</span>
+          <span class="post-time">
+            2018-06-23 10:32
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/06/09/原生ES-Module在浏览器中的尝试/">
+        <div class="post-title">
+          原生ES-Module在浏览器中的尝试
+        </div>
+        <div class="post-content">
+          
+其实浏览器原生模块相关的支持也已经出了一两年了（我第一次知道这个事情实在2016年下半年的时候）可以抛开webpack直接使用import之类的语法但因为算是一个比较新的东西，所以现在基本只能自己闹着玩 :p但这并不能成为不去了解它的借口，还是要体验一下的。  
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="30d78680-6baf-11e8-98d8-7f0203e7f955">0 Comments</span>
+          <span class="post-time">
+            2018-06-09 19:34
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/06/08/记一次Node项目的优化/">
+        <div class="post-title">
+          记一次Node项目的优化
+        </div>
+        <div class="post-content">
+          
+这两天针对一个Node项目进行了一波代码层面的优化，从响应时间上看，是一次很显著的提升。一个纯粹给客户端提供接口的服务，没有涉及到页面渲染相关。  
+
+背景首先这个项目是一个几年前的项目了，期间一直在新增需求，导致代码逻辑变得也比较复杂，接口响应时长也在跟着上涨。之前有过一次针对服务器环境方面的优化（node版本升级），确实性能提升不少，但是本着“青春在于作死”的理念，这次就从代码层面再进行一次优化。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="2271eac0-6ac6-11e8-aa06-fb703a95d82c">0 Comments</span>
+          <span class="post-time">
+            2018-06-08 23:20
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/06/03/Flex入坑指南/">
+        <div class="post-title">
+          Flex入坑指南
+        </div>
+        <div class="post-content">
+          弹性布局flex是一个几年前的CSS属性了，说它解放了一部分生产力不为过。至少解放了不少CSS布局相关的面试题 :)之前网上流行的各种XX布局，什么postion: absolute+margin，float+padding，各种都可以使用flex来取代之。早两年在使用的时候，还是会担心有兼容性问题的，某些手机在使用了auto-prefixer以后依然会出现不兼容的问题。好在现在已经是2018年了，不必再担心那些老旧的设备，希望这篇文章能帮你加深对flex的认识。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="82562a30-6672-11e8-86f5-ffae14b06dea">0 Comments</span>
+          <span class="post-time">
+            2018-06-03 19:37
+          </span>
+        </div>
+      </a>
+      
+  </section>
+
+  
+</body>
+
+</html>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>
