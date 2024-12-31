@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>GitLab CI/CD 在 Node.js 项目中的实践 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#现有流程中的一些问题"><span class="toc-number">1.</span> <span class="toc-text">现有流程中的一些问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例"><span class="toc-number">1.1.</span> <span class="toc-text">测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ESLint"><span class="toc-number">1.2.</span> <span class="toc-text">ESLint</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部署上线的方式"><span class="toc-number">1.3.</span> <span class="toc-text">部署上线的方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TypeScript"><span class="toc-number">1.3.1.</span> <span class="toc-text">TypeScript</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何解决这些问题"><span class="toc-number">2.</span> <span class="toc-text">如何解决这些问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装时需要注意的地方"><span class="toc-number">2.1.</span> <span class="toc-text">安装时需要注意的地方</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注册时需要注意的地方"><span class="toc-number">2.2.</span> <span class="toc-text">注册时需要注意的地方</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gitlab-ci-yml-配置文件"><span class="toc-number">2.3.</span> <span class="toc-text">.gitlab-ci.yml 配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#设置仅在特定的情况下触发-CI-CD"><span class="toc-number">2.3.1.</span> <span class="toc-text">设置仅在特定的情况下触发 CI/CD</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存必要的文件"><span class="toc-number">2.4.</span> <span class="toc-text">缓存必要的文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部署项目"><span class="toc-number">2.5.</span> <span class="toc-text">部署项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更方便的管理-CI-CD-流程"><span class="toc-number">2.6.</span> <span class="toc-text">更方便的管理 CI/CD 流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#接入钉钉通知"><span class="toc-number">2.7.</span> <span class="toc-text">接入钉钉通知</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚处理"><span class="toc-number">2.8.</span> <span class="toc-text">回滚处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hot-fix-的处理"><span class="toc-number">2.9.</span> <span class="toc-text">hot fix 的处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#完整的流程描述"><span class="toc-number">3.1.</span> <span class="toc-text">完整的流程描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后续要做的"><span class="toc-number">3.2.</span> <span class="toc-text">后续要做的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>GitLab CI/CD 在 Node.js 项目中的实践</h1>
+  <blockquote>
+<p>近期在按照业务划分项目时，我们组被分了好多的项目过来，大量的是基于 <code>Node.js</code> 的，也是我们组持续在使用的语言。  </p>
+</blockquote>
+<h2 id="现有流程中的一些问题"><a href="#现有流程中的一些问题" class="headerlink" title="现有流程中的一些问题"></a>现有流程中的一些问题</h2><p>在维护多个项目的时候，会暴露出一些问题： </p>
+<ol>
+<li>如何有效的使用 测试用例</li>
+<li>如何有效的使用 <code>ESLint</code></li>
+<li>部署上线还能再快一些吗<ol>
+<li>使用了 <code>TypeScript</code> 以后带来的额外成本</li>
+</ol>
+</li>
+</ol>
+<a id="more"></a>
+<h3 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h3><p>首先是测试用例，最初我们设计在了 <code>git hooks</code> 里边，在执行 <code>git commit</code> 之前会进行检查，在本地运行测试用例。<br>这会带来一个时间上的问题，如果是日常开发，这么操作还是没什么问题的，但如果是线上 <code>bug</code> 修复，执行测试用例的时间依据项目大小可能会持续几分钟。<br>而为了修复 <code>bug</code>，可能会采用 <code>commit</code> 的时候添加 <code>-n</code> 选项来跳过 <code>hooks</code> ，在修复 <code>bug</code> 时这么做无可厚非，但是即使大家在日常开发中都采用<code>commit -n</code> 的方式来跳过繁琐的测试过程，这个也是没有办法管控的，毕竟是在本地做的这个校验，是否遵循这个规则，全靠大家自觉。  </p>
+<p>所以一段时间后发现，通过这种方式执行测试用例来规避一些风险的作用可能并不是很有效。  </p>
+<h3 id="ESLint"><a href="#ESLint" class="headerlink" title="ESLint"></a>ESLint</h3><p>然后就是 <code>ESLint</code>，我们团队基于<a href="https://github.com/airbnb/javascript" target="_blank" rel="noopener">airbnb</a>的 <code>ESLint</code> 规则自定义了一套更符合团队习惯的<a href="https://github.com/bluedapp/eslint-blued" target="_blank" rel="noopener">规则</a>，我们会在编辑器中引入插件用来帮助高亮一些错误，以及进行一些自动格式化的操作。<br>同时我们也在 <code>git hooks</code> 中添加了对应的处理，也是在 <code>git commit</code> 的时候进行检查，如果不符合规范则不允许提交。<br>不过这个与测试用例是相同的问题：  </p>
+<ol>
+<li>编辑器是否安装 <code>ESLint</code> 插件无从得知，即使安装插件、是否人肉忽略错误提示也无从得知。</li>
+<li><code>git hooks</code> 可以被绕过</li>
+</ol>
+<h3 id="部署上线的方式"><a href="#部署上线的方式" class="headerlink" title="部署上线的方式"></a>部署上线的方式</h3><p>之前团队的部署上线是使用<a href="https://github.com/shipitjs/shipit" target="_blank" rel="noopener">shipit</a>周边套件进行部署的。<br>部署环境强依赖本地，因为需要在本地建立仓库的临时目录，并经过多次<code>ssh XXX &quot;command&quot;</code>的方式完成 部署 + 上线 的操作。<br><code>shipit</code>提供了一个有效的回滚方案，就是在部署后的路径添加多个历史部署版本的记录，回滚时将当前运行的项目目录指向之前的某个版本即可。<em>不过有一点儿坑的是，很难去选择我要回滚到那个节点，以及保存历史记录需要占用额外的磁盘空间</em><br>不过正因为如此，<code>shipit</code>在部署多台服务器时会遇到一些令人不太舒服的地方。  </p>
+<p>如果是多台新增的服务器，那么可以通过在<code>shipit</code>配置文件中传入多个目标服务器地址来进行批量部署。<br>但是假设某天需要上线一些小流量（比如四台机器中的一台），因为前边提到的<code>shipit</code>回滚策略，这会导致单台机器与其他三台机器的历史版本时间戳不一致（因为这几台机器不是同一时间上线的）<br><em>提到了这个时间戳就另外提一嘴，这个时间戳的生成是基于执行上线操作的那台机器的本地时间，之前有遇到过同事在本地测试代码，将时间调整为了几天前的时间，后时间没有改回正确的时间时进行了一次部署操作，代码出现问题后却发现回滚失败了，原因是该同事部署的版本时间戳太小，<code>shipit</code> 找不到之前的版本（<code>shipit</code> 可以设置保留历史版本的数量，当时最早的一次时间戳也是大于本次出问题的时间戳的）</em>  </p>
+<p>也就是说，哪怕有一次进行过小流量上线，那么以后就用不了批量上线的功能了 <em>（没有去仔细研究<code>shipit</code>官方文档，不知道会不会有类似<code>--force</code>之类的忽略历史版本的操作）</em>  </p>
+<p>基于上述的情况，我们的部署上线耗时变为了： （<strong>机器数量</strong>）X（<strong>基于本地网速的仓库克隆、多次 ssh 操作的耗时总和</strong>）。  <em>P.S. 为了保证仓库的有效性，每次执行 <code>shipit</code> 部署，它都会删除之前的副本，重新克隆</em>  </p>
+<p>尤其是服务端项目，有时紧急的 <code>bug</code> 修复可能是在非工作时间，这意味着可能当时你所处的网络环境并不是很稳定。<br>我曾经晚上接到过同事的微信，让我帮他上线项目，他家的 <code>Wi-Fi</code> 是某博士的，下载项目依赖的时候出了些问题。<br>还有过使用移动设备开热点的方式进行上线操作，有一次非前后分离的项目上线后，直接就收到了联通的短信：「您本月流量已超出XXX」（当时还在用合约套餐，一月就800M流量）。</p>
+<h4 id="TypeScript"><a href="#TypeScript" class="headerlink" title="TypeScript"></a>TypeScript</h4><p>在去年下半年开始，我们团队就一直在推动 <code>TypeScript</code> 的应用，因为在大型项目中，拥有明确类型的 <code>TypeScript</code> 显然维护性会更高一些。<br>但是大家都知道的， <code>TypeScript</code> 最终需要编译转换为 <code>JavaScript</code>（也有 <code>tsc</code> 那种的不生成 <code>JS</code> 文件，直接运行，不过这个更多的是在本地开发时使用，线上代码的运行我们还是希望变量越少越好）。  </p>
+<p>所以之前的上线流程还需要额外的增加一步，编译 <code>TS</code>。<br>而且因为<code>shipit</code>是在本地克隆的仓库并完成部署的，所以这就意味着我们必须要把生成后的 <code>JS</code> 文件也放入到仓库中，最直观的，从仓库的概览上看着就很丑（50% <code>TS</code>、50% <code>JS</code>），同时这进一步增加了上线的成本。  </p>
+<blockquote>
+<p>总结来说，现有的部署上线流程过于依赖本地环境，因为每个人的环境不同，这相当于给部署流程增加了很多不可控因素。  </p>
+</blockquote>
+<h2 id="如何解决这些问题"><a href="#如何解决这些问题" class="headerlink" title="如何解决这些问题"></a>如何解决这些问题</h2><p>上边我们所遇到的一些问题，其实可以分为两块：</p>
+<ol>
+<li>有效的约束代码质量</li>
+<li>快速的部署上线</li>
+</ol>
+<p>所以我们就开始寻找解决方案，因为我们的源码是使用自建的 <code>GitLab</code> 仓库来进行管理的，首先就找到了 <a href="https://docs.gitlab.com/ee/ci/README.html" target="_blank" rel="noopener">GitLab CI/CD</a>。<br>在研究了一番文档以后发现，它能够很好的解决我们现在遇到的这些问题。  </p>
+<p>要使用 <code>GitLab CI/CD</code> 是非常简单的，只需要额外的使用一台服务器安装 <code>gitlab-runner</code>，并将要使用 <code>CI/CD</code> 的项目注册到该服务上就可以了。<br><code>GitLab</code> 官方文档中有非常详细的安装注册流程：</p>
+<p><a href="https://docs.gitlab.com/runner/install/" target="_blank" rel="noopener">install | runner</a><br><a href="https://docs.gitlab.com/runner/register/" target="_blank" rel="noopener">register | runner</a><br><a href="https://docs.gitlab.com/ee/ci/runners/#registering-a-group-runner" target="_blank" rel="noopener">group register | repo</a> 注册 <code>Group</code> 项目时的一些操作</p>
+<blockquote>
+<p>上边的注册选择的是注册 group ，也就是整个 GitLab 某个分组下所有的项目。<br>主要目的是因为我们这边项目数量太多，单个注册太过繁琐（还要登录到 runner 服务器去执行命令才能够注册）  </p>
+</blockquote>
+<h3 id="安装时需要注意的地方"><a href="#安装时需要注意的地方" class="headerlink" title="安装时需要注意的地方"></a>安装时需要注意的地方</h3><blockquote>
+<p>官网的流程已经很详细了，不过还是有一些地方可以做一些小提示，避免踩坑  </p>
+</blockquote>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">sudo</span> gitlab-runner <span class="token function">install</span> --user<span class="token operator">=</span>gitlab-runner --working-directory<span class="token operator">=</span>/home/gitlab-runner
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这是 <code>Linux</code> 版本的安装命令，安装需要 <code>root</code> （管理员） 权限，后边跟的两个参数：  </p>
+<ul>
+<li><code>--user</code> 是 <code>CI/CD</code> 执行 job （后续所有的流程都是基于 job 的）时所使用的用户名</li>
+<li><code>--working-directory</code> 是 <code>CI/CD</code> 执行时的根目录路径 <strong>个人的踩坑经验是将目录设置为一个空间大的磁盘上，因为 <code>CI/CD</code> 会生成大量的文件，尤其是如果使用 <code>CI/CD</code> 进行编译 TS 文件并且将其生成后的 JS 文件缓存；这样的操作会导致 <code>innode</code> 不足产生一些问题</strong>  </li>
+</ul>
+<blockquote>
+<p><code>--user</code> 的意思就是 <code>CI/CD</code> 执行使用该用户进行执行，所以如果要编写脚本之类的，建议在该用户登录的状态下编写，避免出现无权限执行 <code>sudo su gitlab-runner</code>  </p>
+</blockquote>
+<h3 id="注册时需要注意的地方"><a href="#注册时需要注意的地方" class="headerlink" title="注册时需要注意的地方"></a>注册时需要注意的地方</h3><p>在按照官网的流程执行时，我们的 <code>tag</code> 是留空的，暂时没有找到什么用途。。<br>以及 <code>executor</code> 这个比较重要了，因为我们是从手动部署上线还是往这边靠拢的，所以稳妥的方式是一步步来，也就是说我们选择的是 <code>shell</code> ，最常规的一种执行方式，对项目的影响也是比较小的（官网示例给的是 <code>docker</code> ）</p>
+<h3 id="gitlab-ci-yml-配置文件"><a href="#gitlab-ci-yml-配置文件" class="headerlink" title=".gitlab-ci.yml 配置文件"></a>.gitlab-ci.yml 配置文件</h3><p>上边的环境已经全部装好了，接下来就是需要让 <code>CI/CD</code> 真正的跑起来<br><code>runner</code> 以哪种方式运行，就靠这个配置文件来描述了，按照约定需要将文件放置到 <code>repo</code> 仓库的根路径下。<br>当该文件存在于仓库中，执行 <code>git push</code> 命令后就会自动按照配置文件中所描述的动作进行执行了。  </p>
+<ul>
+<li><a href="https://docs.gitlab.com/ee/ci/quick_start/" target="_blank" rel="noopener">quick start</a></li>
+<li><a href="https://docs.gitlab.com/ee/ci/yaml/" target="_blank" rel="noopener">configuration</a></li>
+</ul>
+<blockquote>
+<p>上边的两个链接里边信息非常完整，包含各种可以配置的选项。  </p>
+</blockquote>
+<p>一般来讲，配置文件的结构是这样的：</p>
+<pre class="line-numbers language-yaml"><code class="language-yaml"><span class="token key atrule">stages</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> stage1
+  <span class="token punctuation">-</span> stage2
+  <span class="token punctuation">-</span> stage3
+
+job 1<span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage1
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> echo job1
+
+job 2<span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage2
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> echo job2
+
+job 3<span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage2
+  <span class="token key atrule">script</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> echo job3<span class="token punctuation">-</span><span class="token number">1</span>
+    <span class="token punctuation">-</span> echo job3<span class="token punctuation">-</span><span class="token number">2</span>
+
+job 4<span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage3
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> echo job4
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>stages</code> 用来声明有效的可被执行的 <code>stage</code>，按照声明的顺序执行。<br>下边的那些 <code>job XXX</code> 名字不重要，这个名字是在 <code>GitLab CI/CD Pipeline</code> 界面上展示时使用的，重要的是那个 <code>stage</code> 属性，他用来指定当前的这一块 <code>job</code> 隶属于哪个 <code>stage</code>。<br><code>script</code> 则是具体执行的脚本内容，如果要执行多行命令，就像<code>job 3</code>那种写法就好了。  </p>
+<p>如果我们将上述的 <code>stage</code>、<code>job</code> 之类的换成我们项目中的一些操作<code>install_dependencies</code>、<code>test</code>、<code>eslint</code>之类的，然后将<code>script</code>字段中的值换成类似<code>npx eslint</code>之类的，当你把这个文件推送到远端服务器后，你的项目就已经开始自动运行这些脚本了。<br>并且可以在<code>Pipelines</code>界面看到每一步执行的状态。  </p>
+<blockquote>
+<p><em>P.S. 默认情况下，上一个 <code>stage</code> 没有执行完时不会执行下一个 <code>stage</code> 的，不过也可以通过额外的配置来修改：</em><br><a href="https://docs.gitlab.com/ee/ci/yaml/#allow_failure" target="_blank" rel="noopener">allow failure</a><br><a href="https://docs.gitlab.com/ee/ci/yaml/#when" target="_blank" rel="noopener">when</a></p>
+</blockquote>
+<h4 id="设置仅在特定的情况下触发-CI-CD"><a href="#设置仅在特定的情况下触发-CI-CD" class="headerlink" title="设置仅在特定的情况下触发 CI/CD"></a>设置仅在特定的情况下触发 CI/CD</h4><p>上边的配置文件存在一个问题，因为在配置文件中并没有指定哪些分支的提交会触发 <code>CI/CD</code> 流程，所以默认的所有分支上的提交都会触发，这必然不是我们想要的结果。<br><code>CI/CD</code> 的执行会占用系统的资源，如果因为一些开发分支的执行影响到了主干分支的执行，这是一件得不偿失的事情。  </p>
+<p>所以我们需要限定哪些分支才会触发这些流程，也就是要用到了配置中的 <a href="https://docs.gitlab.com/ee/ci/yaml/#onlyexcept-advanced" target="_blank" rel="noopener">only</a> 属性。  </p>
+<p>使用<code>only</code>可以用来设置哪些情况才会触发 <code>CI/CD</code>，一般我们这边常用的就是用来指定分支，这个是要写在具体的 <code>job</code> 上的，也就是大致是这样的操作：  </p>
+<blockquote>
+<p><a href="https://docs.gitlab.com/ee/ci/yaml/#onlyexcept-basic" target="_blank" rel="noopener">具体的配置文档</a></p>
+</blockquote>
+<pre class="line-numbers language-yaml"><code class="language-yaml">job 1<span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage1
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> echo job1
+  <span class="token key atrule">only</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> master
+    <span class="token punctuation">-</span> dev
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>单个的配置是可以这样写的，不过如果 <code>job</code> 的数量变多，这么写就意味着我们需要在配置文件中大量的重复这几行代码，也不是一个很好看的事情。<br>所以这里可能会用到一个<code>yaml</code>的语法：</p>
+<blockquote>
+<p>这是一步可选的操作，只是想在配置文件中减少一些重复代码的出现  </p>
+</blockquote>
+<pre class="line-numbers language-yaml"><code class="language-yaml"><span class="token key atrule">.access_branch_template</span><span class="token punctuation">:</span> <span class="token important">&amp;access_branch</span>
+  <span class="token key atrule">only</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> master
+    <span class="token punctuation">-</span> dev
+
+job 1<span class="token punctuation">:</span>
+  <span class="token key atrule">&lt;&lt;</span><span class="token punctuation">:</span> <span class="token important">*access_branch</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage1
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> echo job1
+
+job 2<span class="token punctuation">:</span>
+  <span class="token key atrule">&lt;&lt;</span><span class="token punctuation">:</span> <span class="token important">*access_branch</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> stage2
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> echo job2
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>一个类似模版继承的操作，官方文档中也没有提到，这个只是一个减少冗余代码的方式，可有可无。</em>  </p>
+<h3 id="缓存必要的文件"><a href="#缓存必要的文件" class="headerlink" title="缓存必要的文件"></a>缓存必要的文件</h3><p>因为默认情况下，<code>CI/CD</code>在执行每一步（<code>job</code>）时都会清理一下当前的工作目录，保证工作目录是干净的、不包含一些之前任务留下的数据、文件。<br>不过这在我们的 <code>Node.js</code> 项目中就会带来一个问题。<br>因为我们的 <code>ESLint</code>、单元测试 都是基于 <code>node_modules</code> 下边的各种依赖来执行的。<br>而目前的情况就相当于我们每一步都需要执行<code>npm install</code>，这显然是一个不必要的浪费。  </p>
+<p>所以就提到了另一个配置文件中的选项：<a href="https://docs.gitlab.com/ee/ci/yaml/#cache" target="_blank" rel="noopener">cache</a>  </p>
+<p>用来指定某些文件、文件夹是需要被缓存的，而不能清除：</p>
+<pre class="line-numbers language-yaml"><code class="language-yaml"><span class="token key atrule">cache</span><span class="token punctuation">:</span>
+  <span class="token key atrule">key</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span>CI_BUILD_REF_NAME<span class="token punctuation">}</span>
+  <span class="token key atrule">paths</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> node_modules/
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>大致是这样的一个操作，<code>CI_BUILD_REF_NAME</code>是一个 <code>CI/CD</code> 提供的环境变量，该变量的内容为执行 <code>CI/CD</code> 时所使用的分支名，通过这种方式让两个分支之间的缓存互不影响。  </p>
+<h3 id="部署项目"><a href="#部署项目" class="headerlink" title="部署项目"></a>部署项目</h3><p>如果基于上边的一些配置，我们将 单元测试、<code>ESLint</code> 对应的脚本放进去，他就已经能够完成我们想要的结果了，如果某一步执行出错，那么任务就会停在那里不会继续向后执行。<br>不过目前来看，后边已经没有多余的任务供我们执行了，所以是时候将 部署 这一步操作接过来了。  </p>
+<p>部署的话，我们目前选择的是通过 <code>rsync</code> 来进行同步多台服务器上的数据，一个比较简单高效的部署方式。  </p>
+<blockquote>
+<p>P.S. 部署需要额外的做一件事情，就是建立从<code>gitlab runner</code>所在机器<code>gitlab-runner</code>用户到目标部署服务器对应用户下的机器信任关系。<br>有 N 多种方法可以实现，最简单的就是在<code>runner</code>机器上执行 <code>ssh-copy-id</code> 将公钥写入到目标机器。<br>或者可以像我一样，提前将 <code>runner</code> 机器的公钥拿出来，需要与机器建立信任关系时就将这个字符串写入到目标机器的配置文件中。<br>类似这样的操作：<code>ssh 10.0.0.1 &quot;echo \&quot;XXX\&quot; &gt;&gt; ~/.ssh/authorized_keys&quot;</code></p>
+</blockquote>
+<p>大致的配置如下：</p>
+<pre class="line-numbers language-yaml"><code class="language-yaml"><span class="token key atrule">variables</span><span class="token punctuation">:</span>
+  <span class="token key atrule">DEPLOY_TO</span><span class="token punctuation">:</span> /home/XXX/repo <span class="token comment" spellcheck="true"># 要部署的目标服务器项目路径</span>
+<span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> deploy
+  <span class="token key atrule">script</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> rsync <span class="token punctuation">-</span>e "ssh <span class="token punctuation">-</span>o StrictHostKeyChecking=no" <span class="token punctuation">-</span>arc <span class="token punctuation">-</span><span class="token punctuation">-</span>exclude<span class="token punctuation">-</span>from="./exclude.list" <span class="token punctuation">-</span><span class="token punctuation">-</span>delete . 10.0.0.1<span class="token punctuation">:</span>$DEPLOY_TO
+    <span class="token punctuation">-</span> ssh 10.0.0.1 "cd $DEPLOY_TO; npm i <span class="token punctuation">-</span><span class="token punctuation">-</span>only=production"
+    <span class="token punctuation">-</span> ssh 10.0.0.1 "pm2 start $DEPLOY_TO/pm2/$CI_ENVIRONMENT_NAME.json;"
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>同时用到的还有<code>variables</code>，用来提出一些变量，在下边使用。  </p>
+</blockquote>
+<p><code>ssh 10.0.0.1 &quot;pm2 start $DEPLOY_TO/pm2/$CI_ENVIRONMENT_NAME.json;&quot;</code>，这行脚本的用途就是重启服务了，我们使用<code>pm2</code>来管理进程，默认的约定项目路径下的<code>pm2</code>文件夹存放着个个环境启动时所需的参数。  </p>
+<p><em>当然了，目前我们在用的没有这么简单，下边会统一提到</em>  </p>
+<p><strong>并且在部署的这一步，我们会有一些额外的处理</strong>  </p>
+<p>这是比较重要的一点，因为我们可能会更想要对上线的时机有主动权，所以 <code>deploy</code> 的任务并不是自动执行的，我们会将其修改为手动操作还会触发，这用到了另一个配置参数：</p>
+<pre class="line-numbers language-yaml"><code class="language-yaml"><span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> deploy
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> XXX
+  <span class="token key atrule">when</span><span class="token punctuation">:</span> manual  <span class="token comment" spellcheck="true"># 设置该任务只能通过手动触发的方式运行</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>当然了，如果不需要，这个移除就好了，比如说我们在测试环境就没有配置这个选项，仅在线上环境使用了这样的操作</em>  </p>
+<h3 id="更方便的管理-CI-CD-流程"><a href="#更方便的管理-CI-CD-流程" class="headerlink" title="更方便的管理 CI/CD 流程"></a>更方便的管理 CI/CD 流程</h3><p>如果按照上述的配置文件进行编写，实际上已经有了一个可用的、包含完整流程的 <code>CI/CD</code> 操作了。  </p>
+<p>不过它的维护性并不是很高，尤其是如果 <code>CI/CD</code> 被应用在多个项目中，想做出某项改动则意味着所有的项目都需要重新修改配置文件并上传到仓库中才能生效。  </p>
+<p>所以我们选择了一个更灵活的方式，最终我们的 <code>CI/CD</code> 配置文件是大致这样子的（省略了部分不相干的配置）：</p>
+<pre class="line-numbers language-yaml"><code class="language-yaml"><span class="token key atrule">variables</span><span class="token punctuation">:</span>
+  <span class="token key atrule">SCRIPTS_STORAGE</span><span class="token punctuation">:</span> /home/gitlab<span class="token punctuation">-</span>runner/runner<span class="token punctuation">-</span>scripts
+  <span class="token key atrule">DEPLOY_TO</span><span class="token punctuation">:</span> /home/XXX/repo <span class="token comment" spellcheck="true"># 要部署的目标服务器项目路径</span>
+
+<span class="token key atrule">stages</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> install
+  <span class="token punctuation">-</span> test
+  <span class="token punctuation">-</span> build
+  <span class="token punctuation">-</span> deploy_development
+  <span class="token punctuation">-</span> deploy_production
+
+<span class="token key atrule">install_dependencies</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> install
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> bash $SCRIPTS_STORAGE/install.sh
+
+<span class="token key atrule">unit_test</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> test
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> bash $SCRIPTS_STORAGE/test.sh
+
+<span class="token key atrule">eslint</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> test
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> bash $SCRIPTS_STORAGE/eslint.sh
+
+<span class="token comment" spellcheck="true"># 编译 TS 文件</span>
+<span class="token key atrule">build</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> build
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> bash $SCRIPTS_STORAGE/build.sh
+
+<span class="token key atrule">deploy_development</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> deploy_development
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> bash $SCRIPTS_STORAGE/deploy.sh 10.0.0.1
+  <span class="token key atrule">only</span><span class="token punctuation">:</span> dev     <span class="token comment" spellcheck="true"># 单独指定生效分支</span>
+
+<span class="token key atrule">deploy_production</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> deploy_production
+  <span class="token key atrule">script</span><span class="token punctuation">:</span> bash $SCRIPTS_STORAGE/deploy.sh 10.0.0.2
+  <span class="token key atrule">only</span><span class="token punctuation">:</span> master  <span class="token comment" spellcheck="true"># 单独指定生效分支</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们将每一步 <code>CI/CD</code> 所需要执行的脚本都放到了 <code>runner</code> 那台服务器上，在配置文件中只是执行了那个脚本文件。<br>这样当我们有什么策略上的调整，比如说 ESLint 规则的变更、部署方式之类的。<br>这些都完全与项目之间进行解耦，后续的操作基本都不会让正在使用 CI/CD 的项目重新修改才能够支持（部分需要新增环境变量的导入之类的确实需要项目的支持）。  </p>
+<h3 id="接入钉钉通知"><a href="#接入钉钉通知" class="headerlink" title="接入钉钉通知"></a>接入钉钉通知</h3><p>实际上，当 <code>CI/CD</code> 执行成功或者失败，我们可以在 <code>Pipeline</code> 页面中看到，也可以设置一些邮件通知，但这些都不是时效性很强的。<br>鉴于我们目前在使用钉钉进行工作沟通，所以就研究了一波钉钉机器人。<br>发现有支持 GitLab 机器人，不过功能并不适用，只能处理一些 issues 之类的， <code>CI/CD</code> 的一些通知是缺失的，所以只好自己基于钉钉的消息模版实现一下了。  </p>
+<p>因为上边我们已经将各个步骤的操作封装了起来，所以这个修改对同事们是无感知的，我们只需要修改对应的脚本文件，添加钉钉的相关操作即可完成，封装了一个简单的函数：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">function</span> sendDingText<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  local text<span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+
+  curl -X POST <span class="token string">"<span class="token variable">$DINGTALK_HOOKS_URL</span>"</span> \
+  -H <span class="token string">'Content-Type: application/json'</span> \
+  -d <span class="token string">'{
+    "msgtype": "text",
+    "text": {
+        "content": "'</span><span class="token string">"<span class="token variable">$text</span>"</span><span class="token string">'"
+    }
+  }'</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true"># 具体发送时传入的参数</span>
+sendDingText <span class="token string">"proj: <span class="token variable">$CI_PROJECT_NAME</span>[<span class="token variable">$CI_JOB_NAME</span>]\nenv: <span class="token variable">$CI_ENVIRONMENT_NAME</span>\ndeploy success\n<span class="token variable">$CI_PIPELINE_URL</span>\ncreated by: <span class="token variable">$GITLAB_USER_NAME</span>\nmessage: <span class="token variable">$CI_COMMIT_MESSAGE</span>"</span>
+
+<span class="token comment" spellcheck="true"># 某些 case 失败的情况下 是否需要更多的信息就看自己自定义咯</span>
+sendDingText <span class="token string">"error: <span class="token variable">$CI_PROJECT_NAME</span>[<span class="token variable">$CI_JOB_NAME</span>]\nenv: <span class="token variable">$CI_ENVIRONMENT_NAME</span>"</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上述用到的环境变量，除了<code>DINGTALK_HOOKS_URL</code>是我们自定义的机器人通知地址以外，其他的变量都是有 <code>GitLab runenr</code>所提供的。  </p>
+<p><em>各种变量可以从这里找到：<a href="https://docs.gitlab.com/ee/ci/variables/predefined_variables.html" target="_blank" rel="noopener">predefined variables</a></em>  </p>
+<h3 id="回滚处理"><a href="#回滚处理" class="headerlink" title="回滚处理"></a>回滚处理</h3><p>聊完了正常的流程，那么也该提一下出问题时候的操作了。<br>人非圣贤孰能无过，很有可能某次上线一些没有考虑到的地方就会导致服务出现异常，这时候首要任务就是让用户还可以照常访问，所以我们会选择回滚到上一个有效的版本去。<br>在项目中的 <code>Pipeline</code> 页面 或者 <code>Enviroment</code> 页面（这个需要在配置文件中某些 <code>job</code> 中手动添加这个属性，一般会写在 <code>deploy</code> 的那一步去），可以在页面上选择想要回滚的节点，然后重新执行 <code>CI/CD</code> 任务，即可完成回滚。  </p>
+<p>不过这在 <code>TypeScript</code> 项目中会有一些问题，因为我们回滚一般来讲是重新执行上一个版本 <code>CI/CD</code> 中的 <code>deploy</code> 任务，在 TS 项目中，我们在 <code>runner</code> 中缓存了 TS 转换 JS 之后的 <code>dist</code> 文件夹，并且部署的时候也是直接将该文件夹推送到服务器的（TS项目的源码就没有再往服务器上推过了）。  </p>
+<p>而如果我们直接点击 <code>retry</code> 就会带来一个问题，因为我们的 <code>dist</code> 文件夹是缓存的，而 <code>deploy</code> 并不会管这种事儿，他只会把对应的要推送的文件发送到服务器上，并重启服务。  </p>
+<p>而实际上 <code>dist</code> 还是最后一次（也就是出错的那次）编译出来的 JS 文件，所以解决这个问题有两种方法：</p>
+<ol>
+<li>在 <code>deploy</code> 之前执行一下 <code>build</code></li>
+<li>在 <code>deploy</code> 的时候进行判断</li>
+</ol>
+<p>第一个方案肯定是不可行的，因为严重依赖于操作上线的人是否知道有这个流程。<br>所以我们主要是通过第二种方案来解决这个问题。  </p>
+<p>我们需要让脚本在执行的时候知道，<code>dist</code> 文件夹里边的内容是不是自己想要的。<br>所以就需要有一个 <strong>标识</strong>，而做这个标识最简单有效唾手可得的就是，<code>git commit id</code>。<br>每一个 <code>commit</code> 都会有一个唯一的标识符号，而且我们的 <code>CI/CD</code> 执行也是依靠于新代码的提交（也就意味着一定有 <code>commit</code>）。<br>所以我们在 <code>build</code> 环节将当前的<code>commit id</code>也缓存了下来：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">git</span> rev-parse --short HEAD <span class="token operator">></span> git_version
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>同时在 <code>deploy</code> 脚本中添加额外的判断逻辑：</p>
+<pre class="line-numbers language-bash"><code class="language-bash">currentVersion<span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">git</span> rev-parse --short HEAD<span class="token variable">`</span></span>
+tagVersion<span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">touch</span> git_version<span class="token punctuation">;</span> <span class="token function">cat</span> git_version<span class="token variable">`</span></span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$currentVersion</span>"</span> <span class="token operator">=</span> <span class="token string">"<span class="token variable">$tagVersion</span>"</span> <span class="token punctuation">]</span>
+<span class="token keyword">then</span>
+    <span class="token keyword">echo</span> <span class="token string">"git version match"</span>
+<span class="token keyword">else</span>
+    <span class="token keyword">echo</span> <span class="token string">"git version not match, rebuild dist"</span>
+    <span class="token function">bash</span> ~/runner-scripts/build.sh  <span class="token comment" spellcheck="true"># 额外的执行 build 脚本</span>
+<span class="token keyword">fi</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样一来，就避免了回滚时还是部署了错误代码的风险。  </p>
+<blockquote>
+<p>关于为什么不将 <code>build</code> 这一步操作与 <code>deploy</code> 合并的原因是这样的：<br>因为我们会有很多台机器，同时 <code>job</code> 会写很多个，类似 <code>deploy_1</code>、<code>deploy_2</code>、<code>deploy_all</code>，如果我们将 <code>build</code> 的这一步放到 <code>deploy</code> 中<br>那就意味着我们每次 <code>deploy</code>，即使是一次部署，但因为我们选择一台台机器单独操作，它也会重新生成多次，这也会带来额外的时间成本</p>
+</blockquote>
+<h3 id="hot-fix-的处理"><a href="#hot-fix-的处理" class="headerlink" title="hot fix 的处理"></a>hot fix 的处理</h3><p>在 <code>CI/CD</code> 运行了一段时间后，我们发现偶尔解决线上 <code>bug</code> 还是会比较慢，因为我们提交代码后要等待完整的 <code>CI/CD</code> 流程走完。<br>所以在研究后我们决定，针对某些特定情况<code>hot fix</code>，我们需要跳过<code>ESLint</code>、单元测试这些流程，快速的修复代码并完成上线。  </p>
+<p><code>CI/CD</code> 提供了针对某些 <code>Tag</code> 可以进行不同的操作，不过我并不想这么搞了，原因有两点：</p>
+<ol>
+<li>这需要修改配置文件（所有项目）</li>
+<li>这需要开发人员熟悉对应的规则（打 <code>Tag</code>）</li>
+</ol>
+<p>所以我们采用了另一种取巧的方式来实现，因为我们的分支都是只接收<code>Merge Request</code>那种方式上线的，所以他们的<code>commit title</code>实际上是固定的：<code>Merge branch &#39;XXX&#39;</code>。<br>同时 <code>CI/CD</code> 会有环境变量告诉我们当前执行 <code>CI/CD</code> 的 <code>commit message</code>。<br>我们通过匹配这个字符串来检查是否符合某种规则来决定是否跳过这些<code>job</code>：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">function</span> checkHotFix<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  local count<span class="token operator">=</span>`echo <span class="token variable">$CI_COMMIT_TITLE</span> <span class="token operator">|</span> <span class="token function">grep</span> -E <span class="token string">"^Merge branch '(hot)?fix/\w+"</span> <span class="token operator">|</span> <span class="token function">wc</span> -l`
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$count</span> -eq 0 <span class="token punctuation">]</span>
+  <span class="token keyword">then</span>
+    <span class="token keyword">return</span> 0
+  <span class="token keyword">else</span>
+    <span class="token keyword">return</span> 1
+  <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true"># 使用方法</span>
+
+checkHotFix
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$?</span> -eq 0 <span class="token punctuation">]</span>
+<span class="token keyword">then</span>
+  <span class="token keyword">echo</span> <span class="token string">"start eslint"</span>
+  npx eslint --ext .js,.ts <span class="token keyword">.</span>
+<span class="token keyword">else</span>
+  <span class="token comment" spellcheck="true"># 跳过该步骤</span>
+  <span class="token keyword">echo</span> <span class="token string">"match hotfix, ignore eslint"</span>
+<span class="token keyword">fi</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样能够保证如果我们的分支名为 <code>hotfix/XXX</code> 或者 <code>fix/XXX</code> 在进行代码合并时， <code>CI/CD</code> 会跳过多余的代码检查，直接进行部署上线。 <em>没有跳过安装依赖的那一步，因为 TS 编译还是需要这些工具的</em>  </p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>目前团队已经有超过一半的项目接入了 <code>CI/CD</code> 流程，为了方便同事接入（主要是编辑 <code>.gitlab-ci.yml</code> 文件），我们还提供了一个脚手架用于快速生成配置文件（包括自动建立机器之间的信任关系）。  </p>
+<p>相较之前，部署的速度明显的有提升，并且不再对本地网络有各种依赖，只要是能够将代码 <code>push</code> 到远程仓库中，后续的事情就和自己没有什么关系了，并且可以方便的进行小流量上线（部署单台验证有效性）。  </p>
+<p>以及在回滚方面则是更灵活了一些，可在多个版本之间快速切换，并且通过界面的方式，操作起来也更加直观。  </p>
+<p>最终可以说，如果没有 <code>CI/CD</code>，实际上开发模式也是可以忍受的，不过当使用了 <code>CI/CD</code> 以后，再去使用之前的部署方式，则会明显的感觉到不舒适。（没有对比，就没有伤害😂）  </p>
+<h3 id="完整的流程描述"><a href="#完整的流程描述" class="headerlink" title="完整的流程描述"></a>完整的流程描述</h3><ol>
+<li>安装依赖</li>
+<li>代码质量检查<ol>
+<li><code>ESLint</code> 检查<ol>
+<li>检查是否为 <code>hotfix</code> 分支，如果是则跳过本流程</li>
+</ol>
+</li>
+<li>单元测试<ol>
+<li>检查是否为 <code>hotfix</code> 分支，如果是则跳过本流程</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>编译 TS 文件</li>
+<li>部署、上线<ol>
+<li>判断当前缓存 <code>dist</code> 目录是否为有效的文件夹，如果不是则重新执行第三步编译 TS 文件</li>
+<li>上线完毕后发送钉钉通知</li>
+</ol>
+</li>
+</ol>
+<h3 id="后续要做的"><a href="#后续要做的" class="headerlink" title="后续要做的"></a>后续要做的</h3><p>接入 <code>CI/CD</code> 只是第一步，将部署上线流程统一后，可以更方便的做一些其他的事情。<br>比如说在程序上线后可以验证一下接口的有效性，如果发现有错误则自动回滚版本，重新部署。<br>或者说接入 <code>docker</code>， 这些调整在一定程度上对项目维护者都是透明的。  </p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.gitlab.com/ee/ci" target="_blank" rel="noopener">GitLab CI/CD</a></li>
+<li><a href="https://open-doc.dingtalk.com/microapp/serverapi2/qf2nxq#-4" target="_blank" rel="noopener">钉钉自定义机器人</a></li>
+</ul>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2019/05/30/GitLab-CI-CD-在-Node-js-项目中的实践/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '8f045d80-8285-11e9-9a0d-dfce6aad8719'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

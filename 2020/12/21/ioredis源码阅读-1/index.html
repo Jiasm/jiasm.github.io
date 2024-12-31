@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>ioredis源码阅读[1] - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cluster-实例化"><span class="toc-number">1.</span> <span class="toc-text">Cluster 实例化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Connect"><span class="toc-number">1.1.</span> <span class="toc-text">Connect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readyCheck"><span class="toc-number">1.2.</span> <span class="toc-text">readyCheck</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendCommand"><span class="toc-number">2.</span> <span class="toc-text">sendCommand</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>ioredis源码阅读[1]</h1>
+  <blockquote>
+<p>上次针对 redis 的源码阅读涉及普通的 client，这次针对 cluster 模式下的 client 源码进行分析。<br>具体的源码路径就是在 lib/cluster 目录下了。  </p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Cluster-实例化"><a href="#Cluster-实例化" class="headerlink" title="Cluster 实例化"></a>Cluster 实例化</h2><p>开门见山，我们使用 <code>Cluster</code> 模式最开始也是要进行实例化的，这里调用的代码位于 <code>lib/cluster/index.ts</code>：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> Cluster <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'ioredis'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> cluster <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Redis<span class="token punctuation">.</span>Cluster</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    port<span class="token punctuation">:</span> <span class="token number">6380</span><span class="token punctuation">,</span>
+    host<span class="token punctuation">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    port<span class="token punctuation">:</span> <span class="token number">6381</span><span class="token punctuation">,</span>
+    host<span class="token punctuation">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+cluster<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'someKey'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从源码上来看，<code>Cluster</code> 预期接收两个参数，第一个是启动的节点集合 <code>startNodes</code>，第二个是一个可选的 <code>options</code>，<br>第一个参数是比较固定的，没有太多含义，而第二个参数可以传递很多配置，这个可以在 README 中找到（目前是 12 个参数）： <a href="https://www.npmjs.com/package/ioredis#cluster" target="_blank" rel="noopener">https://www.npmjs.com/package/ioredis#cluster</a><br><em>如果没有传入的话，则会有默认值来填充，但并不是所有的参数都会有默认值。</em>  </p>
+<p>与 <code>Redis Client</code> 一样的处理逻辑，在构造函数中会 <code>call</code> 一下 <code>Commander</code>，随后还会实例化一个 <code>ConnectionPool</code> 对象，并将 <code>options.redisOptions</code> 传入进去。</p>
+<blockquote>
+<p>代码位于 lib/cluster/ConnectionPool.ts</p>
+</blockquote>
+<p>在实例化 <code>ConnectionPool</code> 的过程中并没有做什么实质性的操作，只是把 <code>options.redisOptions</code> 放到了一个 private 属性中。<br>随后在 <code>Cluster</code> 构造函数中注册了四个对应的事件，分别是 <code>-node</code>、<code>+node</code>、<code>drain</code> 和 <code>nodeError</code>，分别代表了 移除节点、增加节点、节点为空、节点出错。<br>是 <code>ConnectionPool</code> 自己实现的一些事件，后续会看到在哪里触发。  </p>
+<p>接下来实例化了一个  <code>ClusterSubscriber</code> 对象，并将上边实例化的 <code>connectionPool</code> 实例作为参数放了进去，并把 <code>Cluster</code> 实例的引用也传了进去。<br>实例化过程中做的事情也比较简单，就是监听了上边我们提到的 <code>-node</code> 与 <code>+node</code> 两个事件，在移除节点时，会判断是否存在 <code>subscriber</code> 属性，如果不存在则跳出，如果存在的话，会判断被移除的 key 是否等于当前 <code>subscriber</code>。<br>这里可以提一下 <code>subscriber</code> 究竟是什么，这个在下边的 <code>selectSubscriber</code> 函数中可以看到，就是实例化了一个 <code>Redis Client</code>，而实例化 <code>Redis Client</code> 所使用的参数，都是通过调用 <code>connectionPool</code> 的 <code>getNodes</code> 方法所拿到的，并随机挑选其中一个节点配置来进行实例化。<br>之后就会通过该 <code>Redis Client</code> 来调用两个命令，<code>subscriber</code> 与 <code>psubscriber</code>，这两个是用来实现 Pub/Sub 的，具体区别其实就是后者可以监听一个带有通配符的服务。  </p>
+<blockquote>
+<p>subscriber 与 psubscriber 的区别：<a href="https://redis.io/topics/pubsub" target="_blank" rel="noopener">https://redis.io/topics/pubsub</a><br>并在接收到数据以后，通过 <code>emit</code> 的方式转发给 <code>Cluster</code>，后续 Cluster 模式下的 Pub/Sub 将会通过这里来进行数据的传递。  </p>
+</blockquote>
+<h3 id="Connect"><a href="#Connect" class="headerlink" title="Connect"></a>Connect</h3><p>最后我们调用 <code>connect</code> 函数就完成了整个 <code>Cluster</code> 实例化的过程。  </p>
+<blockquote>
+<p>如果是开启了 lazyConnect 那么这里就直接修改实例状态为 wait，然后结束整个流程。  </p>
+</blockquote>
+<p>在 <code>connect</code> 时我们首先会解析 startNodes，拿到对应的 IP 和 端口等信息，然后会调用 reset 重置 <code>connectionPool</code> 中的实例，<code>connectionPool</code> 中会存储多个 IP+端口 的 Redis 实例引用，调用 reset 会把一些应该不存在的实例给关掉，然后把一些新增加的进行创建，复用已经存在的实例，同时在新增节点的时候会触发 <code>ClusterSubscriber</code> 的 <code>+node</code> 事件，如果此时是第一次触发，那么这时 <code>ClusterSubscriber</code> 才会真正的去创建用于 Pub/Sub 的 Redis 实例。  </p>
+<p>之后会注册一个 <code>refresh</code> 事件，在事件内部会调用 <code>readyCheck</code>，在这之前，则需要先去获取 <code>Redis</code> 节点的一些信息，这里是通过 <code>getInfoFromNode</code> 方法来实现的，内部会拿到一个 <code>Redis</code> 实例，并调用 <code>duplicate</code> 创建一个额外的实例，然后调用 <code>cluster slots</code> 命令来获取当前 Redis 集群服务状态，这里返回的数据会包含所有的节点 IP + 端口，同时包含某个节点的起始结束返回，具体的返回值如下：  </p>
+<pre class="line-numbers language-bash"><code class="language-bash">redis 127.0.0.1:6379<span class="token operator">></span> cluster slots
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 0
+   1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4095
+   2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7000
+   3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7004
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 12288
+   1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 16383
+   2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7003
+   3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7007
+3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4096
+   1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 8191
+   2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7001
+   3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7005
+4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 8192
+   1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 12287
+   2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7002
+   3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"127.0.0.1"</span>
+      1<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 7006
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>转换成 JS 的数据大致是一个这样的结构：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">[</span> <span class="token comment" spellcheck="true">// slot info</span>
+    <span class="token number">0</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">// slot range start </span>
+    <span class="token number">4095</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// slot range end</span>
+    <span class="token punctuation">[</span>
+      <span class="token string">'127.0.0.1'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// IP</span>
+      <span class="token number">7000</span>         <span class="token comment" spellcheck="true">// port</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>  <span class="token comment" spellcheck="true">// other slot info</span>
+    <span class="token number">12288</span><span class="token punctuation">,</span>
+    <span class="token number">16383</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span>
+      <span class="token string">'127.0.0.1'</span><span class="token punctuation">,</span>
+      <span class="token number">7003</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>cluster slot 的描述：<a href="https://redis.io/commands/cluster-slots" target="_blank" rel="noopener">https://redis.io/commands/cluster-slots</a>  </p>
+</blockquote>
+<p>在获取到这些真实的节点信息以后，会依据拿到的节点集合，再次调用 <code>connectionPool</code> 的 <code>reset</code> 方法，因为上次调用其实是使用的 <code>startNode</code> 传入的初始值，这里则会使用当前服务正在运行的数据进行一次替换。<br>在完成这一动作后，则会触发 <code>refresh</code> 事件，也就会进入下边的 <code>readyCheck</code> 环节，确保服务是可用的。  </p>
+<h3 id="readyCheck"><a href="#readyCheck" class="headerlink" title="readyCheck"></a>readyCheck</h3><p>查看 <code>readyCheck</code> 的实现，主要也是通过调用 <code>cluster info</code> 命令来获取当前服务的状态。<br>在前文所讲处理 twemproxy 模式下的问题时，将 <code>Redis Client</code> 的 <code>readyCheck</code> 从 <code>info</code> 修改为了 <code>ping</code> 命令来实现，而这里，则没有进行修改，因为要注意的是，这里并不是 <code>info</code> 命令，而是 <code>cluster</code> 命令，只不过参数是 <code>info</code>。  </p>
+<p><code>Cluster</code> 模块会使用 <code>cluster info</code> 命令中的 <code>cluster_state</code> 字段来作为检测的依据，数据会按照 k:v\nk:v\n 这种格式组合，所以我们会在代码中看到通过匹配换行来取得对应的字段，并通过截取的方式拿到具体的值。  </p>
+<blockquote>
+<p>不过针对这里的逻辑，我个人倒是觉得直接用正则匹配反而更简单一些，因为拿到参数的值并没有做一些额外的操作，仅仅是用来验证。  </p>
+</blockquote>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">private</span> <span class="token function">readyCheck</span><span class="token punctuation">(</span>callback<span class="token punctuation">:</span> CallbackFunction<span class="token operator">&lt;</span><span class="token keyword">void</span> <span class="token operator">|</span> <span class="token string">"fail"</span><span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token keyword">as</span> any<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">cluster</span><span class="token punctuation">(</span><span class="token string">"info"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token function">callback</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> res <span class="token operator">!==</span> <span class="token string">"string"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token function">callback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">let</span> state<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> lines <span class="token operator">=</span> res<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">"\r\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> lines<span class="token punctuation">.</span>length<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> parts <span class="token operator">=</span> lines<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">":"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>parts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">"cluster_state"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        state <span class="token operator">=</span> parts<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>state <span class="token operator">===</span> <span class="token string">"fail"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"cluster state not ok (%s)"</span><span class="token punctuation">,</span> state<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> state<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token function">callback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当我们发现 <code>cluster info</code> 中返回的数据为 <code>fail</code> 时，那么说明集群中的这个节点是一个不可用的状态，那么就会调用 <code>disconnect</code> 断开并进行重连。<br>在触发 <code>disconnect</code> 的时候，同时会关闭 <code>ClusterSubscriber</code> 中的实例，因为我们的连接已经要关闭了，那么也没有必要留着一个注册 Pub/Sub 的实例在这里了。<br>在这些操作完成之后，会进入 <code>retry</code> 的流程，这里其实就是按照某种逻辑重新调用了 <code>connect</code> 方法，再次执行前边所描述的逻辑。  </p>
+<p>针对整个流程画图表示大概是这样的：</p>
+<p><img src="/images/redis-code-read/Redis-Cluster-Create-Flow.jpg" alt=""></p>
+<h2 id="sendCommand"><a href="#sendCommand" class="headerlink" title="sendCommand"></a>sendCommand</h2><p>在实例创建完毕后，那么下一步就会涉及到调用命令了。<br>在前边实例化过程中不可避免的也提到了一些 <code>sendCommand</code> 的事情，<code>Redis</code> 在实例化的过程中，会有一个状态的变更，而每次触发 <code>sendCommand</code> 实际上都会去检查那个状态，如果当前还没有建立好连接，那么这时的命令会被放入到 <code>offlineQueue</code> 中暂存的。<br>在 <code>readyCheck</code> 通过之后会按照顺序来调用这些命令。  </p>
+<p>当然，在 <code>sendCommand</code> 方法中也存在了对当前实例状态的判断，如果是 <code>wait</code>，那么可以认为实例开启了 <code>lazyConnect</code> 模式，这时会尝试与服务端建立连接。  </p>
+<p>同时在 <code>sendCommand</code> 中也会对命令进行判断，一些 Pub/Sub 对应的命令，比如 <code>publish</code>，会被转发到 <code>ClusterSubscriber</code> 对应的实例上去执行，而其他普通的命令则会放到 <code>connectionPool</code> 中去执行。<br>通过这样的方式将发布订阅与普通的命令进行了拆分。  </p>
+<p>同样，因为是 Cluster 模式，所以还会有主从之间的拆分逻辑，这个可以通过实例化 <code>Redis Cluster</code> 时传入的 <code>scaleReads</code> 参数来决定，默认的话是 <code>master</code>，可选的还有 <code>all</code>、<code>slave</code> 以及一个接收命令以及实例列表的自定义函数。  </p>
+<p><strong>知识点来了</strong>  </p>
+<p>在 ioredis 中，默认情况下的配置是 <code>master</code>，这也就意味着所有的请求都会发送到 <code>master</code> 节点，这就意味着如果你为了提高读取的性能所创建的一些从库，<strong>根本不会被访问到</strong>。  </p>
+<blockquote>
+<p>详情见文档： <a href="https://www.npmjs.com/package/ioredis#user-content-read-write-splitting" target="_blank" rel="noopener">https://www.npmjs.com/package/ioredis#user-content-read-write-splitting</a></p>
+</blockquote>
+<p>如果想要使用从库，那么可以把 <code>scaleReads</code> 修改为 <code>slave</code>，但是不需要担心说一些会对数据库造成修改的命令发送到从库，在 <code>sendCommand</code> 中会针对所发送的命令进行检测，如果不是只读的命令，且 <code>scaleReads</code> 设置的不是 <code>master</code> 会强行覆盖为 <code>master</code>。  </p>
+<blockquote>
+<p>针对命令是否为只读的判断： <a href="https://github.com/luin/ioredis/blob/master/lib/cluster/index.ts#L599" target="_blank" rel="noopener">https://github.com/luin/ioredis/blob/master/lib/cluster/index.ts#L599</a>  </p>
+</blockquote>
+<p>然后关于那个自定义函数，其实就是需要自己根据 <code>command</code> 去评估究竟使用哪个（些）实例，然后把对应的实例返回出去。<br>最终，我们拿到了一个 <code>Redis</code> 实例，这时使用该 <code>Redis</code> 实例进行调用 <code>sendCommand</code> 即可。<br>然后后边的逻辑就和普通的 <code>Redis</code> 触发命令没有什么区别了。  </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来看， 在 ioredis 的实现中 <code>Redis Cluster</code> 是作为一个 <code>Redis</code> 的扩展来做的，在很多地方都会看到 <code>Redis</code> 的存在，并且同样都会继承自 <code>Command</code> 实例，这就让用户在使用的过程中并没有太多的差异，只有在实例化时传入的参数不太一样，在调用各种 <code>Redis</code> 命令时则没有区别，而在 <code>Cluster</code> 中则内部调用了 <code>Redis</code> 的 <code>sendCommand</code> 完成了逻辑上的复用。  </p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2020/12/21/ioredis源码阅读-1/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'a5eca120-435d-11eb-9f28-7999481d7fab'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

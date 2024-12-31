@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>项目结构——JavaScript版本的2048实现[0] - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目结构"><span class="toc-number">1.</span> <span class="toc-text">项目结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Base"><span class="toc-number">1.1.</span> <span class="toc-text">Base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Config"><span class="toc-number">1.2.</span> <span class="toc-text">Config</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Utils"><span class="toc-number">1.3.</span> <span class="toc-text">Utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Game"><span class="toc-number">1.4.</span> <span class="toc-text">Game</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start"><span class="toc-number">1.4.1.</span> <span class="toc-text">start</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#canMove"><span class="toc-number">1.4.2.</span> <span class="toc-text">canMove</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#move"><span class="toc-number">1.4.3.</span> <span class="toc-text">move</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GameRender"><span class="toc-number">1.5.</span> <span class="toc-text">GameRender</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GameController"><span class="toc-number">1.6.</span> <span class="toc-text">GameController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#index"><span class="toc-number">1.7.</span> <span class="toc-text">index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">2.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些还未完成的"><span class="toc-number">3.</span> <span class="toc-text">一些还未完成的</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>项目结构——JavaScript版本的2048实现[0]</h1>
+  <blockquote>
+<p>最近在看一本书<a href="https://book.douban.com/subject/26184170/" target="_blank" rel="noopener">《HTML5 Canvas开发详解》</a> 看到了一定程度，打算找一个项目练练手<br>遂想到了前几年玩过的一个游戏<code>2048</code> 于是开始了尝试实现一个<a href="jiasm.org/2048/">JavaScript版2048</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>项目地址：<a href="https://github.com/jiasm/2048" target="_blank" rel="noopener">https://github.com/jiasm/2048</a><br>LiveDemo: <a href="http://jiasm.org/2048" target="_blank" rel="noopener">http://jiasm.org/2048</a></p>
+<pre><code>.
+├── LICENSE
+├── README.md
+├── dist
+│   ├── bundle.js
+│   └── main.js.map
+├── index.html
+├── package.json
+├── src
+│   ├── Base.js
+│   ├── Config.js
+│   ├── Utils.js
+│   ├── Game.js
+│   ├── GameController.js
+│   ├── GameRender.js
+│   └── index.js
+└── webpack.config.js
+</code></pre><p>使用<code>webpack</code>进行打包，因为有用到了<code>babel</code>，所以整体语法采用ES6、ES7写法 <em>（写起来无比的舒心）</em>。<br><em>因为该<code>GitHub</code>项目设置了<code>Git Pages</code> 所以<code>dist</code>文件夹就保留在项目中了，没有删除。</em></p>
+<p>文件夹<code>src</code>里边就是所有的代码了。</p>
+<h3 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h3><p>一个聊胜于无的基类。。就是让类拥有一个通过<code>.init</code>就可以实现实例化对象的功能</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> init <span class="token punctuation">(</span><span class="token operator">...</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">this</span><span class="token punctuation">(</span><span class="token operator">...</span>arg<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><p>该文件里边存储了一些配置参数，比如默认的矩阵数量、<code>2048</code>中各个方块显示的文本&amp;颜色之类的。<br>方便拿走即用。。修改一个配置文件即可得到你想要的<code>2048</code></p>
+<h3 id="Utils"><a href="#Utils" class="headerlink" title="Utils"></a>Utils</h3><p>里边提供了一个<code>log</code>方法以及一个增强版的<code>logMatrix</code></p>
+<ul>
+<li><code>log</code>方法只在<code>window.debug === true</code>时生效。</li>
+<li><code>logMatrix</code>方法接收一个二维数据，会将数组中的数据格式化后展示出来，方便调试。</li>
+</ul>
+<h3 id="Game"><a href="#Game" class="headerlink" title="Game"></a>Game</h3><blockquote>
+<p>该游戏的核心类，生成渲染所需要的二维数据矩阵<br>提供如下几个方法</p>
+</blockquote>
+<h4 id="start"><a href="#start" class="headerlink" title="start"></a>start</h4><p>初始化一个游戏实例<br>生成矩阵数据</p>
+<h4 id="canMove"><a href="#canMove" class="headerlink" title="canMove"></a>canMove</h4><p>返回一个<code>Boolean</code>值，来确定是否可以继续移动</p>
+<h4 id="move"><a href="#move" class="headerlink" title="move"></a>move</h4><p>将当前矩阵按照传入函数的<code>direction</code>来进行移动，并在移动后会随机塞入一个新的<code>item</code></p>
+<h3 id="GameRender"><a href="#GameRender" class="headerlink" title="GameRender"></a>GameRender</h3><blockquote>
+<p>用来将矩阵数据渲染到<code>Canvas</code>中（由于<code>Game</code>实例返回的是一个二维数组，<code>GameRender</code>就可以非常灵活的使用了，你也可以选择使用<code>DOM</code>来渲染，只不过我本意是要练练<code>Canvas</code>，所以选择了这个方案，后期在添加一些动画时差点搞死自己。。。）</p>
+</blockquote>
+<p>该类只提供一个API，那就是<code>render</code>，将二维数组渲染至<code>Canvas</code>（具体的实现，以后再谈）。</p>
+<h3 id="GameController"><a href="#GameController" class="headerlink" title="GameController"></a>GameController</h3><blockquote>
+<p>用来控制与用户的交互</p>
+</blockquote>
+<p>该类是作为一个控制器来存在的。<br>监听了键盘&amp;触摸的一些事件，并调用<code>Game</code>获取数据，遂即调用<code>GameRender</code>来进行渲染。</p>
+<h3 id="index"><a href="#index" class="headerlink" title="index"></a>index</h3><p><code>index</code>作为应用的入口文件<code>entries</code><br>只做了两件事：</p>
+<ol>
+<li>对界面进行响应式处理。放大<code>Canvas</code>为一个正方形</li>
+<li>实例化一个<code>GameController</code></li>
+</ol>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>整体的项目结构就是这些。<br>开发时间貌似是用了四个晚上，周一到周四，9点-1点。。<br>这一套做下来，目前是遇到了两个坑：</p>
+<ol>
+<li>矩阵合并&amp;移动的逻辑</li>
+<li>动画的实现</li>
+</ol>
+<h2 id="一些还未完成的"><a href="#一些还未完成的" class="headerlink" title="一些还未完成的"></a>一些还未完成的</h2><ol>
+<li>本地缓存矩阵数据，防止页面刷新后只能重新开始</li>
+<li>积分的统计</li>
+</ol>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2017/08/27/项目结构——JavaScript版本的2048实现-0/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '9672f5b0-8af0-11e7-ab65-ff167b677dac'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

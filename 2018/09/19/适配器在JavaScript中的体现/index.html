@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>适配器在JavaScript中的体现 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生活中的例子"><span class="toc-number">1.</span> <span class="toc-text">生活中的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在代码中的体现"><span class="toc-number">2.</span> <span class="toc-text">在代码中的体现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#接入多个第三方SDK"><span class="toc-number">2.1.</span> <span class="toc-text">接入多个第三方SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些其他的例子"><span class="toc-number">2.2.</span> <span class="toc-text">一些其他的例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>适配器在JavaScript中的体现</h1>
+  <p>适配器设计模式在JavaScript中非常有用，在处理跨浏览器兼容问题、整合多个第三方SDK的调用，都可以看到它的身影。<br>其实在日常开发中，很多时候会不经意间写出符合某种设计模式的代码，毕竟设计模式就是老前辈们总结提炼出来的一些能够帮助提升开发效率的一些模版，源于日常的开发中。<br>而<code>适配器</code>其实在<code>JavaScript</code>中应该是比较常见的一种了。  </p>
+<a id="more"></a>
+<p>在维基百科中，关于适配器模式的定义为：  </p>
+<blockquote>
+<p>在软件工程中，适配器模式是一种软件设计模式，允许从另一个接口使用现有类的接口。它通常用于使现有的类与其他类一起工作，而无需修改其源代码。  </p>
+</blockquote>
+<h2 id="生活中的例子"><a href="#生活中的例子" class="headerlink" title="生活中的例子"></a>生活中的例子</h2><p>在生活中最常见的就是电源插头的适配器了，世界各国的插座标准各不相同，如果需要根据各国的标准购买对应的电源插头那未免太过于浪费钱财，如果说自己带着插座，把人家墙敲碎，重新接线，也肯定是不现实的。<br>所以就会有插头的适配器，用来将某种插头转换成另一种插头，在插座和你的电源之间做中转的这个东西，就是适配器。  </p>
+<p><img src="/images/pattern-adapter/sockets.jpg" alt="">  </p>
+<h2 id="在代码中的体现"><a href="#在代码中的体现" class="headerlink" title="在代码中的体现"></a>在代码中的体现</h2><p>而转向到编程中，我个人是这样理解的：</p>
+<blockquote>
+<p>将那些你不愿意看见的脏代码藏起来，你就可以说这是一个适配器  </p>
+</blockquote>
+<h3 id="接入多个第三方SDK"><a href="#接入多个第三方SDK" class="headerlink" title="接入多个第三方SDK"></a>接入多个第三方SDK</h3><p>举个日常开发中的例子，我们在做一个微信公众号开发，里边用到了微信的支付模块，经过长时间的联调，终于跑通了整个流程，正当你准备开心的打包上线代码的时候，得到了一个新需求：<br><strong>我们需要接入支付宝公众号的SDK，也要有支付的流程</strong>  </p>
+<p>为了复用代码，我们可能会在脚本中写下这样的逻辑：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>platform <span class="token operator">===</span> <span class="token string">'wechat'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  wx<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>platform <span class="token operator">===</span> <span class="token string">'alipay'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  alipay<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 做一些后续的逻辑处理</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是一般来说，各厂的SDK所提供的接口调用方式都会多多少少有些区别，<del>虽说有些时候文档可能用的是同一份，致敬友商。</del>  </p>
+<p>所以针对上述的代码可能是这样的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 并不是真实的参数配置，仅仅举例使用</span>
+<span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token punctuation">{</span>
+  price<span class="token punctuation">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+  goodsId<span class="token punctuation">:</span> <span class="token number">1</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 还有可能返回值的处理方式也不相同</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>platform <span class="token operator">===</span> <span class="token string">'wechat'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  config<span class="token punctuation">.</span>appId <span class="token operator">=</span> <span class="token string">'XXX'</span>
+  config<span class="token punctuation">.</span>secretKey <span class="token operator">=</span> <span class="token string">'XXX'</span>
+  wx<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// error</span>
+
+    <span class="token comment" spellcheck="true">// success</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>platform <span class="token operator">===</span> <span class="token string">'alipay'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  config<span class="token punctuation">.</span>token <span class="token operator">=</span> <span class="token string">'XXX'</span>
+  alipay<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> data <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// success</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> err <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// error</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>就目前来说，代码接口还算是清晰，只要我们写好注释，这也不是一个太糟糕的代码。<br>但是生活总是充满了意外，我们又接到了需求需要添加QQ的SDK、美团的SDK、小米的SDK，或者某些银行的SDK。  </p>
+<p>此时你的代码可能是这样的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">switch</span> <span class="token punctuation">(</span>platform<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> <span class="token string">'wechat'</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">// 微信的处理逻辑</span>
+  <span class="token keyword">break</span>
+  <span class="token keyword">case</span> <span class="token string">'QQ'</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">// QQ的处理逻辑</span>
+  <span class="token keyword">break</span>
+  <span class="token keyword">case</span> <span class="token string">'alipay'</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">// 支付宝的处理逻辑</span>
+  <span class="token keyword">break</span>
+  <span class="token keyword">case</span> <span class="token string">'meituan'</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">// 美团的处理逻辑</span>
+  <span class="token keyword">break</span>
+  <span class="token keyword">case</span> <span class="token string">'xiaomi'</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">// 小米的处理逻辑</span>
+  <span class="token keyword">break</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这已经不是一些注释能够弥补的问题了，这样的代码会变得越来越难维护，各种SDK千奇百怪的调用方式，如果其他人也要做类似的需求，还需要重新写一遍这样的代码，那肯定是很浪费资源的一件事儿。  </p>
+<p>所以为了保证我们业务逻辑的清晰，同时也为了避免后人重复的踩这个坑，我们会将它进行拆分出来作为一个公共的函数来存在：<br>找到其中某一个SDK的调用方式或者一个我们约定好的规则作为基准。<br>我们来告诉调用方，你要怎么怎么做，你能怎样获取返回数据，然后我们在函数内部进行这些各种肮脏的判断：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> pay <span class="token punctuation">(</span><span class="token punctuation">{</span>
+  price<span class="token punctuation">,</span>
+  goodsId
+<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>platform<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token string">'wechat'</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true">// 微信的处理逻辑</span>
+        config<span class="token punctuation">.</span>price <span class="token operator">=</span> price
+        config<span class="token punctuation">.</span>goodsId <span class="token operator">=</span> goodsId
+        config<span class="token punctuation">.</span>appId <span class="token operator">=</span> <span class="token string">'XXX'</span>
+        config<span class="token punctuation">.</span>secretKey <span class="token operator">=</span> <span class="token string">'XXX'</span>
+        wx<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+
+          <span class="token function">resolve</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+      <span class="token keyword">break</span>
+      <span class="token keyword">case</span> <span class="token string">'QQ'</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true">// QQ的处理逻辑</span>
+        config<span class="token punctuation">.</span>price <span class="token operator">=</span> price <span class="token operator">*</span> <span class="token number">100</span>
+        config<span class="token punctuation">.</span>gid <span class="token operator">=</span> goodsId
+        config<span class="token punctuation">.</span>appId <span class="token operator">=</span> <span class="token string">'XXX'</span>
+        config<span class="token punctuation">.</span>secretKey <span class="token operator">=</span> <span class="token string">'XXX'</span>
+        config<span class="token punctuation">.</span>success <span class="token operator">=</span> resolve
+        config<span class="token punctuation">.</span>error <span class="token operator">=</span> reject
+        qq<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+      <span class="token keyword">break</span>
+      <span class="token keyword">case</span> <span class="token string">'alipay'</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true">// 支付宝的处理逻辑</span>
+        config<span class="token punctuation">.</span>payment <span class="token operator">=</span> price
+        config<span class="token punctuation">.</span>id <span class="token operator">=</span> goodsId
+        config<span class="token punctuation">.</span>token <span class="token operator">=</span> <span class="token string">'XXX'</span>
+        alipay<span class="token punctuation">.</span><span class="token function">pay</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span>
+      <span class="token keyword">break</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样无论我们在什么环境下，只要我们的适配器支持，就可以按照我们约定好的通用规则进行调用，而具体执行的是什么SDK，则是适配器需要关心的事情：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// run anywhere</span>
+<span class="token keyword">await</span> <span class="token function">pay</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  price<span class="token punctuation">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+  goodsId<span class="token punctuation">:</span> <span class="token number">1</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对于SDK提供方，仅仅需要知道自己所需要的一些参数，然后按照自己的方式进行数据返回。<br>对于SDK调用房，仅仅需要我们约定好的通用的参数，以及按照约定的方式进行监听回调处理。  </p>
+<p>整合多个第三方SDK的任务就交由适配器来做，然后我们将适配器的代码压缩，混淆，放在一个看不见的角落里去，这样的代码逻辑就会变得很清晰了 :)。  </p>
+<p>适配器大致就是这样的作用，有一点一定要明确，适配器不是银弹，<strong>那些繁琐的代码始终是存在的，只不过你在写业务的时候看不到它罢了</strong>，眼不见心不烦。  </p>
+<h3 id="一些其他的例子"><a href="#一些其他的例子" class="headerlink" title="一些其他的例子"></a>一些其他的例子</h3><p>个人觉得，<code>jQuery</code>中就有很多适配器的例子，包括最基础的<code>$(&#39;selector&#39;).on</code>，这个不就是一个很明显的适配器模式么？  </p>
+<p>一步步的进行降级，并且抹平了一些浏览器之间的差异，让我们可以通过简单的<code>on</code>来进行在主流浏览器中进行事件监听：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 一个简单的伪代码示例</span>
+<span class="token keyword">function</span> on <span class="token punctuation">(</span>target<span class="token punctuation">,</span> event<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>target<span class="token punctuation">.</span>addEventListener<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 标准的监听事件方式</span>
+    target<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span>event<span class="token punctuation">,</span> callback<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>target<span class="token punctuation">.</span>attachEvent<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// IE低版本的监听方式</span>
+    target<span class="token punctuation">.</span><span class="token function">attachEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">,</span> callback<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 一些低版本的浏览器监听事件方式</span>
+    target<span class="token punctuation">[</span><span class="token template-string"><span class="token string">`on</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>event<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> callback
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>或者在Node中的这样的例子更是常见，因为早年是没有<code>Promise</code>的，所以大多数的异步由<code>callback</code>来完成，且有一个约定好的规则，<code>Error-first callback</code>：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+fs<span class="token punctuation">.</span><span class="token function">readFile</span><span class="token punctuation">(</span><span class="token string">'test.txt'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 处理异常</span>
+
+  <span class="token comment" spellcheck="true">// 处理正确结果</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而我们的新功能都采用了<code>async/await</code>的方式来进行，当我们需要复用一些老项目中的功能时，直接去修改老项目的代码肯定是不可行的。<br>这样的兼容处理需要调用方来做，所以为了让逻辑代码看起来不是太混乱，我们可能会将这样的回调转换为<code>Promise</code>的版本方便我们进行调用：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> readFile <span class="token punctuation">(</span>fileName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    fs<span class="token punctuation">.</span><span class="token function">readFile</span><span class="token punctuation">(</span>fileName<span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+
+      <span class="token function">resolve</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">await</span> <span class="token function">readFile</span><span class="token punctuation">(</span><span class="token string">'test.txt'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为前边也提到了，这种<code>Error-first callback</code>是一个约定好的形式，所以我们可以很轻松的实现一个通用的适配器：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">promisify</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token function">func</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+
+      <span class="token function">resolve</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在使用前进行对应的转换就可以用我们预期的方式来执行代码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> readFile <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>fs<span class="token punctuation">.</span>readFile<span class="token punctuation">)</span>
+
+<span class="token keyword">await</span> <span class="token function">readFile</span><span class="token punctuation">(</span><span class="token string">'test.txt'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>在Node8中，官方已经实现了类似这样的工具函数：<a href="https://nodejs.org/dist/latest-v8.x/docs/api/util.html#util_util_promisify_original" target="_blank" rel="noopener">util.promisify</a>  </p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>个人观点：所有的设计模式都不是凭空想象出来的，肯定是在开发的过程中，总结提炼出的一些高效的方法，这也就意味着，可能你并不需要在刚开始的时候就去生啃这些各种命名高大上的设计模式。<br>因为书中所说的场景可能并不全面，也可能针对某些语言，会存在更好的解决办法，所以生搬硬套可能并不会写出有灵魂的代码 :)  </p>
+<blockquote>
+<p>纸上得来终觉浅，绝知此事要躬行。 ———— 《冬夜读书示子聿》，陆游</p>
+</blockquote>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/09/19/适配器在JavaScript中的体现/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '4492f470-bb41-11e8-9792-c7582ddcf0d2'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

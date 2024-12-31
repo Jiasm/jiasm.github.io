@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>PM2源码分析 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PM2-的核心功能概览"><span class="toc-number">1.</span> <span class="toc-text">PM2 的核心功能概览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目结构"><span class="toc-number">1.1.</span> <span class="toc-text">项目结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#守护进程与-Client-进程通讯方式"><span class="toc-number">1.2.</span> <span class="toc-text">守护进程与 Client 进程通讯方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PM2-启动程序的方式"><span class="toc-number">1.3.</span> <span class="toc-text">PM2 启动程序的方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多进程管理"><span class="toc-number">2.</span> <span class="toc-text">多进程管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#系统信息监控"><span class="toc-number">3.</span> <span class="toc-text">系统信息监控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日志管理"><span class="toc-number">4.</span> <span class="toc-text">日志管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">5.</span> <span class="toc-text">后记</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>PM2源码分析</h1>
+  <blockquote>
+<p>近期有需求需要了解 PM2 一些功能的实现方式，所以趁势看了一下 PM2 的源码，也算是用了这么多年的 PM2，第一次进入内部进行一些探索。<br>PM2 是一个 基于 node.js 的进程管理工具，本身 node.js 是一个单进程的语言，但是 PM2 可以实现多进程的运行及管理（当然还是基于 node 的 API），还提供程序系统信息的展示，包括 内存、CPU 等数据。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="PM2-的核心功能概览"><a href="#PM2-的核心功能概览" class="headerlink" title="PM2 的核心功能概览"></a>PM2 的核心功能概览</h2><blockquote>
+<p><a href="https://github.com/Unitech/pm2" target="_blank" rel="noopener">源码位置</a><br><a href="https://pm2.keymetrics.io/" target="_blank" rel="noopener">官方网站</a>  </p>
+</blockquote>
+<p>PM2 的功能、插件非常的丰富，但比较核心的功能其实不多：</p>
+<ol>
+<li>多进程管理</li>
+<li>系统信息监控</li>
+<li>日志管理</li>
+</ol>
+<p>其他的一些功能就都是基于 PM2 之上的辅助功能了。  </p>
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><p>PM2 的项目结构算是比较简洁的了，主要的源码都在 <code>lib</code> 目录下， <code>God</code> 目录为核心功能多进程管理的实现，以及 <code>API</code> 目录则是提供了各种能力，包括 日志管理、面板查看系统信息以及各种辅助功能，最后就是 <code>Sysinfo</code> 目录下关于如何采集系统信息的实现了。  </p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 删除了多个不相干的文件、文件夹</span>
+lib
+├── API     <span class="token comment" spellcheck="true"># 日志管理、GUI 等辅助功能</span>
+├── God     <span class="token comment" spellcheck="true"># 多进程管理逻辑实现位置</span>
+└── Sysinfo <span class="token comment" spellcheck="true"># 系统信息采集</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>几个比较关键的文件作用：</p>
+<ul>
+<li>Daemon.js <ul>
+<li>守护进程的主要逻辑实现，包括 rpc server，以及各种守护进程的能力</li>
+</ul>
+</li>
+<li>God.js<ul>
+<li>业务进程的包裹层，负责与守护进程建立连接，以及注入一些操作，我们编写的代码最终是由这里执行的</li>
+</ul>
+</li>
+<li>Client.js<ul>
+<li>执行 PM2 命令的主要逻辑实现，包括与守护进程建立 rpc 连接，以及各种请求守护进程的操作</li>
+</ul>
+</li>
+<li>API.js<ul>
+<li>各种功能性的实现，包括启动、关闭项目、展示列表、展示系统信息等操作，会调用 Client 的各种函数</li>
+</ul>
+</li>
+<li>binaries/CLI.js<ul>
+<li>执行 pm2 命令时候触发的入口文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="守护进程与-Client-进程通讯方式"><a href="#守护进程与-Client-进程通讯方式" class="headerlink" title="守护进程与 Client 进程通讯方式"></a>守护进程与 Client 进程通讯方式</h3><p>看源码后会知道，PM2 与 Client 进程（也就是我们 <code>pm2 start XXX</code> 时对应的进程），是通过 RPC 进行通讯的，这样就能保证所有的 Client 进程可以与守护进程进行通讯，上报一些信息，以及从守护进程层面执行一些操作。  </p>
+<h3 id="PM2-启动程序的方式"><a href="#PM2-启动程序的方式" class="headerlink" title="PM2 启动程序的方式"></a>PM2 启动程序的方式</h3><p>PM2 并不是简单的使用 node XXX 来启动我们的程序，就像前边所提到了守护进程与 Client 进程的通讯方式，Client 进程会将启动业务进程所需要的配置，通过 rpc 传递给守护进程，由守护进程去启动程序。<br>这样，在 PM2 start 命令执行完成以后业务进程也在后台运行起来了，然后等到我们后续想再针对业务进程进行一些操作的时候，就可以通过列表查看对应的 pid、name 来进行对应的操作，同样是通过 Client 触发 rpc 请求到守护进程，实现逻辑。  </p>
+<p>当然，我们其实很少会有单独启动守护进程的操作，守护进程的启动其实被写在了 Client 启动的逻辑中，在 Client 启动的时候会检查是否有存活的守护进程，如果没有的话，会尝试启动一个新的守护进程用于后续的使用。<br>具体方式就是通过 <code>spawn</code> + <code>detached: true</code> 来实现的，创建一个单独的进程，这样即便是我们的 Client 作为父进程退出了，守护进程依然是可以独立运行在后台的。  </p>
+<p>P.S. 在使用 PM2 的时候应该有时也会看到有些这样的输出，这个其实就是 Client 运行时监测到守护进程还没有启动，主动启动了守护进程：  </p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> <span class="token punctuation">[</span>PM2<span class="token punctuation">]</span> Spawning PM2 daemon with pm2_home<span class="token operator">=</span>/Users/jiashunming/.pm2
+<span class="token operator">></span> <span class="token punctuation">[</span>PM2<span class="token punctuation">]</span> PM2 Successfully daemonized
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/images/pm2-startup-flow.png" alt=""></p>
+<h2 id="多进程管理"><a href="#多进程管理" class="headerlink" title="多进程管理"></a>多进程管理</h2><p>一般使用 PM2 实现多进程管理主要的目的是为了能够让我们的 node 程序可以运行在多核 CPU 上，比如四核机器，我们就希望能够存在四个进程在运行，以便更高效的支持服务。<br>在进程管理上，PM2 提供了一个大家经常会用到的参数： <code>exec_mode</code>，它的取值只有两个，<code>cluster</code>和<code>fork</code>，<code>fork</code> 是一个比较常规的模式，相当于就是执行了多次的 <code>node XXX.js</code>。<br>但是这样去运行 node 程序就会有一个问题，如果是一个 HTTP 服务的话，很容易就会出现端口冲突的问题：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'http'</span><span class="token punctuation">)</span>
+
+http<span class="token punctuation">.</span><span class="token function">createServer</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">8000</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>比如我们有这样的一个 PM2 配置文件，那么执行的时候你就会发现，报错了，提示端口冲突：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  apps<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// 设置启动实例个数</span>
+      <span class="token string">"instances"</span><span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+      <span class="token comment" spellcheck="true">// 设置运行模式</span>
+      <span class="token string">"exec_mode"</span><span class="token punctuation">:</span> <span class="token string">"fork"</span><span class="token punctuation">,</span>
+      <span class="token comment" spellcheck="true">// 入口文件</span>
+      <span class="token string">"script"</span><span class="token punctuation">:</span> <span class="token string">"./test-create-server.js"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这是因为在 PM2 的实现中， fork 模式下就是简单的通过 spawn 执行入口文件罢了。  </p>
+<blockquote>
+<p>实现位置：<a href="https://github.com/Unitech/pm2/blob/master/lib/God/ForkMode.js" target="_blank" rel="noopener">lib/God/ForkMode.js</a></p>
+</blockquote>
+<p>而当我们把 <code>exec_mode</code> 改为 <code>cluster</code> 之后，你会发现程序可以正常运行了，并不会出现端口占用的错误。<br>这是因为 PM2 使用了 node 官方提供的 <a href="https://nodejs.org/dist/latest-v12.x/docs/api/cluster.html" target="_blank" rel="noopener">cluster</a> 模块来运行程序。  </p>
+<p>cluster 是一个 master-slave 模型的运行方式（<em>最近 ms 这个说法貌似变得不政治正确了。。</em>），首先需要有一个 master 进程来负责创建一些工作进程，或者叫做 worker 吧。<br>然后在 worker 进程中执行 createServer 监听对应的端口号即可。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'http'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> cluster <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'cluster'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>cluster<span class="token punctuation">.</span>isMaster<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> limit <span class="token operator">=</span> <span class="token number">2</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>limit<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    cluster<span class="token punctuation">.</span><span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+  http<span class="token punctuation">.</span><span class="token function">createServer</span><span class="token punctuation">(</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    res<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token function">String</span><span class="token punctuation">(</span>process<span class="token punctuation">.</span>pid<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">8000</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>详情可以参考 node.js 中 TCP 模块关于 listen 的实现：<a href="https://github.com/nodejs/node/blob/master/lib/net.js#L1335" target="_blank" rel="noopener">lib/net.js</a><br>在内部实现逻辑大致为， master 进程负责监听端口号，并通过 round_robin 算法来进行请求的分发，master 进程与 worker 进程之间会通过基于 EventEmitter 的消息进行通讯。  </p>
+<blockquote>
+<p>具体的逻辑实现都在这里 <a href="https://github.com/nodejs/node/tree/master/lib/internal/cluster" target="_blank" rel="noopener">lib/internal/cluster</a> 因为是 node 的逻辑，并不是 PM2 的逻辑，所以就不太多说了。  </p>
+</blockquote>
+<p>然后回到 PM2 关于 cluster 的实现，其实是设置了 N 多的默认参数，然后添加了一些与进程之间的 ipc 通讯逻辑，在进程启动成功、出现异常等特殊情况时，进行对应的操作。<br>因为前边也提到了，PM2 是由守护进程维护管理所有的业务进程的，所以守护进程会维护与所有服务的连接。<br><code>process</code> 对象是继承自 <code>EventEmitter</code> 的，所以我们只是监听了一些特定的事件，包括 <code>uncaughtException</code>、<code>unhandledRejection</code> 等。<br>在进程重启的实现方式中，就是由子进程监听到异常事件，向守护进程发送异常日志的信息，然后发送 <code>disconnect</code> 表示进程即将退出，最后触发自身的 <code>exit</code> 函数终止掉进程。<br>同时守护进程在接收到消息以后，也会重新创建新的进程，从而完成了进程自动重启的逻辑。  </p>
+<p>实现业务进程的主要逻辑在 <a href="https://github.com/Unitech/pm2/blob/master/lib/ProcessContainer.js" target="_blank" rel="noopener">lib/ProcessContainer</a> 中，它是我们实际代码执行的载体。  </p>
+<h2 id="系统信息监控"><a href="#系统信息监控" class="headerlink" title="系统信息监控"></a>系统信息监控</h2><p>系统信息监控这块，在看源码之前以为是用什么 addon 来做的，或者是某些黑科技。<br>但是真的循着源码看下去，发现了就是用了 <a href="https://www.npmjs.com/package/pidusage" target="_blank" rel="noopener">pidusage</a> 这个包来做的- -<br>只关心 unix 系统的话，内部实际上就是<code>ps -p XXX</code>这么一个简单的命令。  </p>
+<p>至于在使用 <code>pm2 monit</code>、<code>pm2 ls --watch</code> 命令时，实际上就是定时器在循环调用上述的获取系统信息方法了。</p>
+<blockquote>
+<p>具体实现逻辑：<br><a href="https://github.com/Unitech/pm2/blob/master/lib/God/ActionMethods.js#L40" target="_blank" rel="noopener">getMonitorData</a><br><a href="https://github.com/Unitech/pm2/blob/master/lib/API/Extra.js#L671" target="_blank" rel="noopener">dashboard</a><br><a href="https://github.com/Unitech/pm2/blob/master/lib/API.js#L597" target="_blank" rel="noopener">list</a></p>
+</blockquote>
+<p>后边就是如何使用基于终端的 UI 库展现数据的逻辑了。  </p>
+<h2 id="日志管理"><a href="#日志管理" class="headerlink" title="日志管理"></a>日志管理</h2><p>日志在 PM2 中的实现分了两块。<br>一个是业务进程的日志、还有一个是 PM2 守护进程自身的日志。  </p>
+<p>守护进程的日志实现方式是通过 hack 了 <code>console</code> 相关 API 实现的，在原有的输出逻辑基础上添加了一个基于 <a href="https://www.npmjs.com/package/axon" target="_blank" rel="noopener">axon</a> 的消息传递，是一个 pub/sub 模型的，主要是用于 Client 获得日志，例如 <code>pm2 attach</code>、<code>pm2 dashboard</code> 等命令。<br>业务进程的日志实现方式则是通过覆盖了 <code>process.stdout</code>、<code>process.stderr</code> 对象上的方法（<code>console</code> API 基于它实现），在接收到日志以后会写入文件，同时调用 <code>process.send</code> 将日志进行转发，而守护进程监听对应的数据，也会使用上述守护进程创建的 socket 服务将日志数据进行转发，这样业务进程与守护进程就有了统一的可以获取的位置，通过 Client 就可以建立 socket 连接来实现日志的输出了。  </p>
+<blockquote>
+<p>hack console 的位置：<a href="https://github.com/Unitech/pm2/blob/master/lib/Utility.js#L97" target="_blank" rel="noopener">lib/Utility.js</a><br>hack stdout/stderr write 的位置：<a href="https://github.com/Unitech/pm2/blob/master/lib/Utility.js#L131" target="_blank" rel="noopener">lib/Utility.js</a><br>创建文件可写流用于子进程写入文件：<a href="https://github.com/Unitech/pm2/blob/master/lib/Utility.js#L131" target="_blank" rel="noopener">lib/Utility.js</a><br>子进程接收到输出后写入文件并发送消息到守护进程：<a href="https://github.com/Unitech/pm2/blob/master/lib/ProcessContainer.js#L212" target="_blank" rel="noopener">lib/ProcessContainer.js</a><br>守护进程监听子进程消息并转发：<a href="https://github.com/Unitech/pm2/blob/master/lib/God/ClusterMode.js#L59" target="_blank" rel="noopener">lib/God/ClusterMode.js</a><br>守护进程将事件通过 socket 广播：<a href="https://github.com/Unitech/pm2/blob/master/lib/Daemon.js#L437" target="_blank" rel="noopener">lib/Daemon.js</a><br>Client 读取并展示日志：<a href="https://github.com/Unitech/pm2/blob/master/lib/API/Extra.js#L671" target="_blank" rel="noopener">lib/API/Extra.js</a></p>
+</blockquote>
+<p><img src="/images/pm2-log-flow.jpg" alt="">  </p>
+<p><em>查看日志的流程中有一个小细节，就是业务日志， PM2 会先去读取文件最后的几行进行展示，然后才是依据 socket 服务返回的数据进行刷新终端展示数据。</em>  </p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>PM2 比较核心的也就是这几块了，因为通过 Client 可以与守护进程进行交互，而守护进程与业务进程之间也存在着联系，可以执行一些操作。<br>所以我们就可以很方便的对业务进程进行管理，剩下的逻辑基本就是基于这之上的一些辅助功能，以及还有就是 UI 展示上的逻辑处理了。  </p>
+<p>PM2 是一个纯 JavaScript 编写的工具，在第一次看的时候还是会觉得略显复杂，到处绕来绕去的比较晕，我推荐的一个阅读源码的方式是，通过找一些入口文件来下手，可以采用 调试 or 加日志的方式，一步步的来看代码的执行顺序。<br>最终就会有一个较为清晰的概念。  </p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2020/08/29/PM2源码分析/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '73f01e40-e769-11ea-a947-c51f99c22afa'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

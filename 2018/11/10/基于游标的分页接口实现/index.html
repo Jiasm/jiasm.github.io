@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>基于游标的分页接口实现 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#页码-条数-的分页接口的问题"><span class="toc-number">1.</span> <span class="toc-text">页码+条数 的分页接口的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#游标-条数-的分页接口实现"><span class="toc-number">2.</span> <span class="toc-text">游标+条数 的分页接口实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#大致的结构"><span class="toc-number">2.1.</span> <span class="toc-text">大致的结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-number">2.2.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列表数据在全局缓存"><span class="toc-number">2.2.1.</span> <span class="toc-text">列表数据在全局缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取数据-过滤数据函数的实现"><span class="toc-number">2.2.2.</span> <span class="toc-text">获取数据 过滤数据函数的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最后拼接数据的函数"><span class="toc-number">2.2.3.</span> <span class="toc-text">最后拼接数据的函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两者之间的比较"><span class="toc-number">3.</span> <span class="toc-text">两者之间的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">4.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>基于游标的分页接口实现</h1>
+  <p>分页接口的实现，在偏业务的服务端开发中应该很常见，PC时代的各种表格，移动时代的各种<code>feed</code>流、<code>timeline</code>。  </p>
+<p>出于对流量的控制，或者用户的体验，大批量的数据都不会直接返回给客户端，而是通过分页接口，多次请求返回数据。  </p>
+<p>而最常用的分页接口定义大概是这样的：</p>
+<a id="more"></a>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/list'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> page<span class="token punctuation">,</span> size <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>query
+
+  <span class="token comment" spellcheck="true">// ...</span>
+
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token punctuation">{</span>
+    data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// > curl /list?page=1&amp;size=10</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>接口传入请求的页码、以及每页要请求的条数，我个人猜想这可能和大家初学的时候所接触的数据库有关吧- -，我所认识的人里边，先接触<code>MySQL</code>、<code>SQL Server</code>什么的比较多一些，以及类似的<code>SQL</code>语句，在查询的时候基本上就是这样的一个分页条件：  </p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">&lt;</span><span class="token keyword">column</span><span class="token operator">></span> <span class="token keyword">FROM</span> <span class="token operator">&lt;</span><span class="token keyword">table</span><span class="token operator">></span> <span class="token keyword">LIMIT</span> <span class="token operator">&lt;</span><span class="token keyword">offset</span><span class="token operator">></span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">rows</span><span class="token operator">></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>或者类似的<code>Redis</code>中针对<code>zset</code>的操作也是类似的：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> ZRANGE <span class="token operator">&lt;</span>key<span class="token operator">></span> <span class="token operator">&lt;</span>start<span class="token operator">></span> <span class="token operator">&lt;</span>stop<span class="token operator">></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>所以可能习惯性的就使用类似的方式创建分页请求接口，让客户端提供<code>page</code>、<code>size</code>两个参数。<br>这样的做法并没有什么问题，在<code>PC</code>的表格，移动端的列表，都能够整整齐齐的展示数据。  </p>
+<p>但是这是一种比较常规的数据分页处理方式，适用于没有什么动态的过滤条件的数据。<br>而如果数据是实时性要求非常高的那种，存在有大量的过滤条件，或者需要和其他数据源进行对照过滤，用这样的处理方式看起来就会有些诡异。  </p>
+<h2 id="页码-条数-的分页接口的问题"><a href="#页码-条数-的分页接口的问题" class="headerlink" title="页码+条数 的分页接口的问题"></a>页码+条数 的分页接口的问题</h2><p>举个简单的例子，我司是有直播业务的，必然也是存在有直播列表这样的接口的。<br>而直播这样的数据是非常要求时效性的，类似热门列表、新人列表，这些数据的来源是离线计算好的数据，但这样的数据一般只会存储用户的标识或者直播间的标识，像直播间观看人数、直播时长、人气，这类数据必然是时效性要求很高的，不可能在离线脚本中进行处理，所以就需要接口请求时才进行获取。  </p>
+<p>而且在客户端请求的时候也是需要有一些验证的，举例一些简单的条件：  </p>
+<ul>
+<li>确保主播正在直播</li>
+<li>确保直播内容合规</li>
+<li>检查用户与主播之间的拉黑关系</li>
+</ul>
+<p>这些在离线脚本运行的时候都是没有办法做到的，因为每时每刻都在发生变化，而且数据可能没有存储在同一个位置，可能列表数据来自<code>MySQL</code>、过滤的数据需要用<code>Redis</code>中来获取、用户信息相关的数据在<code>XXX</code>数据库，所以这些操作不可能是一个连表查询就能够解决的，它需要在接口层来进行，拿到多份数据进行合成。  </p>
+<p>而此时采用上述的分页模式，就会出现一个很尴尬的问题。<br>也许访问接口的用户戾气比较重，将第一页所有的主播全部拉黑了，这就会导致，实际接口返回的数据是<code>0</code>条，这个就很可怕了。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true">// length: 10</span>
+data <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>filterBlackList<span class="token punctuation">)</span>
+<span class="token keyword">return</span> data   <span class="token comment" spellcheck="true">// length: 0</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这种情况客户端是该按照无数据来展示还是说紧接着要去请求第二页数据呢。<br><img src="https://user-images.githubusercontent.com/9568094/48297078-1f5d9e80-e4db-11e8-97bf-8de9b194b912.jpg" alt=""></p>
+<p>所以这样的分页设计在某些情况下并不能够满足我们的需求，恰巧此时发现了<code>Redis</code>中的一个命令：<code>scan</code>。</p>
+<h2 id="游标-条数-的分页接口实现"><a href="#游标-条数-的分页接口实现" class="headerlink" title="游标+条数 的分页接口实现"></a>游标+条数 的分页接口实现</h2><p><code>scan</code>命令用于迭代<code>Redis</code>数据库中所有的<code>key</code>，但是因为数据中的<code>key</code>数量是不能确定的，（<em>线上直接执行<code>keys</code>会被打死的</em>），而且<code>key</code>的数量在你操作的过程中也是时刻在变化的，可能有的被删除，可能期间又有新增的。<br>所以，<code>scan</code>的命令要求传入一个游标，第一次调用的时候传入<code>0</code>即可，而<code>scan</code>命令的返回值则有两项，第一项是下次迭代时候所需要的游标，而第二项是一个集合，表示本次迭代返回的所有<code>key</code>。<br>以及<code>scan</code>是可以添加正则表达式用来迭代某些满足规则的<code>key</code>，例如所有<code>temp_</code>开头的<code>key</code>：<code>scan 0 temp_*</code>，而<code>scan</code>并不会真的去按照你所指定的规则去匹配<code>key</code>然后返回给你，它并不保证一次迭代一定会返回<code>N</code>条数据，有极大的可能一次迭代一条数据都不返回。  </p>
+<p>如果我们明确的需要<code>XX</code>条数据，那么按照游标多次调用就好了。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 用一个递归简单的实现获取十个匹配的key</span>
+<span class="token keyword">await</span> <span class="token keyword">function</span> getKeys <span class="token punctuation">(</span>pattern<span class="token punctuation">,</span> oldCursor <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> res <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span> cursor<span class="token punctuation">,</span> data <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">await</span> redis<span class="token punctuation">.</span><span class="token function">scan</span><span class="token punctuation">(</span>oldCursor<span class="token punctuation">,</span> pattern<span class="token punctuation">)</span>
+
+  res <span class="token operator">=</span> res<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>res<span class="token punctuation">.</span>length <span class="token operator">>=</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+  <span class="token keyword">else</span> <span class="token keyword">return</span> <span class="token function">getKeys</span><span class="token punctuation">(</span>cursor<span class="token punctuation">,</span> pattern<span class="token punctuation">,</span> res<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">await</span> <span class="token function">getKeys</span><span class="token punctuation">(</span><span class="token string">'temp_*'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// length: 10</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样的使用方式给了我一些思路，打算按照类似的方式来实现分页接口。<br>不过将这样的逻辑放在客户端，会导致后期调整逻辑时候变得非常麻烦。需要发版才能解决，新老版本兼容也会使得后期的修改束手束脚。<br>所以这样的逻辑会放在服务端来开发，而客户端只需要将接口返回的游标<code>cursor</code>在下次接口请求时携带上即可。  </p>
+<h3 id="大致的结构"><a href="#大致的结构" class="headerlink" title="大致的结构"></a>大致的结构</h3><p>对于客户端来说，这就是一个简单的游标存储以及使用。<br>但是服务端的逻辑要稍微复杂一些：</p>
+<ol>
+<li>首先，我们需要有一个获取数据的函数</li>
+<li>其次需要有一个用于数据过滤的函数</li>
+<li>有一个用于判断数据长度并截取的函数</li>
+</ol>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> getData <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 获取数据</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> filterData <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 过滤数据</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> generatedData <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 合并、生成、返回数据</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><blockquote>
+<p><code>node.js 10.x</code>已经变为了<code>LTS</code>，所以示例代码会使用<code>10</code>的一些新特性。  </p>
+</blockquote>
+<p>因为列表大概率的会存储为一个集合，类似用户标识的集合，在<code>Redis</code>中是<code>set</code>或者<code>zset</code>。  </p>
+<p>如果是数据源来自<code>Redis</code>，我的建议是在全局缓存一份完整的列表，定时更新数据，然后在接口层面通过<code>slice</code>来获取本次请求所需的部分数据。  </p>
+<p><em>P.S. 下方示例代码假设<code>list</code>的数据中存储的是一个唯一ID的集合，而通过这些唯一ID再从其他的数据库获取对应的详细数据。</em>  </p>
+<pre class="line-numbers language-bash"><code class="language-bash">redis<span class="token operator">></span> SMEMBER list
+     <span class="token operator">></span> 1
+     <span class="token operator">></span> 2
+     <span class="token operator">></span> 3
+
+mysql<span class="token operator">></span> SELECT * FROM user_info
++-----+---------+------+--------+
+<span class="token operator">|</span> uid <span class="token operator">|</span> name    <span class="token operator">|</span> age  <span class="token operator">|</span> gender <span class="token operator">|</span>
++-----+---------+------+--------+
+<span class="token operator">|</span>   1 <span class="token operator">|</span> Niko    <span class="token operator">|</span>   18 <span class="token operator">|</span>      1 <span class="token operator">|</span>
+<span class="token operator">|</span>   2 <span class="token operator">|</span> Bellic  <span class="token operator">|</span>   20 <span class="token operator">|</span>      2 <span class="token operator">|</span>
+<span class="token operator">|</span>   3 <span class="token operator">|</span> Jarvis  <span class="token operator">|</span>   22 <span class="token operator">|</span>      2 <span class="token operator">|</span>
++-----+---------+------+--------+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="列表数据在全局缓存"><a href="#列表数据在全局缓存" class="headerlink" title="列表数据在全局缓存"></a>列表数据在全局缓存</h4><pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 完整列表在全局的缓存</span>
+<span class="token keyword">let</span> globalList <span class="token operator">=</span> <span class="token keyword">null</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> updateGlobalData <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  globalList <span class="token operator">=</span> <span class="token keyword">await</span> redis<span class="token punctuation">.</span><span class="token function">smembers</span><span class="token punctuation">(</span><span class="token string">'list'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">updateGlobalData</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token function">setInterval</span><span class="token punctuation">(</span>updateGlobalData<span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 2s 更新一次</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="获取数据-过滤数据函数的实现"><a href="#获取数据-过滤数据函数的实现" class="headerlink" title="获取数据 过滤数据函数的实现"></a>获取数据 过滤数据函数的实现</h4><p>因为上边的<code>scan</code>示例采用的是递归的方式来进行的，但是可读性并不是很高，所以我们可以采用生成器<code>Generator</code>来帮助我们实现这样的需求：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 获取数据的函数</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token operator">*</span> getData <span class="token punctuation">(</span>list<span class="token punctuation">,</span> size<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> count <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">ceil</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span>length <span class="token operator">/</span> size<span class="token punctuation">)</span>
+
+  <span class="token keyword">let</span> index <span class="token operator">=</span> <span class="token number">0</span>
+
+  <span class="token keyword">do</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> start <span class="token operator">=</span> index <span class="token operator">*</span> size
+    <span class="token keyword">const</span> end   <span class="token operator">=</span> start <span class="token operator">+</span> size
+    <span class="token keyword">const</span> piece <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>start<span class="token punctuation">,</span> end<span class="token punctuation">)</span>
+
+    <span class="token comment" spellcheck="true">// 查询 MySQL 获取对应的用户详细数据</span>
+    <span class="token keyword">const</span> results <span class="token operator">=</span> <span class="token keyword">await</span> mysql<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`
+      SELECT * FROM user_info
+      WHERE uid in (</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>piece<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)
+    `</span></span><span class="token punctuation">)</span>
+
+    <span class="token comment" spellcheck="true">// 过滤所需要的函数，会在下方列出来</span>
+    <span class="token keyword">yield</span> <span class="token function">filterData</span><span class="token punctuation">(</span>results<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span>index<span class="token operator">++</span> <span class="token operator">&lt;</span> count<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同时，我们还需要有一个过滤数据的函数，这些函数可能会从一些其他数据源获取数据，用来校验列表数据的合法性，比如说，用户A有一个黑名单，里边有用户B、用户C，那么用户A访问接口时，就需要将B和C进行过滤。<br>抑或是我们需要判断当前某条数据的状态，例如主播是否已经关闭了直播间，推流状态是否正常，这些可能会调用其他的接口来进行验证。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 过滤数据的函数</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> filterData <span class="token punctuation">(</span>list<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> validList <span class="token operator">=</span> <span class="token keyword">await</span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> <span class="token punctuation">[</span>
+      isLive<span class="token punctuation">,</span>
+      inBlackList
+    <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">await</span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+      http<span class="token punctuation">.</span><span class="token function">request</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`https://XXX.com/live?target=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>item<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">,</span> redis<span class="token punctuation">.</span><span class="token function">sismember</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`XXX:black:list`</span></span><span class="token punctuation">,</span> item<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token comment" spellcheck="true">// 正确的状态</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>isLive <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>inBlackList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> item
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true">// 过滤无效数据</span>
+  <span class="token keyword">return</span> validList<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>i <span class="token operator">=</span><span class="token operator">></span> i<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="最后拼接数据的函数"><a href="#最后拼接数据的函数" class="headerlink" title="最后拼接数据的函数"></a>最后拼接数据的函数</h4><p>上述两个关键功能的函数实现后，就需要有一个用来检查、拼接数据的函数出现了。<br>用来决定何时给客户端返回数据，何时发起新的获取数据的请求：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> generatedData <span class="token punctuation">(</span><span class="token punctuation">{</span>
+  cursor<span class="token punctuation">,</span>
+  size<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> list <span class="token operator">=</span> globalList
+
+  <span class="token comment" spellcheck="true">// 如果传入游标，从游标处截取列表</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>cursor<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// + 1 的作用在下边有提到</span>
+    list <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>cursor<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">let</span> results <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+  <span class="token comment" spellcheck="true">// 注意这里的是 for 循环， 而非 map、forEach 之类的</span>
+  <span class="token keyword">for</span> <span class="token keyword">await</span> <span class="token punctuation">(</span><span class="token keyword">const</span> res <span class="token keyword">of</span> <span class="token function">getData</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    results <span class="token operator">=</span> results<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>results<span class="token punctuation">.</span>length <span class="token operator">>=</span> size<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> list <span class="token operator">=</span> results<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> size<span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        list<span class="token punctuation">,</span>
+        <span class="token comment" spellcheck="true">// 如果还有数据，那么就需要将本次</span>
+        <span class="token comment" spellcheck="true">// 我们返回列表最后一项的 ID 作为游标，这也就解释了接口入口处的 indexOf 为什么会有一个 + 1 的操作了</span>
+        cursor<span class="token punctuation">:</span> list<span class="token punctuation">[</span>size <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>id<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    list<span class="token punctuation">:</span> results<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>非常简单的一个<code>for</code>循环，用<code>for</code>循环就是为了让接口请求的过程变为串行，在第一次接口请求拿到结果后，并确定数据还不够，还需要继续获取数据进行填充，这时才会发起第二次请求，避免额外的资源浪费。<br>在获取到所需的数据以后，就可以直接<code>return</code>了，循环终止，后续的生成器也会被销毁。  </p>
+<p>以及将这个函数放在我们的接口中，就完成了整个流程的组装：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/list'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> cursor<span class="token punctuation">,</span> size <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>query
+
+  <span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">generatedData</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    cursor<span class="token punctuation">,</span>
+    size<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token punctuation">{</span>
+    code<span class="token punctuation">:</span> <span class="token number">200</span><span class="token punctuation">,</span>
+    data<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样的结构返回值大概是，一个<code>list</code>与一个<code>cursor</code>，类似<code>scan</code>的返回值，游标与数据。<br>客户端还可以传入可选的<code>size</code>来指定一次接口期望的返回条数。<br>不过相对于普通的<code>page</code>+<code>size</code>分页方式，这样的接口请求势必会慢一些（因为普通的分页可能一页返回不了固定条数的数据，而这个在内部可能执行了多次获取数据的操作）。  </p>
+<p>不过用于一些实时性要求强的接口上，我个人觉得这样的实现方式对用户会更友好一些。  </p>
+<h2 id="两者之间的比较"><a href="#两者之间的比较" class="headerlink" title="两者之间的比较"></a>两者之间的比较</h2><p>这两种方式都是很不错的分页方式，第一种更常见一些，而第二种也不是灵丹妙药，只是在某些情况下可能会好一些。  </p>
+<p>第一种方式可能更多的会应用在<code>B</code>端，一些工单、报表、归档数据之类的。<br>而第二种可能就是<code>C</code>端用会比较好一些，毕竟提供给用户的产品；<br>在PC页面可能是一个分页表格，第一个展示<code>10</code>条，第二页展示出来<code>8</code>条，但是第三页又变成了<code>10</code>条，这对用户体验来说简直是个灾难。<br>而在移动端页面可能会相对好一些，类似无限滚动的瀑布流，但是也会出现用户加载一次出现<code>2</code>条数据，又加载了一次出现了<code>8</code>条数据，在非首页这样的情况还是勉强可以接受的，但是如果首页就出现了<code>2</code>条数据，啧啧。  </p>
+<p>而用第二种，游标<code>cursor</code>的方式能够保证每次接口返回数据都是<code>size</code>条，如果不够了，那就说明后边没有数据了。<br>对用户来说体验会更好一些。（当然了，如果列表没有什么过滤条件，就是一个普通的展示，那么建议使用第一种，没有必要添加这些逻辑处理了）  </p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>当然了，这只是从服务端能够做到的一些分页相关的处理，但是这依然没有解决所有的问题，类似一些更新速度较快的列表，排行榜之类的，每秒钟的数据可能都在变化，有可能第一次请求的时候，用户A在第十名，而第二次请求接口的时候用户A在第十一名，那么两次接口都会存在用户A的记录。  </p>
+<p>针对这样的情况，客户端也要做相应的去重处理，但是这样一去重就会导致数据量的减少。<br>这又是一个很大的话题了，不打算展开来讲。。<br>一个简单的欺骗用户的方式，就是一次接口请求<code>16</code>条，展示<code>10</code>条，剩余<code>6</code>条存在本地下次接口拼接进去再展示。  </p>
+<p>文中如果有什么错误，或者关于分页各位有更好的实现方式、自己喜欢的方式，不妨交流一番。  </p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="http://doc.redisfans.com/key/scan.html" target="_blank" rel="noopener">redis | scan</a></li>
+</ul>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/11/10/基于游标的分页接口实现/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'a457dd60-e492-11e8-b8ee-b9334326368d'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2024 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>
