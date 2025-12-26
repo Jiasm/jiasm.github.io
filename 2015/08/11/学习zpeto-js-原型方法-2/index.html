@@ -8,8 +8,10 @@
   
   
   <title>学习zpeto.js(原型方法)[2] - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -62,61 +64,42 @@
 
 <div id="post-content">
   <h1>学习zpeto.js(原型方法)[2]</h1>
-  <p>接着昨天的来,继续说原型方法,<a href="http://www.cnblogs.com/jiasm/p/4718610.html" target="_blank" rel="noopener">昨天的传送阵</a>(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);</p>
+  <p>接着昨天的来,继续说原型方法,<a href="http://www.cnblogs.com/jiasm/p/4718610.html">昨天的传送阵</a>(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);</p>
 <h3 id="grep"><a href="#grep" class="headerlink" title="$.grep():"></a>$.grep():</h3><p>作用与Array.filter类似(其实就是调用的filter方法- -)</p>
-<p>通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;<br><a id="more"></a></p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> array <span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> even <span class="token operator">=</span> $<span class="token punctuation">.</span><span class="token function">grep</span><span class="token punctuation">(</span>array<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> value <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>even<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// --> [2,4]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>函数可以接收到三个传递来的参数,上边只接收了一个,第二个是当前item在array中的下标,从0开始- -,第三个是array本身;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-1.png" alt=""></p>
-<p>//filter的值为 [].filter</p>
+<p>通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;</p>
+<span id="more"></span>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> even = $.<span class="title function_">grep</span>(array, <span class="keyword">function</span> (<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> value % <span class="number">2</span> === <span class="number">0</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(even); <span class="comment">// --&gt; [2,4]</span></span><br></pre></td></tr></table></figure>
+
+<p>函数可以接收到三个传递来的参数,上边只接收了一个,第二个是当前item在array中的下标,从0开始- -,第三个是array本身;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-1.png"></p>
+<p>&#x2F;&#x2F;filter的值为 [].filter</p>
 <h3 id="inArray"><a href="#inArray" class="headerlink" title="$.inArray():"></a>$.inArray():</h3><p>接收两到三个参数,第一个是item(中文不知道该如何形容,子项?就是),第二个是一个数组对象,第三个是可选的开始下标,该方法用来检查第一个参数是否存在与自身.返回值是一个下标,从0开始的.</p>
 <p>如果没有找到,就会返回-1;</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">$<span class="token punctuation">.</span><span class="token function">inArray</span><span class="token punctuation">(</span><span class="token string">"aaa"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"aaa"</span><span class="token punctuation">,</span> <span class="token string">"bbb"</span><span class="token punctuation">,</span> <span class="token string">"ccc"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// -->0</span>
-$<span class="token punctuation">.</span><span class="token function">inArray</span><span class="token punctuation">(</span><span class="token string">"aaa"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"aaa"</span><span class="token punctuation">,</span> <span class="token string">"bbb"</span><span class="token punctuation">,</span> <span class="token string">"ccc"</span><span class="token punctuation">,</span> <span class="token string">"ccc"</span><span class="token punctuation">,</span> <span class="token string">"aaa"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// -->4</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>inArray方法也是直接调用了Array的idnexOf方法,这些都是ES5的新方法,在zepto里边是没有做兼容处理的,只是简单的call方法,毕竟是为了移动端而生的;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-2.png" alt=""></p>
-<p>//jQuery1.x的版本是做了兼容的处理,2.x以后也是直接调用的indexOf方法.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="title function_">inArray</span>(<span class="string">&quot;aaa&quot;</span>, [<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;bbb&quot;</span>, <span class="string">&quot;ccc&quot;</span>]);<span class="comment">// --&gt;0</span></span><br><span class="line">$.<span class="title function_">inArray</span>(<span class="string">&quot;aaa&quot;</span>, [<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;bbb&quot;</span>, <span class="string">&quot;ccc&quot;</span>, <span class="string">&quot;ccc&quot;</span>, <span class="string">&quot;aaa&quot;</span>], <span class="number">3</span>) <span class="comment">// --&gt;4</span></span><br></pre></td></tr></table></figure>
+
+<p>inArray方法也是直接调用了Array的idnexOf方法,这些都是ES5的新方法,在zepto里边是没有做兼容处理的,只是简单的call方法,毕竟是为了移动端而生的;<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-2.png"></p>
+<p>&#x2F;&#x2F;jQuery1.x的版本是做了兼容的处理,2.x以后也是直接调用的indexOf方法.</p>
 <h3 id="isArray"><a href="#isArray" class="headerlink" title="$.isArray():"></a>$.isArray():</h3><p>该方法只接收一个参数,一个对象,用来判断该对象是否为Array,返回一个boolean值,</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">$<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// --> true</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>该方法是做了一个兼容处理的,如果Array存在isArray方法,则直接调用,否则赋值为自定义的一个函数:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-3.png" alt=""></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="title function_">isArray</span>([]);<span class="comment">// --&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<p>该方法是做了一个兼容处理的,如果Array存在isArray方法,则直接调用,否则赋值为自定义的一个函数:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-3.png"></p>
 <h3 id="isFunction"><a href="#isFunction" class="headerlink" title="$.isFunction():"></a>$.isFunction():</h3><p>方法只接收一个参数,一个对象,判断是否为function对象,别看这方法只是用来检查参数是否为function,里边衍生出的几个变量和方法还是挺有意思的.</p>
 <p>用法如下:</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> test1 <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
-<span class="token keyword">var</span> test2 <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>$<span class="token punctuation">.</span><span class="token function">isFunction</span><span class="token punctuation">(</span>test1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// -->true</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>$<span class="token punctuation">.</span><span class="token function">isFunction</span><span class="token punctuation">(</span>test2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// -->true</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>贴上几块代码:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-5.png" alt=""><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-6.png" alt=""></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">test1</span> (<span class="params"></span>)&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> test2 = <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>($.<span class="title function_">isFunction</span>(test1)); <span class="comment">// --&gt;true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>($.<span class="title function_">isFunction</span>(test2)); <span class="comment">// --&gt;true</span></span><br></pre></td></tr></table></figure>
+<p>贴上几块代码:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-4.png"><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-5.png"><br><img src="/images/learning-zepto-js-prototype-second/screen-shot-6.png"></p>
 <p>首先在isFunction函数内部调用了type函数,type函数返回一个字符串,</p>
 <p>type函数通过一个三元运算符来判断是否为空,然后调用对象的toString方法,返回一个类似[object Array]这种格式的字符串,</p>
 <p>再放入一个Mapping中,就是class2type(class to type),在zepto自执行函数中通过each函数将一个数组,就是第三张图那一串类型,循环放入class2type对象中,</p>
 <p>现在回到第一张图,这样的调用应该能清楚了吧.</p>
-<p>放一张class2type的内容截图<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-7.png" alt=""></p>
+<p>放一张class2type的内容截图<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-7.png"></p>
 <h3 id="isPlainObject"><a href="#isPlainObject" class="headerlink" title="$.isPlainObject():"></a>$.isPlainObject():</h3><p>该方法判断传入对象是否为一个纯洁粹的对象,就是一个通过”{}”或者 new Object 来创建的对象.</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">$<span class="token punctuation">.</span><span class="token function">isPlainObject</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// ..> true</span>
-$<span class="token punctuation">.</span><span class="token function">isPlainObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// --> true</span>
-$<span class="token punctuation">.</span><span class="token function">isPlainObject</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// --> false</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>zepto不认为window对象是一个纯粹的Object,但是通过typeof来看的话,window确实是一个object- -,所以在代码中添加了对window对象的处理<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-8.png" alt=""></p>
-<p>首先判断传入参数为一个对象,并且不是一个window对象,getPrototypeOf方法返回参数的构造方法的prototype.有兴趣的可以移步<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="title function_">isPlainObject</span>(&#123;&#125;); <span class="comment">// ..&gt; true</span></span><br><span class="line">$.<span class="title function_">isPlainObject</span>(<span class="keyword">new</span> <span class="title class_">Object</span>()); <span class="comment">// --&gt; true</span></span><br><span class="line">$.<span class="title function_">isPlainObject</span>(<span class="number">1</span>); <span class="comment">// --&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>zepto不认为window对象是一个纯粹的Object,但是通过typeof来看的话,window确实是一个object- -,所以在代码中添加了对window对象的处理<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-8.png"></p>
+<p>首先判断传入参数为一个对象,并且不是一个window对象,getPrototypeOf方法返回参数的构造方法的prototype.有兴趣的可以移步<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf">MDN</a></p>
 <h3 id="map"><a href="#map" class="headerlink" title="$.map():"></a>$.map():</h3><p>该函数返回一个数组,传入两个参数,第一个是要遍历的对象,可以使一个类数组,也可以是一个对象,第二个参数是一个回调函数,在回调函数返回的值,会被存入集合并通过$.map来返回,返回的是一个数组;</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">$<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  name<span class="token punctuation">:</span> <span class="token string">'niko'</span><span class="token punctuation">,</span>
-  age<span class="token punctuation">:</span> <span class="token number">18</span>
-<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>value<span class="token punctuation">,</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>key <span class="token operator">===</span> <span class="token string">'age'</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> value<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// --> [18]</span>
-$<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> item <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// --> [2,4,6,8]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/images/learning-zepto-js-prototype-second/screen-shot-9.png" alt=""><br>方法逻辑不算复杂,在最后返回时,调用的函数用来将传入的类数组对象转换为一个数组,代码如下:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-10.png" alt=""></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="title function_">map</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;niko&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span></span><br><span class="line">&#125;, <span class="keyword">function</span> (<span class="params">value, key</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (key === <span class="string">&#x27;age&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;) <span class="comment">// --&gt; [18]</span></span><br><span class="line">$.<span class="title function_">map</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], <span class="keyword">function</span> (<span class="params">item, index</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> item * <span class="number">2</span>;</span><br><span class="line">&#125;) <span class="comment">// --&gt; [2,4,6,8]</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/learning-zepto-js-prototype-second/screen-shot-9.png"><br>方法逻辑不算复杂,在最后返回时,调用的函数用来将传入的类数组对象转换为一个数组,代码如下:<br><img src="/images/learning-zepto-js-prototype-second/screen-shot-10.png"></p>
 <p>剩下两个 $.trim,以及$.parseJSON,这两个就不说了,因为都属于原生函数的别名而已.</p>
 <p>今天先说到了这里,zepto里边的原型方法出了ajax模块的就都已经说完了- -,读源码真的是最快的学习方式.</p>
 
@@ -130,7 +113,7 @@ $<span class="token punctuation">.</span><span class="token function">map</span>
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2015/08/11/学习zpeto-js-原型方法-2/';
+  var disqus_url = 'http://jiasm.github.io/2015/08/11/%E5%AD%A6%E4%B9%A0zpeto-js-%E5%8E%9F%E5%9E%8B%E6%96%B9%E6%B3%95-2/';
   
   var disqus_config = function () {
     this.page.url = location.href

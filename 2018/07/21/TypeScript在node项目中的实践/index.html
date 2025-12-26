@@ -8,8 +8,10 @@
   
   
   <title>TypeScript在node项目中的实践 - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,7 +57,7 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么选择TS"><span class="toc-number">1.</span> <span class="toc-text">为什么选择TS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TypeScript在node中的应用"><span class="toc-number">2.</span> <span class="toc-text">TypeScript在node中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#环境依赖"><span class="toc-number">2.1.</span> <span class="toc-text">环境依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目结构"><span class="toc-number">2.2.</span> <span class="toc-text">项目结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#controllers"><span class="toc-number">2.3.</span> <span class="toc-text">controllers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#middleware"><span class="toc-number">2.4.</span> <span class="toc-text">middleware</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#entity"><span class="toc-number">2.5.</span> <span class="toc-text">entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#model"><span class="toc-number">2.6.</span> <span class="toc-text">model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#utils"><span class="toc-number">2.7.</span> <span class="toc-text">utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configs"><span class="toc-number">2.8.</span> <span class="toc-text">configs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#types"><span class="toc-number">2.9.</span> <span class="toc-text">types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#目前使用TS中的一些问题"><span class="toc-number">2.10.</span> <span class="toc-text">目前使用TS中的一些问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9TS"><span class="toc-number">1.</span> <span class="toc-text">为什么选择TS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TypeScript%E5%9C%A8node%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">TypeScript在node中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BE%9D%E8%B5%96"><span class="toc-number">2.1.</span> <span class="toc-text">环境依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">项目结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#controllers"><span class="toc-number">2.3.</span> <span class="toc-text">controllers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#middleware"><span class="toc-number">2.4.</span> <span class="toc-text">middleware</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#entity"><span class="toc-number">2.5.</span> <span class="toc-text">entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#model"><span class="toc-number">2.6.</span> <span class="toc-text">model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#utils"><span class="toc-number">2.7.</span> <span class="toc-text">utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configs"><span class="toc-number">2.8.</span> <span class="toc-text">configs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#types"><span class="toc-number">2.9.</span> <span class="toc-text">types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%89%8D%E4%BD%BF%E7%94%A8TS%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-number">2.10.</span> <span class="toc-text">目前使用TS中的一些问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
@@ -63,15 +65,16 @@
 <div id="post-content">
   <h1>TypeScript在node项目中的实践</h1>
   <p>TypeScript可以理解为是JavaScript的一个超集，也就是说涵盖了所有JavaScript的功能，并在之上有着自己独特的语法。<br>最近的一个新项目开始了TS的踩坑之旅，现分享一些可以借鉴的套路给大家。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <h2 id="为什么选择TS"><a href="#为什么选择TS" class="headerlink" title="为什么选择TS"></a>为什么选择TS</h2><p>作为巨硬公司出品的一个静态强类型编译型语言，该语言已经出现了几年的时间了，相信在社区的维护下，已经是一门很稳定的语言。<br>我们知道，JavaScript是一门动态弱类型解释型脚本语言，动态带来了很多的便利，我们可以在代码运行中随意的修改变量类型以达到预期目的。<br>但同时，这是一把双刃剑，当一个庞大的项目出现在你的面前，面对无比复杂的逻辑，你很难通过代码看出某个变量是什么类型，这个变量要做什么，很可能一不小心就会踩到坑。  </p>
 <p>而静态强类型编译能够带来很多的好处，其中最重要的一点就是可以帮助开发人员杜绝一些马虎大意的问题：<br><img src="http://newimg88.b0.upaiyun.com/newimg88/2018/02/javascript-error-graph.png" alt="image"><br><em>图为rollbar统计的数千个项目中数量最多的前十个异常</em>  </p>
-<p>不难看出，因为类型不匹配、变量为空导致的异常比你敢承认的次数要多。<br>譬如<br><img src="https://os4ty6tab.qnssl.com/cblued/static/sample-error-code.1ci4jfvvt2t4ojs.png" alt=""><br>而这一点在TS中得到了很好的改善，任何一个变量的引用，都需要指定自己的类型，而你下边在代码中可以用什么，支持什么方法，都需要在上边进行定义：<br><img src="https://os4ty6tab.qnssl.com/cblued/static/typescript-example.1ciuh4eh1v1sum.png" alt=""><br>这个提示会在开发、编译期来提示给开发者，避免了上线以后发现有问题，再去修改。  </p>
+<p>不难看出，因为类型不匹配、变量为空导致的异常比你敢承认的次数要多。<br>譬如<br><img src="https://os4ty6tab.qnssl.com/cblued/static/sample-error-code.1ci4jfvvt2t4ojs.png"><br>而这一点在TS中得到了很好的改善，任何一个变量的引用，都需要指定自己的类型，而你下边在代码中可以用什么，支持什么方法，都需要在上边进行定义：<br><img src="https://os4ty6tab.qnssl.com/cblued/static/typescript-example.1ciuh4eh1v1sum.png"><br>这个提示会在开发、编译期来提示给开发者，避免了上线以后发现有问题，再去修改。  </p>
 <p>另外一个由静态编译类型带来的好处，就是函数签名。<br>还是就像上边所说的，因为是一个动态的脚本语言，所以很难有编辑器能够在开发期间正确地告诉你所要调用的一个函数需要传递什么参数，函数会返回什么类型的返回值。</p>
-<p><img src="https://os4ty6tab.qnssl.com/cblued/static/js-function-call.1ci4kli9ou37kr.png" alt="">  </p>
-<p>而在TS中，对于一个函数，首先你需要定义所有参数的类型，以及返回值的类型。<br>这样在函数被调用时，我们就可以很清晰的看到这个函数的效果：<br><img src="https://os4ty6tab.qnssl.com/cblued/static/ts-function-call.1ciuh6bsp2ujs1q.png" alt="">  </p>
-<p>这是最基础的、能够让程序更加稳定的两个特性，当然，还有更多的功能在TS中的：<a href="https://www.typescriptlang.org/docs/home.html" target="_blank" rel="noopener">TypeScript | Handbook</a>  </p>
-<h2 id="TypeScript在node中的应用"><a href="#TypeScript在node中的应用" class="headerlink" title="TypeScript在node中的应用"></a>TypeScript在node中的应用</h2><p>在TS的官网中，有着大量的<a href="https://www.typescriptlang.org/samples/index.html" target="_blank" rel="noopener">示例</a>，其中就找到了<a href="https://github.com/Microsoft/TypeScript-Node-Starter#typescript-node-starter" target="_blank" rel="noopener">Express</a>版本的例子，针对这个稍作修饰，应用在了一个 koa 项目中。  </p>
+<p><img src="https://os4ty6tab.qnssl.com/cblued/static/js-function-call.1ci4kli9ou37kr.png">  </p>
+<p>而在TS中，对于一个函数，首先你需要定义所有参数的类型，以及返回值的类型。<br>这样在函数被调用时，我们就可以很清晰的看到这个函数的效果：<br><img src="https://os4ty6tab.qnssl.com/cblued/static/ts-function-call.1ciuh6bsp2ujs1q.png">  </p>
+<p>这是最基础的、能够让程序更加稳定的两个特性，当然，还有更多的功能在TS中的：<a href="https://www.typescriptlang.org/docs/home.html">TypeScript | Handbook</a>  </p>
+<h2 id="TypeScript在node中的应用"><a href="#TypeScript在node中的应用" class="headerlink" title="TypeScript在node中的应用"></a>TypeScript在node中的应用</h2><p>在TS的官网中，有着大量的<a href="https://www.typescriptlang.org/samples/index.html">示例</a>，其中就找到了<a href="https://github.com/Microsoft/TypeScript-Node-Starter#typescript-node-starter">Express</a>版本的例子，针对这个稍作修饰，应用在了一个 koa 项目中。  </p>
 <h3 id="环境依赖"><a href="#环境依赖" class="headerlink" title="环境依赖"></a>环境依赖</h3><p>在使用TS之前，需要先准备这些东西：  </p>
 <ol>
 <li><strong>VS code</strong>，同为巨硬公司出品，本身就是TS开发的，遂该编辑器是目前对TS支持度最高的一个</li>
@@ -80,8 +83,8 @@
 <li><code>npm i -g nodemon</code>，全局安装nodemon，在tsc编译后自动刷新服务器程序</li>
 </ol>
 <ul>
-<li><a href="https://www.typescriptlang.org/docs/handbook" target="_blank" rel="noopener">官方手册</a></li>
-<li><a href="https://github.com/Microsoft/TypeScript-Node-Starter/" target="_blank" rel="noopener">官方Express示例</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook">官方手册</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript-Node-Starter/">官方Express示例</a></li>
 </ul>
 <p>以项目中使用的一些核心依赖：  </p>
 <ol>
@@ -91,246 +94,103 @@
 <li><code>sequelize-typescript</code>： 上述插件的装饰器版本，定义实体时使用</li>
 </ol>
 <h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><p>首先，放出目前项目的结构：</p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">.</span>
-├── README.md
-├── copy-static-assets.ts
-├── nodemon.json
-├── package-lock.json
-├── package.json
-├── dist
-├── src
-│   ├── config
-│   ├── controllers
-│   ├── entity
-│   ├── models
-│   ├── middleware
-│   ├── public
-│   ├── app.ts
-│   ├── server.ts
-│   ├── types
-│   └── utils
-├── tsconfig.json
-└── tslint.json
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── README.md</span><br><span class="line">├── copy-static-assets.ts</span><br><span class="line">├── nodemon.json</span><br><span class="line">├── package-lock.json</span><br><span class="line">├── package.json</span><br><span class="line">├── dist</span><br><span class="line">├── src</span><br><span class="line">│   ├── config</span><br><span class="line">│   ├── controllers</span><br><span class="line">│   ├── entity</span><br><span class="line">│   ├── models</span><br><span class="line">│   ├── middleware</span><br><span class="line">│   ├── public</span><br><span class="line">│   ├── app.ts</span><br><span class="line">│   ├── server.ts</span><br><span class="line">│   ├── types</span><br><span class="line">│   └── utils</span><br><span class="line">├── tsconfig.json</span><br><span class="line">└── tslint.json</span><br></pre></td></tr></table></figure>
+
 <p><code>src</code>为主要开发目录，所有的TS代码都在这里边，在经过编译过后，会生成一个与<code>src</code>同级的<code>dist</code>文件夹，这个文件夹是<code>node</code>引擎实际运行的代码。<br>在<code>src</code>下，主要代码分为了如下结构（依据自己项目的实际情况进行增删）：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">#</th>
+<th align="center">#</th>
 <th>folder</th>
 <th>desc</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
+<tbody><tr>
+<td align="center">1</td>
 <td><code>controllers</code></td>
 <td>用于处理接口请求，原<code>apps</code>、<code>routes</code>文件夹。</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
+<td align="center">2</td>
 <td><code>middleware</code></td>
 <td>存放了各种中间件、全局 or 自定义的中间件</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
+<td align="center">3</td>
 <td><code>config</code></td>
 <td>各种配置项的位置，包括端口、<code>log</code>路径、各种巴拉巴拉的常量定义。</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
+<td align="center">4</td>
 <td><code>entity</code></td>
 <td>这里存放的是所有的实体定义（使用了sequelize进行数据库操作）。</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
+<td align="center">5</td>
 <td><code>models</code></td>
 <td>使用来自<code>entity</code>中的实体进行<code>sequelize</code>来完成初始化的操作，并将<code>sequelize</code>对象抛出。</td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
+<td align="center">6</td>
 <td><code>utils</code></td>
 <td>存放的各种日常开发中提炼出来的公共函数</td>
 </tr>
 <tr>
-<td style="text-align:center">7</td>
+<td align="center">7</td>
 <td><code>types</code></td>
 <td>存放了各种客制化的复合类型的定义，各种结构、属性、方法返回值的定义（目前包括常用的Promise版redis与qconf）</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h3 id="controllers"><a href="#controllers" class="headerlink" title="controllers"></a>controllers</h3><blockquote>
 <p>controllers只负责处理逻辑，通过操作model对象，而不是数据库来进行数据的增删改查</p>
 </blockquote>
-<p>鉴于公司绝大部分的Node项目版本都已经升级到了<code>Node 8.11</code>，理所应当的，我们会尝试新的语法。<br>也就是说我们会抛弃<code>Generator</code>，拥抱<code>async</code>/<code>await</code>  。  </p>
+<p>鉴于公司绝大部分的Node项目版本都已经升级到了<code>Node 8.11</code>，理所应当的，我们会尝试新的语法。<br>也就是说我们会抛弃<code>Generator</code>，拥抱<code>async</code>&#x2F;<code>await</code>  。  </p>
 <p>使用<code>Koa</code>、<code>Express</code>写过接口的童鞋应该都知道，当一个项目变得庞大，实际上会产生很多重复的非逻辑代码：  </p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/page1'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/page2'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/page3'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/pageN'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;&#125;)</span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/page1&#x27;</span>, <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;&#125;)</span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/page2&#x27;</span>, <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;&#125;)</span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/page3&#x27;</span>, <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;&#125;)</span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/pageN&#x27;</span>, <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>而在每个路由监听中，又做着大量重复的工作：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
-  <span class="token keyword">let</span> uid <span class="token operator">=</span> <span class="token function">Number</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>cookies<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'uid'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token keyword">let</span> device <span class="token operator">=</span> ctx<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'device'</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token string">'ios'</span>
-  <span class="token keyword">let</span> <span class="token punctuation">{</span> tel<span class="token punctuation">,</span> name <span class="token punctuation">}</span> <span class="token operator">=</span> ctx<span class="token punctuation">.</span>query
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> uid = <span class="title class_">Number</span>(ctx.<span class="property">cookies</span>.<span class="title function_">get</span>(<span class="string">&#x27;uid&#x27;</span>))</span><br><span class="line">  <span class="keyword">let</span> device = ctx.<span class="property">headers</span>[<span class="string">&#x27;device&#x27;</span>] || <span class="string">&#x27;ios&#x27;</span></span><br><span class="line">  <span class="keyword">let</span> &#123; tel, name &#125; = ctx.<span class="property">query</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>几乎每一个路由的头部都是在做着获取参数的工作，而参数很可能来自<code>header</code>、<code>body</code>甚至是<code>cookie</code>及<code>query</code>。  </p>
-<p>所以，我们对原来koa的使用方法进行了一个较大的改动，并使用<a href="https://github.com/typestack/routing-controllers" target="_blank" rel="noopener">routing-controllers</a>大量的应用装饰器来帮助我们处理大部分的非逻辑代码。  </p>
+<p>所以，我们对原来koa的使用方法进行了一个较大的改动，并使用<a href="https://github.com/typestack/routing-controllers">routing-controllers</a>大量的应用装饰器来帮助我们处理大部分的非逻辑代码。  </p>
 <p>原有router的定义：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>router<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token operator">*</span> <span class="token punctuation">(</span>next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">let</span> uid <span class="token operator">=</span> <span class="token function">Number</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>cookies<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'uid'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token keyword">let</span> device <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'device'</span><span class="token punctuation">]</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">router</span>) &#123;</span><br><span class="line">  router.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">function</span>* (next) &#123;</span><br><span class="line">    <span class="keyword">let</span> uid = <span class="title class_">Number</span>(<span class="variable language_">this</span>.<span class="property">cookies</span>.<span class="title function_">get</span>(<span class="string">&#x27;uid&#x27;</span>))</span><br><span class="line">    <span class="keyword">let</span> device = <span class="variable language_">this</span>.<span class="property">headers</span>[<span class="string">&#x27;device&#x27;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">body</span> = &#123;</span><br><span class="line">      <span class="attr">code</span>: <span class="number">200</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    <span class="token keyword">this</span><span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token punctuation">{</span>
-      code<span class="token punctuation">:</span> <span class="token number">200</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>使用了TypeScript与装饰器的定义：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">@Controller
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token punctuation">{</span>
-  @<span class="token function">Get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
-  <span class="token keyword">async</span> index <span class="token punctuation">(</span>
-    @<span class="token function">CookieParam</span><span class="token punctuation">(</span><span class="token string">'uid'</span><span class="token punctuation">)</span> uid<span class="token punctuation">:</span> number<span class="token punctuation">,</span>
-    @<span class="token function">HeaderParam</span><span class="token punctuation">(</span><span class="token string">'device'</span><span class="token punctuation">)</span> device<span class="token punctuation">:</span> string
-  <span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> <span class="token punctuation">{</span>
-      code<span class="token punctuation">:</span> <span class="token number">200</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Controller</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> &#123;</span><br><span class="line">  @<span class="title class_">Get</span>(<span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">  <span class="keyword">async</span> <span class="title function_">index</span> (</span><br><span class="line">    @<span class="title class_">CookieParam</span>(<span class="string">&#x27;uid&#x27;</span>) <span class="attr">uid</span>: number,</span><br><span class="line">    @<span class="title class_">HeaderParam</span>(<span class="string">&#x27;device&#x27;</span>) <span class="attr">device</span>: string</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">code</span>: <span class="number">200</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>为了使接口更易于检索、更清晰，所以我们抛弃了原有的<code>bd-router</code>的功能（依据文件路径作为接口路径、TS中的文件路径仅用于文件分层）。<br>直接在<code>controllers</code>下的文件中声明对应的接口进行监听。  </p>
-<h3 id="middleware"><a href="#middleware" class="headerlink" title="middleware"></a>middleware</h3><p>如果是全局的中间件，则直接在class上添加<code>@Middleware</code>装饰器，并设置<code>type: &#39;after|before&#39;</code>即可。<br>如果是特定的一些中间件，则创建一个普通的class即可，然后在需要使用的<code>controller</code>对象上指定<code>@UseBefore</code>/<code>@UseAfter</code>（可以写在class上，也可以写在method上）。  </p>
+<h3 id="middleware"><a href="#middleware" class="headerlink" title="middleware"></a>middleware</h3><p>如果是全局的中间件，则直接在class上添加<code>@Middleware</code>装饰器，并设置<code>type: &#39;after|before&#39;</code>即可。<br>如果是特定的一些中间件，则创建一个普通的class即可，然后在需要使用的<code>controller</code>对象上指定<code>@UseBefore</code>&#x2F;<code>@UseAfter</code>（可以写在class上，也可以写在method上）。  </p>
 <p><strong>所有的中间件都需要继承对应的MiddlewareInterface接口，并需要实现<code>use</code>方法</strong>  </p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// middleware/xxx.ts</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span>ExpressMiddlewareInterface<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"../../src/driver/express/ExpressMiddlewareInterface"</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// middleware/xxx.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123;<span class="title class_">ExpressMiddlewareInterface</span>&#125; <span class="keyword">from</span> <span class="string">&quot;../../src/driver/express/ExpressMiddlewareInterface&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">CompressionMiddleware</span> implements <span class="title class_">KoaMiddlewareInterface</span> &#123;</span><br><span class="line">  <span class="title function_">use</span>(<span class="attr">request</span>: any, <span class="attr">response</span>: any, next?: <span class="title class_">Function</span>): any &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;hello compression ...&quot;</span>)</span><br><span class="line">    <span class="title function_">next</span>()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// controllers/xxx.ts</span></span><br><span class="line">@<span class="title class_">UseBefore</span>(<span class="title class_">CompressionMiddleware</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> &#123; &#125;</span><br></pre></td></tr></table></figure>
 
-<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">CompressionMiddleware</span> <span class="token keyword">implements</span> <span class="token class-name">KoaMiddlewareInterface</span> <span class="token punctuation">{</span>
-  <span class="token function">use</span><span class="token punctuation">(</span>request<span class="token punctuation">:</span> any<span class="token punctuation">,</span> response<span class="token punctuation">:</span> any<span class="token punctuation">,</span> next<span class="token operator">?</span><span class="token punctuation">:</span> Function<span class="token punctuation">)</span><span class="token punctuation">:</span> any <span class="token punctuation">{</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"hello compression ..."</span><span class="token punctuation">)</span>
-    <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment" spellcheck="true">// controllers/xxx.ts</span>
-@<span class="token function">UseBefore</span><span class="token punctuation">(</span>CompressionMiddleware<span class="token punctuation">)</span>
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="entity"><a href="#entity" class="headerlink" title="entity"></a>entity</h3><blockquote>
 <p>文件只负责定义数据模型，不做任何逻辑操作</p>
 </blockquote>
 <p>同样的使用了sequelize+装饰器的方式，entity只是用来建立与数据库之间通讯的数据模型。  </p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Model<span class="token punctuation">,</span> Table<span class="token punctuation">,</span> Column <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Model</span>, <span class="title class_">Table</span>, <span class="title class_">Column</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;sequelize-typescript&#x27;</span></span><br><span class="line"></span><br><span class="line">@<span class="title class_">Table</span>(&#123;</span><br><span class="line">  <span class="attr">tableName</span>: <span class="string">&#x27;user_info_test&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">UserInfo</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Model</span>&lt;<span class="title class_">UserInfo</span>&gt; &#123;</span><br><span class="line">  @<span class="title class_">Column</span>(&#123;</span><br><span class="line">    <span class="attr">comment</span>: <span class="string">&#x27;自增ID&#x27;</span>,</span><br><span class="line">    <span class="attr">autoIncrement</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">primaryKey</span>: <span class="literal">true</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="attr">uid</span>: number</span><br><span class="line"></span><br><span class="line">  @<span class="title class_">Column</span>(&#123;</span><br><span class="line">    <span class="attr">comment</span>: <span class="string">&#x27;姓名&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="attr">name</span>: string</span><br><span class="line"></span><br><span class="line">  @<span class="title class_">Column</span>(&#123;</span><br><span class="line">    <span class="attr">comment</span>: <span class="string">&#x27;年龄&#x27;</span>,</span><br><span class="line">    <span class="attr">defaultValue</span>: <span class="number">0</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="attr">age</span>: number</span><br><span class="line"></span><br><span class="line">  @<span class="title class_">Column</span>(&#123;</span><br><span class="line">    <span class="attr">comment</span>: <span class="string">&#x27;性别&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="attr">gender</span>: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-@<span class="token function">Table</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  tableName<span class="token punctuation">:</span> <span class="token string">'user_info_test'</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">UserInfo</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>UserInfo<span class="token operator">></span> <span class="token punctuation">{</span>
-  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    comment<span class="token punctuation">:</span> <span class="token string">'自增ID'</span><span class="token punctuation">,</span>
-    autoIncrement<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    primaryKey<span class="token punctuation">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  uid<span class="token punctuation">:</span> number
-
-  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    comment<span class="token punctuation">:</span> <span class="token string">'姓名'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  name<span class="token punctuation">:</span> string
-
-  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    comment<span class="token punctuation">:</span> <span class="token string">'年龄'</span><span class="token punctuation">,</span>
-    defaultValue<span class="token punctuation">:</span> <span class="token number">0</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  age<span class="token punctuation">:</span> number
-
-  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    comment<span class="token punctuation">:</span> <span class="token string">'性别'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  gender<span class="token punctuation">:</span> number
-<span class="token punctuation">}</span>
-
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>因为sequelize建立连接也是需要对应的数据库地址、账户、密码、database等信息、所以推荐将同一个数据库的所有实体放在一个目录下，方便sequelize加载对应的模型</strong><br>同步的推荐在config下创建对应的配置信息，并添加一列用于存放实体的key。<br>这样在建立数据库链接，加载数据模型时就可以动态的导入该路径下的所有实体：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// config.ts</span>
-<span class="token keyword">export</span> <span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token comment" spellcheck="true">// ...</span>
-  mysql1<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// ... config</span>
-<span class="token operator">+</span>   entity<span class="token punctuation">:</span> <span class="token string">'entity1'</span> <span class="token comment" spellcheck="true">// 添加一列用来标识是什么实体的key</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  mysql2<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// ... config</span>
-<span class="token operator">+</span>   entity<span class="token punctuation">:</span> <span class="token string">'entity2'</span> <span class="token comment" spellcheck="true">// 添加一列用来标识是什么实体的key</span>
-  <span class="token punctuation">}</span>
-  <span class="token comment" spellcheck="true">// ...</span>
-<span class="token punctuation">}</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> config = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">mysql1</span>: &#123;</span><br><span class="line">    <span class="comment">// ... config</span></span><br><span class="line">+   <span class="attr">entity</span>: <span class="string">&#x27;entity1&#x27;</span> <span class="comment">// 添加一列用来标识是什么实体的key</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mysql2</span>: &#123;</span><br><span class="line">    <span class="comment">// ... config</span></span><br><span class="line">+   <span class="attr">entity</span>: <span class="string">&#x27;entity2&#x27;</span> <span class="comment">// 添加一列用来标识是什么实体的key</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// utils/mysql.ts</span></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Sequelize</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">modelPath</span>: [path.<span class="title function_">reolve</span>(__dirname, <span class="string">`../entity/<span class="subst">$&#123;config.mysql1.entity&#125;</span>`</span>)]</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
-<span class="token comment" spellcheck="true">// utils/mysql.ts</span>
-<span class="token keyword">new</span> <span class="token class-name">Sequelize</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  <span class="token comment" spellcheck="true">// ...</span>
-  modelPath<span class="token punctuation">:</span> <span class="token punctuation">[</span>path<span class="token punctuation">.</span><span class="token function">reolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token template-string"><span class="token string">`../entity/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>config<span class="token punctuation">.</span>mysql1<span class="token punctuation">.</span>entity<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">]</span>
-  <span class="token comment" spellcheck="true">// ...</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="model"><a href="#model" class="headerlink" title="model"></a>model</h3><p>model的定位在于根据对应的实体创建抽象化的数据库对象，因为使用了sequelize，所以该目录下的文件会变得非常简洁。<br>基本就是初始化sequelize对象，并在加载模型后将其抛出。  </p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">new</span> <span class="token class-name">Sequelize</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  host<span class="token punctuation">:</span> <span class="token string">'127.0.0.1'</span><span class="token punctuation">,</span>
-  database<span class="token punctuation">:</span> <span class="token string">'database'</span><span class="token punctuation">,</span>
-  username<span class="token punctuation">:</span> <span class="token string">'user'</span><span class="token punctuation">,</span>
-  password<span class="token punctuation">:</span> <span class="token string">'password'</span><span class="token punctuation">,</span>
-  dialect<span class="token punctuation">:</span> <span class="token string">'mysql'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 或者一些其他的数据库</span>
-  modelPaths<span class="token punctuation">:</span> <span class="token punctuation">[</span>path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token template-string"><span class="token string">`../entity/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>configs<span class="token punctuation">.</span>mysql1<span class="token punctuation">.</span>entity<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 加载我们的实体</span>
-  pool<span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 连接池的一些相关配置</span>
-    max<span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
-    min<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-    acquire<span class="token punctuation">:</span> <span class="token number">30000</span><span class="token punctuation">,</span>
-    idle<span class="token punctuation">:</span> <span class="token number">10000</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  operatorsAliases<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-  logging<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token comment" spellcheck="true">// true会在控制台打印每次sequelize操作时对应的SQL命令</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> <span class="title class_">Sequelize</span>(&#123;</span><br><span class="line">  <span class="attr">host</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">  <span class="attr">database</span>: <span class="string">&#x27;database&#x27;</span>,</span><br><span class="line">  <span class="attr">username</span>: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">  <span class="attr">password</span>: <span class="string">&#x27;password&#x27;</span>,</span><br><span class="line">  <span class="attr">dialect</span>: <span class="string">&#x27;mysql&#x27;</span>, <span class="comment">// 或者一些其他的数据库</span></span><br><span class="line">  <span class="attr">modelPaths</span>: [path.<span class="title function_">resolve</span>(__dirname, <span class="string">`../entity/<span class="subst">$&#123;configs.mysql1.entity&#125;</span>`</span>)], <span class="comment">// 加载我们的实体</span></span><br><span class="line">  <span class="attr">pool</span>: &#123; <span class="comment">// 连接池的一些相关配置</span></span><br><span class="line">    <span class="attr">max</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">min</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">acquire</span>: <span class="number">30000</span>,</span><br><span class="line">    <span class="attr">idle</span>: <span class="number">10000</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">operatorsAliases</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">logging</span>: <span class="literal">true</span> <span class="comment">// true会在控制台打印每次sequelize操作时对应的SQL命令</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="utils"><a href="#utils" class="headerlink" title="utils"></a>utils</h3><p>所有的公共函数，都放在这里。<br>同时推荐编写对应的索引文件(index.ts)，大致的格式如下：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// utils/get-uid.ts</span>
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span> number <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> <span class="token number">123</span>
-<span class="token punctuation">}</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils/get-uid.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> (<span class="params"></span>): number &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">123</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// utils/number-comma.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span>(<span class="params"></span>): string &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;1,234&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// utils/index.ts</span></span><br><span class="line"><span class="keyword">export</span> &#123;<span class="keyword">default</span> <span class="keyword">as</span> getUid&#125; <span class="keyword">from</span> <span class="string">&#x27;./get-uid&#x27;</span></span><br><span class="line"><span class="keyword">export</span> &#123;<span class="keyword">default</span> <span class="keyword">as</span> numberComma&#125; <span class="keyword">from</span> <span class="string">&#x27;./number-comma&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<span class="token comment" spellcheck="true">// utils/number-comma.ts</span>
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span> string <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> <span class="token string">'1,234'</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment" spellcheck="true">// utils/index.ts</span>
-<span class="token keyword">export</span> <span class="token punctuation">{</span><span class="token keyword">default</span> <span class="token keyword">as</span> getUid<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./get-uid'</span>
-<span class="token keyword">export</span> <span class="token punctuation">{</span><span class="token keyword">default</span> <span class="token keyword">as</span> numberComma<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./number-comma'</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>每添加一个新的<code>util</code>，就去<code>index</code>中添加对应的索引，这样带来的好处就是可以通过一行来引入所有想引入的<code>utils</code>：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span>getUid<span class="token punctuation">,</span> numberComma<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./utils'</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;getUid, numberComma&#125; <span class="keyword">from</span> <span class="string">&#x27;./utils&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="configs"><a href="#configs" class="headerlink" title="configs"></a>configs</h3><p>configs下边存储的就是各种配置信息了，包括一些第三方接口URL、数据库配置、日志路径。<br>各种balabala的静态数据。<br>如果配置文件多的话，建议拆分为多个文件，然后按照<code>utils</code>的方式编写索引文件。</p>
 <h3 id="types"><a href="#types" class="headerlink" title="types"></a>types</h3><p>这里存放的是所有的自定义的类型定义，一些开源社区没有提供的，但是我们用到的第三方插件，需要在这里进行定义，一般来说常用的都会有，但是一些小众的包可能确实没有TS的支持，例如我们有使用的一个<code>node-qconf</code>：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// types/node-qconf.d.ts</span>
-<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">getConf</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> string<span class="token punctuation">)</span><span class="token punctuation">:</span> string <span class="token operator">|</span> <span class="token keyword">null</span>
-<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">getBatchKeys</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> string<span class="token punctuation">)</span><span class="token punctuation">:</span> string<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">|</span> <span class="token keyword">null</span>
-<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">getBatchConf</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> string<span class="token punctuation">)</span><span class="token punctuation">:</span> string <span class="token operator">|</span> <span class="token keyword">null</span>
-<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">getAllHost</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> string<span class="token punctuation">)</span><span class="token punctuation">:</span> string<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">|</span> <span class="token keyword">null</span>
-<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">getHost</span><span class="token punctuation">(</span>path<span class="token punctuation">:</span> string<span class="token punctuation">)</span><span class="token punctuation">:</span> string <span class="token operator">|</span> <span class="token keyword">null</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// types/node-qconf.d.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getConf</span>(<span class="params">path: string</span>): string | <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getBatchKeys</span>(<span class="params">path: string</span>): string[] | <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getBatchConf</span>(<span class="params">path: string</span>): string | <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getAllHost</span>(<span class="params">path: string</span>): string[] | <span class="literal">null</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getHost</span>(<span class="params">path: string</span>): string | <span class="literal">null</span></span><br></pre></td></tr></table></figure>
 <p><em>类型定义的文件规定后缀为 .d.ts</em><br>types下边的所有文件可以直接引用，而不用关心相对路径的问题（其他普通的model则需要写相对路径，这是一个很尴尬的问题）。  </p>
-<h3 id="目前使用TS中的一些问题"><a href="#目前使用TS中的一些问题" class="headerlink" title="目前使用TS中的一些问题"></a>目前使用TS中的一些问题</h3><p><img src="https://os4ty6tab.qnssl.com/cblued/static/issues.1ci8qk2dr12l4sc.png" alt=""><br>当前GitHub仓库中，有2600+的开启状态的issues，筛选bug标签后，依然有900+的存在。<br>所以很难保证在使用的过程中不会踩坑，但是一个项目拥有这么多活跃的issues，也能从侧面说明这个项目的受欢迎程度。</p>
+<h3 id="目前使用TS中的一些问题"><a href="#目前使用TS中的一些问题" class="headerlink" title="目前使用TS中的一些问题"></a>目前使用TS中的一些问题</h3><p><img src="https://os4ty6tab.qnssl.com/cblued/static/issues.1ci8qk2dr12l4sc.png"><br>当前GitHub仓库中，有2600+的开启状态的issues，筛选bug标签后，依然有900+的存在。<br>所以很难保证在使用的过程中不会踩坑，但是一个项目拥有这么多活跃的issues，也能从侧面说明这个项目的受欢迎程度。</p>
 <p>目前遇到的唯一一个比较尴尬的问题就是：<br><strong>引用文件路径一定要写全。。</strong></p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">import</span> module <span class="token keyword">from</span> <span class="token string">'../../../../f**k-module'</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="variable language_">module</span> <span class="keyword">from</span> <span class="string">&#x27;../../../../f**k-module&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>初次尝试TypeScript，深深的喜欢上了这个语言，虽说也会有一些小小的问题，但还是能克服的:)。<br>使用一门静态强类型编译语言，能够将很多bug都消灭在开发期间。  </p>
-<p>基于上述描述的一个简单示例：<a href="https://github.com/Jiasm/typescript-example" target="_blank" rel="noopener">代码仓库</a></p>
+<p>基于上述描述的一个简单示例：<a href="https://github.com/Jiasm/typescript-example">代码仓库</a></p>
 <p>希望大家玩得开心，如有任何TS相关的问题，欢迎来骚扰。<code>NPM loves U.</code>。</p>
 
 </div>
@@ -343,7 +203,7 @@ router<span class="token punctuation">.</span><span class="token keyword">get</s
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2018/07/21/TypeScript在node项目中的实践/';
+  var disqus_url = 'http://jiasm.github.io/2018/07/21/TypeScript%E5%9C%A8node%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5/';
   
   var disqus_config = function () {
     this.page.url = location.href

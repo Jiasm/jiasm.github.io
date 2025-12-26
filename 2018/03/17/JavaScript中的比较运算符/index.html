@@ -8,8 +8,10 @@
   
   
   <title>JavaScript中的比较运算符 - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,7 +57,7 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#相等运算符"><span class="toc-number">1.</span> <span class="toc-text">相等运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#与"><span class="toc-number">1.1.</span> <span class="toc-text">==与!=</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与-1"><span class="toc-number">1.2.</span> <span class="toc-text">===与!==</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系运算符"><span class="toc-number">2.</span> <span class="toc-text">关系运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文档"><span class="toc-number">3.</span> <span class="toc-text">参考文档</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E7%AD%89%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.</span> <span class="toc-text">相等运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E"><span class="toc-number">1.1.</span> <span class="toc-text">&#x3D;&#x3D;与!&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E-1"><span class="toc-number">1.2.</span> <span class="toc-text">&#x3D;&#x3D;&#x3D;与!&#x3D;&#x3D;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">关系运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">3.</span> <span class="toc-text">参考文档</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
@@ -65,18 +67,15 @@
   <blockquote>
 <p>JavaScript中的比较运算符粗略的可以分为两种：</p>
 <ol>
-<li>相等运算符（==、===、!==）这些</li>
-<li>关系运算符（&gt;、&lt;、&gt;=）<br>在平时开发中，基本不会太关注这两者的差异，我们几乎总是可以获取到我们想要的结果-。-</li>
+<li>相等运算符（&#x3D;&#x3D;、&#x3D;&#x3D;&#x3D;、!&#x3D;&#x3D;）这些</li>
+<li>关系运算符（&gt;、&lt;、&gt;&#x3D;）<br>在平时开发中，基本不会太关注这两者的差异，我们几乎总是可以获取到我们想要的结果-。-</li>
 </ol>
 </blockquote>
-<a id="more"></a>
-<p>前几天在群里一个小伙伴问了个问题：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => false</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => false</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => false</span>
+<span id="more"></span>
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => ?</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>前几天在群里一个小伙伴问了个问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">null</span> &gt; <span class="number">0</span>) <span class="comment">// =&gt; false</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">null</span> &lt; <span class="number">0</span>) <span class="comment">// =&gt; false</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">null</span> == <span class="number">0</span>) <span class="comment">// =&gt; false</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">null</span> &gt;= <span class="number">0</span>) <span class="comment">// =&gt; ?</span></span><br></pre></td></tr></table></figure>
+
 <p>最后一个<code>null &gt;= 0</code>的结果为true。<br>刚看到这个代码的时候，下意识地会认为结果应该也是<code>false</code>，毕竟上边标明了三种情况都为<code>false</code>。<br>然而这个就露出了<strong>相等运算符</strong>和<strong>关系运算符</strong>两者执行的差异。</p>
 <p>在相等运算符中，如果是非严格相等，则会尝试将两边的值转换为相同类型进行比较。<br>在关系运算符中，会尝试将运算符两边的值转换为<code>Number</code>再进行比较。</p>
 <p>所以在执行<code>null &gt;= 0</code>的时候<code>null</code>被转换为<code>Number</code>随后值就变为了<code>0</code>，所以第四个运算符实际的执行为<code>0 &gt;= 0</code>。</p>
@@ -101,20 +100,14 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <h2 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h2><p>关系运算符的执行过程，是尽可能的将两边的表达式转换为<code>Number</code>进行比较。（也确实，其他类型木有什么可比性的）</p>
 <p>运算符刚开始会尝试将两侧表达式转换为原始值，并且在转换的过程中会优先选择转换为<code>Number</code>类型。</p>
 <p>转换完成后，如果两边表达式都为<code>String</code>，则会先判断一侧表达式是否包含另一侧。<br>例如：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token string">'abc'</span> <span class="token operator">></span> <span class="token string">'ab'</span> <span class="token comment" spellcheck="true">// abc 包含 ab 所以 abc 比 ab 大，结果为true</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;abc&#x27;</span> &gt; <span class="string">&#x27;ab&#x27;</span> <span class="comment">// abc 包含 ab 所以 abc 比 ab 大，结果为true</span></span><br></pre></td></tr></table></figure>
 <p>如果两者不为包含关系，则会从第一个字符开始获取对应的<code>Unicode</code>编码，来进行比大小，如果大小相同，则顺移至下一位。<br><img src="/images/comparison-operators/pic-8.png" alt="check-Unicode"></p>
 <p>其余情况下，则会将两侧表达式直接转换为<code>Number</code>求值。</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">Number</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
-<span class="token function">Number</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span class="token function">Number</span><span class="token punctuation">(</span>undefined<span class="token punctuation">)</span>
-<span class="token function">Number</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span>
-<span class="token comment" spellcheck="true">// ...</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Number</span>(<span class="literal">true</span>)</span><br><span class="line"><span class="title class_">Number</span>(&#123;&#125;)</span><br><span class="line"><span class="title class_">Number</span>(<span class="literal">undefined</span>)</span><br><span class="line"><span class="title class_">Number</span>(<span class="literal">null</span>)</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
 <p>当任意一个结果为<code>NaN</code>时，运算符的结果都为<code>false</code>（而且文档中给出的，返回值为<code>undefined</code>，并不是<code>false</code>。。。）</p>
 <p>然后针对<code>&lt;</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>&gt;=</code>进行各自的判断。</p>
 <p>所以到最后就解释了，为什么那个问题的<code>null &gt;= 0</code>为<code>true</code>。<br>因为关系运算符是会将值转换为<code>Number</code>来进行比较的。<br>而相等运算符只在极少数的情况下会将值转换为<code>Number</code>来进行比较（例如：一个为<code>Number</code>另一个为<code>String</code>）</p>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://www.ecma-international.org/ecma-262/6.0/ECMA-262.pdf" target="_blank" rel="noopener">http://www.ecma-international.org/ecma-262/6.0/ECMA-262.pdf</a></p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://www.ecma-international.org/ecma-262/6.0/ECMA-262.pdf">http://www.ecma-international.org/ecma-262/6.0/ECMA-262.pdf</a></p>
 
 </div>
 
@@ -126,7 +119,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2018/03/17/JavaScript中的比较运算符/';
+  var disqus_url = 'http://jiasm.github.io/2018/03/17/JavaScript%E4%B8%AD%E7%9A%84%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6/';
   
   var disqus_config = function () {
     this.page.url = location.href

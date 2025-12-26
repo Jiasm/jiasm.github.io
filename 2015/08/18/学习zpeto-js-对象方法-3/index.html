@@ -8,8 +8,10 @@
   
   
   <title>学习zpeto.js(对象方法)[3] - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -63,46 +65,43 @@
 <div id="post-content">
   <h1>学习zpeto.js(对象方法)[3]</h1>
   <p>继续说zepto里attributes的相关操作.</p>
-<p>attr,removeAttr,prop这三个方法.<br><a id="more"></a></p>
+<p>attr,removeAttr,prop这三个方法.</p>
+<span id="more"></span>
+
 <h3 id="attr"><a href="#attr" class="headerlink" title="attr():"></a>attr():</h3><p>三种用途</p>
 <h4 id="get"><a href="#get" class="headerlink" title="get:"></a>get:</h4><p>返回值为一个string字符串</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"&lt;span id="</span>special<span class="token string">">&lt;/span>"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//--> "special"</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&lt;span id=&quot;</span>special<span class="string">&quot;&gt;&lt;/span&gt;&quot;</span>).<span class="title function_">attr</span>(<span class="string">&quot;id&quot;</span>); <span class="comment">//--&gt; &quot;special&quot;</span></span><br></pre></td></tr></table></figure>
+
 <p>注意:只能返回对象中第一个节点的属性值</p>
 <h4 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h4><p>返回值为一个zepto对象</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"&lt;span>"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">,</span><span class="token string">"special"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//--> [&lt;span id="special">&lt;/span>]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&lt;span&gt;&quot;</span>).<span class="title function_">attr</span>(<span class="string">&quot;id&quot;</span>,<span class="string">&quot;special&quot;</span>); <span class="comment">//--&gt; [&lt;span id=&quot;special&quot;&gt;&lt;/span&gt;]</span></span><br></pre></td></tr></table></figure>
+
 <p>第二个参数也可以传入一个function,有两个参数可以使用</p>
 <p>1:index,zepto对象dom元素数组的下标</p>
 <p>2:value,该对象对应属性的值</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"&lt;div id='demo1'>&lt;/div>"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>    
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// --> 0 demo1</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&lt;div id=&#x27;demo1&#x27;&gt;&lt;/div&gt;&quot;</span>).<span class="title function_">attr</span>(<span class="string">&quot;id&quot;</span>, <span class="keyword">function</span>(<span class="params">index, value</span>) &#123;    </span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(index, value);<span class="comment">// --&gt; 0 demo1</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <p>上边那段代码如果执行了.那么该zepto对象的id属性值就会被清除,因为该函数没有返回字符串用来设置值.</p>
 <p>或者也可以直接传入一个json串来修改多个属性.</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"&lt;span>"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token punctuation">{</span>    
-  id<span class="token punctuation">:</span><span class="token string">'special'</span><span class="token punctuation">,</span>    
-  name<span class="token punctuation">:</span><span class="token string">'special'</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&lt;span&gt;&quot;</span>).<span class="title function_">attr</span>(&#123;    </span><br><span class="line">  <span class="attr">id</span>:<span class="string">&#x27;special&#x27;</span>,    </span><br><span class="line">  <span class="attr">name</span>:<span class="string">&#x27;special&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <h4 id="remove"><a href="#remove" class="headerlink" title="remove:"></a>remove:</h4><p>返回值也是一个zepto对象,作用相当于调用removeAttr()</p>
-<p>$(“<span id="special"></span>“).attr(“id”,null);//–&gt; [<span></span>]</p>
+<p>$(“<span id="special"></span>“).attr(“id”,null);&#x2F;&#x2F;–&gt; [<span></span>]</p>
 <p>需注意的只能传入null才能触发remove效果.</p>
 <p>传入function与json都可以,只要是返回值或者值为null,都会触发remove;</p>
 <h3 id="removeAttr"><a href="#removeAttr" class="headerlink" title="removeAttr:"></a>removeAttr:</h3><p>removeAttr相当于(功能)是attr的一部分.但是代码实现是分开的.这个函数应用场景比较单一,所以省去了很多判断.但最终都是调用的function getAttribute(){};</p>
 <p>只接收一个参数,就是name</p>
 <p>返回值是一个zepto对象.</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"&lt;span id="</span>special<span class="token string">">&lt;/span>"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">removeAttr</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//--> [&lt;span>&lt;/span>]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&lt;span id=&quot;</span>special<span class="string">&quot;&gt;&lt;/span&gt;&quot;</span>).<span class="title function_">removeAttr</span>(<span class="string">&quot;id&quot;</span>);<span class="comment">//--&gt; [&lt;span&gt;&lt;/span&gt;]</span></span><br></pre></td></tr></table></figure>
+
 <p>移除多个属性请用空格分开</p>
-<h3 id="prop"><a href="#prop" class="headerlink" title="prop:"></a>prop:</h3><p>prop用来设置或取出dom元素的属性值.功能相当于 (prop = attr - removeAttr);</p>
+<h3 id="prop"><a href="#prop" class="headerlink" title="prop:"></a>prop:</h3><p>prop用来设置或取出dom元素的属性值.功能相当于 (prop &#x3D; attr - removeAttr);</p>
 <p>prop用法与attr相同.只不过没有remove功能.两者的区别在这里</p>
-<p>读取或设置dom元素的属性值。它在读取属性值的情况下优先于 <a href="http://www.css88.com/doc/zeptojs/#attr" target="_blank" rel="noopener">attr</a>，因为这些属性值会因为用户的交互发生改变，如checked 和 selected。</p>
-<p>那是zepto.js中文api中所说的.本人认为,在判断有关交互的属性时,应优先使用prop,比如checked和selected;<br><img src="/images/learning-zepto-js-object-third/screen-shot-1.png" alt=""><br><img src="/images/learning-zepto-js-object-third/screen-shot-2.png" alt=""></p>
-<p>之所以为出现差异,是因为两者底层实现的区别.<br><img src="/images/learning-zepto-js-object-third/screen-shot-3.png" alt=""></p>
+<p>读取或设置dom元素的属性值。它在读取属性值的情况下优先于 <a href="http://www.css88.com/doc/zeptojs/#attr">attr</a>，因为这些属性值会因为用户的交互发生改变，如checked 和 selected。</p>
+<p>那是zepto.js中文api中所说的.本人认为,在判断有关交互的属性时,应优先使用prop,比如checked和selected;<br><img src="/images/learning-zepto-js-object-third/screen-shot-1.png"><br><img src="/images/learning-zepto-js-object-third/screen-shot-2.png"></p>
+<p>之所以为出现差异,是因为两者底层实现的区别.<br><img src="/images/learning-zepto-js-object-third/screen-shot-3.png"></p>
 <p>prop采用的是上边那种,而attr是两种都用到了;</p>
-<p>getAttribute()方法只能取出存在于标签中的属性”<div id="" name=""></div>“ // 只能取出id与name.隐式的属性是取不出来的,比如style<br><img src="/images/learning-zepto-js-object-third/screen-shot-4.png" alt=""><br><img src="/images/learning-zepto-js-object-third/screen-shot-5.png" alt=""></p>
+<p>getAttribute()方法只能取出存在于标签中的属性”<div id name></div>“ &#x2F;&#x2F; 只能取出id与name.隐式的属性是取不出来的,比如style<br><img src="/images/learning-zepto-js-object-third/screen-shot-4.png"><br><img src="/images/learning-zepto-js-object-third/screen-shot-5.png"></p>
 <p>来说说实现吧.</p>
 <h4 id="attr-1"><a href="#attr-1" class="headerlink" title="attr"></a>attr</h4><p>attr返回的那个三元运算符嵌套写的有点虎…待我细细说来;</p>
 <p>–首先判断name参数是否为字符串,并且只有一个实参.这样来讲就是get功能.</p>
@@ -124,19 +123,17 @@
 <p>用法与attr类似,但是会将传入的name值加上”data-“的前缀,并且会将驼峰命名转换为全小写连字符的格式;</p>
 <p>取值时也不需要加”data-“前缀.</p>
 <p>就是说,</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//取的是 data-id属性的值</span>
-<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token string">"userName"</span><span class="token punctuation">,</span><span class="token string">"scott"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//给data-user-name属性赋值</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&quot;</span>).<span class="title function_">data</span>(<span class="string">&quot;id&quot;</span>);<span class="comment">//取的是 data-id属性的值</span></span><br><span class="line">$(<span class="string">&quot;&quot;</span>).<span class="title function_">data</span>(<span class="string">&quot;userName&quot;</span>,<span class="string">&quot;scott&quot;</span>);<span class="comment">//给data-user-name属性赋值</span></span><br></pre></td></tr></table></figure>
+
 <p>第二个参数也可以是一个function;</p>
-<p>actually,data方法内部调用的就是attr方法<br><img src="/images/learning-zepto-js-object-third/screen-shot-6.png" alt=""></p>
+<p>actually,data方法内部调用的就是attr方法<br><img src="/images/learning-zepto-js-object-third/screen-shot-6.png"></p>
 <p>deserializeValue是一个反序列化函数,如果有其他地方需要,不妨将该方法copy出去;</p>
-<p><img src="/images/learning-zepto-js-object-third/screen-shot-7.png" alt=""></p>
+<p><img src="/images/learning-zepto-js-object-third/screen-shot-7.png"></p>
 <h3 id="val"><a href="#val" class="headerlink" title="val:"></a>val:</h3><p>方法接收一个参数,如果不填,则视为取value值,否则为设置value值.</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">val</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// getter</span>
-<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">val</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// setter</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;&quot;</span>).<span class="title function_">val</span>();<span class="comment">// getter</span></span><br><span class="line">$(<span class="string">&quot;&quot;</span>).<span class="title function_">val</span>(<span class="string">&quot;&quot;</span>);<span class="comment">// setter</span></span><br></pre></td></tr></table></figure>
+
 <p>参数可以是一个字符串,function;function接收的参数为(index[对象的下标],value[对象之前的值]),function需返回一个字符串;</p>
-<p><img src="/images/learning-zepto-js-object-third/screen-shot-8.png" alt=""></p>
+<p><img src="/images/learning-zepto-js-object-third/screen-shot-8.png"></p>
 <p>方法本身无亮点,但是返回值有三种;</p>
 <p>一:</p>
 <p>　　返回一个字符串,作为get值时返回;</p>
@@ -147,11 +144,11 @@
 <p>之所以会存在第二种情况,那是因为select(下拉选项)是可以多选的.而开启多选的属性开关名字叫multiple;</p>
 <p>当下拉选项开启多选时,直接通过value属性只会取到第一个值,其余的取不到.所以在代码中就做了处理;</p>
 <p>取出对象所有的option子节点.通过filter方法返回被选中的节点集合,并调用pluck方法</p>
-<p><img src="/images/learning-zepto-js-object-third/screen-shot-9.png" alt="">一个来自prototype.js大表哥中的方法;</p>
+<p><img src="/images/learning-zepto-js-object-third/screen-shot-9.png">一个来自prototype.js大表哥中的方法;</p>
 <p>传入一个属性名,将调用者集合中所有的该属性的值作为一个数组返回;</p>
 <p>其余的没什么了.</p>
 <p>如果有什么疑惑的地方还请留言问我.大家共同学习;</p>
-<p>或者<a href="tencent://QQInterLive/?Cmd=2&amp;Uin=812788037" target="_blank" rel="noopener">我的扣扣</a></p>
+<p>或者<a href="tencent://QQInterLive/?Cmd=2&Uin=812788037">我的扣扣</a></p>
 
 </div>
 
@@ -163,7 +160,7 @@
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2015/08/18/学习zpeto-js-对象方法-3/';
+  var disqus_url = 'http://jiasm.github.io/2015/08/18/%E5%AD%A6%E4%B9%A0zpeto-js-%E5%AF%B9%E8%B1%A1%E6%96%B9%E6%B3%95-3/';
   
   var disqus_config = function () {
     this.page.url = location.href

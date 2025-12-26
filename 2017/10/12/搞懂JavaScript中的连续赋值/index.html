@@ -8,8 +8,10 @@
   
   
   <title>搞懂JavaScript中的连续赋值 - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,7 +57,7 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">1.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
@@ -65,21 +67,16 @@
   <blockquote>
 <p>前段时间老是被一道题刷屏，一个关于连续赋值的坑。<br>遂留下一个笔记，以后再碰到有人问这个题，直接丢过去链接。。</p>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
+
 <p>题目代码：</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> a <span class="token operator">=</span> <span class="token punctuation">{</span> n<span class="token punctuation">:</span> <span class="token number">1</span> <span class="token punctuation">}</span>
-<span class="token keyword">let</span> b <span class="token operator">=</span> a
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;</span><br><span class="line"><span class="keyword">let</span> b = a</span><br><span class="line"></span><br><span class="line">a.<span class="property">x</span> = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">x</span>) <span class="comment">// =&gt; undefined</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b.<span class="property">x</span>) <span class="comment">// =&gt; &#123; n: 2 &#125;</span></span><br></pre></td></tr></table></figure>
 
-a<span class="token punctuation">.</span>x <span class="token operator">=</span> a <span class="token operator">=</span> <span class="token punctuation">{</span> n<span class="token punctuation">:</span> <span class="token number">2</span> <span class="token punctuation">}</span>
-
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span>x<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => undefined</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>b<span class="token punctuation">.</span>x<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => { n: 2 }</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
 <p>首先解释一下连续赋值的意思：<br>表达式<code>variable = 1</code>，这个为赋值语句。<br>当我们要给多个变量进行赋值时，有一个简单的写法。<br><code>variable1 = variable2 = 1</code>，这个我们就称之为连续赋值。</p>
 </blockquote>
 <p>再来说上边的那道题，我一次看到这个题的时候，答案也是错了，后来翻阅资料，结合着调试，也算是整明白了-.-</p>
-<p>前两行的声明变量并赋值，使得<code>a</code>和<code>b</code>都指向了同一个地址（<code>{ n: 1 }</code>在内存中的位置）</p>
+<p>前两行的声明变量并赋值，使得<code>a</code>和<code>b</code>都指向了同一个地址（<code>&#123; n: 1 &#125;</code>在内存中的位置）</p>
 <p><strong>为了理解连续赋值的运行原理，我们需要结合着ECMAScript的文档来解释一下<code>=</code>赋值的执行过程</strong></p>
 <p><img src="https://user-images.githubusercontent.com/9568094/31504078-11b998b8-af37-11e7-8787-a91d4663f2d3.png" alt="image"></p>
 <p>图中出现了一个关键字<strong>LeftHandSideExpression</strong>（我们简称为<code>LHS</code>）<br>MDN对该关键字的解释为<code>“Left values are the destination of an assignment.”</code>，翻译过来大概就是：<code>LHS</code>是用来分配赋值操作结果存放的位置（<em>也就是<code>=</code>右边的这坨东西要放到哪</em>）。</p>
@@ -87,24 +84,24 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <p>再来说<strong>连续赋值</strong>，其实就是多次的赋值操作。</p>
 <p>我们从代码的第一行开始，画图，一个图一个图的来说：</p>
 <ol>
-<li><code>let a = { n: 1 }</code>声明了一个变量<code>a</code>，并且创建了一个<code>Object</code>：<code>{ n: 1 }</code>，并将该<code>Object</code>在内存中的地址赋值到变量<code>a</code>中，这时就能通过<code>a</code>来获取到<code>{ n: 1}</code>：<em>引用类型的值是只存放地址的，而不是直接存放原始值（<code>{} !== {}</code>）</em><br><img src="https://user-images.githubusercontent.com/9568094/31505886-87161b0a-af3b-11e7-8cfe-64a73f04f709.png" alt="image"></li>
-<li><code>let b = a</code>声明一个变量<code>b</code>，并且将<code>a</code>赋值给<code>b</code>，这时，<code>a</code>和<code>b</code>都指向了<code>{ n: 1 }</code>：<br><img src="https://user-images.githubusercontent.com/9568094/31505989-ce332744-af3b-11e7-8350-2559471a4da5.png" alt="image"></li>
-<li>执行表达式（<code>a.x = a = { n: 2 }</code>），取出<code>a.x</code>的位置，由于<code>a</code>的值为<code>{ n: 1 }</code>，所以取属性<code>x</code>为<code>undefined</code>，遂在内存中开辟一块新的空间作为<code>({ n: 1}).x</code>的位置：<br><img src="https://user-images.githubusercontent.com/9568094/31506231-785d989e-af3c-11e7-9216-5a4de5315af3.png" alt="image"></li>
-<li>执行剩余表达式（<code>a = { n: 2 }</code>），取出<code>a</code>的位置，因为<code>a</code>是一个已声明的变量，所以该步骤并不会有什么改变；</li>
-<li>执行剩余表达式（<code>{ n: 2 }</code>），为<code>{ n: 2 }</code>在内存中开辟一块空间存放数据：<br><img src="https://user-images.githubusercontent.com/9568094/31506483-25350d2c-af3d-11e7-88c1-a353f202d18a.png" alt="image"></li>
-<li>将<code>{ n: 2 }</code>赋值到第<code>4</code>步取出的<code>a</code>对应的位置：<br><img src="https://user-images.githubusercontent.com/9568094/31506554-55b02d38-af3d-11e7-8c19-58b129f7eaa2.png" alt="image"></li>
-<li>将<code>{ n: 2}</code>赋值到第<code>3</code>步取出的<code>a.x</code>对应的位置：<br><img src="https://user-images.githubusercontent.com/9568094/31506793-20c90c9c-af3e-11e7-8b31-b7f605f2f501.png" alt="image"></li>
+<li><code>let a = &#123; n: 1 &#125;</code>声明了一个变量<code>a</code>，并且创建了一个<code>Object</code>：<code>&#123; n: 1 &#125;</code>，并将该<code>Object</code>在内存中的地址赋值到变量<code>a</code>中，这时就能通过<code>a</code>来获取到<code>&#123; n: 1&#125;</code>：<em>引用类型的值是只存放地址的，而不是直接存放原始值（<code>&#123;&#125; !== &#123;&#125;</code>）</em><br><img src="https://user-images.githubusercontent.com/9568094/31505886-87161b0a-af3b-11e7-8cfe-64a73f04f709.png" alt="image"></li>
+<li><code>let b = a</code>声明一个变量<code>b</code>，并且将<code>a</code>赋值给<code>b</code>，这时，<code>a</code>和<code>b</code>都指向了<code>&#123; n: 1 &#125;</code>：<br><img src="https://user-images.githubusercontent.com/9568094/31505989-ce332744-af3b-11e7-8350-2559471a4da5.png" alt="image"></li>
+<li>执行表达式（<code>a.x = a = &#123; n: 2 &#125;</code>），取出<code>a.x</code>的位置，由于<code>a</code>的值为<code>&#123; n: 1 &#125;</code>，所以取属性<code>x</code>为<code>undefined</code>，遂在内存中开辟一块新的空间作为<code>(&#123; n: 1&#125;).x</code>的位置：<br><img src="https://user-images.githubusercontent.com/9568094/31506231-785d989e-af3c-11e7-9216-5a4de5315af3.png" alt="image"></li>
+<li>执行剩余表达式（<code>a = &#123; n: 2 &#125;</code>），取出<code>a</code>的位置，因为<code>a</code>是一个已声明的变量，所以该步骤并不会有什么改变；</li>
+<li>执行剩余表达式（<code>&#123; n: 2 &#125;</code>），为<code>&#123; n: 2 &#125;</code>在内存中开辟一块空间存放数据：<br><img src="https://user-images.githubusercontent.com/9568094/31506483-25350d2c-af3d-11e7-88c1-a353f202d18a.png" alt="image"></li>
+<li>将<code>&#123; n: 2 &#125;</code>赋值到第<code>4</code>步取出的<code>a</code>对应的位置：<br><img src="https://user-images.githubusercontent.com/9568094/31506554-55b02d38-af3d-11e7-8c19-58b129f7eaa2.png" alt="image"></li>
+<li>将<code>&#123; n: 2&#125;</code>赋值到第<code>3</code>步取出的<code>a.x</code>对应的位置：<br><img src="https://user-images.githubusercontent.com/9568094/31506793-20c90c9c-af3e-11e7-8b31-b7f605f2f501.png" alt="image"></li>
 </ol>
 <p>这时我们就完成了整个赋值步骤：</p>
 <ul>
-<li>变量<code>a</code>指向<code>{ n: 2 }</code></li>
-<li>变量<code>b</code>指向<code>{ n: 1, x: { n: 2} }</code></li>
+<li>变量<code>a</code>指向<code>&#123; n: 2 &#125;</code></li>
+<li>变量<code>b</code>指向<code>&#123; n: 1, x: &#123; n: 2&#125; &#125;</code></li>
 <li>也就是说<code>a === b.x</code></li>
 </ul>
 <h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>该代码坑就在于：赋值运算会在运算<code>=</code>右侧前就取出了要赋值的位置，而不是获得结果后再去取出赋值位置的。<br><em>先取位置，后赋值</em><br><strong>所以说，看文档很重要 很重要 很重要</strong></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.13.1" target="_blank" rel="noopener">ECMAScript: Simple Assignment ( = )</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators#Left-hand-side_expressions" target="_blank" rel="noopener">MDN: Expressions and operators</a></li>
+<li><a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.13.1">ECMAScript: Simple Assignment ( &#x3D; )</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators#Left-hand-side_expressions">MDN: Expressions and operators</a></li>
 </ul>
 
 </div>
@@ -117,7 +114,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2017/10/12/搞懂JavaScript中的连续赋值/';
+  var disqus_url = 'http://jiasm.github.io/2017/10/12/%E6%90%9E%E6%87%82JavaScript%E4%B8%AD%E7%9A%84%E8%BF%9E%E7%BB%AD%E8%B5%8B%E5%80%BC/';
   
   var disqus_config = function () {
     this.page.url = location.href

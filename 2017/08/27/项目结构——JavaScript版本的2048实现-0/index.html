@@ -8,8 +8,10 @@
   
   
   <title>项目结构——JavaScript版本的2048实现[0] - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,7 +57,7 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目结构"><span class="toc-number">1.</span> <span class="toc-text">项目结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Base"><span class="toc-number">1.1.</span> <span class="toc-text">Base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Config"><span class="toc-number">1.2.</span> <span class="toc-text">Config</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Utils"><span class="toc-number">1.3.</span> <span class="toc-text">Utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Game"><span class="toc-number">1.4.</span> <span class="toc-text">Game</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start"><span class="toc-number">1.4.1.</span> <span class="toc-text">start</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#canMove"><span class="toc-number">1.4.2.</span> <span class="toc-text">canMove</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#move"><span class="toc-number">1.4.3.</span> <span class="toc-text">move</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GameRender"><span class="toc-number">1.5.</span> <span class="toc-text">GameRender</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GameController"><span class="toc-number">1.6.</span> <span class="toc-text">GameController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#index"><span class="toc-number">1.7.</span> <span class="toc-text">index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">2.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些还未完成的"><span class="toc-number">3.</span> <span class="toc-text">一些还未完成的</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">项目结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Base"><span class="toc-number">1.1.</span> <span class="toc-text">Base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Config"><span class="toc-number">1.2.</span> <span class="toc-text">Config</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Utils"><span class="toc-number">1.3.</span> <span class="toc-text">Utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Game"><span class="toc-number">1.4.</span> <span class="toc-text">Game</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#start"><span class="toc-number">1.4.1.</span> <span class="toc-text">start</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#canMove"><span class="toc-number">1.4.2.</span> <span class="toc-text">canMove</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#move"><span class="toc-number">1.4.3.</span> <span class="toc-text">move</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GameRender"><span class="toc-number">1.5.</span> <span class="toc-text">GameRender</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GameController"><span class="toc-number">1.6.</span> <span class="toc-text">GameController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#index"><span class="toc-number">1.7.</span> <span class="toc-text">index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E8%AE%B0"><span class="toc-number">2.</span> <span class="toc-text">小记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E8%BF%98%E6%9C%AA%E5%AE%8C%E6%88%90%E7%9A%84"><span class="toc-number">3.</span> <span class="toc-text">一些还未完成的</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
@@ -63,38 +65,18 @@
 <div id="post-content">
   <h1>项目结构——JavaScript版本的2048实现[0]</h1>
   <blockquote>
-<p>最近在看一本书<a href="https://book.douban.com/subject/26184170/" target="_blank" rel="noopener">《HTML5 Canvas开发详解》</a> 看到了一定程度，打算找一个项目练练手<br>遂想到了前几年玩过的一个游戏<code>2048</code> 于是开始了尝试实现一个<a href="jiasm.org/2048/">JavaScript版2048</a></p>
+<p>最近在看一本书<a href="https://book.douban.com/subject/26184170/">《HTML5 Canvas开发详解》</a> 看到了一定程度，打算找一个项目练练手<br>遂想到了前几年玩过的一个游戏<code>2048</code> 于是开始了尝试实现一个<a href="jiasm.org/2048/">JavaScript版2048</a></p>
 </blockquote>
-<a id="more"></a>
-<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>项目地址：<a href="https://github.com/jiasm/2048" target="_blank" rel="noopener">https://github.com/jiasm/2048</a><br>LiveDemo: <a href="http://jiasm.org/2048" target="_blank" rel="noopener">http://jiasm.org/2048</a></p>
-<pre><code>.
-├── LICENSE
-├── README.md
-├── dist
-│   ├── bundle.js
-│   └── main.js.map
-├── index.html
-├── package.json
-├── src
-│   ├── Base.js
-│   ├── Config.js
-│   ├── Utils.js
-│   ├── Game.js
-│   ├── GameController.js
-│   ├── GameRender.js
-│   └── index.js
-└── webpack.config.js
-</code></pre><p>使用<code>webpack</code>进行打包，因为有用到了<code>babel</code>，所以整体语法采用ES6、ES7写法 <em>（写起来无比的舒心）</em>。<br><em>因为该<code>GitHub</code>项目设置了<code>Git Pages</code> 所以<code>dist</code>文件夹就保留在项目中了，没有删除。</em></p>
+<span id="more"></span>
+
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>项目地址：<a href="https://github.com/jiasm/2048">https://github.com/jiasm/2048</a><br>LiveDemo: <a href="http://jiasm.org/2048">http://jiasm.org/2048</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── LICENSE</span><br><span class="line">├── README.md</span><br><span class="line">├── dist</span><br><span class="line">│   ├── bundle.js</span><br><span class="line">│   └── main.js.map</span><br><span class="line">├── index.html</span><br><span class="line">├── package.json</span><br><span class="line">├── src</span><br><span class="line">│   ├── Base.js</span><br><span class="line">│   ├── Config.js</span><br><span class="line">│   ├── Utils.js</span><br><span class="line">│   ├── Game.js</span><br><span class="line">│   ├── GameController.js</span><br><span class="line">│   ├── GameRender.js</span><br><span class="line">│   └── index.js</span><br><span class="line">└── webpack.config.js</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>webpack</code>进行打包，因为有用到了<code>babel</code>，所以整体语法采用ES6、ES7写法 <em>（写起来无比的舒心）</em>。<br><em>因为该<code>GitHub</code>项目设置了<code>Git Pages</code> 所以<code>dist</code>文件夹就保留在项目中了，没有删除。</em></p>
 <p>文件夹<code>src</code>里边就是所有的代码了。</p>
 <h3 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h3><p>一个聊胜于无的基类。。就是让类拥有一个通过<code>.init</code>就可以实现实例化对象的功能</p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
-  <span class="token keyword">static</span> init <span class="token punctuation">(</span><span class="token operator">...</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">this</span><span class="token punctuation">(</span><span class="token operator">...</span>arg<span class="token punctuation">)</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">init</span> (...arg) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title function_">this</span>(...arg)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><p>该文件里边存储了一些配置参数，比如默认的矩阵数量、<code>2048</code>中各个方块显示的文本&amp;颜色之类的。<br>方便拿走即用。。修改一个配置文件即可得到你想要的<code>2048</code></p>
 <h3 id="Utils"><a href="#Utils" class="headerlink" title="Utils"></a>Utils</h3><p>里边提供了一个<code>log</code>方法以及一个增强版的<code>logMatrix</code></p>
 <ul>
@@ -140,7 +122,7 @@
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2017/08/27/项目结构——JavaScript版本的2048实现-0/';
+  var disqus_url = 'http://jiasm.github.io/2017/08/27/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94JavaScript%E7%89%88%E6%9C%AC%E7%9A%842048%E5%AE%9E%E7%8E%B0-0/';
   
   var disqus_config = function () {
     this.page.url = location.href

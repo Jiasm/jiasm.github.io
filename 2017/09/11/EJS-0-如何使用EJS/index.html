@@ -8,8 +8,10 @@
   
   
   <title>EJS[0]-如何使用EJS - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,7 +57,7 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是EJS"><span class="toc-number">1.</span> <span class="toc-text">什么是EJS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简单的示例"><span class="toc-number">1.1.</span> <span class="toc-text">简单的示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用EJS"><span class="toc-number">2.</span> <span class="toc-text">为什么要用EJS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何使用EJS"><span class="toc-number">3.</span> <span class="toc-text">如何使用EJS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-code-gt"><span class="toc-number">3.1.</span> <span class="toc-text">&lt;% code %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-code-gt-1"><span class="toc-number">3.2.</span> <span class="toc-text">&lt;%- code %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-code-gt-2"><span class="toc-number">3.3.</span> <span class="toc-text">&lt;%= code %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-comment-gt"><span class="toc-number">3.4.</span> <span class="toc-text">&lt;%# comment %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在标签后边添加"><span class="toc-number">3.5.</span> <span class="toc-text">在标签后边添加-</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模版提供的各种Config"><span class="toc-number">4.</span> <span class="toc-text">模版提供的各种Config</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cache"><span class="toc-number">4.1.</span> <span class="toc-text">cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#filename"><span class="toc-number">4.2.</span> <span class="toc-text">filename</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scope"><span class="toc-number">4.3.</span> <span class="toc-text">scope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debug"><span class="toc-number">4.4.</span> <span class="toc-text">debug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compileDebug"><span class="toc-number">4.5.</span> <span class="toc-text">compileDebug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#client"><span class="toc-number">4.6.</span> <span class="toc-text">client</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open"><span class="toc-number">4.7.</span> <span class="toc-text">open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#close"><span class="toc-number">4.8.</span> <span class="toc-text">close</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模版对外暴露的API"><span class="toc-number">5.</span> <span class="toc-text">模版对外暴露的API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clearCache"><span class="toc-number">5.1.</span> <span class="toc-text">clearCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parse"><span class="toc-number">5.2.</span> <span class="toc-text">parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compile"><span class="toc-number">5.3.</span> <span class="toc-text">compile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#render"><span class="toc-number">5.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#renderFile"><span class="toc-number">5.5.</span> <span class="toc-text">renderFile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些完整的示例"><span class="toc-number">6.</span> <span class="toc-text">一些完整的示例</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFEJS"><span class="toc-number">1.</span> <span class="toc-text">什么是EJS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简单的示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8EJS"><span class="toc-number">2.</span> <span class="toc-text">为什么要用EJS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8EJS"><span class="toc-number">3.</span> <span class="toc-text">如何使用EJS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">&lt;% code %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">3.2.</span> <span class="toc-text">&lt;%- code %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-2"><span class="toc-number">3.3.</span> <span class="toc-text">&lt;%&#x3D; code %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-3"><span class="toc-number">3.4.</span> <span class="toc-text">&lt;%# comment %&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%A0%87%E7%AD%BE%E5%90%8E%E8%BE%B9%E6%B7%BB%E5%8A%A0"><span class="toc-number">3.5.</span> <span class="toc-text">在标签后边添加-</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E7%89%88%E6%8F%90%E4%BE%9B%E7%9A%84%E5%90%84%E7%A7%8DConfig"><span class="toc-number">4.</span> <span class="toc-text">模版提供的各种Config</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cache"><span class="toc-number">4.1.</span> <span class="toc-text">cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#filename"><span class="toc-number">4.2.</span> <span class="toc-text">filename</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scope"><span class="toc-number">4.3.</span> <span class="toc-text">scope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debug"><span class="toc-number">4.4.</span> <span class="toc-text">debug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compileDebug"><span class="toc-number">4.5.</span> <span class="toc-text">compileDebug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#client"><span class="toc-number">4.6.</span> <span class="toc-text">client</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#open"><span class="toc-number">4.7.</span> <span class="toc-text">open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#close"><span class="toc-number">4.8.</span> <span class="toc-text">close</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E7%89%88%E5%AF%B9%E5%A4%96%E6%9A%B4%E9%9C%B2%E7%9A%84API"><span class="toc-number">5.</span> <span class="toc-text">模版对外暴露的API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clearCache"><span class="toc-number">5.1.</span> <span class="toc-text">clearCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parse"><span class="toc-number">5.2.</span> <span class="toc-text">parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compile"><span class="toc-number">5.3.</span> <span class="toc-text">compile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#render"><span class="toc-number">5.4.</span> <span class="toc-text">render</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#renderFile"><span class="toc-number">5.5.</span> <span class="toc-text">renderFile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-number">6.</span> <span class="toc-text">一些完整的示例</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
@@ -63,81 +65,39 @@
 <div id="post-content">
   <h1>EJS[0]-如何使用EJS</h1>
   <blockquote>
-<p>最近做的一个新项目，所以想着换一个新的模版引擎尝试一下。（之前我们一直在使用<a href="http://handlebarsjs.com/" target="_blank" rel="noopener"><code>handlebars</code></a>）<br><a id="more"></a><br>本次源码分析所使用的是TJ大神开发的<a href="https://github.com/tj/ejs" target="_blank" rel="noopener">1.x版本</a><br>当然现在该项目已经停止维护了，目前正在维护的是<a href="https://github.com/mde/ejs" target="_blank" rel="noopener">2.x版本</a></p>
+<p>最近做的一个新项目，所以想着换一个新的模版引擎尝试一下。（之前我们一直在使用<a href="http://handlebarsjs.com/"><code>handlebars</code></a>）  </p>
+</blockquote>
+<span id="more"></span>
+<blockquote>
+<p>本次源码分析所使用的是TJ大神开发的<a href="https://github.com/tj/ejs">1.x版本</a><br>当然现在该项目已经停止维护了，目前正在维护的是<a href="https://github.com/mde/ejs">2.x版本</a></p>
 </blockquote>
 <h2 id="什么是EJS"><a href="#什么是EJS" class="headerlink" title="什么是EJS"></a>什么是EJS</h2><p><code>EJS</code>是一个<code>JavaScript</code>模版库，用来将<code>EJS</code>模版结合着<code>JSON</code>数据转换为<code>HTML</code><br>并且可以直接在模版中写<code>JavaScript</code>的语法</p>
-<h3 id="简单的示例"><a href="#简单的示例" class="headerlink" title="简单的示例"></a>简单的示例</h3><pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> template <span class="token operator">=</span> <span class="token string">'&lt;h1>Hello, &lt;%= name %>&lt;/h1>'</span>
-<span class="token keyword">let</span> data <span class="token operator">=</span> <span class="token punctuation">{</span>
-  name<span class="token punctuation">:</span> <span class="token string">'Niko Bellic'</span>
-<span class="token punctuation">}</span>
+<h3 id="简单的示例"><a href="#简单的示例" class="headerlink" title="简单的示例"></a>简单的示例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> template = <span class="string">&#x27;&lt;h1&gt;Hello, &lt;%= name %&gt;&lt;/h1&gt;&#x27;</span></span><br><span class="line"><span class="keyword">let</span> data = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;Niko Bellic&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> renderStr = ejs.<span class="title function_">render</span>(template, data)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(renderStr) <span class="comment">// =&gt; &lt;h1&gt;Hello, Niko Bellic&lt;/h1&gt;</span></span><br></pre></td></tr></table></figure>
 
-<span class="token keyword">let</span> renderStr <span class="token operator">=</span> ejs<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>template<span class="token punctuation">,</span> data<span class="token punctuation">)</span>
-
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>renderStr<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// => &lt;h1>Hello, Niko Bellic&lt;/h1></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>EJS</code>模版主要还是<code>HTML</code>标签，仅仅添加了几对特定的标签（<code>&lt;%  %&gt;</code>, <code>&lt;%= %&gt;</code>, <code>&lt;%-  %&gt;</code>, <code>&lt;%  -%&gt;</code>, <code>&lt;%#  %&gt;</code>）。</p>
-<h2 id="为什么要用EJS"><a href="#为什么要用EJS" class="headerlink" title="为什么要用EJS"></a>为什么要用EJS</h2><p>近年来，前端各种MV*框架层出不穷，<code>React</code>，<code>Angular</code>，<code>Vue</code>，当然这应该也是未来几年的趋势了，但是这些大都是前端运行时进行渲染，动态的生成<code>HTML</code>。  <small>（<code>React</code>是有着<a href="https://facebook.github.io/react/docs/react-dom-server.html" target="_blank" rel="noopener">服务端渲染</a>的解决方案，为了解决SEO的问题）</small><br>但是<code>EJS</code>这类的模版引擎是不依赖于宿主语言环境的，只要是<code>JavaScript</code>即可，也就是说可以用于<code>server</code>端（<code>node.js</code>）直接渲染，返回给前端渲染好的页面。（这个在大部分后台页面的开发中还是需要的）<br>当请求某个链接时，直接将渲染完成的页面呈现给用户，主要的作用有两点：  </p>
+<h2 id="为什么要用EJS"><a href="#为什么要用EJS" class="headerlink" title="为什么要用EJS"></a>为什么要用EJS</h2><p>近年来，前端各种MV*框架层出不穷，<code>React</code>，<code>Angular</code>，<code>Vue</code>，当然这应该也是未来几年的趋势了，但是这些大都是前端运行时进行渲染，动态的生成<code>HTML</code>。  <small>（<code>React</code>是有着<a href="https://facebook.github.io/react/docs/react-dom-server.html">服务端渲染</a>的解决方案，为了解决SEO的问题）</small><br>但是<code>EJS</code>这类的模版引擎是不依赖于宿主语言环境的，只要是<code>JavaScript</code>即可，也就是说可以用于<code>server</code>端（<code>node.js</code>）直接渲染，返回给前端渲染好的页面。（这个在大部分后台页面的开发中还是需要的）<br>当请求某个链接时，直接将渲染完成的页面呈现给用户，主要的作用有两点：  </p>
 <ol>
 <li>避免了代码都存在前端，被某些恶意用户看到。  </li>
-<li>对搜索引擎SEO更友好。  </li>
+<li>对搜索引擎SEO更友好。</li>
 </ol>
 <p><small>当然，<code>MV*</code>框架依然是近几年的趋势，也是建议多去使用和研究那些框架，但是模版引擎和前端的那几个框架并不冲突，也是可以一起使用的。</small></p>
 <h2 id="如何使用EJS"><a href="#如何使用EJS" class="headerlink" title="如何使用EJS"></a>如何使用EJS</h2><p><code>EJS</code>提供了数个标签来供我们使用，在标签内可以直接写<code>JavaScript</code>代码，如果使用服务端来渲染，你甚至可以直接引用一些<code>npm</code>包，来做一些想做的事情。</p>
-<h3 id="lt-code-gt"><a href="#lt-code-gt" class="headerlink" title="&lt;% code %&gt;"></a><code>&lt;% code %&gt;</code></h3><p><code>EJS</code>会执行标签内的代码，一般用于逻辑处理或者循环创建使用。</p>
-<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(user)</span> <span class="token attr-name">{</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>&lt;%= user.name %><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">}</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id=""><a href="#" class="headerlink" title="&lt;% code %&gt;"></a><code>&lt;% code %&gt;</code></h3><p><code>EJS</code>会执行标签内的代码，一般用于逻辑处理或者循环创建使用。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (user) &#123; %&gt;</span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&lt;%= user.name %&gt;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+
 <p>如上文在<code>EJS</code>处理后的代码应该是类似这个样子的。<em>（源代码比这个内容更丰富一些。。。）</em></p>
-<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">var</span> buf <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> buf = []</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (user) &#123;</span><br><span class="line">    buf.<span class="title function_">push</span>(<span class="string">&#x27;&lt;h2&gt;&#x27;</span>)</span><br><span class="line">    buf.<span class="title function_">push</span>(user.<span class="property">name</span>)</span><br><span class="line">    buf.<span class="title function_">push</span>(<span class="string">&#x27;&lt;/h2&gt;&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> buf.<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    buf<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">'&lt;h2>'</span><span class="token punctuation">)</span>
-    buf<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
-    buf<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">'&lt;/h2>'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">}</span>
+<h3 id="-1"><a href="#-1" class="headerlink" title="&lt;%- code %&gt;"></a><code>&lt;%- code %&gt;</code></h3><p><code>EJS</code>会将标签内的代码执行，并获取返回值，将返回值输出到字符串中。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>&lt;%= &#x27;Hello&#x27; %&gt;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- convert --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-  <span class="token keyword">return</span> buf<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="lt-code-gt-1"><a href="#lt-code-gt-1" class="headerlink" title="&lt;%- code %&gt;"></a><code>&lt;%- code %&gt;</code></h3><p><code>EJS</code>会将标签内的代码执行，并获取返回值，将返回值输出到字符串中。</p>
-<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>&lt;%= 'Hello' %><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<h3 id="-2"><a href="#-2" class="headerlink" title="&lt;%= code %&gt;"></a><code>&lt;%= code %&gt;</code></h3><p><code>&lt;%= code %&gt;</code>与<code>&lt;%- code %&gt;</code>类似，只不过会将返回值进行转义后输出。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>&lt;%= &#x27;<span class="tag">&lt;<span class="name">hello</span> /&gt;</span>&#x27; %&gt;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- convert --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="symbol">&amp;lt;</span>hello /<span class="symbol">&amp;gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<span class="token comment" spellcheck="true">&lt;!-- convert --></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>Hello<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="lt-code-gt-2"><a href="#lt-code-gt-2" class="headerlink" title="&lt;%= code %&gt;"></a><code>&lt;%= code %&gt;</code></h3><p><code>&lt;%= code %&gt;</code>与<code>&lt;%- code %&gt;</code>类似，只不过会将返回值进行转义后输出。</p>
-<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>&lt;%= '<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hello</span> <span class="token punctuation">/></span></span>' %><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-
-<span class="token comment" spellcheck="true">&lt;!-- convert --></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span><span class="token entity" title="&lt;">&amp;lt;</span>hello /<span class="token entity" title="&gt;">&amp;gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="lt-comment-gt"><a href="#lt-comment-gt" class="headerlink" title="&lt;%# comment %&gt;"></a><code>&lt;%# comment %&gt;</code></h3><p>昂。。这个标签里边的内容是作为注释存在的。。估计很少有人会用-.- 在模版生成后，会移除里边的内容</p>
+<h3 id="-3"><a href="#-3" class="headerlink" title="&lt;%# comment %&gt;"></a><code>&lt;%# comment %&gt;</code></h3><p>昂。。这个标签里边的内容是作为注释存在的。。估计很少有人会用-.- 在模版生成后，会移除里边的内容</p>
 <h3 id="在标签后边添加"><a href="#在标签后边添加" class="headerlink" title="在标签后边添加-"></a>在标签后边添加<code>-</code></h3><p>这个有很多种写法都可以支持，比如：<code>&lt;% -%&gt;</code>，<code>&lt;%= -%&gt;</code>，<code>&lt;%- -%&gt;</code><br><strong>这样会移除该标签后边的第一个换行符（如果有的话）</strong></p>
-<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%-</span> <span class="token attr-name">'Title'</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span><br><span class="line">  &lt;%- &#x27;Title&#x27; %&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- convert --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span><br><span class="line">  Title</span><br><span class="line"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- line --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span><br><span class="line">  &lt;%- &#x27;Title&#x27; -%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- convert --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span><br><span class="line">  Title<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<span class="token comment" spellcheck="true">&lt;!-- convert --></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>
-  Title
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-
-<span class="token comment" spellcheck="true">&lt;!-- line --></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%-</span> <span class="token attr-name">'Title'</span> <span class="token attr-name">-%</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-
-<span class="token comment" spellcheck="true">&lt;!-- convert --></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>
-  Title<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="模版提供的各种Config"><a href="#模版提供的各种Config" class="headerlink" title="模版提供的各种Config"></a>模版提供的各种<code>Config</code></h2><h3 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h3><p>默认为<code>false</code>，如果设置为<code>true</code>则认为是开启了缓存模式，对相同<code>filename</code>参数的模版会使用之前已经渲染好的。<br><strong>前置条件：必须同时设置<code>filename</code>参数</strong></p>
 <h3 id="filename"><a href="#filename" class="headerlink" title="filename"></a>filename</h3><p><code>cache</code>模式下作为一个存储的<code>key</code>。</p>
 <h3 id="scope"><a href="#scope" class="headerlink" title="scope"></a>scope</h3><p>可以通过该参数设置模版执行时的函数上下文。<br>即模版中<code>this</code>的指向。</p>
@@ -150,90 +110,80 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <p>官方文档中写的接口为：<code>compile</code>、<code>render</code>。<br>确实。。其他几个接口都不太常用，或者说，太难以使用，比如：<code>parse</code>属于一个半成品，<code>renderFile</code>又只能在<code>node</code>环境下使用。</p>
 </blockquote>
 <h3 id="clearCache"><a href="#clearCache" class="headerlink" title="clearCache"></a>clearCache</h3><p>清除缓存，将之前内存中存储的模版清空。<br>简单粗暴的一个函数。。。<small>老铁，没毛病。</small></p>
-<pre class="line-numbers language-javascript"><code class="language-javascript">exports<span class="token punctuation">.</span>clearCache <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  cache <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exports</span>.<span class="property">clearCache</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  cache = &#123;&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <h3 id="parse"><a href="#parse" class="headerlink" title="parse"></a>parse</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">参数</th>
-<th style="text-align:center">描述</th>
+<th align="center">参数</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">str</td>
-<td style="text-align:center">要进行解析的模版字符串</td>
+<tbody><tr>
+<td align="center">str</td>
+<td align="center">要进行解析的模版字符串</td>
 </tr>
 <tr>
-<td style="text-align:center">options</td>
-<td style="text-align:center">一系列的配置参数</td>
+<td align="center">options</td>
+<td align="center">一系列的配置参数</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>解析模版字符串，将其转换为可执行的<code>JavaScript</code>代码并返回。<br>P.S. 该函数的执行会返回一个<code>JavaScript</code>脚本的字符串，我们可以通过<code>new Function()</code>或者<code>eval</code>（不推荐了）来执行该脚本获得渲染好的字符串。</p>
 <h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">参数</th>
-<th style="text-align:center">描述</th>
+<th align="center">参数</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">str</td>
-<td style="text-align:center">要进行解析的模版字符串</td>
+<tbody><tr>
+<td align="center">str</td>
+<td align="center">要进行解析的模版字符串</td>
 </tr>
 <tr>
-<td style="text-align:center">options</td>
-<td style="text-align:center">一系列的配置参数</td>
+<td align="center">options</td>
+<td align="center">一系列的配置参数</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>函数会调用<code>parse</code>，并将生成好的脚本塞进一个函数中，并将函数返回，我们可以通过调用该函数来获得渲染好的字符串。</p>
 <h3 id="render"><a href="#render" class="headerlink" title="render"></a>render</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">参数</th>
-<th style="text-align:center">描述</th>
+<th align="center">参数</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">str</td>
-<td style="text-align:center">要进行解析的模版字符串</td>
+<tbody><tr>
+<td align="center">str</td>
+<td align="center">要进行解析的模版字符串</td>
 </tr>
 <tr>
-<td style="text-align:center">options</td>
-<td style="text-align:center">一系列的配置参数</td>
+<td align="center">options</td>
+<td align="center">一系列的配置参数</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>函数调用<code>compile</code>，返回值即是渲染好的字符串。</p>
 <h3 id="renderFile"><a href="#renderFile" class="headerlink" title="renderFile"></a>renderFile</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">参数</th>
-<th style="text-align:center">描述</th>
+<th align="center">参数</th>
+<th align="center">描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">path</td>
-<td style="text-align:center">模版字符串存储的路径</td>
+<tbody><tr>
+<td align="center">path</td>
+<td align="center">模版字符串存储的路径</td>
 </tr>
 <tr>
-<td style="text-align:center">options</td>
-<td style="text-align:center">一系列的配置参数</td>
+<td align="center">options</td>
+<td align="center">一系列的配置参数</td>
 </tr>
 <tr>
-<td style="text-align:center">fn</td>
-<td style="text-align:center">获取到文件后执行的回调函数</td>
+<td align="center">fn</td>
+<td align="center">获取到文件后执行的回调函数</td>
 </tr>
-</tbody>
-</table>
-<p>该函数会将<code>path</code>取出，取出对应的文件，然后将文件的文本作为模版字符串传入<code>render</code>方法中。<br><code>fn</code>回调函数应遵守<a href="http://fredkschott.com/post/2014/03/understanding-error-first-callbacks-in-node-js/" target="_blank" rel="noopener"><code>Error-First</code></a>的规则。（第一个参数为<code>err</code>，后续参数为<code>result</code>）</p>
+</tbody></table>
+<p>该函数会将<code>path</code>取出，取出对应的文件，然后将文件的文本作为模版字符串传入<code>render</code>方法中。<br><code>fn</code>回调函数应遵守<a href="http://fredkschott.com/post/2014/03/understanding-error-first-callbacks-in-node-js/"><code>Error-First</code></a>的规则。（第一个参数为<code>err</code>，后续参数为<code>result</code>）</p>
 <p>对外的<code>API</code>除去<code>clearCache</code>外的四个函数，是一个包含的关系，大致结构如下：</p>
 <blockquote>
 <p><code>renderFile</code> [&gt; readFile &amp; call <code>render</code>]</p>
@@ -247,7 +197,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
 </blockquote>
 </blockquote>
 </blockquote>
-<h2 id="一些完整的示例"><a href="#一些完整的示例" class="headerlink" title="一些完整的示例"></a>一些完整的示例</h2><p>仓库中存放了一些各种使用姿势的示例：<br><a href="https://github.com/Jiasm/ejs-examples" target="_blank" rel="noopener">https://github.com/Jiasm/ejs-examples</a></p>
+<h2 id="一些完整的示例"><a href="#一些完整的示例" class="headerlink" title="一些完整的示例"></a>一些完整的示例</h2><p>仓库中存放了一些各种使用姿势的示例：<br><a href="https://github.com/Jiasm/ejs-examples">https://github.com/Jiasm/ejs-examples</a></p>
 
 </div>
 
@@ -259,7 +209,7 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2017/09/11/EJS-0-如何使用EJS/';
+  var disqus_url = 'http://jiasm.github.io/2017/09/11/EJS-0-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8EJS/';
   
   var disqus_config = function () {
     this.page.url = location.href

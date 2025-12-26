@@ -8,8 +8,10 @@
   
   
   <title>总结CSS3新特性(Transform篇) - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,48 +57,38 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#旋转-rotate"><span class="toc-number">2.</span> <span class="toc-text">旋转(rotate):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缩放-scale"><span class="toc-number">3.</span> <span class="toc-text">缩放(scale):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#倾斜-skew"><span class="toc-number">4.</span> <span class="toc-text">倾斜(skew):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平移-translate"><span class="toc-number">5.</span> <span class="toc-text">平移(translate):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结:</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%8B%E8%BD%AC-rotate"><span class="toc-number">2.</span> <span class="toc-text">旋转(rotate):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%A9%E6%94%BE-scale"><span class="toc-number">3.</span> <span class="toc-text">缩放(scale):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%BE%E6%96%9C-skew"><span class="toc-number">4.</span> <span class="toc-text">倾斜(skew):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E7%A7%BB-translate"><span class="toc-number">5.</span> <span class="toc-text">平移(translate):</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结:</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
 
 <div id="post-content">
   <h1>总结CSS3新特性(Transform篇)</h1>
-  <h3 id="概述"><a href="#概述" class="headerlink" title="概述:"></a>概述:</h3><p>CSS3新添加的Transform可以改变元素在可视化区域的坐标(这种改变不会引起文档的重排,只有重排),以及形状,还有些3D形变.结合 Animation(这里以后会有个链接的) 能实现酷炫的动画;<br><a id="more"></a></p>
+  <h3 id="概述"><a href="#概述" class="headerlink" title="概述:"></a>概述:</h3><p>CSS3新添加的Transform可以改变元素在可视化区域的坐标(这种改变不会引起文档的重排,只有重排),以及形状,还有些3D形变.结合 Animation(这里以后会有个链接的) 能实现酷炫的动画;</p>
+<span id="more"></span>
+
 <h3 id="旋转-rotate"><a href="#旋转-rotate" class="headerlink" title="旋转(rotate):"></a>旋转(rotate):</h3><p>rotate支持一个参数,一个角度值 0-360deg</p>
-<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span></span><span class="token punctuation">{</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span><span class="token number">180</span>deg<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">/*实现旋转,左上角的东西会在右下角显示*/</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><img src="/images/summary-css-new-feature-transforms/screen-shot-1.png" alt=""></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#demo</span>&#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">180deg</span>);<span class="comment">/*实现旋转,左上角的东西会在右下角显示*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/summary-css-new-feature-transforms/screen-shot-1.png"></p>
 <h3 id="缩放-scale"><a href="#缩放-scale" class="headerlink" title="缩放(scale):"></a>缩放(scale):</h3><p>scale支持两个参数(x,y),如果没有填y的话,则取x的值;1为正常,&lt;1为缩放,&gt;1为放大;</p>
-<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span></span><span class="token punctuation">{</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">scale</span><span class="token punctuation">(</span><span class="token number">1.2</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">/*放大1.2倍*/</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">scale</span><span class="token punctuation">(</span><span class="token number">.8</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">/*缩小为正常的0.8倍*/</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/images/summary-css-new-feature-transforms/screen-shot-2.png" alt=""></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#demo</span>&#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1.2</span>);<span class="comment">/*放大1.2倍*/</span></span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(.<span class="number">8</span>);<span class="comment">/*缩小为正常的0.8倍*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/summary-css-new-feature-transforms/screen-shot-2.png"></p>
 <p>scale提供两个子方法,scaleX,scaleY,用来分别设置x或y的缩放;</p>
 <h3 id="倾斜-skew"><a href="#倾斜-skew" class="headerlink" title="倾斜(skew):"></a>倾斜(skew):</h3><p>skew支持两个参数(x,y),参数类型为角度(deg),如果不填y的话,则默认为0(与缩放不同);</p>
-<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span></span><span class="token punctuation">{</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span><span class="token function">skew</span><span class="token punctuation">(</span><span class="token number">45</span>deg<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">/*文本沿x轴向左倾斜45°*/</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span><span class="token function">skew</span><span class="token punctuation">(</span><span class="token number">0</span>,<span class="token number">45</span>deg<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">/*文本沿y轴向下倾斜45°*/</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/images/summary-css-new-feature-transforms/screen-shot-3.png" alt=""></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#demo</span>&#123;</span><br><span class="line">  <span class="attribute">transform</span>:<span class="built_in">skew</span>(<span class="number">45deg</span>);<span class="comment">/*文本沿x轴向左倾斜45°*/</span></span><br><span class="line">  <span class="attribute">transform</span>:<span class="built_in">skew</span>(<span class="number">0</span>,<span class="number">45deg</span>);<span class="comment">/*文本沿y轴向下倾斜45°*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/summary-css-new-feature-transforms/screen-shot-3.png"></p>
 <p>如果仅设x或y,可直接使用两个子方法,skewX与skewY;</p>
 <h3 id="平移-translate"><a href="#平移-translate" class="headerlink" title="平移(translate):"></a>平移(translate):</h3><p>translate接收两个参数(x,y)为平移的距离,如不填y值,则默认为0,支持所有CSS内有效的长度单位(使用translate用来移动元素不会触发重排,只有重绘);</p>
-<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span></span><span class="token punctuation">{</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span><span class="token function">translate</span><span class="token punctuation">(</span><span class="token number">20</span>px,<span class="token number">5</span>vh<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">/*向左移动二十像素,向下移动百分之五的视窗高度*/</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#demo</span>&#123;</span><br><span class="line">  <span class="attribute">transform</span>:<span class="built_in">translate</span>(<span class="number">20px</span>,<span class="number">5vh</span>);<span class="comment">/*向左移动二十像素,向下移动百分之五的视窗高度*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>同样有两个子方法,translateX,translateY;</p>
-<p>做了一个<a href="http://sandbox.runjs.cn/show/khlxer9k" target="_blank" rel="noopener">简单的小例子</a>,用了rotate;</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h3><p>用Transform可以做出很多酷炫的事情,(跳过了matrix,matrix3d没有说…)当然了,不要像我这样作死<br><img src="/images/summary-css-new-feature-transforms/screen-shot-4.gif" alt=""></p>
+<p>做了一个<a href="http://sandbox.runjs.cn/show/khlxer9k">简单的小例子</a>,用了rotate;</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h3><p>用Transform可以做出很多酷炫的事情,(跳过了matrix,matrix3d没有说…)当然了,不要像我这样作死<br><img src="/images/summary-css-new-feature-transforms/screen-shot-4.gif"></p>
 <p>相关参考文档:</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform" target="_blank" rel="noopener">MDN的Transform</a></p>
-<p><a href="http://www.w3school.com.cn/cssref/pr_transform.asp" target="_blank" rel="noopener">w3school的Transform</a></p>
-<p><a href="http://drafts.csswg.org/css-transforms/" target="_blank" rel="noopener">W3的文档</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform">MDN的Transform</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_transform.asp">w3school的Transform</a></p>
+<p><a href="http://drafts.csswg.org/css-transforms/">W3的文档</a></p>
+<p> </p>
 
 </div>
 
@@ -108,7 +100,7 @@
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2015/07/20/总结CSS3新特性-Transform篇/';
+  var disqus_url = 'http://jiasm.github.io/2015/07/20/%E6%80%BB%E7%BB%93CSS3%E6%96%B0%E7%89%B9%E6%80%A7-Transform%E7%AF%87/';
   
   var disqus_config = function () {
     this.page.url = location.href

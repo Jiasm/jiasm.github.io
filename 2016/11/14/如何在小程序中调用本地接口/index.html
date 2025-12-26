@@ -8,8 +8,10 @@
   
   
   <title>如何在小程序中调用本地接口 - Jarvis&#39;s Blog</title>
-  <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
 <script src="/js/prism-line-numbers.min.js"></script></head>
 
@@ -55,7 +57,7 @@
       <i class="fa fa-list-ol"></i>
     </label>
     <div class="toc-wrap toc-wrap-right">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景："><span class="toc-number">1.</span> <span class="toc-text">背景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#前提："><span class="toc-number">2.</span> <span class="toc-text">前提：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#准备工作："><span class="toc-number">3.</span> <span class="toc-text">准备工作：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作步骤："><span class="toc-number">4.</span> <span class="toc-text">操作步骤：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料："><span class="toc-number">5.</span> <span class="toc-text">参考资料：</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">背景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">前提：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">准备工作：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">操作步骤：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%9A"><span class="toc-number">5.</span> <span class="toc-text">参考资料：</span></a></li></ol>
     </div>
   </div>
   <label class="mask" for="toggle-toc"></label>
@@ -63,57 +65,59 @@
 <div id="post-content">
   <h1>如何在小程序中调用本地接口</h1>
   <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3><p>随着微信小程序开始公测，我司也拿到了AppID，所以开始了微信小程序的趟坑之旅。</p>
-<p>由于现在网上已经有很多的《微信小程序从精通到入门》的教程了，所以就不再重复那些，只是讲一下，在开发的过程中，如何使用本地（开发环境）的接口。<br><a id="more"></a></p>
+<p>由于现在网上已经有很多的《微信小程序从精通到入门》的教程了，所以就不再重复那些，只是讲一下，在开发的过程中，如何使用本地（开发环境）的接口。</p>
+<span id="more"></span>
+
 <p>因为小程序的开发文档中写到了，<strong>wx.request</strong> 中的URL只能是一个https请求，本地一般来讲是不会有https的-.-</p>
 <p>所以我们使用Charles代理来实现需求。</p>
 <h3 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h3><p>本人认为你现在已经具备以下几个条件：</p>
 <ol start="0">
-<li><p>具有微信小程序开发的权限</p>
+<li><p> 具有微信小程序开发的权限</p>
 </li>
-<li><p>知道自家小程序后台配置的信任域名都是什么-.-</p>
+<li><p> 知道自家小程序后台配置的信任域名都是什么-.-</p>
 </li>
-<li><p>有一台Mac（阿哈哈…无视…截图来自Mac…Windows党请多担待）</p>
+<li><p> 有一台Mac（阿哈哈…无视…截图来自Mac…Windows党请多担待）</p>
 </li>
 </ol>
 <h3 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h3><p>首先我们需要安装如下两个软件：</p>
 <ol start="0">
-<li><p>安装<a href="https://www.baidu.com/s?wd=charles%E7%A0%B4%E8%A7%A3%E7%89%88" target="_blank" rel="noopener">Charles</a>，当然了，是个破解版的-.- 破解方法请自行百度，不赘述</p>
+<li><p> 安装<a href="https://www.baidu.com/s?wd=charles%E7%A0%B4%E8%A7%A3%E7%89%88">Charles</a>，当然了，是个破解版的-.- 破解方法请自行百度，不赘述</p>
 </li>
-<li><p>安装<a href="https://mp.weixin.qq.com/wiki/10/e5f772f4521da17fa0d7304f68b97d7e.html#.E4.B8.8B.E8.BD.BD.E5.9C.B0.E5.9D.80" target="_blank" rel="noopener">微信web开发者工具</a></p>
+<li><p> 安装<a href="https://mp.weixin.qq.com/wiki/10/e5f772f4521da17fa0d7304f68b97d7e.html#.E4.B8.8B.E8.BD.BD.E5.9C.B0.E5.9D.80">微信web开发者工具</a></p>
 </li>
 </ol>
 <h3 id="操作步骤："><a href="#操作步骤：" class="headerlink" title="操作步骤："></a>操作步骤：</h3><p>到这一步，本人认为你已经安装好了上边两个软件，并且可以正常运行咯。</p>
 <ol start="0">
-<li><p>首先打开Charles，<strong>Help-&gt;SSL Proxying-&gt;Install Charles Root Certificate</strong> 安装证书到本地<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-1.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-2.png" alt=""></p>
+<li><p>   首先打开Charles，<strong>Help-&gt;SSL Proxying-&gt;Install Charles Root Certificate</strong> 安装证书到本地<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-1.png"><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-2.png"></p>
 </li>
-<li><p>在钥匙串访问中搜索 Charles 关键字，找到那个证书，点开后将信任选为 <strong>始终信任</strong><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-3.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-4.png" alt=""></p>
+<li><p>   在钥匙串访问中搜索 Charles 关键字，找到那个证书，点开后将信任选为 <strong>始终信任</strong><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-3.png"><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-4.png"></p>
 </li>
-<li><p>打开 <strong>Tools-&gt;Map Remote</strong> 添加线上域名于本地（开发环境）服务的映射<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-5.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-6.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-7.png" alt=""></p>
+<li><p>   打开 <strong>Tools-&gt;Map Remote</strong> 添加线上域名于本地（开发环境）服务的映射<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-5.png"><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-6.png"><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-7.png"></p>
 </li>
-<li><p>打开 <strong>Proxy-&gt;Proxy Settings</strong></p>
+<li><p>   打开 <strong>Proxy-&gt;Proxy Settings</strong></p>
 </li>
-<li><p>选择Proxies选项卡，默认的HTTP Proxy的值是8888，这个端口号需要记着，后边在微信web开发者工具里边要用到的<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-8.png" alt=""></p>
+<li><p>   选择Proxies选项卡，默认的HTTP Proxy的值是8888，这个端口号需要记着，后边在微信web开发者工具里边要用到的<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-8.png"></p>
 </li>
-<li><p>选择Mac OS X选项卡，点击启用如下两个选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-9.png" alt=""></p>
+<li><p>   选择Mac OS X选项卡，点击启用如下两个选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-9.png"></p>
 </li>
-<li><p>打开 <strong>Proxy-&gt;Mac OS X Proxy</strong> 启用本地的代理服务<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-10.png" alt=""></p>
+<li><p>   打开 <strong>Proxy-&gt;Mac OS X Proxy</strong> 启用本地的代理服务<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-10.png"></p>
 </li>
-<li><p>这时，Charles已经完成了本地服务代理线上服务的步骤，接下来就是微信web开发者工具中的一些设置</p>
+<li><p>   这时，Charles已经完成了本地服务代理线上服务的步骤，接下来就是微信web开发者工具中的一些设置</p>
 </li>
-<li><p>在扫码登录后，点击右上角代理的选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-11.png" alt=""></p>
+<li><p>   在扫码登录后，点击右上角代理的选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-11.png"></p>
 </li>
-<li><p>选择手动设置代理，然后填写本地的IP，以及前边在Charles中设置的代理端口号（第5步）<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-12.png" alt=""></p>
+<li><p>   选择手动设置代理，然后填写本地的IP，以及前边在Charles中设置的代理端口号（第5步）<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-12.png"></p>
 </li>
-<li><p>点击保存后，来到微信小程序的项目中，在 <strong>wx.request</strong> 中直接填写线上域名后，保存运行，你就会发现Charles中已经收到了来自你本地的一些请求😄<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-13.png" alt=""></p>
+<li><p> 点击保存后，来到微信小程序的项目中，在 <strong>wx.request</strong> 中直接填写线上域名后，保存运行，你就会发现Charles中已经收到了来自你本地的一些请求😄<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-13.png"></p>
 </li>
 </ol>
 <h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol start="0">
-<li><p><a href="https://mp.weixin.qq.com/debug/wxadoc/dev/?t=20161107" target="_blank" rel="noopener">微信小程序官方文档</a></p>
+<li><p>  <a href="https://mp.weixin.qq.com/debug/wxadoc/dev/?t=20161107">微信小程序官方文档</a></p>
 </li>
-<li><p><a href="http://www.waitsun.com/charles-3-11-2.html" target="_blank" rel="noopener">Charles破解版安装</a></p>
+<li><p>  <a href="http://www.waitsun.com/charles-3-11-2.html">Charles破解版安装</a></p>
 </li>
 </ol>
-<p>转载请署原文地址： <a href="https://blog.jiasm.org/2016/11/14/%E5%A6%82%E4%BD%95%E5%9C%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%8E%A5%E5%8F%A3/" target="_blank" rel="noopener">https://blog.jiasm.org/2016/11/14/如何在小程序中调用本地接口/</a></p>
+<p>转载请署原文地址： <a href="https://blog.jiasm.org/2016/11/14/%E5%A6%82%E4%BD%95%E5%9C%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%8E%A5%E5%8F%A3/">https://blog.jiasm.org/2016/11/14/如何在小程序中调用本地接口/</a></p>
 
 </div>
 
@@ -125,7 +129,7 @@
 <script>
   var disqus_shortname = 'jiashunming';
   
-  var disqus_url = 'http://jiasm.github.io/2016/11/14/如何在小程序中调用本地接口/';
+  var disqus_url = 'http://jiasm.github.io/2016/11/14/%E5%A6%82%E4%BD%95%E5%9C%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%8E%A5%E5%8F%A3/';
   
   var disqus_config = function () {
     this.page.url = location.href
