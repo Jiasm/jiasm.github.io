@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>Web开发生存工具使用指南 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#两者的作用"><span class="toc-number">1.</span> <span class="toc-text">两者的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Postman"><span class="toc-number">1.1.</span> <span class="toc-text">Postman</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Charles"><span class="toc-number">1.2.</span> <span class="toc-text">Charles</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在日常中使用的顺序"><span class="toc-number">1.3.</span> <span class="toc-text">在日常中使用的顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Postman-的安装与使用"><span class="toc-number">2.</span> <span class="toc-text">Postman 的安装与使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Charles-的安装与使用"><span class="toc-number">3.</span> <span class="toc-text">Charles 的安装与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装后的配置环节"><span class="toc-number">3.1.</span> <span class="toc-text">安装后的配置环节</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#设置代理端口"><span class="toc-number">3.1.1.</span> <span class="toc-text">设置代理端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#设置要代理的路径"><span class="toc-number">3.1.2.</span> <span class="toc-text">设置要代理的路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在本地安装证书"><span class="toc-number">3.1.3.</span> <span class="toc-text">在本地安装证书</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实际使用中的一些功能"><span class="toc-number">3.2.</span> <span class="toc-text">实际使用中的一些功能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#将网络资源替换为本地文件"><span class="toc-number">3.2.1.</span> <span class="toc-text">将网络资源替换为本地文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将请求转发到本地服务"><span class="toc-number">3.2.2.</span> <span class="toc-text">将请求转发到本地服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改请求的返回值"><span class="toc-number">3.2.3.</span> <span class="toc-text">修改请求的返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BreakPoints"><span class="toc-number">3.2.4.</span> <span class="toc-text">BreakPoints</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#以及一些其他的小功能"><span class="toc-number">3.2.5.</span> <span class="toc-text">以及一些其他的小功能</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">4.</span> <span class="toc-text">小记</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>Web开发生存工具使用指南</h1>
+  <p>这里安利两款我认为开发中能够极大的提高生产力的工具，Charles 和 Postman。</p>
+<p><em>P.S. Charles(查尔斯)。。不要再读查理斯了，金刚狼中被老铁扎心的博士就叫 Charles</em></p>
+<a id="more"></a>
+<h2 id="两者的作用"><a href="#两者的作用" class="headerlink" title="两者的作用"></a>两者的作用</h2><p>首先，这两个工具重叠的功能并不多，两者一起使用效果绝对是<code>1 + 1 &gt; 2</code>。</p>
+<h3 id="Postman"><a href="#Postman" class="headerlink" title="Postman"></a>Postman</h3><p>Postman 主要是用于模拟 http 请求，可以很方便的测试各种<code>METHOD</code>的请求。<br>进阶用法还可以使用其进行一些自动化测试的操作，详见<a href="/2018/04/02/%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/">使用 postman 进行自动化测试</a></p>
+<h3 id="Charles"><a href="#Charles" class="headerlink" title="Charles"></a>Charles</h3><p>Charles 则属于一款代理工具，设置代理后便可以进行 http 请求的抓包，以及修改一些请求实际的内容来达到调试的目的。<br><strong>主要是支持移动设备，跨设备调试神器</strong></p>
+<h3 id="在日常中使用的顺序"><a href="#在日常中使用的顺序" class="headerlink" title="在日常中使用的顺序"></a>在日常中使用的顺序</h3><p>一般在开发过程中，首先会通过<code>Postman</code>来进行接口的本地调试，验证没有问题以后则会进行代码的部署。<br>部署完成后就可以使用移动设备进行查看效果，这时为了验证接口的有效性，我们就会用到<code>Charles</code>，设置代理并拿到移动设备访问接口时的请求参数及返回值，进行验证确保生产环境上接口正常。</p>
+<p>如果是在生产环境上出现了问题，这时候就可以先拿<code>Charles</code>抓包（也就是获取接口的请求信息），在确认接口确实出现问题时，我们现在就有两种途径可以去 debug：</p>
+<ol>
+<li>使用<code>Charles</code>设置代理，将一个远程服务器地址代理到本地服务进行调试</li>
+<li>使用<code>Postman</code>模拟当时生产环境的请求（从<code>Charles</code>中 copy header、query 之类的数据）</li>
+</ol>
+<p>以上的操作都是非常直观的，非常高效的，如果抛开这类工具不用，就靠人肉 debug，不知要额外耗费多少时间了。</p>
+<h2 id="Postman-的安装与使用"><a href="#Postman-的安装与使用" class="headerlink" title="Postman 的安装与使用"></a>Postman 的安装与使用</h2><p>Postman 是一款纯免费的工具（当然，一个多人协作的功能是额外收费的），由 Electron 驱动的一款软件。</p>
+<p>官方网站：<a href="https://www.getpostman.com/" target="_blank" rel="noopener">https://www.getpostman.com/</a><br>下载地址：<a href="https://www.getpostman.com/apps" target="_blank" rel="noopener">https://www.getpostman.com/apps</a></p>
+<p>此处略过下载&amp;安装的过程。<br><em>P.S. 新版推荐安装独立应用，而不是 Chrome 的插件</em></p>
+<p>打开应用后的界面大概是这个样子的：<br><img src="/images/tools-usage/usage-postman-landingpage.png" alt=""></p>
+<p>首先是右侧的内容主体，这里包含了最基础的几个设置项。<br><img src="/images/tools-usage/postman-request-input.png" alt=""></p>
+<ul>
+<li>指定请求的 Method</li>
+<li>设置请求的 URL</li>
+<li>添加请求时所携带的参数</li>
+</ul>
+<p>在上边的这几项都设置完成后，点击 Send 按钮，即完成一个请求的发送了。<br>当然，如果在发送请求时想添加一些 Header 信息的话，直接在下边编辑 Header 信息即可，界面类似 Params。<br><img src="/images/tools-usage/postman-header-editor.png" alt=""><br>上图中右上角可以看到有一个 Cookies 按钮，点击后发现这里保存的是在 Postman 中所有访问的接口所返回的 cookie 信息，可以一键添加到当前请求的 Header 中来。<br><img src="/images/tools-usage/postman-cookie-copy.png" alt=""></p>
+<p>在请求发送过后，就可以在下边看到请求相应的结果了。<br><img src="/images/tools-usage/postman-response.png" alt=""></p>
+<ul>
+<li>Body 表示响应的结果</li>
+<li>Cookies 为服务端返回的 cookie</li>
+<li>Headers 是服务端返回的时所设置的各种头信息（Content-Type、Status 以及 CORS 之类的信息都会在这里）</li>
+<li>Test Results，是测试脚本执行的结果（如果有编写的话，详见之前写过的<a href="/2018/04/02/%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/">使用 postman 进行自动化测试</a>）</li>
+</ul>
+<p>再下边一行是返回数据的展示，默认会针对返回值的<code>Content-Type</code>进行自动格式化，三个按钮可以切换视图（格式化、原始数据、预览）<br>如果访问的 http 请求返回为 html 文件，则预览状态下展现类似浏览器，但是有些遗憾的是，页面中的静态资源引用一定要是绝对路径，不能出现类似这样的使用<code>&lt;link href=&quot;/XXX&quot; /&gt;</code>只能是<code>&lt;link href=&quot;http://XXX&quot; /&gt;</code><br><img src="/images/tools-usage/postman-preview.png" alt=""></p>
+<p>用 Postman 还有一个很喜人的地方，如果你需要和其他人进行接口的联调，先在 Postman 中编写好对应的格式尝试发送请求，如果接口不符合预期的话，可以点击 Send 按钮下边的 code，将该次请求生成各种语言的实现，直接 copy 给对方，让对方帮忙查看问题出在哪里。<br><img src="/images/tools-usage/postman-request-code.png" alt=""></p>
+<p>最左侧的一栏，Collections，可以理解为是一个类似文件夹的存在，里边会包含多个 Request（也就是上边写的某一个请求）。<br>用于分组自动化测试，如果不使用自动化测试的话，单纯的当作一个文件夹来看待也是没有问题的。</p>
+<h2 id="Charles-的安装与使用"><a href="#Charles-的安装与使用" class="headerlink" title="Charles 的安装与使用"></a>Charles 的安装与使用</h2><p>这两个工具的安装都比较简单，但是 Charles 在配置上会稍微复杂一些，毕竟要修改一些系统层面上的东西（不然没法抓包了）<br>Charles 是一个免费下载，但是使用收费的软件<em>当然网上大量的..破解方案，详情咨询度老师和谷老师</em></p>
+<p>官方网站：<a href="https://www.charlesproxy.com/" target="_blank" rel="noopener">https://www.charlesproxy.com/</a><br>下载地址：<a href="https://www.charlesproxy.com/download/latest-release/" target="_blank" rel="noopener">https://www.charlesproxy.com/download/latest-release/</a></p>
+<h3 id="安装后的配置环节"><a href="#安装后的配置环节" class="headerlink" title="安装后的配置环节"></a>安装后的配置环节</h3><p>可能就是大量的会在证书配置这里卡壳，所以觉得 Charles 好麻烦，不想用；殊不知一次麻烦过后带来的是怎样的好处。</p>
+<h4 id="设置代理端口"><a href="#设置代理端口" class="headerlink" title="设置代理端口"></a>设置代理端口</h4><blockquote>
+<p>设置路径 Proxy -&gt; Proxy Setting -&gt; Proxies</p>
+</blockquote>
+<p>安装成功以后，首先我们要设置代理所使用的端口号，一般来说都喜欢用<code>8888</code><br>这个端口号是用来在远程设备上连接你本机时使用的。<br>同一个页面的其他几个选项卡，第一个是用来设置一些忽略的 IP、域名之类的，俗称的白名单。以及针对 MacOS 和 Firefox 的一些特殊选项。</p>
+<p><img src="/images/tools-usage/charles-setting-proxy-port.png" alt=""></p>
+<h4 id="设置要代理的路径"><a href="#设置要代理的路径" class="headerlink" title="设置要代理的路径"></a>设置要代理的路径</h4><blockquote>
+<p>设置路径 Proxy -&gt; Proxy Setting -&gt; SSL Proxying Settings</p>
+</blockquote>
+<p>然后是设置 Charles 针对那些路径的请求去进行代理相关的操作，是一个可配置的表格。<br>图方便的话，可以直接写上<em>:</em>，前边是 IP、域名，后边是端口。*作为通配符可以匹配全部。<br><img src="/images/tools-usage/charles-setting-ssl-proxy.png" alt=""><br><img src="/images/tools-usage/charles-setting-edit-ssl.png" alt=""></p>
+<h4 id="在本地安装证书"><a href="#在本地安装证书" class="headerlink" title="在本地安装证书"></a>在本地安装证书</h4><blockquote>
+<p>设置路径 Help -&gt; SSL Proxying -&gt; Install Charles Root Certificate</p>
+</blockquote>
+<p>如果需要在本地进行一些抓包的操作的话，就需要在本地安装信任证书了<br>如果是 Mac，在安装完以后会自动跳转到钥匙串管理界面，右上角搜索 Charles 找到刚刚安装的证书。<br>将其所有的权限设置为始终信任即可。<br><img src="/images/tools-usage/charles-certificate.png" alt=""></p>
+<p>至此，在电脑端的设置就已经结束了，接下来就是远程设备的设置了，也就是我们平时用的手机之类的。<br>首先，我们要保证两个设备处于同一个局域网下，然后设置手机设备上边的代理信息。</p>
+<blockquote>
+<p>以 iOS 举例，设置路径为：<br>设置 -&gt; 无线局域网 -&gt; 点击当前连接的 Wi-Fi 右侧的感叹号图标 -&gt; 滑动到底部找到 HTTP 代理，点击进入 -&gt; 设置服务器为电脑端的 IP，端口为我们在上边设置的那个端口即可。</p>
+</blockquote>
+<p>此时，Charles 应该会弹出一个弹框提示有新设备接入，是否允许，点击 Allow 即可。<br><img src="/images/tools-usage/charles-new-device.png" alt=""><br>但是，此时还没完，我们还需要安装证书到手机端才能够正常使用。</p>
+<blockquote>
+<p>设置路径 Help -&gt; SSL Proxying -&gt; Install Charles Root Certificate on a Mobile Device or Remote Browser</p>
+</blockquote>
+<p>点击后，电脑上会有一个弹框，按照其说明找到弹框中的一个 URL，在手机浏览器中输入即可（目前的版本是 <a href="chls.pro/ssl">chls.pro/ssl</a>）。<br><em>P.S. 一定要保证手机是在连着本地代理的情况下去访问者个 URL</em><br><img src="/images/tools-usage/charles-install-certificate.png" alt=""><br>在 iOS 中会弹框提示你跳转到设置中安装描述文件，直接点击安装即可。<br><img src="/images/tools-usage/setting-1.gif" alt=""></p>
+<p>One more things，这个证书安装完以后，依然没有完成，我们还需要在 iOS 设备商进一步设置才能够使用。<br>此时我们看到的 https 的结果依然是错误的：<br><img src="/images/tools-usage/charles-unknown-https.png" alt=""></p>
+<blockquote>
+<p>设置路径 设置 -&gt; 通用 -&gt; 关于本机 -&gt; 证书信任设置（在最下边） -&gt; 找到我们刚刚的 Charles，点击 checkbox 完全信任这个证书</p>
+</blockquote>
+<p><img src="/images/tools-usage/setting-2-1.png" alt=""></p>
+<p>现在就完成了在 iOS 上边的设置了，可以愉快的使用 Charles 进行抓包了。<br><img src="/images/tools-usage/charles-known-https.png" alt=""></p>
+<h3 id="实际使用中的一些功能"><a href="#实际使用中的一些功能" class="headerlink" title="实际使用中的一些功能"></a>实际使用中的一些功能</h3><h4 id="将网络资源替换为本地文件"><a href="#将网络资源替换为本地文件" class="headerlink" title="将网络资源替换为本地文件"></a>将网络资源替换为本地文件</h4><p>在工作中，如果突然有一个页面出现了 bug，而且不能够在本地复现，此时怀疑问题出在 js 文件中。<br>可是这个文件是通过 webpack 之类的进行打包的，用 Charles 就可以很好的进行 debug。<br>我们可以使用 Map Local 来将某些网络资源替换为本地的资源，就像上边的，我们可以将线上压缩后的 js 文件替换为本地未压缩（或者添加了 debug 逻辑的 js 文件）来进行调试。</p>
+<blockquote>
+<p>设置路径 Tools -&gt; Map Local</p>
+</blockquote>
+<p><img src="/images/tools-usage/charles-map-local.png" alt=""></p>
+<p>比如我们将百度的首页替换为一个本地简单的页面。<br>此时再通过手机进行访问，得到的就是我们映射在本地的文件了。</p>
+<p><img src="/images/tools-usage/demo-charles-maplocal.png" alt=""><br><img src="/images/tools-usage/charles-map-local-detail.png" alt=""></p>
+<h4 id="将请求转发到本地服务"><a href="#将请求转发到本地服务" class="headerlink" title="将请求转发到本地服务"></a>将请求转发到本地服务</h4><p>上边的是针对一些静态资源文件进行的处理，但如果是一个接口出现了问题呢？<br>调用接口出错了，但是并不知道为什么，所以我们可以使用另一个功能，Map Remote，将一些请求转发到本地服务器。<br>这样无需去服务器上改代码就能够调试了。</p>
+<blockquote>
+<p>设置路径 Tools -&gt; Map Remote</p>
+</blockquote>
+<p>几点注意事项：</p>
+<ol>
+<li>某一项为空，则代表匹配全部的</li>
+<li>如果是代理到本地服务器，Map to 里边的 protocol 一定要填成 http，不然 https 的请求转发过来也会是 https</li>
+<li>如果在服务器中有用到 refer 字段的要注意了，这个 refer 的值会变成你在这里配置的本地接口地址，例如 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 代理到 localhost:8000，实际获得的 refer 为 localhost:8000，为了解决这个问题，你需要勾选下边的 Preserve Host header 来保证 Header 信息不会改变</li>
+</ol>
+<p><img src="/images/tools-usage/charles-map-remote.png" alt=""></p>
+<h4 id="修改请求的返回值"><a href="#修改请求的返回值" class="headerlink" title="修改请求的返回值"></a>修改请求的返回值</h4><p>我们可以通过配置一些规则来改变某些接口的返回值。<br>比如我们将一个 github 的接口中所有的 jiasm 修改为 jarvis。</p>
+<blockquote>
+<p>设置路径 Tools -&gt; Rewrite</p>
+</blockquote>
+<p>各种规则都可以配置，示例仅做了 Body 中的替换，其实修改 Header 什么之类的也都可以做到的。</p>
+<p><img src="/images/tools-usage/charles-rewrite-setting-1.png" alt=""><br><img src="/images/tools-usage/charles-rewrite-setting-2.png" alt=""><br><img src="/images/tools-usage/charles-rewrite-setting-3.png" alt=""></p>
+<p>这样我们再访问接口时的返回值就会产生变化：<br><img src="/images/tools-usage/charles-rewrite-before.png" alt=""><br><img src="/images/tools-usage/charles-rewrite-after.png" alt=""></p>
+<h4 id="BreakPoints"><a href="#BreakPoints" class="headerlink" title="BreakPoints"></a>BreakPoints</h4><p>上边的示例是在 Charles 中配置了一个规则，后续的所有访问都会去执行这一段逻辑。<br>但如果仅仅是想修改一次接口的请求，还要去配置这个规则就显得太麻烦了。<br>所以 Charles 还提供了另一种方案，BreakPoints，用类似打断点的方式，手动修改某一次请求的数据。</p>
+<p>我们在要打断点的请求上右键调出菜单，然后找到 BreakPoints，点击激活。<br><img src="/images/tools-usage/charles-trigger-breakpoints.png" alt=""><br>下次再访问时就会自动跳转到另一个页面进行设置。<br>第一次是修改 Request 的时候，所以我们直接点击 execute 执行。<br>等到下次再跳转到这个页面时则表示已经获取到数据了，这时我们再进行修改 Response。<br><img src="/images/tools-usage/charles-edit-breakpoints.png" alt=""><br><strong>Rewrite 是早于 BreakPoints 执行的，因为我们可以看到，name 已经被覆盖为了 jarvis</strong><br>修改完成后点击 Execute，这时候设备就接收到了我们修改后的请求了。<br><img src="/images/tools-usage/charles-breakpoints-results.png" alt=""></p>
+<h4 id="以及一些其他的小功能"><a href="#以及一些其他的小功能" class="headerlink" title="以及一些其他的小功能"></a>以及一些其他的小功能</h4><ol>
+<li>模拟弱网环境 Proxy -&gt; Throttle Settings</li>
+<li>简单的压测 找到你要压测的请求，右键找到 Repeat Advanced</li>
+</ol>
+<p>更多例子请查阅<a href="https://www.charlesproxy.com/documentation/tools/" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>Postman 与 Charles 都是非常有助于提升开发效率的工具。<br>Postman 可以模拟请求、进行简易的自动化测试以及性能监控个。<br>Charles 可以在本地快速的进行 debug，解决问题（以及也可以做一些性能测试）。<br>希望大家能够善用工具，不要将自己的时间浪费到可被工具替代的事情上来。</p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/06/23/Web开发生存工具使用指南/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'a3ab9f00-768d-11e8-b3fd-09142d923783'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

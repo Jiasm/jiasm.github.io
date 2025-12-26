@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>koa源码阅读[2]-koa-router - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#koa-router是什么"><span class="toc-number">1.</span> <span class="toc-text">koa-router是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#koa-router的大致结构"><span class="toc-number">2.</span> <span class="toc-text">koa-router的大致结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#koa-router的运行流程"><span class="toc-number">3.</span> <span class="toc-text">koa-router的运行流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建实例时的一些事情"><span class="toc-number">3.1.</span> <span class="toc-text">创建实例时的一些事情</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sensitive"><span class="toc-number">3.1.1.</span> <span class="toc-text">sensitive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strict"><span class="toc-number">3.1.2.</span> <span class="toc-text">strict</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#methods"><span class="toc-number">3.1.3.</span> <span class="toc-text">methods</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#routerPath"><span class="toc-number">3.1.4.</span> <span class="toc-text">routerPath</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#巧用routerPath实现转发功能"><span class="toc-number">3.1.5.</span> <span class="toc-text">巧用routerPath实现转发功能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注册路由的监听"><span class="toc-number">3.2.</span> <span class="toc-text">注册路由的监听</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#path"><span class="toc-number">3.2.1.</span> <span class="toc-text">path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#methods-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">methods</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#middleware"><span class="toc-number">3.2.3.</span> <span class="toc-text">middleware</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#opts"><span class="toc-number">3.2.4.</span> <span class="toc-text">opts</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#name"><span class="toc-number">3.2.4.1.</span> <span class="toc-text">name</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#跑题说下router-url的那些事儿"><span class="toc-number">3.2.4.2.</span> <span class="toc-text">跑题说下router.url的那些事儿</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#prefix"><span class="toc-number">3.2.4.3.</span> <span class="toc-text">prefix</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#sensitive与strict"><span class="toc-number">3.2.4.4.</span> <span class="toc-text">sensitive与strict</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#end"><span class="toc-number">3.2.4.5.</span> <span class="toc-text">end</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ignoreCaptures"><span class="toc-number">3.2.4.6.</span> <span class="toc-text">ignoreCaptures</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#router-param的作用"><span class="toc-number">3.2.5.</span> <span class="toc-text">router.param的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最常用的get-post之类的快捷方式"><span class="toc-number">3.2.6.</span> <span class="toc-text">最常用的get/post之类的快捷方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#router-use-Router内部的中间件"><span class="toc-number">3.2.7.</span> <span class="toc-text">router.use-Router内部的中间件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#普通的use"><span class="toc-number">3.2.7.1.</span> <span class="toc-text">普通的use</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#将其他router实例传递进来"><span class="toc-number">3.2.7.2.</span> <span class="toc-text">将其他router实例传递进来</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求的处理"><span class="toc-number">3.3.</span> <span class="toc-text">请求的处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小记"><span class="toc-number">4.</span> <span class="toc-text">小记</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>koa源码阅读[2]-koa-router</h1>
+  <p>第三篇，有关koa生态中比较重要的一个中间件：<a href="https://github.com/alexmingoia/koa-router" target="_blank" rel="noopener">koa-router</a>  </p>
+<blockquote>
+<p>第一篇：<a href="/2018/07/22/koa源码阅读-0">koa源码阅读-0</a><br>第二篇：<a href="/2018/07/29/koa源码阅读-1-koa与koa-compose">koa源码阅读-1-koa与koa-compose</a>  </p>
+</blockquote>
+<h2 id="koa-router是什么"><a href="#koa-router是什么" class="headerlink" title="koa-router是什么"></a>koa-router是什么</h2><p>首先，因为koa是一个管理中间件的平台，而注册一个中间件使用<code>use</code>来执行。<br>无论是什么请求，都会将所有的中间件执行一遍（如果没有中途结束的话）<br>所以，这就会让开发者很困扰，如果我们要做路由该怎么写逻辑？  </p>
+<a id="more"></a>
+<pre class="line-numbers language-javascript"><code class="language-javascript">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">switch</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>url<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">case</span> <span class="token string">'/'</span><span class="token punctuation">:</span>
+    <span class="token keyword">case</span> <span class="token string">'/index'</span><span class="token punctuation">:</span>
+      ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'index'</span>
+      <span class="token keyword">break</span>
+    <span class="token keyword">case</span> <span class="token string">'list'</span><span class="token punctuation">:</span>
+      ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'list'</span>
+      <span class="token keyword">break</span>
+    <span class="token keyword">default</span><span class="token punctuation">:</span>
+      ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'not found'</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>诚然，这样是一个简单的方法，但是必然不适用于大型项目，数十个接口通过一个<code>switch</code>来控制未免太繁琐了。<br>更何况请求可能只支持<code>get</code>或者<code>post</code>，以及这种方式并不能很好的支持URL中包含参数的请求<code>/info/:uid</code>。<br>在<code>express</code>中是不会有这样的问题的，自身已经提供了<code>get</code>、<code>post</code>等之类的与<code>METHOD</code>同名的函数用来注册回调：<br><em>express</em></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'hi there.'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是<code>koa</code>做了很多的精简，将很多逻辑都拆分出来作为独立的中间件来存在。<br>所以导致很多<code>express</code>项目迁移为<code>koa</code>时，需要额外的安装一些中间件，<code>koa-router</code>应该说是最常用的一个。<br>所以在<code>koa</code>中则需要额外的安装<code>koa-router</code>来实现类似的路由功能：<br><em>koa</em></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'hi there.'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看起来代码确实多了一些，毕竟将很多逻辑都从框架内部转移到了中间件中来处理。<br>也算是为了保持一个简练的koa框架所取舍的一些东西吧。<br><em>koa-router的逻辑确实要比koa的复杂一些，可以将koa想象为一个市场，而koa-router则是其中一个摊位</em><br><em>koa仅需要保证市场的稳定运行，而真正和顾客打交道的确是在里边摆摊的koa-router</em>  </p>
+<h2 id="koa-router的大致结构"><a href="#koa-router的大致结构" class="headerlink" title="koa-router的大致结构"></a>koa-router的大致结构</h2><p><code>koa-router</code>的结构并不是很复杂，也就分了两个文件：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">.</span>
+├── layer.js
+└── router.ja
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><code>layer</code>主要是针对一些信息的封装，主要路基由<code>router</code>提供：  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">File</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>layer</code></td>
+<td style="text-align:left">信息存储：路径、METHOD、路径对应的正则匹配、路径中的参数、路径对应的中间件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>router</code></td>
+<td style="text-align:left">主要逻辑：对外暴露注册路由的函数、提供处理路由的中间件，检查请求的URL并调用对应的layer中的路由处理</td>
+</tr>
+</tbody>
+</table>
+<h2 id="koa-router的运行流程"><a href="#koa-router的运行流程" class="headerlink" title="koa-router的运行流程"></a>koa-router的运行流程</h2><p>可以拿上边所抛出的基本例子来说明<code>koa-router</code>是怎样的一个执行流程：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 实例化一个Router对象</span>
+
+<span class="token comment" spellcheck="true">// 注册一个路由的监听</span>
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'hi there.'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app
+  <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 将该Router对象的中间件注册到Koa实例上，后续请求的主要处理逻辑</span>
+  <span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 添加针对OPTIONS的响应处理，以及一些METHOD不支持的处理</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="创建实例时的一些事情"><a href="#创建实例时的一些事情" class="headerlink" title="创建实例时的一些事情"></a>创建实例时的一些事情</h3><p>首先，在<code>koa-router</code>实例化的时候，是可以传递一个配置项参数作为初始化的配置信息的。<br>然而这个配置项在<code>readme</code>中只是简单的被描述为：  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Param</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>[opts]</code></td>
+<td style="text-align:center"><code>Object</code></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>[opts.prefix]</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:left">prefix router paths(路由的前缀)</td>
+</tr>
+</tbody>
+</table>
+<p>告诉我们可以添加一个<code>Router</code>注册时的前缀，也就是说如果按照模块化分，可以不必在每个路径匹配的前端都添加巨长的前缀：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  prefix<span class="token punctuation">:</span> <span class="token string">'/my/awesome/prefix'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/index'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// curl /my/awesome/prefix/index => pong!</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>P.S. 不过要记住，如果<code>prefix</code>以<code>/</code>结尾，则路由的注册就可以省去前缀的<code>/</code>了，不然会出现<code>/</code>重复的情况</em>  </p>
+<p>实例化<code>Router</code>时的代码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">Router</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token keyword">instanceof</span> <span class="token class-name">Router</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">this</span><span class="token punctuation">.</span>opts <span class="token operator">=</span> opts <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>methods <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>methods <span class="token operator">||</span> <span class="token punctuation">[</span>
+    <span class="token string">'HEAD'</span><span class="token punctuation">,</span>
+    <span class="token string">'OPTIONS'</span><span class="token punctuation">,</span>
+    <span class="token string">'GET'</span><span class="token punctuation">,</span>
+    <span class="token string">'PUT'</span><span class="token punctuation">,</span>
+    <span class="token string">'PATCH'</span><span class="token punctuation">,</span>
+    <span class="token string">'POST'</span><span class="token punctuation">,</span>
+    <span class="token string">'DELETE'</span>
+  <span class="token punctuation">]</span>
+
+  <span class="token keyword">this</span><span class="token punctuation">.</span>params <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>stack <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可见的只有一个<code>methods</code>的赋值，但是在查看了其他源码后，发现除了<code>prefix</code>还有一些参数是实例化时传递进来的，但是不太清楚为什么文档中没有提到：  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Param</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>sensitive</code></td>
+<td style="text-align:center"><code>Boolean</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">是否严格匹配大小写</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>strict</code></td>
+<td style="text-align:center"><code>Boolean</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">如果设置为<code>false</code>则匹配路径后边的<code>/</code>是可选的</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>methods</code></td>
+<td style="text-align:center"><code>Array[String]</code></td>
+<td style="text-align:left"><code>[&#39;HEAD&#39;,&#39;OPTIONS&#39;,&#39;GET&#39;,&#39;PUT&#39;,&#39;PATCH&#39;,&#39;POST&#39;,&#39;DELETE&#39;]</code></td>
+<td style="text-align:left">设置路由可以支持的METHOD</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>routerPath</code></td>
+<td style="text-align:center">String</td>
+<td style="text-align:left"><code>null</code></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="sensitive"><a href="#sensitive" class="headerlink" title="sensitive"></a>sensitive</h4><p>如果设置了<code>sensitive</code>，则会以更严格的匹配规则来监听路由，不会忽略URL中的大小写，完全按照注册时的来匹配：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  sensitive<span class="token punctuation">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/index'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// curl /index => pong!</span>
+<span class="token comment" spellcheck="true">// curl /Index => 404</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="strict"><a href="#strict" class="headerlink" title="strict"></a>strict</h4><p><code>strict</code>与<code>sensitive</code>功能类似，也是用来设置让路径的匹配变得更加严格，在默认情况下，路径结尾处的<code>/</code>是可选的，如果开启该参数以后，如果在注册路由时尾部没有添加<code>/</code>，则匹配的路由也一定不能够添加<code>/</code>结尾：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  strict<span class="token punctuation">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/index'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// curl /index  => pong!</span>
+<span class="token comment" spellcheck="true">// curl /Index  => pong!</span>
+<span class="token comment" spellcheck="true">// curl /index/ => 404</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="methods"><a href="#methods" class="headerlink" title="methods"></a>methods</h4><p><code>methods</code>配置项存在的意义在于，如果我们有一个接口需要同时支持<code>GET</code>和<code>POST</code>，<code>router.get</code>、<code>router.post</code>这样的写法必然是丑陋的。<br>所以我们可能会想到使用<code>router.all</code>来简化操作：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token string">'/ping'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// curl -X GET  /index  => pong!</span>
+<span class="token comment" spellcheck="true">// curl -X POST /index  => pong!</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这简直是太完美了，可以很轻松的实现我们的需求，但是如果再多实验一些其他的<code>methods</code>以后，尴尬的事情就发生了：  </p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> curl -X DELETE /index  <span class="token operator">=</span><span class="token operator">></span> pong<span class="token operator">!</span>
+<span class="token operator">></span> curl -X PUT    /index  <span class="token operator">=</span><span class="token operator">></span> pong<span class="token operator">!</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这显然不是符合我们预期的结果，所以，在这种情况下，基于目前<code>koa-router</code>需要进行如下修改来实现我们想要的功能：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Koa <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> Router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'router'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Koa</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 修改处1</span>
+<span class="token keyword">const</span> methods <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  methods
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 修改处2</span>
+router<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 理想情况下，这些判断应该交由中间件来完成</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">~</span>methods<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>method<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样的两处修改，就可以实现我们所期望的功能：  </p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> curl -X GET    /index  <span class="token operator">=</span><span class="token operator">></span> pong<span class="token operator">!</span>
+<span class="token operator">></span> curl -X POST   /index  <span class="token operator">=</span><span class="token operator">></span> pong<span class="token operator">!</span>
+<span class="token operator">></span> curl -X DELETE /index  <span class="token operator">=</span><span class="token operator">></span> Not Implemented
+<span class="token operator">></span> curl -X PUT    /index  <span class="token operator">=</span><span class="token operator">></span> Not Implemented
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我个人觉得这是<code>allowedMethods</code>实现的一个逻辑问题，不过也许是我没有get到作者的点，<code>allowedMethods</code>中比较关键的一些源码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>allowedMethods <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  options <span class="token operator">=</span> options <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token keyword">let</span> implemented <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>methods
+
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">allowedMethods</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">let</span> allowed <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+      <span class="token comment" spellcheck="true">// 如果进行了ctx.body赋值，必然不会执行后续的逻辑</span>
+      <span class="token comment" spellcheck="true">// 所以就需要我们自己在中间件中进行判断</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>ctx<span class="token punctuation">.</span>status <span class="token operator">||</span> ctx<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">404</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">~</span>implemented<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>method<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>options<span class="token punctuation">.</span><span class="token keyword">throw</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">let</span> notImplementedThrowable
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> options<span class="token punctuation">.</span>notImplemented <span class="token operator">===</span> <span class="token string">'function'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              notImplementedThrowable <span class="token operator">=</span> options<span class="token punctuation">.</span><span class="token function">notImplemented</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// set whatever the user returns from their function</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+              notImplementedThrowable <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HttpError<span class="token punctuation">.</span>NotImplemented</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">throw</span> notImplementedThrowable
+          <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            ctx<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">501</span>
+            ctx<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">'Allow'</span><span class="token punctuation">,</span> allowedArr<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">', '</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>allowedArr<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token comment" spellcheck="true">// ...</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先，<code>allowedMethods</code>是作为一个后置的中间件存在的，因为在返回的函数中先调用了<code>next</code>，其次才是针对<code>METHOD</code>的判断，而这样带来的一个后果就是，如果我们在路由的回调中进行类似<code>ctx.body = XXX</code>的操作，实际上会修改本次请求的<code>status</code>值的，使之并不会成为<code>404</code>，而无法正确的触发<code>METHOD</code>检查的逻辑。<br>想要正确的触发<code>METHOD</code>逻辑，就需要自己在路由监听中手动判断<code>ctx.method</code>是否为我们想要的，然后在跳过当前中间件的执行。<br>而这一判断的步骤实际上与<code>allowedMethods</code>中间件中的<code>!~implemented.indexOf(ctx.method)</code>逻辑完全是重复的，不太清楚<code>koa-router</code>为什么会这么处理。  </p>
+<p><strong>当然，<code>allowedMethods</code>是不能够作为一个前置中间件来存在的，因为一个<code>Koa</code>中可能会挂在多个<code>Router</code>，<code>Router</code>之间的配置可能不尽相同，不能保证所有的<code>Router</code>都和当前<code>Router</code>可处理的<code>METHOD</code>是一样的。</strong><br>所以，个人感觉<code>methods</code>参数的存在意义并不是很大。。 </p>
+<h4 id="routerPath"><a href="#routerPath" class="headerlink" title="routerPath"></a>routerPath</h4><p>这个参数的存在。。感觉会导致一些很诡异的情况。<br>这就要说到在注册完中间件以后的<code>router.routes()</code>的操作了：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>routes <span class="token operator">=</span> Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>middleware <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> router <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token keyword">let</span> dispatch <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token function">dispatch</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> path <span class="token operator">=</span> router<span class="token punctuation">.</span>opts<span class="token punctuation">.</span>routerPath <span class="token operator">||</span> ctx<span class="token punctuation">.</span>routerPath <span class="token operator">||</span> ctx<span class="token punctuation">.</span>path
+    <span class="token keyword">let</span> matched <span class="token operator">=</span> router<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>method<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// 如果匹配到则执行对应的中间件</span>
+    <span class="token comment" spellcheck="true">// 执行后续操作</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> dispatch
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为我们实际上向<code>koa</code>注册的是这样的一个中间件，在每次请求发送过来时，都会执行<code>dispatch</code>，而在<code>dispatch</code>中判断是否命中某个<code>router</code>时，则会用到这个配置项，这样的一个表达式：<code>router.opts.routerPath || ctx.routerPath || ctx.path</code>，<code>router</code>代表当前<code>Router</code>实例，也就是说，如果我们在实例化一个<code>Router</code>的时候，如果填写了<code>routerPath</code>，这会导致无论任何请求，都会优先使用<code>routerPath</code>来作为路由检查：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  routerPath<span class="token punctuation">:</span> <span class="token string">'/index'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token string">'/index'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">8888</span><span class="token punctuation">,</span> _ <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'server run as http://127.0.0.1:8888'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果有这样的代码，无论请求什么URL，都会认为是<code>/index</code>来进行匹配：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> curl http://127.0.0.1:8888
+pong<span class="token operator">!</span>
+<span class="token operator">></span> curl http://127.0.0.1:8888/index
+pong<span class="token operator">!</span>
+<span class="token operator">></span> curl http://127.0.0.1:8888/whatever/path
+pong<span class="token operator">!</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="巧用routerPath实现转发功能"><a href="#巧用routerPath实现转发功能" class="headerlink" title="巧用routerPath实现转发功能"></a>巧用routerPath实现转发功能</h4><p>同样的，这个短路运算符一共有三个表达式，第二个的<code>ctx</code>则是当前请求的上下文，也就是说，如果我们有一个早于<code>routes</code>执行的中间件，也可以进行赋值来修改路由判断所使用的<code>URL</code>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token string">'/index'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'pong!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>routerPath <span class="token operator">=</span> <span class="token string">'/index'</span> <span class="token comment" spellcheck="true">// 手动改变routerPath</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">8888</span><span class="token punctuation">,</span> _ <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'server run as http://127.0.0.1:8888'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样的代码也能够实现相同的效果。<br>实例化中传入的<code>routerPath</code>让人捉摸不透，但是在中间件中改变<code>routerPath</code>的这个还是可以找到合适的场景，这个可以简单的理解为转发的一种实现，转发的过程是对客户端不可见的，在客户端看来依然访问的是最初的URL，但是在中间件中改变<code>ctx.routerPath</code>可以很轻易的使路由匹配到我们想转发的地方去  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 老版本的登录逻辑处理</span>
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'old login logic!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 新版本的登录处理逻辑</span>
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/login-v2'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'new login logic!'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>path <span class="token operator">===</span> <span class="token string">'/login'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 匹配到旧版请求，转发到新版</span>
+    ctx<span class="token punctuation">.</span>routerPath <span class="token operator">=</span> <span class="token string">'/login-v2'</span> <span class="token comment" spellcheck="true">// 手动改变routerPath</span>
+  <span class="token punctuation">}</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就实现了一个简易的转发：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> curl -X POST http://127.0.0.1:8888/login
+new login logic<span class="token operator">!</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="注册路由的监听"><a href="#注册路由的监听" class="headerlink" title="注册路由的监听"></a>注册路由的监听</h3><p>上述全部是关于实例化<code>Router</code>时的一些操作，下面就来说一下使用最多的，注册路由相关的操作，最熟悉的必然就是<code>router.get</code>，<code>router.post</code>这些的操作了。<br>但实际上这些也只是一个快捷方式罢了，在内部调用了来自<code>Router</code>的<code>register</code>方法：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>register <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>path<span class="token punctuation">,</span> methods<span class="token punctuation">,</span> middleware<span class="token punctuation">,</span> opts<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  opts <span class="token operator">=</span> opts <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  <span class="token keyword">let</span> router <span class="token operator">=</span> <span class="token keyword">this</span>
+  <span class="token keyword">let</span> stack <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack
+
+  <span class="token comment" spellcheck="true">// support array of paths</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    path<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>p<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      router<span class="token punctuation">.</span>register<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>router<span class="token punctuation">,</span> p<span class="token punctuation">,</span> methods<span class="token punctuation">,</span> middleware<span class="token punctuation">,</span> opts<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// create route</span>
+  <span class="token keyword">let</span> route <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Layer</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> methods<span class="token punctuation">,</span> middleware<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    end<span class="token punctuation">:</span> opts<span class="token punctuation">.</span>end <span class="token operator">===</span> <span class="token boolean">false</span> <span class="token operator">?</span> opts<span class="token punctuation">.</span>end <span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    name<span class="token punctuation">:</span> opts<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+    sensitive<span class="token punctuation">:</span> opts<span class="token punctuation">.</span>sensitive <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>sensitive <span class="token operator">||</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    strict<span class="token punctuation">:</span> opts<span class="token punctuation">.</span>strict <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>strict <span class="token operator">||</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    prefix<span class="token punctuation">:</span> opts<span class="token punctuation">.</span>prefix <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>prefix <span class="token operator">||</span> <span class="token string">''</span><span class="token punctuation">,</span>
+    ignoreCaptures<span class="token punctuation">:</span> opts<span class="token punctuation">.</span>ignoreCaptures
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>prefix<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    route<span class="token punctuation">.</span><span class="token function">setPrefix</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>prefix<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// add parameter middleware</span>
+  Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>params<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>param<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    route<span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span>param<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>params<span class="token punctuation">[</span>param<span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span>
+
+  stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> route
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em>该方法在注释中标为了 private 但是其中的一些参数在代码中各种地方都没有体现出来，鬼知道为什么会留着那些参数，但既然存在，就需要了解他是干什么的</em><br>这个是路由监听的基础方法，函数签名大致如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Param</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>path</code></td>
+<td style="text-align:left"><code>String</code>/<code>Array[String]</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">一个或者多个的路径</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>methods</code></td>
+<td style="text-align:left"><code>Array[String]</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">该路由需要监听哪几个<code>METHOD</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>middleware</code></td>
+<td style="text-align:left"><code>Function</code>/<code>Array[Function]</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">由函数组成的中间件数组，路由实际调用的回调函数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>opts</code></td>
+<td style="text-align:left"><code>Object</code></td>
+<td style="text-align:left"><code>{}</code></td>
+<td style="text-align:left">一些注册路由时的配置参数，上边提到的<code>strict</code>、<code>sensitive</code>和<code>prefix</code>在这里都有体现</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到，函数大致就是实现了这样的流程：  </p>
+<ol>
+<li>检查<code>path</code>是否为数组，如果是，遍历<code>item</code>进行调用自身</li>
+<li>实例化一个<code>Layer</code>对象，设置一些初始化参数</li>
+<li>设置针对某些参数的中间件处理（如果有的话）</li>
+<li>将实例化后的对象放入<code>stack</code>中存储</li>
+</ol>
+<p>所以在介绍这几个参数之前，简单的描述一下<code>Layer</code>的构造函数是很有必要的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">Layer</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> methods<span class="token punctuation">,</span> middleware<span class="token punctuation">,</span> opts<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>opts <span class="token operator">=</span> opts <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>name <span class="token operator">||</span> <span class="token keyword">null</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>methods <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>paramNames <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>stack <span class="token operator">=</span> Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>middleware<span class="token punctuation">)</span> <span class="token operator">?</span> middleware <span class="token punctuation">:</span> <span class="token punctuation">[</span>middleware<span class="token punctuation">]</span>
+
+  methods<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> l <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>methods<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>method<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>methods<span class="token punctuation">[</span>l<span class="token number">-1</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token string">'GET'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>methods<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span><span class="token string">'HEAD'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true">// ensure middleware is a function</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>stack<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> type <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> fn<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>type <span class="token operator">!==</span> <span class="token string">'function'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span>
+        methods<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> " <span class="token template-string"><span class="token string">`" + (this.opts.name || path) +"`</span></span><span class="token punctuation">:</span> <span class="token template-string"><span class="token string">`middleware`</span></span> "
+        <span class="token operator">+</span> "must be a <span class="token keyword">function</span><span class="token punctuation">,</span> not <span class="token template-string"><span class="token string">`" + type + "`</span></span>"
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">this</span><span class="token punctuation">.</span>path <span class="token operator">=</span> path
+  <span class="token keyword">this</span><span class="token punctuation">.</span>regexp <span class="token operator">=</span> <span class="token function">pathToRegExp</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>paramNames<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>layer是负责存储路由监听的信息的，每次注册路由时的URL，URL生成的正则表达式，该URL中存在的参数，以及路由对应的中间件。<br>统统交由<code>Layer</code>来存储，重点需要关注的是实例化过程中的那几个数组参数：  </p>
+<ul>
+<li>methods</li>
+<li>paramNames</li>
+<li>stack</li>
+</ul>
+<p><code>methods</code>存储的是该路由监听对应的有效<code>METHOD</code>，并会在实例化的过程中针对<code>METHOD</code>进行大小写的转换。<br><code>paramNames</code>因为用的插件问题，看起来不那么清晰，实际上在<code>pathToRegExp</code>内部会对<code>paramNames</code>这个数组进行<code>push</code>的操作，这么看可能会舒服一些<code>pathToRegExp(path, &amp;this.paramNames, this.opts)</code>，在拼接<code>hash</code>结构的路径参数时会用到这个数组<br><code>stack</code>存储的是该路由监听对应的中间件函数，<code>router.middleware</code>部分逻辑会依赖于这个数组</p>
+<h4 id="path"><a href="#path" class="headerlink" title="path"></a>path</h4><p>在函数头部的处理逻辑，主要是为了支持多路径的同时注册，如果发现第一个<code>path</code>参数为数组后，则会遍历<code>path</code>参数进行调用自身。<br>所以针对多个<code>URL</code>的相同路由可以这样来处理：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'/path1'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'/path2'</span><span class="token punctuation">,</span> <span class="token string">'path3'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'hi there.'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这样完全是一个有效的设置：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token operator">></span> curl http://127.0.0.1:8888/
+hi there.
+<span class="token operator">></span> curl http://127.0.0.1:8888/path1
+hi there.
+<span class="token operator">></span> curl http://127.0.0.1:8888/path3
+hi there.
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="methods-1"><a href="#methods-1" class="headerlink" title="methods"></a>methods</h4><p>而关于<code>methods</code>参数，则默认认为是一个数组，即使是只监听一个<code>METHOD</code>也需要传入一个数组作为参数，如果是空数组的话，即使<code>URL</code>匹配，也会直接跳过，执行下一个中间件，这个在后续的<code>router.routes</code>中会提到</p>
+<h4 id="middleware"><a href="#middleware" class="headerlink" title="middleware"></a>middleware</h4><p><code>middleware</code>则是一次路由真正执行的事情了，依旧是符合<code>koa</code>标准的中间件，可以有多个，按照洋葱模型的方式来执行。<br>这也是<code>koa-router</code>中最重要的地方，能够让我们的一些中间件只在特定的<code>URL</code>时执行。<br>这里写入的多个中间件都是针对该<code>URL</code>生效的。  </p>
+<p><em>P.S. 在<code>koa-router</code>中，还提供了一个方法，叫做<code>router.use</code>，这个会注册一个基于<code>router</code>实例的中间件</em>  </p>
+<h4 id="opts"><a href="#opts" class="headerlink" title="opts"></a>opts</h4><p><code>opts</code>则是用来设置一些路由生成的配置规则的，包括如下几个可选的参数：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Param</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>name</code></td>
+<td style="text-align:left"><code>String</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">设置该路由所对应的<code>name</code>，命名<code>router</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>prefix</code></td>
+<td style="text-align:left"><code>String</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left"><strong>非常鸡肋的参数，完全没有卵用</strong>，看似会设置路由的前缀，实际上没有一点儿用</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>sensitive</code></td>
+<td style="text-align:left"><code>Boolean</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">是否严格匹配大小写，覆盖实例化<code>Router</code>中的配置</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>strict</code></td>
+<td style="text-align:left"><code>Boolean</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">是否严格匹配大小写，如果设置为<code>false</code>则匹配路径后边的<code>/</code>是可选的</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>end</code></td>
+<td style="text-align:left"><code>Boolean</code></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">路径匹配是否为完整URL的结尾</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ignoreCaptures</code></td>
+<td style="text-align:left"><code>Boolean</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">是否忽略路由匹配正则结果中的捕获组</td>
+</tr>
+</tbody>
+</table>
+<h5 id="name"><a href="#name" class="headerlink" title="name"></a>name</h5><p>首先是<code>name</code>，主要是用于这几个地方：</p>
+<ol>
+<li>抛出异常时更方便的定位</li>
+<li>可以通过<code>router.url(&lt;name&gt;)</code>、<code>router.route(&lt;name&gt;)</code>获取到对应的<code>router</code>信息</li>
+<li>在中间件执行的时候，<code>name</code>会被塞到<code>ctx.routerName</code>中</li>
+</ol>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/test1'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> _ <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token string">'module'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/test2'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> _ <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token string">'module'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token string">'module'</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string">'/test1'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// true</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+  router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/test2'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'error-module'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Error: GET `error-module`: `middleware` must be a function, not `object`</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果多个<code>router</code>使用相同的命名，则通过<code>router.url</code>调用返回最先注册的那一个：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// route用来获取命名路由</span>
+Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>route <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> routes <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack
+
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> len <span class="token operator">=</span> routes<span class="token punctuation">.</span>length<span class="token punctuation">,</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>routes<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>name <span class="token operator">&amp;&amp;</span> routes<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>name <span class="token operator">===</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> routes<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token comment" spellcheck="true">// 匹配到第一个就直接返回了</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// url获取该路由对应的URL，并使用传入的参数来生成真实的URL</span>
+Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>url <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>name<span class="token punctuation">,</span> params<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> route <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">route</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>route<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> args <span class="token operator">=</span> Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>slice<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> route<span class="token punctuation">.</span>url<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>route<span class="token punctuation">,</span> args<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'No route found for name: '</span> <span class="token operator">+</span> name<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h5 id="跑题说下router-url的那些事儿"><a href="#跑题说下router-url的那些事儿" class="headerlink" title="跑题说下router.url的那些事儿"></a>跑题说下router.url的那些事儿</h5><p>如果在项目中，想要针对某些<code>URL</code>进行跳转，使用<code>router.url</code>来生成<code>path</code>则是一个不错的选择：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>
+  <span class="token string">'/list/:id'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token template-string"><span class="token string">`Hi </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>ctx<span class="token punctuation">.</span>params<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">, query: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>ctx<span class="token punctuation">.</span>querystring<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'list'</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// /list/1?name=Niko</span>
+  ctx<span class="token punctuation">.</span><span class="token function">redirect</span><span class="token punctuation">(</span>
+    router<span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token string">'list'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span> <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> query<span class="token punctuation">:</span> <span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// curl -L http://127.0.0.1:8888 => Hi 1, query: name=Niko</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到，<code>router.url</code>实际上调用的是<code>Layer</code>实例的<code>url</code>方法，该方法主要是用来处理生成时传入的一些参数。<br>源码地址：<a href="https://github.com/alexmingoia/koa-router/blob/master/lib/layer.js#L116" target="_blank" rel="noopener">layer.js#L116</a><br>函数接收两个参数，<code>params</code>和<code>options</code>，因为本身<code>Layer</code>实例是存储了对应的<code>path</code>之类的信息，所以<code>params</code>就是存储的在路径中的一些参数的替换，<code>options</code>在目前的代码中，仅仅存在一个<code>query</code>字段，用来拼接<code>search</code>后边的数据：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Layer <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'koa-router/lib/layer'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> layer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Layer</span><span class="token punctuation">(</span><span class="token string">'/list/:id/info/:name'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>_ <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>layer<span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token punctuation">{</span> id<span class="token punctuation">:</span> <span class="token number">123</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>layer<span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">123</span><span class="token punctuation">,</span> <span class="token string">'Niko'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>layer<span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">,</span> <span class="token string">'Niko'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>
+  layer<span class="token punctuation">.</span><span class="token function">url</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">,</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    query<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      arg1<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+      arg2<span class="token punctuation">:</span> <span class="token number">2</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上述的调用方式都是有效的，在源码中有对应的处理，首先是针对多参数的判断，如果<code>params</code>不是一个<code>object</code>，则会认为是通过<code>layer.url(参数, 参数, 参数, opts)</code>这种方式来调用的。<br>将其转换为<code>layer.url([参数, 参数], opts)</code>形式的。<br>这时候的逻辑仅需要处理三种情况了：</p>
+<ol>
+<li>数组形式的参数替换</li>
+<li><code>hash</code>形式的参数替换</li>
+<li>无参数</li>
+</ol>
+<p>这个参数替换指的是，一个<code>URL</code>会通过一个<a href="https://www.npmjs.com/package/path-to-regexp" target="_blank" rel="noopener">第三方的库</a>用来处理链接中的参数部分，也就是<code>/:XXX</code>的这一部分，然后传入一个<code>hash</code>实现类似模版替换的操作：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 可以简单的认为是这样的操作：</span>
+<span class="token keyword">let</span> hash <span class="token operator">=</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span> <span class="token number">123</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span> <span class="token punctuation">}</span>
+<span class="token string">'/list/:id/:name'</span><span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex">/(?:\/:)(\w+)/g</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>_<span class="token punctuation">,</span> $<span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token template-string"><span class="token string">`/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>hash<span class="token punctuation">[</span>$<span class="token number">1</span><span class="token punctuation">]</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>然后<code>layer.url</code>的处理就是为了将各种参数生成类似<code>hash</code>这样的结构，最终替换<code>hash</code>获取完整的<code>URL</code>。  </p>
+<h5 id="prefix"><a href="#prefix" class="headerlink" title="prefix"></a>prefix</h5><p>上边实例化<code>Layer</code>的过程中看似是<code>opts.prefix</code>的权重更高，但是紧接着在下边就有了一个判断逻辑进行调用<code>setPrefix</code>重新赋值，在翻遍了整个的源码后发现，这样唯一的一个区别就在于，会有一条<code>debug</code>应用的是注册<code>router</code>时传入的<code>prefix</code>，而其他地方都会被实例化<code>Router</code>时的<code>prefix</code>所覆盖。  </p>
+<p>而且如果想要路由正确的应用<code>prefix</code>，则需要调用<code>setPrefix</code>，因为在<code>Layer</code>实例化的过程中关于<code>path</code>的存储就是来自远传入的<code>path</code>参数。<br>而应用<code>prefix</code>前缀则需要手动触发<code>setPrefix</code>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// Layer实例化的操作</span>
+<span class="token keyword">function</span> <span class="token function">Layer</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> methods<span class="token punctuation">,</span> middleware<span class="token punctuation">,</span> opts<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 省略不相干操作</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>path <span class="token operator">=</span> path
+  <span class="token keyword">this</span><span class="token punctuation">.</span>regexp <span class="token operator">=</span> <span class="token function">pathToRegExp</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>paramNames<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 只有调用setPrefix才会应用前缀</span>
+Layer<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>setPrefix <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>prefix<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>path<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>path <span class="token operator">=</span> prefix <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>path
+    <span class="token keyword">this</span><span class="token punctuation">.</span>paramNames <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>regexp <span class="token operator">=</span> <span class="token function">pathToRegExp</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>path<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>paramNames<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">this</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个在暴露给使用者的几个方法中都有体现，类似的<code>get</code>、<code>set</code>以及<code>use</code>。<br>当然在文档中也提供了可以直接设置所有<code>router</code>前缀的方法，<code>router.prefix</code>：<br>文档中就这样简单的告诉你可以设置前缀，<code>prefix</code>在内部会循环调用所有的<code>layer.setPrefix</code>：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">prefix</span><span class="token punctuation">(</span><span class="token string">'/things/:thing_id'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>但是在翻看了<code>layer.setPrefix</code>源码后才发现这里其实是含有一个暗坑的。<br>因为<code>setPrefix</code>的实现是拿到<code>prefix</code>参数，拼接到当前<code>path</code>的头部。<br>这样就会带来一个问题，如果我们多次调用<code>setPrefix</code>会导致多次<code>prefix</code>叠加，而非替换：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/index'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'hi there.'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">prefix</span><span class="token punctuation">(</span><span class="token string">'/path1'</span><span class="token punctuation">)</span>
+router<span class="token punctuation">.</span><span class="token function">prefix</span><span class="token punctuation">(</span><span class="token string">'/path2'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// > curl http://127.0.0.1:8888/path2/path1/index</span>
+<span class="token comment" spellcheck="true">// hi there.</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><strong>prefix方法会叠加前缀，而不是覆盖前缀</strong></p>
+</blockquote>
+<h5 id="sensitive与strict"><a href="#sensitive与strict" class="headerlink" title="sensitive与strict"></a>sensitive与strict</h5><p>这俩参数没啥好说的，就是会覆盖实例化<code>Router</code>时所传递的那俩参数，效果都一致。</p>
+<h5 id="end"><a href="#end" class="headerlink" title="end"></a>end</h5><p><code>end</code>是一个很有趣的参数，这个在<code>koa-router</code>中引用的其他模块中有体现到，<a href="https://github.com/pillarjs/path-to-regexp/blob/master/index.js#L337" target="_blank" rel="noopener">path-to-regexp</a>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>strict<span class="token punctuation">)</span> route <span class="token operator">+</span><span class="token operator">=</span> <span class="token string">'(?:'</span> <span class="token operator">+</span> delimiter <span class="token operator">+</span> <span class="token string">')?'</span>
+
+  route <span class="token operator">+</span><span class="token operator">=</span> endsWith <span class="token operator">===</span> <span class="token string">'$'</span> <span class="token operator">?</span> <span class="token string">'$'</span> <span class="token punctuation">:</span> <span class="token string">'(?='</span> <span class="token operator">+</span> endsWith <span class="token operator">+</span> <span class="token string">')'</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>strict<span class="token punctuation">)</span> route <span class="token operator">+</span><span class="token operator">=</span> <span class="token string">'(?:'</span> <span class="token operator">+</span> delimiter <span class="token operator">+</span> <span class="token string">'(?='</span> <span class="token operator">+</span> endsWith <span class="token operator">+</span> <span class="token string">'))?'</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isEndDelimited<span class="token punctuation">)</span> route <span class="token operator">+</span><span class="token operator">=</span> <span class="token string">'(?='</span> <span class="token operator">+</span> delimiter <span class="token operator">+</span> <span class="token string">'|'</span> <span class="token operator">+</span> endsWith <span class="token operator">+</span> <span class="token string">')'</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RegExp</span><span class="token punctuation">(</span><span class="token string">'^'</span> <span class="token operator">+</span> route<span class="token punctuation">,</span> <span class="token function">flags</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>endWith</code>可以简单地理解为是正则中的<code>$</code>，也就是匹配的结尾。<br>看代码的逻辑，大致就是，如果设置了<code>end: true</code>，则无论任何情况都会在最后添加<code>$</code>表示匹配的结尾。<br>而如果<code>end: false</code>，则只有在同时设置了<code>strict: false</code>或者<code>isEndDelimited: false</code>时才会触发。<br>所以我们可以通过这两个参数来实现URL的模糊匹配：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>
+  <span class="token string">'/list'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'hi there.'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    end<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    strict<span class="token punctuation">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也就是说上述代码最后生成的用于匹配路由的正则表达式大概是这样的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token regex">/^\/list(?=\/|$)/i</span>
+
+<span class="token comment" spellcheck="true">// 可以通过下述代码获取到正则</span>
+<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path-to-regexp'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">tokensToRegExp</span><span class="token punctuation">(</span><span class="token string">'/list/'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>end<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> strict<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结尾的<code>$</code>是可选的，这就会导致，我们只要发送任何开头为<code>/list</code>的请求都会被这个中间件所获取到。</p>
+<h5 id="ignoreCaptures"><a href="#ignoreCaptures" class="headerlink" title="ignoreCaptures"></a>ignoreCaptures</h5><p><code>ignoreCaptures</code>参数用来设置是否需要返回<code>URL</code>中匹配的路径参数给中间件。<br>而如果设置了<code>ignoreCaptures</code>以后这两个参数就会变为空对象：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/list/:id'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>captures<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// ['1'], { id: '1' }</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// > curl /list/1</span>
+
+router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/list/:id'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>captures<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// [ ], {  }</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  ignoreCaptures<span class="token punctuation">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > curl /list/1</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个是在中间件执行期间调用了来自<code>layer</code>的两个方法获取的。<br>首先调用<code>captures</code>获取所有的参数，如果设置了<code>ignoreCaptures</code>则会导致直接返回空数组。<br>然后调用<code>params</code>将注册路由时所生成的所有参数以及参数们实际的值传了进去，然后生成一个完整的<code>hash</code>注入到<code>ctx</code>对象中：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 中间件的逻辑</span>
+ctx<span class="token punctuation">.</span>captures <span class="token operator">=</span> layer<span class="token punctuation">.</span><span class="token function">captures</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>captures<span class="token punctuation">)</span>
+ctx<span class="token punctuation">.</span>params <span class="token operator">=</span> layer<span class="token punctuation">.</span><span class="token function">params</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>captures<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">)</span>
+ctx<span class="token punctuation">.</span>routerName <span class="token operator">=</span> layer<span class="token punctuation">.</span>name
+<span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 中间件的逻辑 end</span>
+
+<span class="token comment" spellcheck="true">// layer提供的方法</span>
+Layer<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>captures <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>opts<span class="token punctuation">.</span>ignoreCaptures<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword">return</span> path<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>regexp<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+Layer<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>params <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>path<span class="token punctuation">,</span> captures<span class="token punctuation">,</span> existingParams<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> params <span class="token operator">=</span> existingParams <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> len <span class="token operator">=</span> captures<span class="token punctuation">.</span>length<span class="token punctuation">,</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>paramNames<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> c <span class="token operator">=</span> captures<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+      params<span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span>paramNames<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> c <span class="token operator">?</span> <span class="token function">safeDecodeURIComponent</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token punctuation">:</span> c
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> params
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 所做的事情大致如下：</span>
+<span class="token comment" spellcheck="true">// [18, 'Niko'] + ['age', 'name']</span>
+<span class="token comment" spellcheck="true">// =></span>
+<span class="token comment" spellcheck="true">// { age: 18, name: 'Niko' }</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="router-param的作用"><a href="#router-param的作用" class="headerlink" title="router.param的作用"></a>router.param的作用</h4><p>上述是关于注册路由时的一些参数描述，可以看到在<code>register</code>中实例化<code>Layer</code>对象后并没有直接将其放入<code>stack</code>中，而是执行了这样的一个操作以后才将其推入<code>stack</code>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>params<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>param<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  route<span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span>param<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>params<span class="token punctuation">[</span>param<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span>
+
+stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 装载</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里是用作添加针对某个<code>URL</code>参数的中间件处理的，与<code>router.param</code>两者关联性很强：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>param <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>param<span class="token punctuation">,</span> middleware<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>params<span class="token punctuation">[</span>param<span class="token punctuation">]</span> <span class="token operator">=</span> middleware
+  <span class="token keyword">this</span><span class="token punctuation">.</span>stack<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>route<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    route<span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span>param<span class="token punctuation">,</span> middleware<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>两者操作类似，前者用于对新增的路由监听添加所有的<code>param</code>中间件，而后者用于针对现有的所有路由添加<code>param</code>中间件。<br>因为在<code>router.param</code>中有着<code>this.params[param] = XXX</code>的赋值操作。<br>这样在后续的新增路由监听中，直接循环<code>this.params</code>就可以拿到所有的中间件了。  </p>
+<p><code>router.param</code>的操作在文档中也有介绍，<a href="https://github.com/alexmingoia/koa-router/blob/master/README.md#routerparamparam-middleware--router" target="_blank" rel="noopener">文档地址</a><br>大致就是可以用来做一些参数校验之类的操作，不过因为在<code>layer.param</code>中有了一些<a href="https://github.com/alexmingoia/koa-router/blob/master/lib/layer.js#L197" target="_blank" rel="noopener">特殊的处理</a>，所以我们不必担心<code>param</code>的执行顺序，<code>layer</code>会保证<code>param</code>一定是早于依赖这个参数的中间件执行的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/list/:id'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token template-string"><span class="token string">`hello: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>ctx<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>param<span class="token punctuation">,</span> ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`got id: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>param<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
+  ctx<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'Niko'</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>param<span class="token punctuation">,</span> ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'param2'</span><span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+
+<span class="token comment" spellcheck="true">// > curl /list/1</span>
+<span class="token comment" spellcheck="true">// got id: 1</span>
+<span class="token comment" spellcheck="true">// param2</span>
+<span class="token comment" spellcheck="true">// hello: Niko</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="最常用的get-post之类的快捷方式"><a href="#最常用的get-post之类的快捷方式" class="headerlink" title="最常用的get/post之类的快捷方式"></a>最常用的get/post之类的快捷方式</h4><p>以及说完了上边的基础方法<code>register</code>，我们可以来看下暴露给开发者的几个<code>router.verb</code>方法：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// get|put|post|patch|delete|del</span>
+<span class="token comment" spellcheck="true">// 循环注册多个METHOD的快捷方式</span>
+methods<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>method<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  Router<span class="token punctuation">.</span>prototype<span class="token punctuation">[</span>method<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>name<span class="token punctuation">,</span> path<span class="token punctuation">,</span> middleware<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> middleware
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> path <span class="token operator">===</span> <span class="token string">'string'</span> <span class="token operator">||</span> path <span class="token keyword">instanceof</span> <span class="token class-name">RegExp</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      middleware <span class="token operator">=</span> Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>slice<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      middleware <span class="token operator">=</span> Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>slice<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+      path <span class="token operator">=</span> name
+      name <span class="token operator">=</span> <span class="token keyword">null</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token punctuation">[</span>method<span class="token punctuation">]</span><span class="token punctuation">,</span> middleware<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      name<span class="token punctuation">:</span> name
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>del <span class="token operator">=</span> Router<span class="token punctuation">.</span>prototype<span class="token punctuation">[</span><span class="token string">'delete'</span><span class="token punctuation">]</span> <span class="token comment" spellcheck="true">// 以及最后的一个别名处理，因为del并不是有效的METHOD</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>令人失望的是，<code>verb</code>方法将大量的<code>opts</code>参数都砍掉了，默认只留下了一个<code>name</code>字段。<br>只是很简单的处理了一下命名<code>name</code>路由相关的逻辑，然后进行调用<code>register</code>完成操作。</p>
+<h4 id="router-use-Router内部的中间件"><a href="#router-use-Router内部的中间件" class="headerlink" title="router.use-Router内部的中间件"></a>router.use-Router内部的中间件</h4><p>以及上文中也提到的<code>router.use</code>，可以用来注册一个中间件，使用<code>use</code>注册中间件分为两种情况：</p>
+<ol>
+<li>普通的中间件函数</li>
+<li>将现有的<code>router</code>实例作为中间件传入</li>
+</ol>
+<h5 id="普通的use"><a href="#普通的use" class="headerlink" title="普通的use"></a>普通的use</h5><p>这里是<code>use</code>方法的关键代码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>use <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> router <span class="token operator">=</span> <span class="token keyword">this</span>
+  middleware<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>m<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>m<span class="token punctuation">.</span>router<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 这里是通过`router.routes()`传递进来的</span>
+      m<span class="token punctuation">.</span>router<span class="token punctuation">.</span>stack<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>nestedLayer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>path<span class="token punctuation">)</span> nestedLayer<span class="token punctuation">.</span><span class="token function">setPrefix</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>router<span class="token punctuation">.</span>opts<span class="token punctuation">.</span>prefix<span class="token punctuation">)</span> nestedLayer<span class="token punctuation">.</span><span class="token function">setPrefix</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span>opts<span class="token punctuation">.</span>prefix<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 调用`use`的Router实例的`prefix`</span>
+        router<span class="token punctuation">.</span>stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>nestedLayer<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>router<span class="token punctuation">.</span>params<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span>params<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          m<span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> router<span class="token punctuation">.</span>params<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 普通的中间件注册</span>
+      router<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>path <span class="token operator">||</span> <span class="token string">'(.*)'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> m<span class="token punctuation">,</span> <span class="token punctuation">{</span> end<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> ignoreCaptures<span class="token punctuation">:</span> <span class="token operator">!</span>hasPath <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 在routes方法有这样的一步操作</span>
+Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>routes <span class="token operator">=</span> Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>middleware <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// ...</span>
+  <span class="token punctuation">}</span>
+
+  dispatch<span class="token punctuation">.</span>router <span class="token operator">=</span> <span class="token keyword">this</span> <span class="token comment" spellcheck="true">// 将router实例赋值给了返回的函数</span>
+
+  <span class="token keyword">return</span> dispatch
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>第一种是比较常规的方式，传入一个函数，一个可选的<code>path</code>，来进行注册中间件。<br>不过有一点要注意的是，<code>.use(&#39;path&#39;)</code>这样的用法，中间件不能独立存在，必须要有一个可以与之路径相匹配的路由监听存在：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'/list'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 如果只有这么一个中间件，无论如何也不会执行的</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 必须要存在相同路径的`register`回调</span>
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/list'</span><span class="token punctuation">,</span> ctx <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>原因是这样的：</p>
+<ol>
+<li><code>.use</code>和<code>.get</code>都是基于<code>.register</code>来实现的，但是<code>.use</code>在<code>methods</code>参数中传递的是一个空数组</li>
+<li>在一个路径被匹配到时，会将所有匹配到的中间件取出来，然后检查对应的<code>methods</code>，如果<code>length !== 0</code>则会对当前匹配组标记一个<code>flag</code></li>
+<li>在执行中间件之前会先判断有没有这个<code>flag</code>，如果没有则说明该路径所有的中间件都没有设置<code>METHOD</code>，则会直接跳过进入其他流程（<em>比如allowedMethod</em>）</li>
+</ol>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>match <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>path<span class="token punctuation">,</span> method<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> layers <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack
+  <span class="token keyword">var</span> layer
+  <span class="token keyword">var</span> matched <span class="token operator">=</span> <span class="token punctuation">{</span>
+    path<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    pathAndMethod<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    route<span class="token punctuation">:</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> len <span class="token operator">=</span> layers<span class="token punctuation">.</span>length<span class="token punctuation">,</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    layer <span class="token operator">=</span> layers<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>layer<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      matched<span class="token punctuation">.</span>path<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>layer<span class="token punctuation">)</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>layer<span class="token punctuation">.</span>methods<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">||</span> <span class="token operator">~</span>layer<span class="token punctuation">.</span>methods<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        matched<span class="token punctuation">.</span>pathAndMethod<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>layer<span class="token punctuation">)</span>
+
+        <span class="token comment" spellcheck="true">// 只有在发现不为空的`methods`以后才会设置`flag`</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>layer<span class="token punctuation">.</span>methods<span class="token punctuation">.</span>length<span class="token punctuation">)</span> matched<span class="token punctuation">.</span>route <span class="token operator">=</span> <span class="token boolean">true</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> matched
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 以及在`routes`中有这样的操作</span>
+Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>routes <span class="token operator">=</span> Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>middleware <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">dispatch</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">// 如果没有`flag`，直接跳过</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>matched<span class="token punctuation">.</span>route<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> dispatch
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h5 id="将其他router实例传递进来"><a href="#将其他router实例传递进来" class="headerlink" title="将其他router实例传递进来"></a>将其他router实例传递进来</h5><p>可以看到，如果选择了<code>router.routes()</code>来方式来复用中间件，会遍历该实例的所有路由，然后设置<code>prefix</code>。<br>并将修改完的<code>layer</code>推出到当前的<code>router</code>中。<br>那么现在就要注意了，在上边其实已经提到了，<code>Layer</code>的<code>setPrefix</code>是拼接的，而不是覆盖的。<br>而<code>use</code>是会操作<code>layer</code>对象的，所以这样的用法会导致之前的中间件路径也被修改。<br>而且如果传入<code>use</code>的中间件已经注册在了<code>koa</code>中就会导致相同的中间件会执行两次(<em>如果有调用<code>next</code>的话</em>)：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> middlewareRouter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> routerPage1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  prefix<span class="token punctuation">:</span> <span class="token string">'/page1'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> routerPage2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  prefix<span class="token punctuation">:</span> <span class="token string">'/page2'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+middlewareRouter<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/list/:id'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'trigger middleware'</span><span class="token punctuation">)</span>
+  ctx<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token template-string"><span class="token string">`hi there.`</span></span>
+  <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+routerPage1<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareRouter<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+routerPage2<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareRouter<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareRouter<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>routerPage1<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>routerPage2<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>就像上述代码，实际上会有两个问题：</p>
+<ol>
+<li>最终有效的访问路径为<code>/page2/page1/list/1</code>，因为<code>prefix</code>会拼接而非覆盖</li>
+<li>当我们在中间件中调用<code>next</code>以后，<code>console.log</code>会连续输出三次，因为所有的<code>routes</code>都是动态的，实际上<code>prefix</code>都被修改为了<code>/page2/page1</code></li>
+</ol>
+<p><strong>一定要小心使用，不要认为这样的方式可以用来实现路由的复用</strong></p>
+<h3 id="请求的处理"><a href="#请求的处理" class="headerlink" title="请求的处理"></a>请求的处理</h3><p>以及，终于来到了最后一步，当一个请求来了以后，<code>Router</code>是怎样处理的。<br>一个<code>Router</code>实例可以抛出两个中间件注册到<code>koa</code>上：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><code>routes</code>负责主要的逻辑。<br><code>allowedMethods</code>负责提供一个后置的<code>METHOD</code>检查中间件。  </p>
+<p><code>allowedMethods</code>没什么好说的，就是根据当前请求的<code>method</code>进行的一些校验，并返回一些错误信息。<br>而上边介绍的很多方法其实都是为了最终的<code>routes</code>服务：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>routes <span class="token operator">=</span> Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>middleware <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> router <span class="token operator">=</span> <span class="token keyword">this</span>
+
+  <span class="token keyword">var</span> dispatch <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token function">dispatch</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> path <span class="token operator">=</span> router<span class="token punctuation">.</span>opts<span class="token punctuation">.</span>routerPath <span class="token operator">||</span> ctx<span class="token punctuation">.</span>routerPath <span class="token operator">||</span> ctx<span class="token punctuation">.</span>path
+    <span class="token keyword">var</span> matched <span class="token operator">=</span> router<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>method<span class="token punctuation">)</span>
+    <span class="token keyword">var</span> layerChain<span class="token punctuation">,</span> layer<span class="token punctuation">,</span> i
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>matched<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      ctx<span class="token punctuation">.</span>matched<span class="token punctuation">.</span>push<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>matched<span class="token punctuation">,</span> matched<span class="token punctuation">.</span>path<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      ctx<span class="token punctuation">.</span>matched <span class="token operator">=</span> matched<span class="token punctuation">.</span>path
+    <span class="token punctuation">}</span>
+
+    ctx<span class="token punctuation">.</span>router <span class="token operator">=</span> router
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>matched<span class="token punctuation">.</span>route<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">var</span> matchedLayers <span class="token operator">=</span> matched<span class="token punctuation">.</span>pathAndMethod
+    <span class="token keyword">var</span> mostSpecificLayer <span class="token operator">=</span> matchedLayers<span class="token punctuation">[</span>matchedLayers<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span>
+    ctx<span class="token punctuation">.</span>_matchedRoute <span class="token operator">=</span> mostSpecificLayer<span class="token punctuation">.</span>path
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mostSpecificLayer<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      ctx<span class="token punctuation">.</span>_matchedRouteName <span class="token operator">=</span> mostSpecificLayer<span class="token punctuation">.</span>name
+    <span class="token punctuation">}</span>
+
+    layerChain <span class="token operator">=</span> matchedLayers<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>memo<span class="token punctuation">,</span> layer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      memo<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ctx<span class="token punctuation">.</span>captures <span class="token operator">=</span> layer<span class="token punctuation">.</span><span class="token function">captures</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>captures<span class="token punctuation">)</span>
+        ctx<span class="token punctuation">.</span>params <span class="token operator">=</span> layer<span class="token punctuation">.</span><span class="token function">params</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>captures<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">)</span>
+        ctx<span class="token punctuation">.</span>routerName <span class="token operator">=</span> layer<span class="token punctuation">.</span>name
+        <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> memo<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>layer<span class="token punctuation">.</span>stack<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token function">compose</span><span class="token punctuation">(</span>layerChain<span class="token punctuation">)</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  dispatch<span class="token punctuation">.</span>router <span class="token operator">=</span> <span class="token keyword">this</span>
+
+  <span class="token keyword">return</span> dispatch
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先可以看到，<code>koa-router</code>同时还提供了一个别名<code>middleware</code>来实现相同的功能。<br>以及函数的调用最终会返回一个中间件函数，这个函数才是真正被挂在到<code>koa</code>上的。<br><code>koa</code>的中间件是纯粹的中间件，不管什么请求都会执行所包含的中间件。<br><strong>所以不建议为了使用<code>prefix</code>而创建多个<code>Router</code>实例，这会导致在<code>koa</code>上挂载多个<code>dispatch</code>用来检查URL是否符合规则</strong>  </p>
+<p>进入中间件以后会进行URL的判断，就是我们上边提到的可以用来做<code>foraward</code>实现的地方。<br>匹配调用的是<code>router.match</code>方法，虽说看似赋值是<code>matched.path</code>，而实际上在<code>match</code>方法的实现中，里边全部是匹配到的<code>Layer</code>实例：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Router<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>match <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>path<span class="token punctuation">,</span> method<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> layers <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack <span class="token comment" spellcheck="true">// 这个就是获取的Router实例中所有的中间件对应的layer对象</span>
+  <span class="token keyword">var</span> layer
+  <span class="token keyword">var</span> matched <span class="token operator">=</span> <span class="token punctuation">{</span>
+    path<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    pathAndMethod<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    route<span class="token punctuation">:</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> len <span class="token operator">=</span> layers<span class="token punctuation">.</span>length<span class="token punctuation">,</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    layer <span class="token operator">=</span> layers<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>layer<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// 这里就是一个简单的正则匹配</span>
+      matched<span class="token punctuation">.</span>path<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>layer<span class="token punctuation">)</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>layer<span class="token punctuation">.</span>methods<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">||</span> <span class="token operator">~</span>layer<span class="token punctuation">.</span>methods<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 将有效的中间件推入</span>
+        matched<span class="token punctuation">.</span>pathAndMethod<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>layer<span class="token punctuation">)</span>
+
+        <span class="token comment" spellcheck="true">// 判断是否存在METHOD</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>layer<span class="token punctuation">.</span>methods<span class="token punctuation">.</span>length<span class="token punctuation">)</span> matched<span class="token punctuation">.</span>route <span class="token operator">=</span> <span class="token boolean">true</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> matched
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 一个简单的正则匹配</span>
+Layer<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>match <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>regexp<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而之所以会存在说判断是否有<code>ctx.matched</code>来进行处理，而不是直接对这个属性进行赋值。<br>这是因为上边也提到过的，一个<code>koa</code>实例可能会注册多个<code>koa-router</code>实例。<br>这就导致一个<code>router</code>实例的中间件执行完毕后，后续可能还会有其他的<code>router</code>实例也命中了某个<code>URL</code>，但是这样会保证<code>matched</code>始终是在累加的，而非每次都会覆盖。 </p>
+<blockquote>
+<p><strong><code>path</code>与<code>pathAndMethod</code>都是<code>match</code>返回的两个数组，两者的区别在于<code>path</code>返回的是匹配URL成功的数据，而<code>pathAndMethod</code>则是匹配URL且匹配到METHOD的数据</strong>   </p>
+</blockquote>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> router1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> router2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+router1<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> _ <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router1<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>redirectBody <span class="token operator">=</span> <span class="token string">'hi'</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`trigger router1, matched length: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>ctx<span class="token punctuation">.</span>matched<span class="token punctuation">.</span>length<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
+  <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router2<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  ctx<span class="token punctuation">.</span>redirectBody <span class="token operator">=</span> <span class="token string">'hi'</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`trigger router2, matched length: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>ctx<span class="token punctuation">.</span>matched<span class="token punctuation">.</span>length<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
+  <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router1<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router2<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// >  curl http://127.0.0.1:8888/</span>
+<span class="token comment" spellcheck="true">// => trigger router1, matched length: 2</span>
+<span class="token comment" spellcheck="true">// => trigger router2, matched length: 3</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>关于中间件的执行，在<code>koa-router</code>中也使用了<code>koa-compose</code>来合并洋葱：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> matchedLayers <span class="token operator">=</span> matched<span class="token punctuation">.</span>pathAndMethod
+
+layerChain <span class="token operator">=</span> matchedLayers<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>memo<span class="token punctuation">,</span> layer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  memo<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>captures <span class="token operator">=</span> layer<span class="token punctuation">.</span><span class="token function">captures</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>captures<span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span>params <span class="token operator">=</span> layer<span class="token punctuation">.</span><span class="token function">params</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>captures<span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span>routerName <span class="token operator">=</span> layer<span class="token punctuation">.</span>name
+    <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> memo<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>layer<span class="token punctuation">.</span>stack<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token keyword">return</span> <span class="token function">compose</span><span class="token punctuation">(</span>layerChain<span class="token punctuation">)</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这坨代码会在所有匹配到的中间件之前添加一个<code>ctx</code>属性赋值的中间件操作，也就是说<code>reduce</code>的执行会让洋葱模型对应的中间件函数数量至少<code>X2</code>。<br><strong>layer中可能包含多个中间件，不要忘了<code>middleware</code>，这就是为什么会在<code>reduce</code>中使用<code>concat</code>而非<code>push</code></strong><br>因为要在每一个中间件执行之前，修改<code>ctx</code>为本次中间件触发时的一些信息。<br>包括匹配到的URL参数，以及当前中间件的<code>name</code>之类的信息。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  layer1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 第一个register中对应的中间件1</span>
+  layer1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 第一个register中对应的中间件2</span>
+  layer2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true">// 第二个register中对应的中间件1</span>
+<span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true">// =></span>
+
+<span class="token punctuation">[</span>
+  <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>params <span class="token operator">=</span> layer1<span class="token punctuation">.</span>params <span class="token comment" spellcheck="true">// 第一个register对应信息的赋值  </span>
+    <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  layer1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 第一个register中对应的中间件1</span>
+  layer1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 第一个register中对应的中间件2</span>
+  <span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>params <span class="token operator">=</span> layer2<span class="token punctuation">.</span>params <span class="token comment" spellcheck="true">// 第二个register对应信息的赋值  </span>
+    <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  layer2<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true">// 第二个register中对应的中间件1</span>
+<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在<code>routes</code>最后，会调用<code>koa-compose</code>来合并<code>reduce</code>所生成的中间件数组，以及用到了之前在<code>koa-compose</code>中提到了的第二个可选的参数，用来做洋葱执行完成后最终的回调处理。  </p>
+<hr>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>至此，<code>koa-router</code>的使命就已经完成了，实现了路由的注册，以及路由的监听处理。<br>在阅读<code>koa-router</code>的源码过程中感到很迷惑：  </p>
+<ul>
+<li>明明代码中已经实现的功能，为什么在文档中就没有体现出来呢。  </li>
+<li>如果文档中不写明可以这样来用，为什么还要在代码中有对应的实现呢？  </li>
+</ul>
+<p>两个最简单的举证：</p>
+<ol>
+<li>可以通过修改<code>ctx.routerPath</code>来实现<code>forward</code>功能，但是在文档中不会告诉你</li>
+<li>可以通过<code>router.register(path, [&#39;GET&#39;, &#39;POST&#39;])</code>来快速的监听多个<code>METHOD</code>，但是<code>register</code>被标记为了<code>@private</code></li>
+</ol>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://github.com/alexmingoia/koa-router/blob/master/README.md" target="_blank" rel="noopener">koa-router | docs</a></li>
+<li><a href="https://github.com/pillarjs/path-to-regexp/blob/master/Readme.md" target="_blank" rel="noopener">path-to-regexp | docs</a></li>
+</ul>
+<p>示例代码在仓库中的位置：<a href="https://github.com/jiasm/notebook/blob/master/labs/demo/node/learning-koa-router" target="_blank" rel="noopener">learning-koa-router</a>  </p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/08/03/koa源码阅读-2-koa-router/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '36042ab0-970a-11e8-b6da-f38a26a70a49'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

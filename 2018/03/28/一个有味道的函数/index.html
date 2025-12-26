@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>一个有味道的函数 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-0实现方案"><span class="toc-number">1.</span> <span class="toc-text">1.0实现方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-0需求变更"><span class="toc-number">2.</span> <span class="toc-text">2.0需求变更</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-0终极版"><span class="toc-number">3.</span> <span class="toc-text">3.0终极版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关示例代码仓库"><span class="toc-number">5.</span> <span class="toc-text">相关示例代码仓库</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>一个有味道的函数</h1>
+  <blockquote>
+<p>最近想到了一个<em>自认为</em>很有意思的面试题<br>如何实现一个<code>compose</code>函数。<br>函数接收数个参数，参数均为<code>Function</code>类型，右侧函数的执行结果将作为左侧函数执行的参数来调用。</p>
+</blockquote>
+<a id="more"></a>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">compose</span><span class="token punctuation">(</span>arg <span class="token operator">=</span><span class="token operator">></span> <span class="token template-string"><span class="token string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>arg<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">%`</span></span><span class="token punctuation">,</span> arg <span class="token operator">=</span><span class="token operator">></span> arg<span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> arg <span class="token operator">=</span><span class="token operator">></span> arg <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 15.00%</span>
+<span class="token function">compose</span><span class="token punctuation">(</span>arg <span class="token operator">=</span><span class="token operator">></span> arg<span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> arg <span class="token operator">=</span><span class="token operator">></span> arg <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 15.00</span>
+<span class="token function">compose</span><span class="token punctuation">(</span>arg <span class="token operator">=</span><span class="token operator">></span> arg <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 15</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>执行结果如上述代码，有兴趣的同学可以先自己实现一下再来看后续的。</p>
+<h2 id="1-0实现方案"><a href="#1-0实现方案" class="headerlink" title="1.0实现方案"></a>1.0实现方案</h2><p>大致的思路为：</p>
+<ol>
+<li>获取所有的参数</li>
+<li>调用最后一个函数，并接收返回值</li>
+<li>如果没有后续的函数，返回数据，如果有，将返回值放入下一个函数中执行</li>
+</ol>
+<p>所以这种情况用递归来实现会比较清晰一些</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> compose <span class="token punctuation">(</span><span class="token operator">...</span>funcs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> exec <span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> func <span class="token operator">=</span> funcs<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token function">func</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 执行函数，获取返回值</span>
+
+    <span class="token comment" spellcheck="true">// 如果后续还有函数，将返回值放入下一个函数执行</span>
+    <span class="token comment" spellcheck="true">// 如果后续没有了，直接返回</span>
+    <span class="token keyword">return</span> funcs<span class="token punctuation">.</span>length <span class="token operator">?</span> <span class="token function">exec</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token punctuation">:</span> result
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样，我们就实现了上述的<code>compose</code>函数。<br>真是可喜可贺，可喜可贺。</p>
+<p><strong>本文完。</strong></p>
+<hr>
+<p><img src="/images/koajs-code-review/pic-1.jpg" alt=""><br><img src="/images/koajs-code-review/pic-1.jpg" alt=""><br><img src="/images/koajs-code-review/pic-1.jpg" alt=""></p>
+<p>好了，如果现实生活中开发做需求也是如此爽快不做作就好了，但是，产品总是会来的，需求总是会改的。</p>
+<h2 id="2-0需求变更"><a href="#2-0需求变更" class="headerlink" title="2.0需求变更"></a>2.0需求变更</h2><p>我们现在有如下要求，函数需要支持<code>Promise</code>对象，而且要兼容普通函数的方式。<br>示例代码如下：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 为方便阅读修改的排版</span>
+<span class="token function">compose</span><span class="token punctuation">(</span>
+  arg <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span>
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span>_ <span class="token operator">=</span><span class="token operator">></span>
+      <span class="token function">resolve</span><span class="token punctuation">(</span>arg<span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token number">1000</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">)</span><span class="token punctuation">,</span>
+  arg <span class="token operator">=</span><span class="token operator">></span> arg <span class="token operator">+</span> <span class="token number">10</span>
+<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>data <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 15.00</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们有如下代码调用，对<code>toFixed</code>函数的调用添加<code>1000ms</code>的延迟。<del>让用户觉得这个函数执行很慢，方便下次优化</del></p>
+<p>所以，我们就需要去修改<code>compose</code>函数了。<br>我们之前的代码只能支持普通函数的处理，现在因为添加了<code>Promise</code>对象的原因，所以我们要进行如下修改：</p>
+<p>首先，异步函数改为同步函数是不存在的<code>readFile/readFileSync</code>这类除外。<br>所以，最简单的方式就是，我们将普通函数改为异步函数，也就是在普通函数外包一层<code>Promise</code>。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> compose <span class="token punctuation">(</span><span class="token operator">...</span>funcs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> exec <span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      <span class="token keyword">let</span> func <span class="token operator">=</span> funcs<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+      <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token function">promiseify</span><span class="token punctuation">(</span><span class="token function">func</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 执行函数，获取返回值，并将返回值转换为`Promise`对象</span>
+
+      <span class="token comment" spellcheck="true">// 注册`Promise`的`then`事件，并在里边进行下一次函数执行的准备</span>
+      <span class="token comment" spellcheck="true">// 判断后续是否还存在函数，如果有，继续执行</span>
+      <span class="token comment" spellcheck="true">// 如果没有，直接返回结果</span>
+      result<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>data <span class="token operator">=</span><span class="token operator">></span> funcs<span class="token punctuation">.</span>length <span class="token operator">?</span>
+        <span class="token function">exec</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>resolve<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>reject<span class="token punctuation">)</span> <span class="token punctuation">:</span>
+        <span class="token function">resolve</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+      <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>reject<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 判断参数是否为`Promise`</span>
+<span class="token keyword">function</span> isPromise <span class="token punctuation">(</span>pro<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> pro <span class="token keyword">instanceof</span> <span class="token class-name">Promise</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 将参数转换为`Promise`</span>
+<span class="token keyword">function</span> promiseify <span class="token punctuation">(</span>pro<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 如果结果为`Promise`，直接返回</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isPromise</span><span class="token punctuation">(</span>pro<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> pro
+  <span class="token comment" spellcheck="true">// 如果结果为这些基本类型，说明是普通函数</span>
+  <span class="token comment" spellcheck="true">// 我们给他包一层`Promise.resolve`</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'string'</span><span class="token punctuation">,</span> <span class="token string">'number'</span><span class="token punctuation">,</span> <span class="token string">'regexp'</span><span class="token punctuation">,</span> <span class="token string">'object'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> pro<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>pro<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们针对<code>compose</code>代码的改动主要是集中在这几处：</p>
+<ol>
+<li>将<code>compose</code>的返回值改为了<code>Promise</code>对象，这个是必然的，因为内部可能会包含<code>Promise</code>参数，所以我们一定要返回一个<code>Promise</code>对象</li>
+<li>将各个函数执行的返回值包装为了<code>Promise</code>对象，为了统一返回值。</li>
+<li>处理函数返回值，监听<code>then</code>和<code>catch</code>、并将<code>resolve</code>和<code>reject</code>传递了过去。</li>
+</ol>
+<hr>
+<h2 id="3-0终极版"><a href="#3-0终极版" class="headerlink" title="3.0终极版"></a>3.0终极版</h2><p>现在，我们又得到了一个新的需求，我们想要在其中某些函数执行中跳过部分代码，先执行后续的函数，等到后续函数执行完后，再拿到返回值执行剩余的代码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">compose</span><span class="token punctuation">(</span>
+  data <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token function">resolve</span><span class="token punctuation">(</span>data <span class="token operator">+</span> <span class="token number">2.5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  data <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token function">resolve</span><span class="token punctuation">(</span>data <span class="token operator">+</span> <span class="token number">2.5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">async</span> <span class="token keyword">function</span> c <span class="token punctuation">(</span>data<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// async/await为Promise语法糖，不赘述</span>
+    data <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">10</span> <span class="token comment" spellcheck="true">// 数值 + 10</span>
+    <span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 先执行后续的代码</span>
+
+    result <span class="token operator">-</span><span class="token operator">=</span> <span class="token number">5</span>  <span class="token comment" spellcheck="true">// 数值 - 5</span>
+
+    <span class="token keyword">return</span> result
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span>data<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token function">next</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>data <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      data <span class="token operator">=</span> data <span class="token operator">/</span> <span class="token number">100</span> <span class="token comment" spellcheck="true">// 将数值除以100限制百分比</span>
+      <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>data<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">%`</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>reject<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 先执行后续的代码</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">function</span> d <span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> data <span class="token operator">+</span> <span class="token number">20</span> <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 0.45%</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>拿到需求后，陷入沉思。。。<br>好好地顺序执行代码，突然就变成了这个鸟样，随时可能会跳到后边的函数去。<br>所以我们分析这个新需求的效果：</p>
+<p>我们在函数执行到一半时，执行了<code>next</code>，<code>next</code>的返回值为后续函数的执行返回值。<br>也就是说，我们在<code>next</code>中处理，直接调用队列中的下一个函数即可；<br>然后监听<code>then</code>和<code>catch</code>回调，即可在当前函数中获取到返回值；<br>拿到返回值后就可以执行我们后续的代码。</p>
+<p>然后他的实现呢，也是非常的简单，我们只需要修改如下代码即可完成操作：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 在这里会强行调用`exec`并传入参数</span>
+<span class="token comment" spellcheck="true">// 而`exec`的执行，则意味着`funcs`集合中又一个函数被从队列中取出来</span>
+<span class="token function">promiseify</span><span class="token punctuation">(</span><span class="token function">func</span><span class="token punctuation">(</span>arg<span class="token punctuation">,</span> arg <span class="token operator">=</span><span class="token operator">></span> <span class="token function">exec</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>也就是说，我们会提前执行下一个函数，而且下一个函数的<code>then</code>事件注册是在我们当前函数内部的，当我们拿到返回值后，就可以进行后续的处理了。<br>而我们所有的函数是存放在一个队列里的，在我们提前执行完毕该函数后，后续的执行也就不会再出现了。避免了一个函数被重复执行的问题。</p>
+<p>如果看到这里已经很明白了，那么恭喜，你已经了解了实现<code>koajs</code>最核心的代码：<br><strong>中间件的实现方式</strong>、<strong>洋葱模型</strong><br><img src="/images/koajs-code-review/pic-2.png" alt=""><br>想必现在整个函数周遭散发着<code>洋葱</code>的味道。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://github.com/koajs/compose/blob/master/index.js" target="_blank" rel="noopener">koa-compose</a></p>
+<h2 id="相关示例代码仓库"><a href="#相关示例代码仓库" class="headerlink" title="相关示例代码仓库"></a>相关示例代码仓库</h2><p><a href="https://github.com/Jiasm/notebook/blob/master/compose.js" target="_blank" rel="noopener">1.0，普通函数</a><br><a href="https://github.com/Jiasm/notebook/blob/master/compose-promise.js" target="_blank" rel="noopener">2.0，Promise函数</a><br><a href="https://github.com/Jiasm/notebook/blob/master/compose-promise-with-next.js" target="_blank" rel="noopener">3.0，支持洋葱模型</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/03/28/一个有味道的函数/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '7fa36350-328a-11e8-a4c5-f3da6c2f43b3'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>总结CSS3新特性(Animation篇) - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#keyframe用法"><span class="toc-number">1.</span> <span class="toc-text">@keyframe用法:　　</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Animation用法"><span class="toc-number">2.</span> <span class="toc-text">Animation用法:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用时需注意"><span class="toc-number">3.</span> <span class="toc-text">使用时需注意:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部分参考文档"><span class="toc-number">4.</span> <span class="toc-text">部分参考文档:</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>总结CSS3新特性(Animation篇)</h1>
+  <p>动画(Animation),是CSS3的亮点.//之一</p>
+<p>通过animation属性指定@keyframe来完成关键帧动画;<br><a id="more"></a></p>
+<h3 id="keyframe用法"><a href="#keyframe用法" class="headerlink" title="@keyframe用法:　　"></a>@keyframe用法:　　</h3><pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@keyframes</span> name</span> <span class="token punctuation">{</span>
+  <span class="token selector">0% </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token comment" spellcheck="true">/*0%可用from关键字替代*/</span>  <span class="token selector">50% </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">10</span>px<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">100% </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token comment" spellcheck="true">/*100%可用to关键字替代*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>由于是CSS3,所以不出意外的各种前缀:</p>
+<p><img src="http://images0.cnblogs.com/blog2015/731575/201508/031528187517503.png" alt="Image">–图片来自MDN,<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/%40keyframes" target="_blank" rel="noopener">CSS中的关键帧</a></p>
+<p>单个帧中可填写多个属性,而且不需要保证一致,如:</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@-webkit-keyframes</span> identifier</span> <span class="token punctuation">{</span>
+  <span class="token selector">from </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">50% </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">10</span>px<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> red<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">to </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">20</span>px<span class="token punctuation">;</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> red<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token comment" spellcheck="true">/*这是一个完全有效的关键帧定义*/</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需要注意的有几点:</p>
+<p>　　关键帧中有效的属性为<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties" target="_blank" rel="noopener">可动画属性</a>;如出现不可动画属性,会忽略该属性,不影响其余属性的动画,</p>
+<p>　　如属性后跟有 !important,则会忽略该属性,</p>
+<p>　　某个关键帧如果重复定义,则取后定义的帧,　　</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@-webkit-keyframes</span> identifier</span> <span class="token punctuation">{</span>
+  <span class="token selector">from </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">50% </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">10</span>px<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/*该属性会动画*/</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> red <span class="token important">!important</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/*因为有!important字样,所以该条将被忽略*/</span>
+    <span class="token property">text-align</span><span class="token punctuation">:</span> center<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/*由于该属性不为可动画属性,因此也被忽略*/</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">to </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">20</span>px<span class="token punctuation">;</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> red<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">100% </span><span class="token punctuation">{</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> green<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token comment" spellcheck="true">/*由于to关键字表示100%,所以该动画只会执行改变颜色为green,而to所对应的属性全部被忽略*/</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>帧数范围为0%-100%,不属于这个范围的则被忽略(经实验,关键帧定义可以不按顺序来,可以正确执行,但是可读性不太好);</p>
+<h3 id="Animation用法"><a href="#Animation用法" class="headerlink" title="Animation用法:"></a>Animation用法:</h3><p>animation-name:设置动画的名称,就是@keyframe后跟的标识;</p>
+<p>animation-duration:设置动画花费的时间,//这两个为必填属性,第一个不解释了,第二个必填的原因为默认值是0s,0s是不会产生动画效果的,所以为必填;</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-name</span><span class="token punctuation">:</span> demo<span class="token punctuation">;</span>
+  <span class="token property">animation-duration</span><span class="token punctuation">:</span> <span class="token number">2</span>s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token atrule"><span class="token rule">@keyframe</span> demo</span> <span class="token punctuation">{</span>
+  <span class="token selector">from </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">to </span><span class="token punctuation">{</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">20</span>px<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>animation-timing-function:设置动画的速度曲线,默认值为 ease,<a href="http://www.w3school.com.cn/cssref/pr_animation-timing-function.asp" target="_blank" rel="noopener">可选值</a>有数个,可通过cubic-bezier函数来自定义,这里有一些定义好的,可以直接拿来用的函数,<a href="http://easings.net/zh-cn" target="_blank" rel="noopener">传送阵</a>;</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-function</span><span class="token punctuation">:</span> <span class="token function">cubic-bezier</span><span class="token punctuation">(</span><span class="token number">0.25</span>,<span class="token number">0.1</span>,<span class="token number">0.25</span>,<span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*自定义的贝塞尔曲线*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>animation-delay:设置动画开始前的等待时间,默认为0s;</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-delay</span><span class="token punctuation">:</span> <span class="token number">2</span>s<span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*动画将于2s后执行*/</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>animation-iteration-count:设置动画执行次数,默认为1,使用 infinite 关键字可以使动画无限循环;</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-iteration-count</span><span class="token punctuation">:</span> infinite<span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*动画将无限循环,此时animation-fill-mode将无效*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>animation-direction:设置动画执行完后时候倒序执行,默认为normal,使用 alternate 关键字开启倒序执行</p>
+<p>//仅有animation-iteration-count值为大于1次时才会激活,倒序执行消耗时间为animation-duration设置的时间,奇数次数为正序,偶数次数为倒序;</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-direction</span><span class="token punctuation">:</span> alternate<span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*激活倒序播放*/</span>
+  <span class="token property">animation-iteration-count</span><span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*此时该属性须大于1,direction才会有效*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>animation-play-state:设置动画当前状态,默认是 running ,为执行状态,可以设置为 paused 为暂停,</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector"><span class="token id">#demo</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-play-state</span><span class="token punctuation">:</span> paused<span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*默认不触发动画*/</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#demo</span><span class="token pseudo-class">:hover</span> </span><span class="token punctuation">{</span>
+  <span class="token property">animation-play-state</span><span class="token punctuation">:</span> running<span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">/*悬浮至该元素才执行动画*/</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>animation-fill-mode:设置动画执行完后的状态(复原(none),保持第一帧(backwards)以及保持最后一帧(forwards),还有一个both值 MDN说是同时backwards和forwards,原谅我没有试出它与forwards的区别…,)</p>
+<p>　　//设置animation-iteration-count值为infinite时将导致该属性失效;</p>
+<p>animation的简写方式对顺序要求特别严格,规格如下:</p>
+<p>animation:name duration timing-function delay iteration-count direction play-state fill-mode;</p>
+<h3 id="使用时需注意"><a href="#使用时需注意" class="headerlink" title="使用时需注意:"></a>使用时需注意:</h3><p>各种前缀...@keyframe里边如果用到了transform,也是需要加前缀的,如:</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@-webkit-keyframe</span> demo</span> <span class="token punctuation">{</span>
+  <span class="token selector">from </span><span class="token punctuation">{</span>
+    <span class="token property">-webkit-transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span><span class="token number">7</span>deg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token selector">to </span><span class="token punctuation">{</span>
+    <span class="token property">-webkit-transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span><span class="token number">14</span>deg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="部分参考文档"><a href="#部分参考文档" class="headerlink" title="部分参考文档:"></a>部分参考文档:</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/animation" target="_blank" rel="noopener">MDN的动画</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/%40keyframes" target="_blank" rel="noopener">CSS3中的关键帧</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_animation.asp" target="_blank" rel="noopener">W3School的Animation属性</a></p>
+<p><a href="http://www.w3school.com.cn/cssref/pr_keyframes.asp" target="_blank" rel="noopener">W3School的@Keyframe规则</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2015/08/03/总结CSS3新特性-Animation篇/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '95bb2f40-b97a-11e6-8659-63244734908c'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

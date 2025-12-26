@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>如何在小程序中调用本地接口 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景："><span class="toc-number">1.</span> <span class="toc-text">背景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#前提："><span class="toc-number">2.</span> <span class="toc-text">前提：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#准备工作："><span class="toc-number">3.</span> <span class="toc-text">准备工作：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作步骤："><span class="toc-number">4.</span> <span class="toc-text">操作步骤：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料："><span class="toc-number">5.</span> <span class="toc-text">参考资料：</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>如何在小程序中调用本地接口</h1>
+  <h3 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h3><p>随着微信小程序开始公测，我司也拿到了AppID，所以开始了微信小程序的趟坑之旅。</p>
+<p>由于现在网上已经有很多的《微信小程序从精通到入门》的教程了，所以就不再重复那些，只是讲一下，在开发的过程中，如何使用本地（开发环境）的接口。<br><a id="more"></a></p>
+<p>因为小程序的开发文档中写到了，<strong>wx.request</strong> 中的URL只能是一个https请求，本地一般来讲是不会有https的-.-</p>
+<p>所以我们使用Charles代理来实现需求。</p>
+<h3 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h3><p>本人认为你现在已经具备以下几个条件：</p>
+<ol start="0">
+<li><p>具有微信小程序开发的权限</p>
+</li>
+<li><p>知道自家小程序后台配置的信任域名都是什么-.-</p>
+</li>
+<li><p>有一台Mac（阿哈哈…无视…截图来自Mac…Windows党请多担待）</p>
+</li>
+</ol>
+<h3 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h3><p>首先我们需要安装如下两个软件：</p>
+<ol start="0">
+<li><p>安装<a href="https://www.baidu.com/s?wd=charles%E7%A0%B4%E8%A7%A3%E7%89%88" target="_blank" rel="noopener">Charles</a>，当然了，是个破解版的-.- 破解方法请自行百度，不赘述</p>
+</li>
+<li><p>安装<a href="https://mp.weixin.qq.com/wiki/10/e5f772f4521da17fa0d7304f68b97d7e.html#.E4.B8.8B.E8.BD.BD.E5.9C.B0.E5.9D.80" target="_blank" rel="noopener">微信web开发者工具</a></p>
+</li>
+</ol>
+<h3 id="操作步骤："><a href="#操作步骤：" class="headerlink" title="操作步骤："></a>操作步骤：</h3><p>到这一步，本人认为你已经安装好了上边两个软件，并且可以正常运行咯。</p>
+<ol start="0">
+<li><p>首先打开Charles，<strong>Help-&gt;SSL Proxying-&gt;Install Charles Root Certificate</strong> 安装证书到本地<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-1.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-2.png" alt=""></p>
+</li>
+<li><p>在钥匙串访问中搜索 Charles 关键字，找到那个证书，点开后将信任选为 <strong>始终信任</strong><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-3.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-4.png" alt=""></p>
+</li>
+<li><p>打开 <strong>Tools-&gt;Map Remote</strong> 添加线上域名于本地（开发环境）服务的映射<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-5.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-6.png" alt=""><br><img src="/images/how-to-use-local-request-on-wx/screen-shot-7.png" alt=""></p>
+</li>
+<li><p>打开 <strong>Proxy-&gt;Proxy Settings</strong></p>
+</li>
+<li><p>选择Proxies选项卡，默认的HTTP Proxy的值是8888，这个端口号需要记着，后边在微信web开发者工具里边要用到的<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-8.png" alt=""></p>
+</li>
+<li><p>选择Mac OS X选项卡，点击启用如下两个选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-9.png" alt=""></p>
+</li>
+<li><p>打开 <strong>Proxy-&gt;Mac OS X Proxy</strong> 启用本地的代理服务<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-10.png" alt=""></p>
+</li>
+<li><p>这时，Charles已经完成了本地服务代理线上服务的步骤，接下来就是微信web开发者工具中的一些设置</p>
+</li>
+<li><p>在扫码登录后，点击右上角代理的选项<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-11.png" alt=""></p>
+</li>
+<li><p>选择手动设置代理，然后填写本地的IP，以及前边在Charles中设置的代理端口号（第5步）<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-12.png" alt=""></p>
+</li>
+<li><p>点击保存后，来到微信小程序的项目中，在 <strong>wx.request</strong> 中直接填写线上域名后，保存运行，你就会发现Charles中已经收到了来自你本地的一些请求😄<br><img src="/images/how-to-use-local-request-on-wx/screen-shot-13.png" alt=""></p>
+</li>
+</ol>
+<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol start="0">
+<li><p><a href="https://mp.weixin.qq.com/debug/wxadoc/dev/?t=20161107" target="_blank" rel="noopener">微信小程序官方文档</a></p>
+</li>
+<li><p><a href="http://www.waitsun.com/charles-3-11-2.html" target="_blank" rel="noopener">Charles破解版安装</a></p>
+</li>
+</ol>
+<p>转载请署原文地址： <a href="https://blog.jiasm.org/2016/11/14/%E5%A6%82%E4%BD%95%E5%9C%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%8E%A5%E5%8F%A3/" target="_blank" rel="noopener">https://blog.jiasm.org/2016/11/14/如何在小程序中调用本地接口/</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2016/11/14/如何在小程序中调用本地接口/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '8a0c2820-b97a-11e6-ab7e-5ff09bae0f94'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

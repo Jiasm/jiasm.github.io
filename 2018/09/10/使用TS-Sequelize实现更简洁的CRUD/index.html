@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>使用TS+Sequelize实现更简洁的CRUD - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CRUD原始版-手动拼接SQL"><span class="toc-number">1.</span> <span class="toc-text">CRUD原始版 手动拼接SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRUD进阶版-Sequelize的使用"><span class="toc-number">2.</span> <span class="toc-text">CRUD进阶版 Sequelize的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ORM是干嘛的"><span class="toc-number">2.1.</span> <span class="toc-text">ORM是干嘛的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sequelize的使用方式"><span class="toc-number">2.2.</span> <span class="toc-text">Sequelize的使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#这还不够"><span class="toc-number">2.3.</span> <span class="toc-text">这还不够</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRUD终极版-装饰器实现模型定义"><span class="toc-number">3.</span> <span class="toc-text">CRUD终极版 装饰器实现模型定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sequelize-typescript的使用方式"><span class="toc-number">3.1.</span> <span class="toc-text">Sequelize-typescript的使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Sequelize-typescript实现模型的继承"><span class="toc-number">3.2.</span> <span class="toc-text">使用Sequelize-typescript实现模型的继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过继承来复用一些行为"><span class="toc-number">3.3.</span> <span class="toc-text">通过继承来复用一些行为</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>使用TS+Sequelize实现更简洁的CRUD</h1>
+  <p>如果是经常使用Node来做服务端开发的童鞋，肯定不可避免的会操作数据库，做一些增删改查（<code>CRUD</code>，<code>Create Read Update Delete</code>）的操作，如果是一些简单的操作，类似定时脚本什么的，可能就直接生写SQL语句来实现功能了，而如果是在一些大型项目中，数十张、上百张的表，之间还会有一些（一对多，多对多）的映射关系，那么引入一个<code>ORM</code>（<code>Object Relational Mapping</code>）工具来帮助我们与数据库打交道就可以减轻一部分不必要的工作量，<code>Sequelize</code>就是其中比较受欢迎的一个。</p>
+<a id="more"></a>
+<h2 id="CRUD原始版-手动拼接SQL"><a href="#CRUD原始版-手动拼接SQL" class="headerlink" title="CRUD原始版 手动拼接SQL"></a>CRUD原始版 手动拼接SQL</h2><p>先来举例说明一下直接拼接<code>SQL</code>语句这样比较“底层”的操作方式：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> animal <span class="token punctuation">(</span>
+  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
+  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  weight <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
+  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建这样的一张表，三个字段，自增ID、<code>name</code>以及<code>weight</code>。<br>如果使用<code>mysql</code>这个包来直接操作数据库大概是这样的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> connection <span class="token operator">=</span> mysql<span class="token punctuation">.</span><span class="token function">createConnection</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> tableName <span class="token operator">=</span> <span class="token string">'animal'</span>
+
+connection<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 我们假设已经支持了Promise</span>
+
+<span class="token comment" spellcheck="true">// 查询</span>
+<span class="token keyword">const</span> <span class="token punctuation">[</span>results<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">await</span> connection<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`
+  SELECT 
+    id,
+    name,
+    weight
+  FROM </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>tableName<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+`</span></span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 新增</span>
+<span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token string">'Niko'</span>
+<span class="token keyword">const</span> weight <span class="token operator">=</span> <span class="token number">70</span>
+<span class="token keyword">await</span> connection<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`
+  INSERT INTO </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>tableName<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> (name, weight)
+  VALUES ('</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">', </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>weight<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)
+`</span></span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 或者通过传入一个Object的方式也可以做到</span>
+<span class="token keyword">await</span> connection<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`INSERT INTO </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>tableName<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> SET ?`</span></span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  name<span class="token punctuation">,</span>
+  weight
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+connection<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看起来也还算是比较清晰，但是这样带来的问题就是，开发人员需要对表结构足够的了解。<br>如果表中有十几个字段，对于开发人员来说这会是很大的记忆成本，你需要知道某个字段是什么类型，拼接<code>SQL</code>时还要注意插入时的顺序及类型，<code>WHERE</code>条件对应的查询参数类型，如果修改某个字段的类型，还要去处理对应的传参。<br>这样的项目尤其是在进行交接的时候更是一件恐怖的事情，新人又需要从头学习这些表结构。<br><em>以及还有一个问题，如果有哪天需要更换数据库了，放弃了<code>MySQL</code>，那么所有的<code>SQL</code>语句都要进行修改（因为各个数据库的方言可能有区别）</em>  </p>
+<h2 id="CRUD进阶版-Sequelize的使用"><a href="#CRUD进阶版-Sequelize的使用" class="headerlink" title="CRUD进阶版 Sequelize的使用"></a>CRUD进阶版 Sequelize的使用</h2><p>关于记忆这件事情，机器肯定会比人脑更靠谱儿，所以就有了<code>ORM</code>，这里就用到了在<code>Node</code>中比较流行的<code>Sequelize</code>。  </p>
+<h3 id="ORM是干嘛的"><a href="#ORM是干嘛的" class="headerlink" title="ORM是干嘛的"></a>ORM是干嘛的</h3><p>首先可能需要解释下<code>ORM</code>是做什么使的，可以简单地理解为，使用面向对象的方式，通过操作对象来实现与数据库之前的交流，完成<code>CRUD</code>的动作。<br>开发者并不需要关心数据库的类型，也不需要关心实际的表结构，而是根据当前编程语言中对象的结构与数据库中表、字段进行映射。  </p>
+<p>就好比针对上边的<code>animal</code>表进行操作，不再需要在代码中去拼接<code>SQL</code>语句，而是直接调用类似<code>Animal.create</code>，<code>Animal.find</code>就可以完成对应的动作。  </p>
+<h3 id="Sequelize的使用方式"><a href="#Sequelize的使用方式" class="headerlink" title="Sequelize的使用方式"></a>Sequelize的使用方式</h3><p>首先我们要先下载<code>Sequelize</code>的依赖：  </p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">npm</span> i sequelize
+<span class="token function">npm</span> i mysql2    <span class="token comment" spellcheck="true"># 以及对应的我们需要的数据库驱动</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>然后在程序中创建一个<code>Sequelize</code>的实例：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> Sequelize <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'Sequelize'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> sequelize <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequelize</span><span class="token punctuation">(</span><span class="token string">'mysql://root:jarvis@127.0.0.1:3306/ts_test'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//                             dialect://username:password@host:port/db_name</span>
+
+<span class="token comment" spellcheck="true">// 针对上述的表，我们需要先建立对应的模型：</span>
+<span class="token keyword">const</span> Animal <span class="token operator">=</span> sequelize<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">'animal'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  id<span class="token punctuation">:</span> <span class="token punctuation">{</span> type<span class="token punctuation">:</span> Sequelize<span class="token punctuation">.</span>INTEGER<span class="token punctuation">,</span> autoIncrement<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  name<span class="token punctuation">:</span> <span class="token punctuation">{</span> type<span class="token punctuation">:</span> Sequelize<span class="token punctuation">.</span>STRING<span class="token punctuation">,</span> allowNull<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  weight<span class="token punctuation">:</span> <span class="token punctuation">{</span> type<span class="token punctuation">:</span> Sequelize<span class="token punctuation">.</span>INTEGER<span class="token punctuation">,</span> allowNull<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 禁止sequelize修改表名，默认会在animal后边添加一个字母`s`表示负数</span>
+  freezeTableName<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token comment" spellcheck="true">// 禁止自动添加时间戳相关属性</span>
+  timestamps<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 然后就可以开始使用咯</span>
+<span class="token comment" spellcheck="true">// 还是假设方法都已经支持了Promise</span>
+
+<span class="token comment" spellcheck="true">// 查询</span>
+<span class="token keyword">const</span> results <span class="token operator">=</span> <span class="token keyword">await</span> Animal<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  raw<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 新增</span>
+<span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token string">'Niko'</span>
+<span class="token keyword">const</span> weight <span class="token operator">=</span> <span class="token number">70</span>
+
+<span class="token keyword">await</span> Animal<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token punctuation">,</span>
+  weight<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>sequelize定义模型相关的各种配置：<a href="https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/models-definition.md" target="_blank" rel="noopener">docs</a>  </p>
+</blockquote>
+<p>抛开模型定义的部分，使用<code>Sequelize</code>无疑减轻了很多使用上的成本，因为模型的定义一般不太会去改变，一次定义多次使用，而使用手动拼接<code>SQL</code>的方式可能就需要将一段<code>SQL</code>改来改去的。  </p>
+<p>而且可以帮助进行字段类型的转换，避免出现类型强制转换出错<code>NaN</code>或者数字被截断等一些粗心导致的错误。  </p>
+<p>通过定义模型的方式来告诉程序，有哪些模型，模型的字段都是什么，让程序来帮助我们记忆，而非让我们自己去记忆。<br>我们只需要拿到对应的模型进行操作就好了。  </p>
+<h3 id="这还不够"><a href="#这还不够" class="headerlink" title="这还不够"></a>这还不够</h3><p><strong>But</strong>，虽说切换为<code>ORM</code>工具已经帮助我们减少了很大一部分的记忆成本，但是依然还不够，我们仍然需要知道模型中都有哪些字段，才能在业务逻辑中进行使用，如果新人接手项目，仍然需要去翻看模型的定义才能知道有什么字段，所以就有了今天要说的真正的主角儿：<a href="https://www.npmjs.com/package/sequelize-typescript" target="_blank" rel="noopener">sequelize-typescript</a></p>
+<h2 id="CRUD终极版-装饰器实现模型定义"><a href="#CRUD终极版-装饰器实现模型定义" class="headerlink" title="CRUD终极版 装饰器实现模型定义"></a>CRUD终极版 装饰器实现模型定义</h2><p><code>Sequelize-typescript</code>是基于<code>Sequelize</code>针对<code>TypeScript</code>所实现的一个增强版本，抛弃了之前繁琐的模型定义，使用装饰器直接达到我们想到的目的。</p>
+<h3 id="Sequelize-typescript的使用方式"><a href="#Sequelize-typescript的使用方式" class="headerlink" title="Sequelize-typescript的使用方式"></a>Sequelize-typescript的使用方式</h3><p>首先因为是用到了<code>TS</code>，所以环境依赖上要安装的东西会多一些：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 这里采用ts-node来完成举例</span>
+<span class="token function">npm</span> i ts-node typescript
+<span class="token function">npm</span> i sequelize reflect-metadata sequelize-typescript
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>其次，还需要修改<code>TS</code>项目对应的<code>tsconfig.json</code>文件，用来让<code>TS</code>支持装饰器的使用：</p>
+<pre class="line-numbers language-diff"><code class="language-diff">{
+  "compilerOptions": {
+<span class="token inserted">+   "experimentalDecorators": true,</span>
+<span class="token inserted">+   "emitDecoratorMetadata": true</span>
+  }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后就可以开始编写脚本来进行开发了，与<code>Sequelize</code>不同之处基本在于模型定义的地方：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// /modles/animal.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Table<span class="token punctuation">,</span> Column<span class="token punctuation">,</span> Model <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+
+@<span class="token function">Table</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  tableName<span class="token punctuation">:</span> <span class="token string">'animal'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>Animal<span class="token operator">></span> <span class="token punctuation">{</span>
+  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    primaryKey<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    autoIncrement<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  id<span class="token punctuation">:</span> number
+
+  @Column
+  name<span class="token punctuation">:</span> string
+
+  @Column
+  weight<span class="token punctuation">:</span> number
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 创建与数据库的链接、初始化模型</span>
+<span class="token comment" spellcheck="true">// app.ts</span>
+<span class="token keyword">import</span> path <span class="token keyword">from</span> <span class="token string">'path'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Sequelize <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+<span class="token keyword">import</span> Animal <span class="token keyword">from</span> <span class="token string">'./models/animal'</span>
+
+<span class="token keyword">const</span> sequelize <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequelize</span><span class="token punctuation">(</span><span class="token string">'mysql://root:jarvis@127.0.0.1:3306/ts_test'</span><span class="token punctuation">)</span>
+sequelize<span class="token punctuation">.</span><span class="token function">addModels</span><span class="token punctuation">(</span><span class="token punctuation">[</span>path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token template-string"><span class="token string">`./models/`</span></span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 查询</span>
+<span class="token keyword">const</span> results <span class="token operator">=</span> <span class="token keyword">await</span> Animal<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  raw<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 新增</span>
+<span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token string">'Niko'</span>
+<span class="token keyword">const</span> weight <span class="token operator">=</span> <span class="token number">70</span>
+
+<span class="token keyword">await</span> Animal<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token punctuation">,</span>
+  weight<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>与普通的<code>Sequelize</code>不同的有这么几点：</p>
+<ol>
+<li>模型的定义采用装饰器的方式来定义</li>
+<li>实例化<code>Sequelize</code>对象时需要指定对应的<code>model</code>路径</li>
+<li>模型相关的一系列方法都是支持<code>Promise</code>的</li>
+</ol>
+<p><em>如果在使用过程中遇到提示<code>XXX used before model init</code>，可以尝试在实例化前边添加一个<code>await</code>操作符，等到与数据库的连接建立完成以后再进行操作</em></p>
+<p>但是好像看起来这样写的代码相较于<code>Sequelize</code>多了不少呢，而且至少需要两个文件来配合，那么这么做的意义是什么的？<br>答案就是<code>OOP</code>中一个重要的理念：<strong>继承</strong>。  </p>
+<h3 id="使用Sequelize-typescript实现模型的继承"><a href="#使用Sequelize-typescript实现模型的继承" class="headerlink" title="使用Sequelize-typescript实现模型的继承"></a>使用Sequelize-typescript实现模型的继承</h3><p>因为<code>TypeScript</code>的核心开发人员中包括<code>C#</code>的架构师，所以<code>TypeScript</code>中可以看到很多类似<code>C#</code>的痕迹，在模型的这方面，我们可以尝试利用继承减少一些冗余的代码。  </p>
+<p>比如说我们基于<code>animal</code>表又有了两张新表，<code>dog</code>和<code>bird</code>，这两者之间肯定是有区别的，所以就有了这样的定义：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> dog <span class="token punctuation">(</span>
+  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
+  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  weight <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
+  leg <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> bird <span class="token punctuation">(</span>
+  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
+  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  weight <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
+  wing <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  claw <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>关于<code>dog</code>我们有一个腿<code>leg</code>数量的描述，关于<code>bird</code>我们有了翅膀<code>wing</code>和爪子<code>claw</code>数量的描述。<br><em>特意让两者的特殊字段数量不同，省的有杠精说可以通过添加<code>type</code>字段区分两种不同的动物 :p</em>  </p>
+<p>如果要用<code>Sequelize</code>的方式，我们就要将一些相同的字段定义<code>define</code>三遍才能实现，或者说写得灵活一些，将<code>define</code>时使用的<code>Object</code>抽出来使用<code>Object.assign</code>的方式来实现类似继承的效果。  </p>
+<p>但是在<code>Sequelize-typescript</code>就可以直接使用继承来实现我们想要的效果：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 首先还是我们的Animal模型定义</span>
+<span class="token comment" spellcheck="true">// /models/animal.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Table<span class="token punctuation">,</span> Column<span class="token punctuation">,</span> Model <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+
+@<span class="token function">Table</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  tableName<span class="token punctuation">:</span> <span class="token string">'animal'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>Animal<span class="token operator">></span> <span class="token punctuation">{</span>
+  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    primaryKey<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    autoIncrement<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  id<span class="token punctuation">:</span> number
+
+  @Column
+  name<span class="token punctuation">:</span> string
+
+  @Column
+  weight<span class="token punctuation">:</span> number
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 接下来就是继承的使用了</span>
+<span class="token comment" spellcheck="true">// /models/dog.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Table<span class="token punctuation">,</span> Column<span class="token punctuation">,</span> Model <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+<span class="token keyword">import</span> Animal <span class="token keyword">from</span> <span class="token string">'./animal'</span>
+
+@<span class="token function">Table</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  tableName<span class="token punctuation">:</span> <span class="token string">'dog'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Dog</span> <span class="token keyword">extends</span> <span class="token class-name">Animal</span> <span class="token punctuation">{</span>
+  @Column
+  leg<span class="token punctuation">:</span> number
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// /models/bird.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Table<span class="token punctuation">,</span> Column<span class="token punctuation">,</span> Model <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+<span class="token keyword">import</span> Animal <span class="token keyword">from</span> <span class="token string">'./animal'</span>
+
+@<span class="token function">Table</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  tableName<span class="token punctuation">:</span> <span class="token string">'bird'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Bird</span> <span class="token keyword">extends</span> <span class="token class-name">Animal</span> <span class="token punctuation">{</span>
+  @Column
+  wing<span class="token punctuation">:</span> number
+
+  @Column
+  claw<span class="token punctuation">:</span> number
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>有一点需要注意的：<strong>每一个模型需要单独占用一个文件，并且采用<code>export default</code>的方式来导出</strong><br>也就是说目前我们的文件结构是这样的：  </p>
+<pre class="line-numbers language-bash"><code class="language-bash">├── models
+│   ├── animal.ts
+│   ├── bird.ts
+│   └── dog.ts
+└── app.ts
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>得益于<code>TypeScript</code>的静态类型，我们能够很方便地得知这些模型之间的关系，以及都存在哪些字段。<br>在结合着<code>VS Code</code>开发时可以得到很多动态提示，类似<code>findAll</code>，<code>create</code>之类的操作都会有提示：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Animal<span class="token punctuation">.</span>create<span class="token operator">&lt;</span>Animal<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  abc<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+<span class="token comment" spellcheck="true">// ^ abc不是Animal已知的属性  </span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="通过继承来复用一些行为"><a href="#通过继承来复用一些行为" class="headerlink" title="通过继承来复用一些行为"></a>通过继承来复用一些行为</h3><p>上述的例子也只是说明了如何复用模型，但是如果是一些封装好的方法呢？<br>类似的获取表中所有的数据，可能一般情况下获取<code>JSON</code>数据就够了，也就是<code>findAll({raw: true})</code><br>所以我们可以针对类似这样的操作进行一次简单的封装，不需要开发者手动去调用<code>findAll</code>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// /models/animal.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Table<span class="token punctuation">,</span> Column<span class="token punctuation">,</span> Model <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'sequelize-typescript'</span>
+
+@<span class="token function">Table</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  tableName<span class="token punctuation">:</span> <span class="token string">'animal'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">Animal</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>Animal<span class="token operator">></span> <span class="token punctuation">{</span>
+  @<span class="token function">Column</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    primaryKey<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    autoIncrement<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  id<span class="token punctuation">:</span> number
+
+  @Column
+  name<span class="token punctuation">:</span> string
+
+  @Column
+  weight<span class="token punctuation">:</span> number
+
+  <span class="token keyword">static</span> <span class="token keyword">async</span> getList <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">{</span>raw<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// /app.ts</span>
+<span class="token comment" spellcheck="true">// 这样就可以直接调用`getList`来实现类似的效果了</span>
+<span class="token keyword">await</span> Animal<span class="token punctuation">.</span><span class="token function">getList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 返回一个JSON数组</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同理，因为上边我们的两个<code>Dog</code>和<code>Bird</code>继承自<code>Animal</code>，所以代码不用改动就可以直接使用<code>getList</code>了。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> results <span class="token operator">=</span> <span class="token keyword">await</span> Dog<span class="token punctuation">.</span><span class="token function">getList</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+results<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>leg <span class="token comment" spellcheck="true">// TS提示错误</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>但是如果你像上边那样使用的话，TS会提示错误的：<code>[ts] 类型“Animal”上不存在属性“leg”。</code>。<br>哈哈，这又是为什么呢？细心的同学可能会发现，<code>getList</code>的返回值是一个<code>Animal[]</code>类型的，所以上边并没有<code>leg</code>属性，<code>Bird</code>的两个属性也是如此。  </p>
+<p>所以我们需要教<code>TS</code>认识我们的数据结构，这样就需要针对<code>Animal</code>的定义进行修改了，用到了 <strong>范型</strong>。<br>我们通过在函数上边添加一个范型的定义，并且添加限制保证传入的范型类型一定是继承自<code>Animal</code>的，在返回值转换其类型为<code>T</code>，就可以实现功能了。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">Animal</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> <span class="token keyword">async</span> getList<span class="token operator">&lt;</span>T <span class="token keyword">extends</span> <span class="token class-name">Animal</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> results <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      raw<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> results <span class="token keyword">as</span> T<span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> dogList <span class="token operator">=</span> <span class="token keyword">await</span> Dog<span class="token punctuation">.</span>getList<span class="token operator">&lt;</span>Dog<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 或者不作任何修改，直接在外边手动as也可以实现类似的效果</span>
+<span class="token comment" spellcheck="true">// 但是这样还是不太灵活，因为你要预先知道返回值的具体类型结构，将预期类型传递给函数，由函数去组装返回的类型还是比较推荐的</span>
+<span class="token keyword">const</span> dogList <span class="token operator">=</span> <span class="token keyword">await</span> Dog<span class="token punctuation">.</span><span class="token function">getList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> Dog<span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>dogList<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>leg<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// success</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这时再使用<code>leg</code>属性就不会出错了，如果要使用范型，一定要记住添加<code>extends Animal</code>的约束，不然<code>TS</code>会认为这里可以传入任意类型，那么很难保证可以正确的兼容<code>Animal</code>，但是继承自<code>Animal</code>的一定是可以兼容的。  </p>
+<p>当然如果连这里的范型或者<code>as</code>也不想写的话，还可以在子类中针对父类方法进行重写。<br>并不需要完整的实现逻辑，只需要获取返回值，然后修改为我们想要的类型即可：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">Dog</span> <span class="token keyword">extends</span> <span class="token class-name">Animal</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> <span class="token keyword">async</span> <span class="token function">getList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 调用父类方法，然后将返回值指定为某个类型</span>
+    <span class="token keyword">const</span> results <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">getList</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> results <span class="token keyword">as</span> Dog<span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 这样就可以直接使用方法，而不用担心返回值类型了</span>
+<span class="token keyword">const</span> dogList <span class="token operator">=</span> <span class="token keyword">await</span> Dog<span class="token punctuation">.</span><span class="token function">getList</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>dogList<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>leg<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// success</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文只是一个引子，一些简单的示例，只为体现出三者（<code>SQL</code>、<code>Sequelize</code>和<code>Sequelize-typescript</code>）之间的区别，<code>Sequelize</code>中有更多高阶的操作，类似映射关系之类的，这些在<code>Sequelize-typescript</code>中都有对应的体现，而且因为使用了装饰器，实现这些功能所需的代码会减少很多，看起来也会更清晰。  </p>
+<p><em>当然了，<code>ORM</code>这种东西也不是说要一股脑的上，如果是初学者，从个人层面上我不建议使用，因为这样会少了一个接触SQL的机会</em><br><em>如果项目结构也不是很复杂，或者可预期的未来也不会太复杂，那么使用<code>ORM</code>也没有什么意义，还让项目结构变得复杂起来</em><br><em>以及，一定程度上来说，通用就意味着妥协，为了保证多个数据库之间的效果都一致，可能会抛弃一些数据库独有的特性，如果明确的需要使用这些特性，那么<code>ORM</code>也不会太适合</em><br><strong>选择最合适的，要知道使用某样东西的意义</strong>  </p>
+<p>最终的一个示例放在了GitHub上：<a href="https://github.com/jiasm/notebook/tree/master/labs/storage/typescript/sequelize" target="_blank" rel="noopener">notebook | typescript/sequelize</a>  </p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/mysql" target="_blank" rel="noopener">mysql | npm</a></li>
+<li><a href="http://docs.sequelizejs.com/" target="_blank" rel="noopener">sequelize</a></li>
+<li><a href="https://www.npmjs.com/package/sequelize-typescript" target="_blank" rel="noopener">sequelize-typescript | npm</a></li>
+<li><a href="https://stackoverflow.com/questions/398134/what-are-the-advantages-of-using-an-orm" target="_blank" rel="noopener">waht are the advantages of using an orm</a></li>
+</ul>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/09/10/使用TS-Sequelize实现更简洁的CRUD/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = 'ccf79160-b3fb-11e8-bcda-095644449e63'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

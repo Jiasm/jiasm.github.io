@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>js - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          <html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <title>
+    
+  </title>
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+  <section class="posts">
+    
+      <a class="post" href="/2018/03/09/函数节流与函数防抖/">
+        <div class="post-title">
+          函数节流与函数防抖
+        </div>
+        <div class="post-content">
+          
+函数节流和函数防抖是一个老生常谈的话题了，两者都是对大量频繁重复调用代码的一种优化方案今天在某群和大家讨论时，顺便搜了一些相关博客发现有一篇关于两者的定义竟然写反了。。。所以决定自己来写一下-.-权当加深记忆了
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="f5253c60-23ae-11e8-bba7-eb8126ebe6f3">0 Comments</span>
+          <span class="post-time">
+            2018-03-09 23:31
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/09/01/学习zpeto-js-对象方法-6/">
+        <div class="post-title">
+          学习zpeto.js(对象方法)[6]
+        </div>
+        <div class="post-content">
+          first:获取当前对象集合中的第一个dom元素。
+$(&quot;div&quot;).first();// 返回第一个div对象（zepto对象）
+//相当于
+$(&quot;div&quot;).eq(0);
+
+与之对应的是last
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="9072f360-b97a-11e6-a57e-a123f1f8b6ca">0 Comments</span>
+          <span class="post-time">
+            2015-09-01 17:37
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/28/学习zpeto-js-对象方法-5/">
+        <div class="post-title">
+          学习zpeto.js(对象方法)[5]
+        </div>
+        <div class="post-content">
+          clone:该方法不接收任何参数,会返回对象中的所有元素集合,但不会对象绑定的事件.
+var $temp =$(&quot;div&quot;).clone();//并不接收任何参数.
+
+方法的实现就是循环调用方法对象.然后将所有的dom元素克隆并返回
+而且使用的深度克隆,就是说,会将节点下方的子节点统统克隆过来.
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8f9823c0-b97a-11e6-ba82-a99f24610643">0 Comments</span>
+          <span class="post-time">
+            2015-08-28 18:14
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/19/学习zpeto-js-对象方法-4/">
+        <div class="post-title">
+          学习zpeto.js(对象方法)[4]
+        </div>
+        <div class="post-content">
+          今天说说那一套获取元素集合的一些方法:
+[&quot;children&quot;, &quot;clone&quot;, &quot;closest&quot;, &quot;contents&quot;, &quot;empty&quot;, &quot;eq&quot;, &quot;filter&quot;, &quot;find&quot;, &quot;first&quot;, &quot;get&quot;, &quot;has&quot;, &quot;last&quot;, &quot;not&quot;, &quot;parent&quot;, &quot;parents&quot;, &quot;siblings&quot;]
+
+children:获取对象的所有匹配的直接子元素.
+参数为可选的一个选择器.如果不填则是所有子节点,否则为匹配的所有子节点;
+$(&quot;#demo&quot;).children();//--&gt;所有的子节点
+$(&quot;#demo&quot;).children(&quot;li&quot;);//--&gt;所有的li子节点
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8ea4c310-b97a-11e6-88f3-1765d959b4f5">0 Comments</span>
+          <span class="post-time">
+            2015-08-19 17:15
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/18/学习zpeto-js-对象方法-3/">
+        <div class="post-title">
+          学习zpeto.js(对象方法)[3]
+        </div>
+        <div class="post-content">
+          继续说zepto里attributes的相关操作.
+attr,removeAttr,prop这三个方法.
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8dc93020-b97a-11e6-bc5c-43642a86b907">0 Comments</span>
+          <span class="post-time">
+            2015-08-18 16:54
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/13/学习zpeto-js-对象方法-2/">
+        <div class="post-title">
+          学习zpeto.js(对象方法)[2]
+        </div>
+        <div class="post-content">
+          今天来说下zepto那一套dom操作方法,
+[&#39;prepend&#39;, &#39;append&#39;, &#39;prependTo&#39;, &#39;appendTo&#39;, &#39;before&#39;, &#39;after&#39;, &#39;insertBefore&#39;, &#39;insertAfter&#39;]
+
+按着从内到外,从主到从,从前到后的顺序来说这八个方法.
+这些方法的参数可以是一个dom节点,也可是是一个html片段,或者Zepto对象;
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8ce4eaa0-b97a-11e6-9515-bd235f05ebbe">0 Comments</span>
+          <span class="post-time">
+            2015-08-13 17:11
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/12/学习zpeto-js-对象方法-1/">
+        <div class="post-title">
+          学习zpeto.js(对象方法)[1]
+        </div>
+        <div class="post-content">
+          zepto也是使用的链式操作,链式操作:函数返回调用函数的对象.
+但并不是所有的对象方法都可以进行链式操作,举几个例子:.size(),.html()|.text()//不传参数的情况下;
+若非特殊说明,下边介绍的方法都会返回zepto对象;
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8c070dc0-b97a-11e6-90f9-bfb0abbec78c">0 Comments</span>
+          <span class="post-time">
+            2015-08-12 15:44
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/11/学习zpeto-js-原型方法-2/">
+        <div class="post-title">
+          学习zpeto.js(原型方法)[2]
+        </div>
+        <div class="post-content">
+          接着昨天的来,继续说原型方法,昨天的传送阵(昨天出了点小意外,博文经过WP手机的UC浏览器进行编辑后标签就露出来了- -,现已修复);
+$.grep():作用与Array.filter类似(其实就是调用的filter方法- -)
+通过传入两个参数,第一个为类数组的对象,第二个为用来执行判断的函数;
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="92369c60-b97a-11e6-87c7-89637d2d5ed6">0 Comments</span>
+          <span class="post-time">
+            2015-08-11 17:14
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/10/学习zpeto-js-原型方法-1/">
+        <div class="post-title">
+          学习zpeto.js(原型方法)[1]
+        </div>
+        <div class="post-content">
+          新的一周,新的开始,今天来学习一下zepto里边的原型方法,就是通过$.进行调用的方法,也是可以通过$.fn进行扩展的方法:
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="91527df0-b97a-11e6-8bab-73a75d1c2eee">0 Comments</span>
+          <span class="post-time">
+            2015-08-10 17:24
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2015/08/07/学习zepto-js-Hello-World/">
+        <div class="post-title">
+          学习zepto.js(Hello World)
+        </div>
+        <div class="post-content">
+          Zepto是一个轻量级的针对现代高级浏览器的JavaScript库， 它与jquery有着类似的api。 如果你会用jquery，那么你也会用zepto。
+昨天听说了zepto.js,正好最近也比较闲,所以就学习一下这个著名DOM操作库,由于本人刚接触这个,但又不想单纯的说如何使用,所以本人会按照API顺序来说明方法如何使用并试着将对于源码的理解写上来;
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="8b1dbf30-b97a-11e6-ac0b-47a7072af775">0 Comments</span>
+          <span class="post-time">
+            2015-08-07 21:39
+          </span>
+        </div>
+      </a>
+      
+  </section>
+
+  
+</body>
+
+</html>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

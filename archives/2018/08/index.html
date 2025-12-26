@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          <html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <title>
+    
+  </title>
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+  <section class="posts">
+    
+      <a class="post" href="/2018/08/26/TypeScript在react项目中的实践/">
+        <div class="post-title">
+          TypeScript在react项目中的实践
+        </div>
+        <div class="post-content">
+          前段时间有写过一个TypeScript在node项目中的实践。在里边有解释了为什么要使用TS，以及在Node中的一个项目结构是怎样的。但是那仅仅是一个纯接口项目，碰巧赶上近期的另一个项目重构也由我来主持，经过上次的实践以后，尝到了TS所带来的甜头，毫不犹豫的选择用TS+React来重构这个项目。这次的重构不仅包括Node的重构（之前是Express的项目），同时还包括前端的重构（之前是由jQuery驱动的多页应用）。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="045e3c30-a907-11e8-b31a-b7afa1b30f1e">0 Comments</span>
+          <span class="post-time">
+            2018-08-26 16:07
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/08/24/koa源码阅读-3-koa-send与它的衍生-static/">
+        <div class="post-title">
+          koa源码阅读[3]-koa-send与它的衍生(static)
+        </div>
+        <div class="post-content">
+          koa源码阅读的第四篇，涉及到向接口请求方提供文件数据。  
+
+第一篇：koa源码阅读-0第二篇：koa源码阅读-1-koa与koa-compose第三篇：koa源码阅读-2-koa-router  
+
+处理静态文件是一个繁琐的事情，因为静态文件都是来自于服务器上，肯定不能放开所有权限让接口来读取。各种路径的校验，权限的匹配，都是需要考虑到的地方。而koa-send和koa-static就是帮助我们处理这些繁琐事情的中间件。koa-send是koa-static的基础，可以在NPM的界面上看到，static的dependencies中包含了koa-send。  
+  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="a7cf6480-9f10-11e8-a6a9-87cc56477fb6">0 Comments</span>
+          <span class="post-time">
+            2018-08-24 00:50
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/08/14/微任务、宏任务与Event-Loop/">
+        <div class="post-title">
+          微任务、宏任务与Event-Loop
+        </div>
+        <div class="post-content">
+          首先，JavaScript是一个单线程的脚本语言。所以就是说在一行代码执行的过程中，必然不会存在同时执行的另一行代码，就像使用alert()以后进行疯狂console.log，如果没有关闭弹框，控制台是不会显示出一条log信息的。亦或者有些代码执行了大量计算，比方说在前端暴力破解密码之类的鬼操作，这就会导致后续代码一直在等待，页面处于假死状态，因为前边的代码并没有执行完。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="e1236d30-9f9c-11e8-96c0-5f943fdd21d6">0 Comments</span>
+          <span class="post-time">
+            2018-08-14 16:34
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/08/03/koa源码阅读-2-koa-router/">
+        <div class="post-title">
+          koa源码阅读[2]-koa-router
+        </div>
+        <div class="post-content">
+          第三篇，有关koa生态中比较重要的一个中间件：koa-router  
+
+第一篇：koa源码阅读-0第二篇：koa源码阅读-1-koa与koa-compose  
+
+koa-router是什么首先，因为koa是一个管理中间件的平台，而注册一个中间件使用use来执行。无论是什么请求，都会将所有的中间件执行一遍（如果没有中途结束的话）所以，这就会让开发者很困扰，如果我们要做路由该怎么写逻辑？  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="36042ab0-970a-11e8-b6da-f38a26a70a49">0 Comments</span>
+          <span class="post-time">
+            2018-08-03 18:44
+          </span>
+        </div>
+      </a>
+      
+  </section>
+
+  
+</body>
+
+</html>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

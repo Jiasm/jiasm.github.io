@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>数组的遍历你都会用了，那Promise版本的呢 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#map"><span class="toc-number">2.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reduce-reduceRight"><span class="toc-number">3.</span> <span class="toc-text">reduce/reduceRight</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#reduceRight"><span class="toc-number">3.1.</span> <span class="toc-text">reduceRight</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#forEach"><span class="toc-number">4.</span> <span class="toc-text">forEach</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#filter"><span class="toc-number">5.</span> <span class="toc-text">filter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#some"><span class="toc-number">6.</span> <span class="toc-text">some</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#every"><span class="toc-number">7.</span> <span class="toc-text">every</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">8.</span> <span class="toc-text">后记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">8.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>数组的遍历你都会用了，那Promise版本的呢</h1>
+  <blockquote>
+<p>这里指的遍历方法包括：<code>map</code>、<code>reduce</code>、<code>reduceRight</code>、<code>forEach</code>、<code>filter</code>、<code>some</code>、<code>every</code><br>因为最近要进行了一些数据汇总，<code>node</code>版本已经是8.11.1了，所以直接写了个<code>async/await</code>的脚本。<br>但是在对数组进行一些遍历操作时，发现有些遍历方法对<code>Promise</code>的反馈并不是我们想要的结果。</p>
+</blockquote>
+<p>当然，有些严格来讲并不能算是遍历，比如说<code>some</code>，<code>every</code>这些的。<br>但确实，这些都会根据我们数组的元素来进行多次的调用传入的回调。</p>
+<p>这些方法都是比较常见的，但是当你的回调函数是一个<code>Promise</code>时，一切都变了。</p>
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>async/await</code>为<code>Promise</code>的语法糖<br>文中会直接使用<code>async/await</code>替换<code>Promise</code></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">let</span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// => 等价于</span>
+<span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>result <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// code here</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// ======</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> func <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token number">1</span>  
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// => 等价与</span>
+<span class="token keyword">function</span> func <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span>resolve <span class="token operator">=</span><span class="token operator">></span> <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p><code>map</code>可以说是对<code>Promise</code>最友好的一个函数了。<br>我们都知道，<code>map</code>接收两个参数：</p>
+<ol>
+<li>对每项元素执行的回调，回调结果的返回值将作为该数组中相应下标的元素</li>
+<li>一个可选的回调函数<code>this</code>指向的参数</li>
+</ol>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 对数组元素进行求平方</span>
+<span class="token comment" spellcheck="true">// > [1, 4, 9]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>上边是一个普通的<code>map</code>执行，但是当我们的一些计算操作变为异步的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 对数组元素进行求平方</span>
+<span class="token comment" spellcheck="true">// > [Promise, Promise, Promise]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这时候，我们获取到的返回值其实就是一个由<code>Promise</code>函数组成的数组了。</p>
+<p>所以为什么上边说<code>map</code>函数为最友好的，因为我们知道，<code>Promise</code>有一个函数为<code>Promise.all</code><br>会将一个由<code>Promise</code>组成的数组依次执行，并返回一个<code>Promise</code>对象，该对象的结果为数组产生的结果集。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">await</span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > [1, 4, 9]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><em>首先使用<code>Promise.all</code>对数组进行包装，然后用<code>await</code>获取结果。</em></p>
+<h2 id="reduce-reduceRight"><a href="#reduce-reduceRight" class="headerlink" title="reduce/reduceRight"></a>reduce/reduceRight</h2><p><code>reduce</code>的函数签名想必大家也很熟悉了，接收两个参数：</p>
+<ol>
+<li>对每一项元素执行的回调函数，返回值将被累加到下次函数调用中，回调函数的签名：<ol>
+<li><code>accumulator</code>累加的值</li>
+<li><code>currentValue</code>当前正在处理的元素</li>
+<li><code>currentIndex</code>当前正在处理的元素下标</li>
+<li><code>array</code>调用<code>reduce</code>的数组</li>
+</ol>
+</li>
+<li>可选的初始化的值，将作为<code>accumulator</code>的初始值</li>
+</ol>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span>accumulator<span class="token punctuation">,</span> item<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> accumulator <span class="token operator">+</span> item<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 进行加和</span>
+<span class="token comment" spellcheck="true">// > 6</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个代码也是没毛病的，同样如果我们加和的操作也是个异步的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span>accumulator<span class="token punctuation">,</span> item<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> accumulator <span class="token operator">+</span> item<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 进行加和</span>
+<span class="token comment" spellcheck="true">// > Promise {&lt;resolved>: "[object Promise]3"}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个结果返回的就会很诡异了，我们在回看上边的<code>reduce</code>的函数签名</p>
+<blockquote>
+<p>对每一项元素执行的回调函数，返回值将被累加到下次函数调用中</p>
+</blockquote>
+<p>然后我们再来看代码，<code>async (accumulator, item) =&gt; accumulator += item</code><br>这个在最开始也提到了，是<code>Pormise</code>的语法糖，为了看得更清晰，我们可以这样写：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">(</span>accumulator<span class="token punctuation">,</span> item<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span>resolve <span class="token operator">=</span><span class="token operator">></span>
+  <span class="token function">resolve</span><span class="token punctuation">(</span>accumulator <span class="token operator">+</span><span class="token operator">=</span> item<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>也就是说，我们<code>reduce</code>的回调函数返回值其实就是一个<code>Promise</code>对象<br>然后我们对<code>Promise</code>对象进行<code>+=</code>操作，得到那样怪异的返回值也就很合情合理了。</p>
+<p>当然，<code>reduce</code>的调整也是很轻松的：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">await</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span>accumulator<span class="token punctuation">,</span> item<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">await</span> accumulator <span class="token operator">+</span> item<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > 6</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>我们对<code>accumulator</code>调用<code>await</code>，然后再与当前<code>item</code>进行加和，在最后我们的<code>reduce</code>返回值也一定是一个<code>Promise</code>，所以我们在最外边也添加<code>await</code>的字样<br>也就是说我们每次<code>reduce</code>都会返回一个新的<code>Promise</code>对象，在对象内部都会获取上次<code>Promise</code>的结果。<br>我们调用<code>reduce</code>实际上得到的是类似这样的一个<code>Promise</code>对象：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span>resolve <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> item <span class="token operator">=</span> <span class="token number">3</span>
+  <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span>resolve <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      <span class="token keyword">let</span> item <span class="token operator">=</span> <span class="token number">2</span>
+      <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span>resolve <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> item <span class="token operator">=</span> <span class="token number">1</span>
+        Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>result <span class="token operator">=</span><span class="token operator">></span> <span class="token function">resolve</span><span class="token punctuation">(</span>item <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>result <span class="token operator">=</span><span class="token operator">></span> <span class="token function">resolve</span><span class="token punctuation">(</span>item <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>result <span class="token operator">=</span><span class="token operator">></span> <span class="token function">resolve</span><span class="token punctuation">(</span>item <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="reduceRight"><a href="#reduceRight" class="headerlink" title="reduceRight"></a>reduceRight</h3><p>这个就没什么好说的了。。跟<code>reduce</code>只是执行顺序相反而已</p>
+<h2 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h2><p><code>forEach</code>，这个应该是用得最多的遍历方法了，对应的函数签名：</p>
+<ol>
+<li><code>callback</code>，对每一个元素进行调用的函数<ol>
+<li><code>currentValue</code>，当前元素</li>
+<li><code>index</code>，当前元素下标</li>
+<li><code>array</code>，调用<code>forEach</code>的数组引用</li>
+</ol>
+</li>
+<li><code>thisArg</code>，一个可选的回调函数<code>this</code>指向</li>
+</ol>
+<p>我们有如下的操作：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 获取数组元素求平方后的值</span>
+<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>item <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > 1</span>
+<span class="token comment" spellcheck="true">// > 4</span>
+<span class="token comment" spellcheck="true">// > 9</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>普通版本我们是可以直接这么输出的，但是如果遇到了<code>Promise</code></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 获取数组元素求平方后的值</span>
+<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>item <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > nothing</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>forEach</code>并不关心回调函数的返回值，所以<code>forEach</code>只是执行了三个会返回<code>Promise</code>的函数<br>所以如果我们想要得到想要的效果，只能够自己进行增强对象属性了：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>forEachSync <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>callback<span class="token punctuation">,</span> thisArg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">[</span>index<span class="token punctuation">,</span> item<span class="token punctuation">]</span> <span class="token keyword">of</span> Object<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">await</span> <span class="token function">callback</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">await</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEachSync</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>item <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// > 1</span>
+<span class="token comment" spellcheck="true">// > 4</span>
+<span class="token comment" spellcheck="true">// > 9</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><em><code>await</code>会忽略非<code>Promise</code>值，<code>await 0</code>、<code>await undefined</code>与普通代码无异</em></p>
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p><code>filter</code>作为一个筛选数组用的函数，同样具有遍历的功能：<br>函数签名同<code>forEach</code>，但是<code>callback</code>返回值为<code>true</code>的元素将被放到<code>filter</code>函数返回值中去。</p>
+<p>我们要进行一个奇数的筛选，所以我们这么写：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">!==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > [1, 3]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>然后我们改为<code>Promise</code>版本：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">!==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > [1, 2, 3]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这会导致我们的筛选功能失效，因为<code>filter</code>的返回值匹配不是完全相等的匹配，只要是返回值能转换为<code>true</code>，就会被认定为通过筛选。<br><code>Promise</code>对象必然是<code>true</code>的，所以筛选失效。<br>所以我们的处理方式与上边的<code>forEach</code>类似，同样需要自己进行对象增强<br>但我们这里直接选择一个取巧的方式：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>filterSync <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>callback<span class="token punctuation">,</span> thisArg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> filterResult <span class="token operator">=</span> <span class="token keyword">await</span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// > [true, false, true]</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_<span class="token punctuation">,</span> index<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> filterResult<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">await</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">filterSync</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">!==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们可以直接在内部调用<code>map</code>方法，因为我们知道<code>map</code>会将所有的返回值返回为一个新的数组。<br>这也就意味着，我们<code>map</code>可以拿到我们对所有<code>item</code>进行筛选的结果，<code>true</code>或者<code>false</code>。<br>接下来对原数组每一项进行返回对应下标的结果即可。</p>
+<h2 id="some"><a href="#some" class="headerlink" title="some"></a>some</h2><p><code>some</code>作为一个用来检测数组是否满足一些条件的函数存在，同样是可以用作遍历的<br>函数签名同<code>forEach</code>，有区别的是当任一<code>callback</code>返回值匹配为<code>true</code>则会直接返回<code>true</code>，如果所有的<code>callback</code>匹配均为<code>false</code>，则返回<code>false</code></p>
+<p>我们要判断数组中是否有元素等于<code>2</code>：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">===</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>然后我们将它改为<code>Promise</code></p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">===</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个函数依然会返回<code>true</code>，但是却不是我们想要的，因为这个是<code>async</code>返回的<code>Promise</code>对象被认定为<code>true</code>。</p>
+<p>所以，我们要进行如下处理：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>someSync <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>callback<span class="token punctuation">,</span> thisArg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">[</span>index<span class="token punctuation">,</span> item<span class="token punctuation">]</span> <span class="token keyword">of</span> Object<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">await</span> <span class="token function">callback</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">await</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">someSync</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">===</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为<code>some</code>在匹配到第一个<code>true</code>之后就会终止遍历，所以我们在这里边使用<code>forEach</code>的话是在性能上的一种浪费。<br>同样是利用了<code>await</code>会忽略普通表达式的优势，在内部使用<code>for-of</code>来实现我们的需求</p>
+<h2 id="every"><a href="#every" class="headerlink" title="every"></a>every</h2><p>以及我们最后的一个<code>every</code><br>函数签名同样与<code>forEach</code>一样，<br>但是<code>callback</code>的处理还是有一些区别的：<br>其实换一种角度考虑，<code>every</code>就是一个反向的<code>some</code><br><code>some</code>会在获取到第一个<code>true</code>时终止<br>而<code>every</code>会在获取到第一个<code>false</code>时终止，如果所有元素均为<code>true</code>，则返回<code>true</code></p>
+<p>我们要判定数组中元素是否全部大于3</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">every</span><span class="token punctuation">(</span>item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">></span> <span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > false</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>很显然，一个都没有匹配到的，而且回调函数在执行到第一次时就已经终止了，不会继续执行下去。<br>我们改为<code>Promise</code>版本：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">every</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">></span> <span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个必然是<code>true</code>，因为我们判断的是<code>Promise</code>对象<br>所以我们拿上边的<code>someSync</code>实现稍微修改一下：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">Array<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>everySync <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>callback<span class="token punctuation">,</span> thisArg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">[</span>index<span class="token punctuation">,</span> item<span class="token punctuation">]</span> <span class="token keyword">of</span> Object<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">await</span> <span class="token function">callback</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">await</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">everySync</span><span class="token punctuation">(</span><span class="token keyword">async</span> item <span class="token operator">=</span><span class="token operator">></span> item <span class="token operator">===</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// > false</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当匹配到任意一个<code>false</code>时，直接返回<code>false</code>，终止遍历。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>关于数组的这几个遍历方法。<br>因为<code>map</code>和<code>reduce</code>的特性，所以是在使用<code>async</code>时改动最小的函数。<br><em><code>reduce</code>的结果很像一个洋葱模型</em><br>但对于其他的遍历函数来说，目前来看就需要自己来实现了。</p>
+<p>四个<code>*Sync</code>函数的实现：<a href="https://github.com/Jiasm/notebook/tree/master/array-sync" target="_blank" rel="noopener">https://github.com/Jiasm/notebook/tree/master/array-sync</a></p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">Array - JavaScript | MDN</a></p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/04/25/数组的遍历你都会用了，那Promise版本的呢/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '6d32e140-4898-11e8-8c86-e715c1f87b28'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

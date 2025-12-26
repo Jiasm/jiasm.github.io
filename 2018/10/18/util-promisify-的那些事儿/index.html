@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>util.promisify 的那些事儿 - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#工具实现的大致思路"><span class="toc-number">1.</span> <span class="toc-text">工具实现的大致思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常规的使用方式"><span class="toc-number">2.</span> <span class="toc-text">常规的使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义的-Promise-化"><span class="toc-number">3.</span> <span class="toc-text">自定义的 Promise 化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一些内置的-custom-处理"><span class="toc-number">3.1.</span> <span class="toc-text">一些内置的 custom 处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置的-promisify-转换后函数"><span class="toc-number">4.</span> <span class="toc-text">内置的 promisify 转换后函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promisify-的一些注意事项"><span class="toc-number">5.</span> <span class="toc-text">promisify 的一些注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">6.</span> <span class="toc-text">小结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">6.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>util.promisify 的那些事儿</h1>
+  <p><code>util.promisify</code>是在<code>node.js 8.x</code>版本中新增的一个工具，用于将老式的<code>Error first callback</code>转换为<code>Promise</code>对象，让老项目改造变得更为轻松。  </p>
+<p>在官方推出这个工具之前，民间已经有很多类似的工具了，比如<a href="https://www.npmjs.com/package/es6-promisify" target="_blank" rel="noopener">es6-promisify</a>、<a href="https://www.npmjs.com/package/thenify" target="_blank" rel="noopener">thenify</a>、<a href="http://bluebirdjs.com/docs/api/promise.promisify.html" target="_blank" rel="noopener">bluebird.promisify</a>。  </p>
+<p>以及很多其他优秀的工具，都是实现了这样的功能，帮助我们在处理老项目的时候，不必费神将各种代码使用<code>Promise</code>再重新实现一遍。  </p>
+<a id="more"></a>
+<h2 id="工具实现的大致思路"><a href="#工具实现的大致思路" class="headerlink" title="工具实现的大致思路"></a>工具实现的大致思路</h2><p>首先要解释一下这种工具大致的实现思路，因为在<code>Node</code>中异步回调有一个约定：<code>Error first</code>，也就是说回调函数中的第一个参数一定要是<code>Error</code>对象，其余参数才是正确时的数据。  </p>
+<p>知道了这样的规律以后，工具就很好实现了，在匹配到第一个参数有值的情况下，触发<code>reject</code>，其余情况触发<code>resolve</code>，一个简单的示例代码：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> util <span class="token punctuation">(</span>func<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token operator">...</span>arg<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token function">func</span><span class="token punctuation">(</span><span class="token operator">...</span>arg<span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> arg<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+      <span class="token keyword">else</span> <span class="token function">resolve</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol>
+<li>调用工具函数返回一个匿名函数，匿名函数接收原函数的参数。  </li>
+<li>匿名函数被调用后根据这些参数来调用真实的函数，同时拼接一个用来处理结果的<code>callback</code>。</li>
+<li>检测到<code>err</code>有值，触发<code>reject</code>，其他情况触发<code>resolve</code></li>
+</ol>
+<p><strong>resolve 只能传入一个参数，所以<code>callback</code>中没有必要使用<code>...arg</code>获取所有的返回值</strong>  </p>
+<h2 id="常规的使用方式"><a href="#常规的使用方式" class="headerlink" title="常规的使用方式"></a>常规的使用方式</h2><blockquote>
+<p>拿一个官方文档中的示例  </p>
+</blockquote>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> promisify <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'util'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> statAsync <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>fs<span class="token punctuation">.</span>stat<span class="token punctuation">)</span>
+
+<span class="token function">statAsync</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>stats <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 拿到了正确的数据</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> err <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 出现了异常</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以及因为是<code>Promise</code>，我们可以使用<code>await</code>来进一步简化代码：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> promisify <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'util'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> statAsync <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>fs<span class="token punctuation">.</span>stat<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 假设在 async 函数中</span>
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> stats <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">statAsync</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// 拿到正确结果</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 出现异常</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>用法与其他工具并没有太大的区别，我们可以很轻易的将回调转换为<code>Promise</code>，然后应用于新的项目中。  </p>
+<h2 id="自定义的-Promise-化"><a href="#自定义的-Promise-化" class="headerlink" title="自定义的 Promise 化"></a>自定义的 Promise 化</h2><p>有那么一些场景，是不能够直接使用<code>promisify</code>来进行转换的，有大概这么两种情况：</p>
+<ol>
+<li>没有遵循<code>Error first callback</code>约定的回调函数</li>
+<li>返回多个参数的回调函数</li>
+</ol>
+<p>首先是第一个，如果没有遵循我们的约定，很可能导致<code>reject</code>的误判，得不到正确的反馈。<br>而第二项呢，则是因为<code>Promise.resolve</code>只能接收一个参数，多余的参数会被忽略。  </p>
+<p>所以为了实现正确的结果，我们可能需要手动实现对应的<code>Promise</code>函数，但是自己实现了以后并不能够确保使用方不会针对你的函数调用<code>promisify</code>。  </p>
+<p>所以，<code>util.promisify</code>还提供了一个<code>Symbol</code>类型的<code>key</code>，<code>util.promisify.custom</code>。  </p>
+<p><code>Symbol</code>类型的大家应该都有了解，是一个唯一的值，这里是<code>util.prosimify</code>用来指定自定义的<code>Promise</code>化的结果的，使用方式如下：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> promisify <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'util'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 比如我们有一个对象，提供了一个返回多个参数的回调版本的函数</span>
+<span class="token keyword">const</span> obj <span class="token operator">=</span> <span class="token punctuation">{</span>
+  getData <span class="token punctuation">(</span>callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span> <span class="token number">18</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 返回两个参数，姓名和年龄</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 这时使用promisify肯定是不行的</span>
+<span class="token comment" spellcheck="true">// 因为Promise.resolve只接收一个参数，所以我们只会得到 Niko</span>
+
+<span class="token function">promisify</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span>getData<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Niko</span>
+
+<span class="token comment" spellcheck="true">// 所以我们需要使用 promisify.custom 来自定义处理方式</span>
+
+obj<span class="token punctuation">.</span>getData<span class="token punctuation">[</span>promisify<span class="token punctuation">.</span>custom<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token number">18</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 当然了，这是一个曲线救国的方式，无论如何 Promise 不会返回多个参数过来的</span>
+<span class="token function">promisify</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span>getData<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// { name: 'Niko', age: 18 }</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><del><em>关于<code>Promise</code>为什么不能<code>resolve</code>多个值，我有一个大胆的想法，一个没有经过考证，强行解释的理由：如果能<code>resolve</code>多个值，你让<code>async</code>函数怎么<code>return</code>（当个乐子看这句话就好，不要当真）</em></del><br><em>不过应该确实跟<code>return</code>有关，因为<code>Promise</code>是可以链式调用的，每个<code>Promise</code>中执行<code>then</code>以后都会将其返回值作为一个新的<code>Promise</code>对象<code>resolve</code>的值，在<code>JavaScript</code>中并没有办法<code>return</code>多个参数，所以即便第一个<code>Promise</code>可以返回多个参数，只要经过<code>return</code>的处理就会丢失</em>  </p>
+<p>在使用上就是很简单的针对可能会被调用<code>promisify</code>的函数上添加<code>promisify.custom</code>对应的处理即可。<br>当后续代码调用<code>promisify</code>时就会进行判断：  </p>
+<ol>
+<li>如果目标函数存在<code>promisify.custom</code>属性，则会判断其类型：<ol>
+<li>如果不是一个可执行的函数，抛出异常</li>
+<li>如果是可执行的函数，则直接返回其对应的函数</li>
+</ol>
+</li>
+<li>如果目标函数不存在对应的属性，按照<code>Error first callback</code>的约定生成对应的处理函数然后返回</li>
+</ol>
+<p>添加了这个<code>custom</code>属性以后，就不用再担心使用方针对你的函数调用<code>promisify</code>了。<br>而且可以验证，赋值给<code>custom</code>的函数与<code>promisify</code>返回的函数地址是一处：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">obj<span class="token punctuation">.</span>getData<span class="token punctuation">[</span>promisify<span class="token punctuation">.</span>custom<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token number">18</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 上边的赋值为 async 函数也可以改为普通函数，只要保证这个普通函数会返回 Promise 实例即可</span>
+<span class="token comment" spellcheck="true">// 这两种方式与上边的 async 都是完全相等的</span>
+
+obj<span class="token punctuation">.</span>getData<span class="token punctuation">[</span>promisify<span class="token punctuation">.</span>custom<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token number">18</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+obj<span class="token punctuation">.</span>getData<span class="token punctuation">[</span>promisify<span class="token punctuation">.</span>custom<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token number">18</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span>getData<span class="token punctuation">[</span>promisify<span class="token punctuation">.</span>custom<span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token function">promisify</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span>getData<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="一些内置的-custom-处理"><a href="#一些内置的-custom-处理" class="headerlink" title="一些内置的 custom 处理"></a>一些内置的 custom 处理</h3><p>在一些内置包中，也能够找到<code>promisify.custom</code>的踪迹，比如说最常用的<code>child_process.exec</code>就内置了<code>promisify.custom</code>的处理：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> exec <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'child_process'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> promisify <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'util'</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> exec<span class="token punctuation">[</span>promisify<span class="token punctuation">.</span>custom<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// function</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为就像前边示例中所提到的曲线救国的方案，官方的做法也是将函数签名中的参数名作为<code>key</code>，将其所有参数存放到一个<code>Object</code>对象中进行返回，比如<code>child_process.exec</code>的返回值抛开<code>error</code>以外会包含两个，<code>stdout</code>和<code>stderr</code>，一个是命令执行后的正确输出，一个是命令执行后的错误输出：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">promisify</span><span class="token punctuation">(</span>exec<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string">'ls'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// -> { stdout: 'XXX', stderr: '' }</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>或者我们故意输入一些错误的命令，当然了，这个只能在<code>catch</code>模块下才能够捕捉到，一般命令正常执行<code>stderr</code>都会是一个空字符串：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">promisify</span><span class="token punctuation">(</span>exec<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string">'lss'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">,</span> console<span class="token punctuation">.</span>error<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// -> { ..., stdout: '', stderr: 'lss: command not found' }</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>包括像<code>setTimeout</code>、<code>setImmediate</code>也都实现了对应的<code>promisify.custom</code>。<br>之前为了实现<code>sleep</code>的操作，还手动使用<code>Promise</code>封装了<code>setTimeout</code>：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> sleep <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>setTimeout<span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">await</span> <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="内置的-promisify-转换后函数"><a href="#内置的-promisify-转换后函数" class="headerlink" title="内置的 promisify 转换后函数"></a>内置的 promisify 转换后函数</h2><p>如果你的<code>Node</code>版本使用<code>10.x</code>以上的，还可以从很多内置的模块中找到类似<code>.promises</code>的子模块，这里边包含了该模块中常用的回调函数的<code>Promise</code>版本（都是<code>async</code>函数），无需再手动进行<code>promisify</code>转换了。   </p>
+<p>而且我本人觉得这是一个很好的指引方向，因为之前的工具实现，有的选择直接覆盖原有函数，有的则是在原有函数名后边增加<code>Async</code>进行区分，官方的这种在模块中单独引入一个子模块，在里边实现<code>Promise</code>版本的函数，其实这个在使用上是很方便的，就拿<code>fs</code>模块进行举例： </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 之前引入一些 fs 相关的 API 是这样做的</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> readFile<span class="token punctuation">,</span> stat <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 而现在可以很简单的改为</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> readFile<span class="token punctuation">,</span> stat <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>promises
+<span class="token comment" spellcheck="true">// 或者</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> promises<span class="token punctuation">:</span> <span class="token punctuation">{</span> readFile<span class="token punctuation">,</span> stat <span class="token punctuation">}</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>后边要做的就是将调用<code>promisify</code>相关的代码删掉即可，对于其他使用<code>API</code>的代码来讲，这个改动是无感知的。<br>所以如果你的<code>node</code>版本够高的话，可以在使用内置模块之前先去翻看文档，有没有对应的<code>promises</code>支持，如果有实现的话，就可以直接使用。  </p>
+<h2 id="promisify-的一些注意事项"><a href="#promisify-的一些注意事项" class="headerlink" title="promisify 的一些注意事项"></a>promisify 的一些注意事项</h2><ol>
+<li>一定要符合<code>Error first callback</code>的约定</li>
+<li>不能返回多个参数</li>
+<li>注意进行转换的函数是否包含<code>this</code>的引用</li>
+</ol>
+<p>前两个问题，使用前边提到的<code>promisify.custom</code>都可以解决掉。<br>但是第三项可能会在某些情况下被我们所忽视，这并不是<code>promisify</code>独有的问题，就一个很简单的例子：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> obj <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span>
+  getName <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+obj<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// Niko</span>
+
+<span class="token keyword">const</span> func <span class="token operator">=</span> obj<span class="token punctuation">.</span>getName
+
+<span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// undefined</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>类似的，如果我们在进行<code>Promise</code>转换的时候，也是类似这样的操作，那么可能会导致生成后的函数<code>this</code>指向出现问题。<br>修复这样的问题有两种途径：</p>
+<ol>
+<li>使用箭头函数，也是推荐的做法</li>
+<li>在调用<code>promisify</code>之前使用<code>bind</code>绑定对应的<code>this</code></li>
+</ol>
+<p>不过这样的问题也是建立在<code>promisify</code>转换后的函数被赋值给其他变量的情况下会发生。<br>如果是类似这样的代码，那么完全不必担心<code>this</code>指向的问题：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> obj <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token string">'Niko'</span><span class="token punctuation">,</span>
+  getName <span class="token punctuation">(</span>callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 这样的操作是不需要担心 this 指向问题的</span>
+obj<span class="token punctuation">.</span>XXX <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span>getName<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 如果赋值给了其他变量，那么这里就需要注意 this 的指向了</span>
+<span class="token keyword">const</span> func <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span>getName<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 错误的 this</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>个人认为<code>Promise</code>作为当代<code>javaScript</code>异步编程中最核心的一部分，了解如何将老旧代码转换为<code>Promise</code>是一件很有意思的事儿。<br>而我去了解官方的这个工具，原因是在搜索<code>Redis</code>相关的<code>Promise</code>版本时看到了这个<a href="https://github.com/mjackson/then-redis" target="_blank" rel="noopener">readme</a>：  </p>
+<blockquote>
+<p>This package is no longer maintained. node_redis now includes support for promises in core, so this is no longer needed.</p>
+</blockquote>
+<p>然后跳到了<code>node_redis</code>里边的实现方案，里边提到了<code>util.promisify</code>，遂抓过来研究了一下，感觉还挺有意思，总结了下分享给大家。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://nodejs.org/api/util.html#util_util_promisify_original" target="_blank" rel="noopener">util.promisify</a></li>
+<li><a href="https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback" target="_blank" rel="noopener">child_process.exec</a></li>
+<li><a href="https://nodejs.org/api/fs.html#fs_fs_promises_api" target="_blank" rel="noopener">fs.promises</a></li>
+</ul>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2018/10/18/util-promisify-的那些事儿/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '84a237e0-d1f0-11e8-9712-c75c21b86b53'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

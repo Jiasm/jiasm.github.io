@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>typescript - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          <html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <title>
+    
+  </title>
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+  <section class="posts">
+    
+      <a class="post" href="/2018/10/12/如何编写-Typescript-声明文件/">
+        <div class="post-title">
+          如何编写 Typescript 声明文件
+        </div>
+        <div class="post-content">
+          使用TypeScript已经有了一段时间，这的确是一个好东西，虽说在使用的过程中也发现了一些bug，不过都是些小问题，所以整体体验还是很不错的。  
+TypeScript之所以叫Type，和它的强类型是分不开的，这也是区别于JavaScript最关键的一点，类型的声明可以直接写在代码中，也可以单独写一个用来表示类型的描述文件*.d.ts。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="1ac3c7c0-cdf5-11e8-ba69-0f9030cfda7c">0 Comments</span>
+          <span class="post-time">
+            2018-10-12 16:02
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/09/28/async语法升级踩坑小记/">
+        <div class="post-title">
+          async语法升级踩坑小记
+        </div>
+        <div class="post-content">
+          
+从今年过完年回来，三月份开始，就一直在做重构相关的事情。就在今天刚刚上线了最新一次的重构代码，希望高峰期安好，接近半年的Node.js代码重构。包含从callback+async.waterfall到generator+co，统统升级为了async，还顺带推动了TypeScript在我司的使用。这些日子也踩了不少坑，也总结了一些小小的优化方案，进行精简后将一些比较关键的点，拿出来分享给大家，希望有同样在做重构的小伙伴们可以绕过这些。  
+
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="a9da0b40-c233-11e8-9d1d-3511dc62be4a">0 Comments</span>
+          <span class="post-time">
+            2018-09-28 08:59
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/09/10/使用TS-Sequelize实现更简洁的CRUD/">
+        <div class="post-title">
+          使用TS+Sequelize实现更简洁的CRUD
+        </div>
+        <div class="post-content">
+          如果是经常使用Node来做服务端开发的童鞋，肯定不可避免的会操作数据库，做一些增删改查（CRUD，Create Read Update Delete）的操作，如果是一些简单的操作，类似定时脚本什么的，可能就直接生写SQL语句来实现功能了，而如果是在一些大型项目中，数十张、上百张的表，之间还会有一些（一对多，多对多）的映射关系，那么引入一个ORM（Object Relational Mapping）工具来帮助我们与数据库打交道就可以减轻一部分不必要的工作量，Sequelize就是其中比较受欢迎的一个。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="ccf79160-b3fb-11e8-bcda-095644449e63">0 Comments</span>
+          <span class="post-time">
+            2018-09-10 11:44
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/09/03/使用-TypeScript-改造构建工具及测试用例/">
+        <div class="post-title">
+          使用 TypeScript 改造构建工具及测试用例
+        </div>
+        <div class="post-content">
+          最近的一段时间一直在搞TypeScript，一个巨硬出品、赋予JavaScript语言静态类型和编译的语言。第一个完全使用TypeScript重构的纯Node.js项目已经上线并稳定运行了。第二个前后端的项目目前也在重构中，关于前端基于webpack的TypeScript套路之前也有提到过：TypeScript在react项目中的实践。  
+但是这些做完以后也总感觉缺了点儿什么 （没有尽兴）：
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="7d7fa840-ad05-11e8-bede-4b0c836d1e42">0 Comments</span>
+          <span class="post-time">
+            2018-09-03 11:06
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/08/26/TypeScript在react项目中的实践/">
+        <div class="post-title">
+          TypeScript在react项目中的实践
+        </div>
+        <div class="post-content">
+          前段时间有写过一个TypeScript在node项目中的实践。在里边有解释了为什么要使用TS，以及在Node中的一个项目结构是怎样的。但是那仅仅是一个纯接口项目，碰巧赶上近期的另一个项目重构也由我来主持，经过上次的实践以后，尝到了TS所带来的甜头，毫不犹豫的选择用TS+React来重构这个项目。这次的重构不仅包括Node的重构（之前是Express的项目），同时还包括前端的重构（之前是由jQuery驱动的多页应用）。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="045e3c30-a907-11e8-b31a-b7afa1b30f1e">0 Comments</span>
+          <span class="post-time">
+            2018-08-26 16:07
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/07/21/TypeScript在node项目中的实践/">
+        <div class="post-title">
+          TypeScript在node项目中的实践
+        </div>
+        <div class="post-content">
+          TypeScript可以理解为是JavaScript的一个超集，也就是说涵盖了所有JavaScript的功能，并在之上有着自己独特的语法。最近的一个新项目开始了TS的踩坑之旅，现分享一些可以借鉴的套路给大家。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="a3016590-8ce4-11e8-bcdf-31f59a8d2cc4">0 Comments</span>
+          <span class="post-time">
+            2018-07-21 20:50
+          </span>
+        </div>
+      </a>
+      
+  </section>
+
+  
+</body>
+
+</html>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

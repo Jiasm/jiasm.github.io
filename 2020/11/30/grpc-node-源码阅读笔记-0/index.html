@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>grpc-node 源码阅读笔记[0] - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单介绍-gRPC"><span class="toc-number">1.</span> <span class="toc-text">简单介绍 gRPC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gRPC-在-Node-js-的实现"><span class="toc-number">2.</span> <span class="toc-text">gRPC 在 Node.js 的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gRPC-在-Node-js-中相关的模块"><span class="toc-number">2.1.</span> <span class="toc-text">gRPC 在 Node.js 中相关的模块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码分析"><span class="toc-number">3.</span> <span class="toc-text">源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#makeGenericClientConstructor"><span class="toc-number">3.1.</span> <span class="toc-text">makeGenericClientConstructor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client"><span class="toc-number">3.2.</span> <span class="toc-text">Client</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#interceptor-的用法"><span class="toc-number">3.2.1.</span> <span class="toc-text">interceptor 的用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Channel-的创建"><span class="toc-number">3.2.2.</span> <span class="toc-text">Channel 的创建</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#makeUnaryRequest"><span class="toc-number">3.3.</span> <span class="toc-text">makeUnaryRequest</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ClientUnaryCall"><span class="toc-number">3.3.1.</span> <span class="toc-text">ClientUnaryCall</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#resolveInterceptorProviders"><span class="toc-number">3.3.2.</span> <span class="toc-text">resolveInterceptorProviders</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getLastListener"><span class="toc-number">3.3.3.</span> <span class="toc-text">getLastListener</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getInterceptingCall"><span class="toc-number">3.3.4.</span> <span class="toc-text">getInterceptingCall</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>grpc-node 源码阅读笔记[0]</h1>
+  <h2 id="简单介绍-gRPC"><a href="#简单介绍-gRPC" class="headerlink" title="简单介绍 gRPC"></a>简单介绍 gRPC</h2><p>贴一张挂在官网的图片：<a href="https://grpc.io/docs/what-is-grpc/introduction/" target="_blank" rel="noopener">https://grpc.io/docs/what-is-grpc/introduction/</a>  </p>
+<p><img src="/images/grpc-code-read/grpc-process.png" alt="">  </p>
+<p>可以理解 gRPC 是 RPC（远程过程调用）框架的一种实现，关于 RPC 的介绍因为并不是本次的主题，所以放个链接来帮助大家理解：<a href="https://www.zhihu.com/question/25536695" target="_blank" rel="noopener">https://www.zhihu.com/question/25536695</a>  </p>
+<a id="more"></a>
+<p>我所理解 RPC 整个执行的过程就是 <code>Client</code> 调用方法 -&gt; 序列化请求参数 -&gt; 传输数据 -&gt; 反序列化请求参数 -&gt; Server 处理请求 -&gt; 序列化返回数据 -&gt; 传输数据 -&gt; <code>Client</code> 接收到方法返回值：</p>
+<p><img src="/images/grpc-code-read/request-process.png" alt="">  </p>
+<p>其主要逻辑会集中在 数据的序列化/反序列化 以及 数据的传输上，而这两项 gRPC 分别选用了 <a href="https://developers.google.com/protocol-buffers" target="_blank" rel="noopener">Protocol Buffers</a> 和 <a href="https://developers.google.com/web/fundamentals/performance/http2?hl=zh-cn" target="_blank" rel="noopener">HTTP2</a> 来作为默认选项。  </p>
+<h2 id="gRPC-在-Node-js-的实现"><a href="#gRPC-在-Node-js-的实现" class="headerlink" title="gRPC 在 Node.js 的实现"></a>gRPC 在 Node.js 的实现</h2><p>gRPC 在 Node.js 的实现上一共有两个官方版本，一个是<a href="https://github.com/grpc/grpc-node/tree/grpc%401.24.x/packages/grpc-native-core" target="_blank" rel="noopener">基于 c++ addon 的版本</a>，另一个是<a href="https://github.com/grpc/grpc-node/tree/master/packages/grpc-js" target="_blank" rel="noopener">纯 JS 实现的版本</a>。  </p>
+<h3 id="gRPC-在-Node-js-中相关的模块"><a href="#gRPC-在-Node-js-中相关的模块" class="headerlink" title="gRPC 在 Node.js 中相关的模块"></a>gRPC 在 Node.js 中相关的模块</h3><p>除了上边提到的两个 gRPC 的实现，在 Node.js 中还存在一些其他的模块用来辅助使用 gRPC。  </p>
+<ul>
+<li>grpc-tools 这个是每个语言都会用的，用来根据 proto 文件生成对应，插件提供了 Node.js 语言的实现</li>
+<li>proto-loader 用来动态加载 proto 文件，不需要使用 grpc_tools 提前生成代码（性能比上边的方式稍差）</li>
+</ul>
+<p>这次笔记主要是针对 grpc-node 方式的实现，在 c++ addon 模块的实现下，并不是一个 gRPC 的完整实现，做的事情更多的是一个衔接的工作，通过 JS、c++ 两层封装将 c++ 版本的 gRPC 能力暴露出来供用户使用。  </p>
+<p>之所以选择它是因为觉得逻辑会较 grpc-js 清晰一些，更适合理解 gRPC 整体的运行逻辑。  </p>
+<p>在项目仓库中，两个目录下是我们需要关注的：</p>
+<ul>
+<li>src（JS 代码）</li>
+<li>ext（c++ 代码）</li>
+</ul>
+<p>ext 中的代码主要用于调用 c++ 版本 gRPC 的接口，并通过 NAN 提供 c++ addon 模块。<br>src 中的代码则是调用了 ext 编译后的模块，并进行一层应用上的封装。<br>而作为使用 gRPC 的用户就是引用的 src 下的文件了。  </p>
+<p>我们先通过官方的 hello world 示例来说明我们是如何使用 gRPC 的，因为 gRPC 默认的数据序列化方式采用的 protobuf，所以首先我们需要有一个 proto 文件，然后通过 gRPC 提供的文件来生成对应的代码，生成出来的文件包含了 proto 中所定义的 service、method、message 等各种结构的定义，并能够让我们用比较熟悉的方式去使用。  </p>
+<p>示例中的 proto 文件：</p>
+<pre class="line-numbers language-proto"><code class="language-proto">package helloworld;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>grpc_tools 是用来生成 proto 对应代码的，这个命令行工具提供了多种语言的生成版本。<br>在 Node 中，会生成两个文件，一般命名规则为 <code>xxx_pb.js</code>、<code>xxx_grpc_pb.js</code>，<code>xxx_pb.js</code> 是 proto 中各种 service、method 以及 message 的结构描述及如何使用的接口定义，而 <code>xxx_grpc_pb.js</code> 主要则是针对 <code>xxx_pb.js</code> 的一个整合，按照 proto 文件中定义的结构生成对应的代码，在用户使用的时候，使用前者多半用于构造消息结构，使用后者则是方法的调用。  </p>
+<p>生成后的关键代码（XXX_grpc_pb.js）：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> grpc <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@grpc/grpc'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> helloworld_pb <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./helloworld_pb.js'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">serialize_helloworld_HelloReply</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>arg <span class="token keyword">instanceof</span> <span class="token class-name">helloworld_pb<span class="token punctuation">.</span>HelloReply</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'Expected argument of type helloworld.HelloReply'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> Buffer<span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span>arg<span class="token punctuation">.</span><span class="token function">serializeBinary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">deserialize_helloworld_HelloReply</span><span class="token punctuation">(</span>buffer_arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> helloworld_pb<span class="token punctuation">.</span>HelloReply<span class="token punctuation">.</span><span class="token function">deserializeBinary</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Uint8Array</span><span class="token punctuation">(</span>buffer_arg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">serialize_helloworld_HelloRequest</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>arg <span class="token keyword">instanceof</span> <span class="token class-name">helloworld_pb<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'Expected argument of type helloworld.HelloRequest'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> Buffer<span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span>arg<span class="token punctuation">.</span><span class="token function">serializeBinary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">deserialize_helloworld_HelloRequest</span><span class="token punctuation">(</span>buffer_arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> helloworld_pb<span class="token punctuation">.</span>HelloRequest<span class="token punctuation">.</span><span class="token function">deserializeBinary</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Uint8Array</span><span class="token punctuation">(</span>buffer_arg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token comment" spellcheck="true">// The greeting service definition.</span>
+<span class="token keyword">const</span> GreeterService <span class="token operator">=</span> exports<span class="token punctuation">.</span>GreeterService <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Sends a greeting</span>
+sayHello<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    path<span class="token punctuation">:</span> <span class="token string">'/helloworld.Greeter/SayHello'</span><span class="token punctuation">,</span>
+    requestStream<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    responseStream<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    requestType<span class="token punctuation">:</span> helloworld_pb<span class="token punctuation">.</span>HelloRequest<span class="token punctuation">,</span>
+    responseType<span class="token punctuation">:</span> helloworld_pb<span class="token punctuation">.</span>HelloReply<span class="token punctuation">,</span>
+    requestSerialize<span class="token punctuation">:</span> serialize_helloworld_HelloRequest<span class="token punctuation">,</span>
+    requestDeserialize<span class="token punctuation">:</span> deserialize_helloworld_HelloRequest<span class="token punctuation">,</span>
+    responseSerialize<span class="token punctuation">:</span> serialize_helloworld_HelloReply<span class="token punctuation">,</span>
+    responseDeserialize<span class="token punctuation">:</span> deserialize_helloworld_HelloReply<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+exports<span class="token punctuation">.</span>GreeterClient <span class="token operator">=</span> grpc<span class="token punctuation">.</span><span class="token function">makeGenericClientConstructor</span><span class="token punctuation">(</span>GreeterService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最终导出的 <code>sayHello</code> 就是我们在 proto 文件中定义的 <code>SayHello</code> 方法，所以我们在作为 <code>Client</code> 的时候使用，就是很简单的调用 <code>sayHello</code> 就行了：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">const</span> messages <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./helloworld_pb'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> services <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./helloworld_grpc_pb'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> grpc <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'grpc'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">services<span class="token punctuation">.</span>GreeterClient</span><span class="token punctuation">(</span>
+  target<span class="token punctuation">,</span>
+  grpc<span class="token punctuation">.</span>credentials<span class="token punctuation">.</span><span class="token function">createInsecure</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">messages<span class="token punctuation">.</span>HelloRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+request<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">'Niko'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+client<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Greeting:'</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其实真实写的代码也就上边的几行，实例化了一个 <code>Client</code>，实例化一个 <code>Message</code> 并构建数据，然后通过 <code>client</code> 调用对应的 <code>method</code> 传入 <code>message</code>，就完成了一个 gRPC 请求的发送。<br>在这个过程中，我们直接可见的用到了 <code>grpc-node</code> 的 <code>credentials</code> 以及 <code>makeGenericClientConstructor</code>，我们就拿这两个作为入口，首先从 <code>makeGenericClientConstructor</code> 来说。  </p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="makeGenericClientConstructor"><a href="#makeGenericClientConstructor" class="headerlink" title="makeGenericClientConstructor"></a>makeGenericClientConstructor</h3><p>在翻看 index.js 文件中可以发现， <code>makeGenericClientConstructor</code> 其实是 <code>client.makeClientConstructor</code> 的一个别名，所以我们需要去查看 src/client.js 中对应函数的定义，就像函数名一样，它是用来生成一个 Client 的构造函数的，这个构造函数就是我们在上边示例中的 <code>GreeterClient</code>。<br>源码所在位置： <a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/src/client.js#L979" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/src/client.js#L979</a></p>
+<p>当对照着 <code>xxx_grpc_pb.js</code> 与源码来看时，会发现调用函数只传入了一个参数，而函数定义却存在三个参数，这个其实是历史原因导致的，我们可以直接忽略后边的两个参数。  </p>
+<p>精简后的源码：</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">exports<span class="token punctuation">.</span>makeClientConstructor <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>methods<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">ServiceClient</span><span class="token punctuation">(</span>address<span class="token punctuation">,</span> credentials<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Client<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> address<span class="token punctuation">,</span> credentials<span class="token punctuation">,</span> options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  util<span class="token punctuation">.</span><span class="token function">inherits</span><span class="token punctuation">(</span>ServiceClient<span class="token punctuation">,</span> Client<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>$method_definitions <span class="token operator">=</span> methods<span class="token punctuation">;</span>
+  ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>$method_names <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>methods<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>name <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> attrs <span class="token operator">=</span> methods<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>name<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span><span class="token string">'$'</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'Method names cannot start with $'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">var</span> method_type <span class="token operator">=</span> common<span class="token punctuation">.</span><span class="token function">getMethodType</span><span class="token punctuation">(</span>attrs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> method_func <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> requester_funcs<span class="token punctuation">[</span>method_type<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> attrs<span class="token punctuation">.</span>path<span class="token punctuation">,</span> attrs<span class="token punctuation">.</span>requestSerialize<span class="token punctuation">,</span> attrs<span class="token punctuation">.</span>responseDeserialize <span class="token punctuation">]</span>
+        <span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span>slice<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> method_func<span class="token punctuation">;</span>
+    ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>$method_names<span class="token punctuation">[</span>attrs<span class="token punctuation">.</span>path<span class="token punctuation">]</span> <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// Associate all provided attributes with the method</span>
+    Object<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span>ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">,</span> attrs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>attrs<span class="token punctuation">.</span>originalName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">[</span>attrs<span class="token punctuation">.</span>originalName<span class="token punctuation">]</span> <span class="token operator">=</span>
+        ServiceClient<span class="token punctuation">.</span>prototype<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  ServiceClient<span class="token punctuation">.</span>service <span class="token operator">=</span> methods<span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> ServiceClient<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>methods</code> 参数就是我们上边文件中生成的对象，包括服务地址、是否使用 stream、以及 请求/返回值 的类型及对应的序列化/反序列化 方式。  </p>
+<p>大致的逻辑就是创建一个继承自 <code>Client</code> 的子类，然后遍历我们整个 <code>service</code> 来看里边有多少个 <code>method</code>，并根据 <code>method</code> 不同的传输类型来区分使用不同的函数进行数据的传输，最后以 <code>method</code> 为 key 放到 <code>Client</code> 子类的原型链上。  </p>
+<p><code>common.getMethodType</code> 就是用来区分 <code>method</code> 究竟是什么类型的请求的，目前 <code>gRPC</code> 一共分了四种类型，双向 <code>Stream</code>、两个单向 <code>Stream</code>，以及 <code>Unary</code> 模式：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">exports<span class="token punctuation">.</span>getMethodType <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>method_definition<span class="token punctuation">.</span>requestStream<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>method_definition<span class="token punctuation">.</span>responseStream<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> constants<span class="token punctuation">.</span>methodTypes<span class="token punctuation">.</span>BIDI_STREAMING<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> constants<span class="token punctuation">.</span>methodTypes<span class="token punctuation">.</span>CLIENT_STREAMING<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>method_definition<span class="token punctuation">.</span>responseStream<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> constants<span class="token punctuation">.</span>methodTypes<span class="token punctuation">.</span>SERVER_STREAMING<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> constants<span class="token punctuation">.</span>methodTypes<span class="token punctuation">.</span>UNARY<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在最后几行有一处判断 <code>originalName</code> 是否存在的操作，这个是在 proto-loader 中存在的一个逻辑，将 methodName 转换成纯小写放了进去，单纯看注释的话，这并不是一个长期的解决方案： <a href="https://github.com/grpc/grpc-node/blob/master/packages/proto-loader/src/index.ts#L193" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/master/packages/proto-loader/src/index.ts#L193</a>    </p>
+<blockquote>
+<p>P.S. proto-loader 是 JS 里边一种动态加载 proto 文件的方式，性能比通过 grpc_tools 预生成代码的方式要低一些。  </p>
+</blockquote>
+<p>所有的请求方式，都被放在了一个叫做 <code>requester_funcs</code> 的对象中，源码中的定义是这样的：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> requester_funcs <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>UNARY<span class="token punctuation">]</span><span class="token punctuation">:</span> Client<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>makeUnaryRequest<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>CLIENT_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> Client<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>makeClientStreamRequest<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>SERVER_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> Client<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>makeServerStreamRequest<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>BIDI_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> Client<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>makeBidiStreamRequest
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从这里就可以看出，其实是和我们 <code>getMethodType</code> 所对应的四种处理方式。  </p>
+<p>最终，将继承自 <code>Client</code> 的子类返回，完成了整个函数的执行。</p>
+<h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><p>首先我们需要看看继承的 <code>Client</code> 构造函数究竟做了什么事情。<br>抛开参数类型的检查，首先是针对拦截器的处理，我们可以通过两种方式来实现拦截器，一个是提供拦截器的具体函数，这个在所有 <code>method</code> 触发时都会执行，还有一个可以通过传入 <code>interceptor_provider</code> 来实现动态的生成拦截器，函数会在初始化 <code>Client</code> 的时候触发，并要求返回一个新的 <code>interceptor</code> 对象用于执行拦截器的逻辑。  </p>
+<h4 id="interceptor-的用法"><a href="#interceptor-的用法" class="headerlink" title="interceptor 的用法"></a>interceptor 的用法</h4><pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// interceptors 用法</span>
+<span class="token keyword">const</span> interceptor <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> nextCall<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'trigger'</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">InterceptingCall</span><span class="token punctuation">(</span><span class="token function">nextCall</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">const</span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">services<span class="token punctuation">.</span>GreeterClient</span><span class="token punctuation">(</span>
+  target<span class="token punctuation">,</span>
+  grpc<span class="token punctuation">.</span>credentials<span class="token punctuation">.</span><span class="token function">createInsecure</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    interceptors<span class="token punctuation">:</span> <span class="token punctuation">[</span>interceptor<span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// interceptor_providers 用法</span>
+<span class="token keyword">const</span> interceptor <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> nextCall<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'trigger'</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">InterceptingCall</span><span class="token punctuation">(</span><span class="token function">nextCall</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> interceptorProvider <span class="token operator">=</span> <span class="token punctuation">(</span>methodDefinition<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'call interceptorProvider'</span><span class="token punctuation">,</span> methodDefinition<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> interceptor
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">services<span class="token punctuation">.</span>GreeterClient</span><span class="token punctuation">(</span>
+  target<span class="token punctuation">,</span>
+  grpc<span class="token punctuation">.</span>credentials<span class="token punctuation">.</span><span class="token function">createInsecure</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    interceptor_providers<span class="token punctuation">:</span> <span class="token punctuation">[</span>interceptorProvider<span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>P.S. 需要注意的是，如果传入 interceptor_providers，则会在两个地方触发调用，一个是实例化 Client 的时候，还有一个是在 method 真实调用的时候，每次调用都会触发，所以如果要复用 interceptor，最好在函数之外构建出函数体  </p>
+</blockquote>
+<p>但是这样的拦截器其实是没有太多意义的，我们不能够针对 <code>metadata</code>、<code>message</code> 来做自己的修改，如果我们观察 <code>InterceptingCall</code> 的具体函数签名，会发现它支持两个参数的传入。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">InterceptingCall</span><span class="token punctuation">(</span>next_call<span class="token punctuation">,</span> requester<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>next_call <span class="token operator">=</span> next_call<span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>requester <span class="token operator">=</span> requester<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上边示例只介绍了第一个参数，这个参数预期接受一个对象，对象会提供多个方法，我们可以通过<code>console.log(nextCall(options).constructor.prototype)</code>来查看都有哪些，例如 <code>sendMessage</code>、<code>start</code> 之类的。<br>而观察这些函数的实现，会发现他们都调用了一个 <code>_callNext</code>。  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript">InterceptingCall<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>sendMessage <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">_callNext</span><span class="token punctuation">(</span><span class="token string">'sendMessage'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>message<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+InterceptingCall<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>halfClose <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">_callNext</span><span class="token punctuation">(</span><span class="token string">'halfClose'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+InterceptingCall<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>cancel <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">_callNext</span><span class="token punctuation">(</span><span class="token string">'cancel'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+InterceptingCall<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>_callNext <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>method_name<span class="token punctuation">,</span> args<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> args_array <span class="token operator">=</span> args <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> next_call <span class="token operator">=</span> next <span class="token operator">?</span> next <span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">_getNextCall</span><span class="token punctuation">(</span>method_name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>requester <span class="token operator">&amp;&amp;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>requester<span class="token punctuation">[</span>method_name<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Avoid using expensive `apply` calls</span>
+    <span class="token keyword">var</span> num_args <span class="token operator">=</span> args_array<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>num_args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>requester<span class="token punctuation">[</span>method_name<span class="token punctuation">]</span><span class="token punctuation">(</span>next_call<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">case</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>requester<span class="token punctuation">[</span>method_name<span class="token punctuation">]</span><span class="token punctuation">(</span>args_array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> next_call<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">case</span> <span class="token number">2</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>requester<span class="token punctuation">[</span>method_name<span class="token punctuation">]</span><span class="token punctuation">(</span>args_array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args_array<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                                           next_call<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>next_call <span class="token operator">===</span> emptyNext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'Interceptor call chain terminated unexpectedly'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">next_call</span><span class="token punctuation">(</span>args_array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args_array<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在 <code>_callNext</code> 方法中，我们就可以找到 <code>requester</code> 参数究竟是有什么用了，如果 <code>requester</code> 也有实现对应的 <code>method_name</code>，那么就会先执行 <code>requester</code> 的方法，随后将 <code>next_call</code> 对应的方法作为调用 <code>requester</code> 方法的最后一个参数传入。<br>在 grpc-node 中，拦截器的执行顺序与传入顺序有关，是一个队列，先传入的拦截器先执行，如果传入了第二个参数，则先执行第二个参数对应的方法，后执行第一个参数对应的方法。  </p>
+<p>所以如果我们想做一些额外的事情，比如说针对 <code>metadata</code> 添加一个我们想要的字段，那么就可以这么来写拦截器：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> interceptor <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> nextCall<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">InterceptingCall</span><span class="token punctuation">(</span><span class="token function">nextCall</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    start<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>metadata<span class="token punctuation">,</span> listener<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">next</span><span class="token punctuation">(</span>metadata<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        onReceiveMetadata<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>metadata<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          metadata<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">'xxx'</span><span class="token punctuation">,</span> <span class="token string">'xxx'</span><span class="token punctuation">)</span>
+          <span class="token function">next</span><span class="token punctuation">(</span>metadata<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>稍微特殊的地方是，<code>start</code>函数的<code>next</code>参数被调用时传入的第二个参数并不是一个<code>InterceptingCall</code>的实例，而是一个<code>InterceptingListener</code>的实例，两者都有<code>_callNext</code>的实现，只不过所提供的方法不完全一样罢了。  </p>
+</blockquote>
+<h4 id="Channel-的创建"><a href="#Channel-的创建" class="headerlink" title="Channel 的创建"></a>Channel 的创建</h4><p>接下来的代码逻辑主要是用于创建 <code>Channel</code>，可以通过传递不同的参数来覆盖 <code>Channel</code>，也可以用默认的 <code>Channel</code>，这个 <code>Channel</code> 对应的 gRPC 中其实就是做数据传输的那一个模块，可以理解为 HTTP2 最终是在这里使用的。<br>一般很少会去覆盖默认的 <code>Channel</code>，所以我们直接去看 grpc-node 里边的 <code>Channel</code> 是如何实现的。  </p>
+<p><code>Channel</code> 是 c++ 代码实现的，代码的位置： <a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/channel.cc#L206" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/channel.cc#L206</a>  </p>
+<p>如果有同学尝试过混用 <code>grpc-node</code> 和 <code>grpc-js</code>，那么你一定有看到过这个报错：<code>Channel&#39;s second argument (credentials) must be a ChannelCredentials</code><br>原因就在于 <code>Channel</code> 实例化过程中会进行检查我们创建 <code>Channel</code> 传入的 <code>credential</code> 是否是继承自 grpc 中的 <code>ChannelCredentials</code> 类。<br>而 <code>grpc-node</code> 和 <code>grpc-js</code> 用的是两个不同的类，所以混用的话可能会出现这个问题。  </p>
+<p>然后就是根据传入的 <code>credential</code> 的不同来判断是否要使用加密，而一般常用的 <code>grpc.credentials.createInsecure()</code> 其实就是不走加密的意思了，我们可以在 <a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/channel_credentials.cc#L248" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/channel_credentials.cc#L248</a> 和 <a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/channel.cc#L230" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/channel.cc#L230</a> 来看到对应的逻辑。  </p>
+<p>后边就是调用 c++ 版本的 grpc 来构建对应的 <code>Channel</code> 了，如果有老铁看过 c++ 版本是如何创建 grpc Client 的，那么这些代码就比较熟悉了：  <a href="https://github.com/grpc/grpc/blob/master/examples/cpp/helloworld/greeter_client.cc#L100" target="_blank" rel="noopener">https://github.com/grpc/grpc/blob/master/examples/cpp/helloworld/greeter_client.cc#L100</a><br>在 <code>grpc-node</code> 中也是调用的同样的 API 来创建的。  </p>
+<h3 id="makeUnaryRequest"><a href="#makeUnaryRequest" class="headerlink" title="makeUnaryRequest"></a>makeUnaryRequest</h3><p>当 <code>Client</code> 被创建出来后，我们会调用 <code>Client</code> 上的方法（也就是发请求了），这时候就会触发到上边提到的 <code>requester_funcs</code> 其中的一个，我们先从最简单的 <code>Unary</code> 来说，这种 Client/Server 都是 <code>Unary</code> 请求方式时会触发的函数。<br>我们通过上边 <code>method_func</code> 中调用方式可以确定传递了什么参数进去，有几个固定的参数 path、request 序列化方式，以及 response 的反序列化方式。<br>后边的参数就是由调用时传入的动态参数了，这些可以在 <code>makeUnaryRequest</code> 函数定义中看到，分别是 <code>argument</code>（也就是 request body）、<code>metadata</code>（可以理解为 header，一些元数据）、<code>options</code> 是一个可选的参数（自定义的拦截器是放在这里的），可以用于覆盖 method 的一些描述信息，以及最后的 <code>callback</code> 就是我们接收到 response 后应该做的操作了。  </p>
+<p>整个函数的实现，按长度来说，有一半都是在处理参数，而剩下的部分则做了两件事，一个是实例化了 <code>ClientUnaryCall</code> 对象，另一个则是处理拦截器相关的逻辑，并启动拦截器来发送整个请求。<br>在 <code>makeUnaryRequest</code> 函数中涉及到拦截器的部分有这么几块 <code>resolveInterceptorProviders</code>、<code>getLastListener</code>与<code>getInterceptingCall</code>。  </p>
+<h4 id="ClientUnaryCall"><a href="#ClientUnaryCall" class="headerlink" title="ClientUnaryCall"></a>ClientUnaryCall</h4><p>先来看 <code>ClientUnaryCall</code> 做了什么事情，在源码中有这样的一个代码块，是使用该对象的场景：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">ClientUnaryCall</span><span class="token punctuation">(</span>call<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  EventEmitter<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>call <span class="token operator">=</span> call<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> callProperties <span class="token operator">=</span> <span class="token punctuation">{</span>
+  argument<span class="token punctuation">:</span> argument<span class="token punctuation">,</span>
+  metadata<span class="token punctuation">:</span> metadata<span class="token punctuation">,</span>
+  call<span class="token punctuation">:</span> <span class="token keyword">new</span> <span class="token class-name">ClientUnaryCall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  channel<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>$channel<span class="token punctuation">,</span>
+  methodDefinition<span class="token punctuation">:</span> method_definition<span class="token punctuation">,</span>
+  callOptions<span class="token punctuation">:</span> options<span class="token punctuation">,</span>
+  callback<span class="token punctuation">:</span> callback
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 以及后续与拦截器产生了一些关联</span>
+<span class="token keyword">var</span> emitter <span class="token operator">=</span> callProperties<span class="token punctuation">.</span>call<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 这行代码很诡异，看起来是可以在实例化的时候传入的，却选择了在这里覆盖属性值</span>
+emitter<span class="token punctuation">.</span>call <span class="token operator">=</span> intercepting_call<span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> last_listener <span class="token operator">=</span> client_interceptors<span class="token punctuation">.</span><span class="token function">getLastListener</span><span class="token punctuation">(</span>
+  methodDefinition<span class="token punctuation">,</span>
+  emitter<span class="token punctuation">,</span>
+  callProperties<span class="token punctuation">.</span>callback
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>关于 <code>ClientUnaryCall</code> 的定义也非常简单，其实是一个继承自 <code>EventEmitter</code> 的子类，增加了一个 <code>call</code> 属性的定义，以及两个方法封装调用了 <code>call</code> 属性对应的一些方法。  </p>
+<p><em>强烈怀疑 这部分代码是后期有过调整，因为 <code>ClientUnaryCall</code> 构造函数的实现中是可以接受一个参数作为 <code>call</code> 属性的赋值的，然而在代码应用中选择了后续覆盖 <code>call</code> 属性，而非直接在实例化的时候传入进去</em></p>
+<h4 id="resolveInterceptorProviders"><a href="#resolveInterceptorProviders" class="headerlink" title="resolveInterceptorProviders"></a>resolveInterceptorProviders</h4><p><code>resolveInterceptorProviders</code> 是用来处理用户传入的拦截器的，这个函数在 <code>Client</code> 的整个生命周期会有两处调用，一个是在上边 <code>Client</code> 实例化的过程中会触发一次，再有就是每次 <code>method</code> 被调用之前，会重新触发该函数。<br><code>resolveInterceptorProviders</code> 的逻辑很简单，就是遍历我们传入的 <code>interceptor_provider</code> 并将对应 method 的信息描述传入并执行，得到 <code>provider</code> 返回的 <code>interceptor</code> 用作拦截器。<br>在 <code>Client</code> 实例化过程中是会遍历所有的 <code>method</code> 来执行，而在具体的 <code>method</code> 触发时则只触发当前 <code>method</code> 相关的 <code>provider</code> 逻辑。  </p>
+<h4 id="getLastListener"><a href="#getLastListener" class="headerlink" title="getLastListener"></a>getLastListener</h4><p><code>getLastListener</code> 按照注释中的描述，是为了获得一个最后会触发的监听者，源码大致是这样的：<br><a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/src/client_interceptors.js#L1337" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/src/client_interceptors.js#L1337</a>  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> listenerGenerators <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>UNARY<span class="token punctuation">]</span><span class="token punctuation">:</span> _getUnaryListener<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>CLIENT_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> _getClientStreamingListener<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>SERVER_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> _getServerStreamingListener<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>BIDI_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> _getBidiStreamingListener
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">getLastListener</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> emitter<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>emitter <span class="token keyword">instanceof</span> <span class="token class-name">Function</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    callback <span class="token operator">=</span> emitter<span class="token punctuation">;</span>
+    callback <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>callback <span class="token keyword">instanceof</span> <span class="token class-name">Function</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    callback <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span><span class="token punctuation">(</span>emitter <span class="token keyword">instanceof</span> <span class="token class-name">EventEmitter</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+       <span class="token punctuation">(</span>callback <span class="token keyword">instanceof</span> <span class="token class-name">Function</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'Argument mismatch in getLastListener'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">var</span> method_type <span class="token operator">=</span> common<span class="token punctuation">.</span><span class="token function">getMethodType</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> generator <span class="token operator">=</span> listenerGenerators<span class="token punctuation">[</span>method_type<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">generator</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> emitter<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同样也使用了一个枚举来区分不同的方法类型来调用不同的函数来生成对应的 listener。  </p>
+<p>比如这里用到的 <code>getUnaryListener</code>，是这样的一个逻辑：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">_getUnaryListener</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> emitter<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> resultMessage<span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    onReceiveMetadata<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>metadata<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      emitter<span class="token punctuation">.</span><span class="token function">emit</span><span class="token punctuation">(</span><span class="token string">'metadata'</span><span class="token punctuation">,</span> metadata<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    onReceiveMessage<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>message<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      resultMessage <span class="token operator">=</span> message<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    onReceiveStatus<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">.</span>code <span class="token operator">!==</span> constants<span class="token punctuation">.</span>status<span class="token punctuation">.</span>OK<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> error <span class="token operator">=</span> common<span class="token punctuation">.</span><span class="token function">createStatusError</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">callback</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> resultMessage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      emitter<span class="token punctuation">.</span><span class="token function">emit</span><span class="token punctuation">(</span><span class="token string">'status'</span><span class="token punctuation">,</span> status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>代码也算比较清晰，在不同的阶段会触发不同的事件，然后再真正返回结果以后，触发 <code>callback</code> 来告知用户请求响应。<br>也就是我们在示例中调用 <code>sayHello</code> 时传入的 <code>callback</code> 被调用的地方了。  </p>
+<h4 id="getInterceptingCall"><a href="#getInterceptingCall" class="headerlink" title="getInterceptingCall"></a>getInterceptingCall</h4><p><code>getInterceptingCall</code> 函数的调用会返回一个实例，通过操作该实例我们可以控制请求的开始、数据的发送以及请求的结束。<br>我们上边 <code>getLastListener</code> 返回的对象触发的时机也是会在这里可以找到的。  </p>
+<p>从源码上来看会涉及到这么几个函数：  </p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token keyword">var</span> interceptorGenerators <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>UNARY<span class="token punctuation">]</span><span class="token punctuation">:</span> _getUnaryInterceptor<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>CLIENT_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> _getClientStreamingInterceptor<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>SERVER_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> _getServerStreamingInterceptor<span class="token punctuation">,</span>
+  <span class="token punctuation">[</span>methodTypes<span class="token punctuation">.</span>BIDI_STREAMING<span class="token punctuation">]</span><span class="token punctuation">:</span> _getBidiStreamingInterceptor
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">getInterceptingCall</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> options<span class="token punctuation">,</span>
+                             interceptors<span class="token punctuation">,</span> channel<span class="token punctuation">,</span> responder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> last_interceptor <span class="token operator">=</span> <span class="token function">_getLastInterceptor</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> channel<span class="token punctuation">,</span>
+                                            responder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> all_interceptors <span class="token operator">=</span> interceptors<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>last_interceptor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">_buildChain</span><span class="token punctuation">(</span>all_interceptors<span class="token punctuation">,</span> options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">_getLastInterceptor</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> channel<span class="token punctuation">,</span> responder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> callback <span class="token operator">=</span> <span class="token punctuation">(</span>responder <span class="token keyword">instanceof</span> <span class="token class-name">Function</span><span class="token punctuation">)</span> <span class="token operator">?</span> responder <span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> emitter <span class="token operator">=</span> <span class="token punctuation">(</span>responder <span class="token keyword">instanceof</span> <span class="token class-name">EventEmitter</span><span class="token punctuation">)</span> <span class="token operator">?</span> responder <span class="token punctuation">:</span>
+                                                      <span class="token keyword">new</span> <span class="token class-name">EventEmitter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> method_type <span class="token operator">=</span> common<span class="token punctuation">.</span><span class="token function">getMethodType</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> generator <span class="token operator">=</span> interceptorGenerators<span class="token punctuation">[</span>method_type<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">generator</span><span class="token punctuation">(</span>method_definition<span class="token punctuation">,</span> channel<span class="token punctuation">,</span> emitter<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">_buildChain</span><span class="token punctuation">(</span>interceptors<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> next <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>interceptors<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>interceptors<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>options<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">var</span> head_interceptor <span class="token operator">=</span> interceptors<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> rest_interceptors <span class="token operator">=</span> interceptors<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token function">head_interceptor</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token function">next</span><span class="token punctuation">(</span>rest_interceptors<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> chain <span class="token operator">=</span> <span class="token function">next</span><span class="token punctuation">(</span>interceptors<span class="token punctuation">)</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">InterceptingCall</span><span class="token punctuation">(</span>chain<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>_getUnaryInterceptor 由于篇幅较长，直接贴 GitHub 链接了：<a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/src/client_interceptors.js#L785" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/src/client_interceptors.js#L785</a>  </p>
+</blockquote>
+<p>大致的逻辑就是我们通过 <code>method_definition</code>、<code>channel</code> 等参数来获取到一个 <code>interceptor</code>，并将其拼接到原有的 <code>interceptor</code> 后边，作为最后执行的拦截器， <code>_buildChain</code> 函数比较简单，就是实现了一个链式调用的函数，用来按顺序执行拦截器。  </p>
+<blockquote>
+<p>关于 interceptor 如何使用可以看我们介绍 interceptor 用法时写的 demo</p>
+</blockquote>
+<p>主要的逻辑实际上在 <code>_getUnaryInterceptor</code> 中，我们会创建一个功能全面的 <code>interceptor</code>，函数会返回一个匿名函数，就是我们在上边代码中看到的调用 <code>generator</code> 的地方了，而在匿名函数的开头部门，我们就调用了 <code>getCall</code> 来获取一个 <code>call</code> 对象，这个 <code>call</code> 对象就是我们与 gRPC 服务器之间的通道了，请求最终是由 <code>call</code> 对象负责发送的。  </p>
+<p><code>getCall</code> 中实际上调用了 <code>channel</code> 对象的 <code>createCall</code> 方法，这部分的逻辑也是在 c++ 中做的了，包含数据的发送之类的逻辑。  </p>
+<p>这是我们回到 <code>makeUnaryRequest</code> 函数，再看函数结束的地方调用的那三个方法，第一个 start，将我们的 metadata（可以理解为 header） 发送了过去，然后将真实的信息发送了过去，最后调用关闭方法。  </p>
+<p>我们可以在 <code>_getUnaryInterceptor</code> 中的 <code>start</code>、<code>sendMessage</code> 以及 <code>halfClose</code> 函数中都有调用 <code>_startBatchIfReady</code> 函数，而这个方法实际上就是调用的 <code>channel</code> 上的 <code>startBatch</code> 方法，再根据调用链查找，最终会看到处理逻辑在这里：<a href="https://github.com/grpc/grpc/blob/85e22ef28d55f27e8efb3d5e2e43ca6f59971065/src/core/lib/surface/call.cc#L1552" target="_blank" rel="noopener">https://github.com/grpc/grpc/blob/85e22ef28d55f27e8efb3d5e2e43ca6f59971065/src/core/lib/surface/call.cc#L1552</a><br>opType 与 代码中 switch-case 中的对应关系在这里： <a href="https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/node_grpc.cc#L72" target="_blank" rel="noopener">https://github.com/grpc/grpc-node/blob/grpc%401.24.x/packages/grpc-native-core/ext/node_grpc.cc#L72</a>  </p>
+<p>首先在 <code>start</code> 里边主要是发送了 <code>metadata</code>，并且尝试接受服务端返回过来的 <code>metadata</code>，并在回调中触发我们传入的 <code>listener</code> 的 <code>onReceiveMetadata</code> 方法。<br>然后检查 response 的状态是否正确，并触发 <code>listener</code> 的 <code>onReceiveStatus</code> 方法。  </p>
+<p>接下来是调用 <code>sendMessage</code> 方法，在这里我们将消息体进行序列化，并发送，在回调中就会去调用我们传入的 callback。  </p>
+<p>最后在 <code>halfClose</code> 方法中其实就是发送一个指令来设置请求的结束。  </p>
+<p>整个的流程细化以后大概是这个样子的：  </p>
+<p><img src="/images/grpc-code-read/grpc-client-request-process.png" alt="">  </p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>上边整体的记录就是关于 Client 这一侧是如何实现的了。<br>主要涉及到 Client 的构建、发送请求时做的事情、拦截器的作用。<br>而更深入的一些逻辑其实是在 c++ 版本的 gRPC 库里所实现，所以本次笔记并没有过多的涉及。  </p>
+<blockquote>
+<p>文章涉及到的部分示例代码仓库地址：<a href="https://github.com/Jiasm/grpc-example" target="_blank" rel="noopener">https://github.com/Jiasm/grpc-example</a></p>
+</blockquote>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2020/11/30/grpc-node-源码阅读笔记-0/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '8601e8e0-2dfd-11eb-81a4-ad76207630a2'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

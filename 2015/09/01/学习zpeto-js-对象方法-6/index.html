@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>学习zpeto.js(对象方法)[6] - Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          
+  <input type="checkbox" id="toggle-toc" class="toggle-toc-right" />
+  <div class="toc-toggle toc-toggle-right">
+    <label for="toggle-toc">
+      <i class="fa fa-list-ol"></i>
+    </label>
+    <div class="toc-wrap toc-wrap-right">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#first"><span class="toc-number">1.</span> <span class="toc-text">first:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#last"><span class="toc-number">2.</span> <span class="toc-text">last:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get"><span class="toc-number">3.</span> <span class="toc-text">get:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#has"><span class="toc-number">4.</span> <span class="toc-text">has:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parent"><span class="toc-number">5.</span> <span class="toc-text">parent:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parents"><span class="toc-number">6.</span> <span class="toc-text">parents:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#siblings"><span class="toc-number">7.</span> <span class="toc-text">siblings:</span></a></li></ol>
+    </div>
+  </div>
+  <label class="mask" for="toggle-toc"></label>
+
+<div id="post-content">
+  <h1>学习zpeto.js(对象方法)[6]</h1>
+  <h3 id="first"><a href="#first" class="headerlink" title="first:"></a>first:</h3><p>获取当前对象集合中的第一个dom元素。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">first</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 返回第一个div对象（zepto对象）</span>
+<span class="token comment" spellcheck="true">//相当于</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">eq</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>与之对应的是last<br><a id="more"></a></p>
+<h3 id="last"><a href="#last" class="headerlink" title="last:"></a>last:</h3><p>获取当前对象集合中的最后一个dom元素。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">last</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 返回最后一个div对象（zepto对象）</span>
+<span class="token comment" spellcheck="true">//相当于</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">eq</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>两方法不接收任何参数。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-1.png" alt=""></p>
+<p>个人认为调用isObject方法没什么用，因为zepto对象集合里存放的都是dom元素。//也许是我无知吧- -</p>
+<p>被大神点醒了。这样做也许是为了这种场景<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-2.png" alt=""></p>
+<h3 id="get"><a href="#get" class="headerlink" title="get:"></a>get:</h3><p>获取当前对象集合对应下标的某元素，传入参数为一个int下标，如果不传入参数，则将对象转换为一个普通数组并返回；</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　　　<span class="token comment" spellcheck="true">// 第0个。（dom对象,不是zepto对象）</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　　　 <span class="token comment" spellcheck="true">//所有div对象组成的一个数组</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>该方法与eq方法的区别在于，eq返回的是zepto对象，而get返回的是dom对象，$().get(0)相当于$()[0]；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-3.png" alt=""></p>
+<p>slice就是[].slice();</p>
+<p>使用get并且不传入参数的对象前后变化图：<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-4.png" alt=""></p>
+<h3 id="has"><a href="#has" class="headerlink" title="has:"></a>has:</h3><p>传入参数为一个选择器字符串或者一个节点，返回的是对象集合中子节点包含参数的对象。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 会返回集合中所有包含a标签的对象</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>上述是传入一个选择器，也可以传入一个node节点作为参数</p>
+<p>$(“div”).has(document.getElementById(“link”));//返回集合中有子项为#link的对象</p>
+<p><img src="/images/learning-zepto-js-object-sixth/screen-shot-5.png" alt=""></p>
+<p>首先，filter方法会将返回值为true的子项装入一个集合。</p>
+<p>在filter方法内，我们通过判断选择器是否为object来进行区分，如果是object，则调用contains方法，判断selector是否属于this。</p>
+<p>否则通过当前对象来调用find方法并将selector传入，并调用size方法获取count（filter会自动将返回值转换为bool类型）。</p>
+<h3 id="parent"><a href="#parent" class="headerlink" title="parent:"></a>parent:</h3><p>获取对象集合所有的直接父节点。可以传入一个选择器，只留下符合选择器的父节点。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">parent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　　　　　<span class="token comment" spellcheck="true">// 获取所有p标签的父节点</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">parent</span><span class="token punctuation">(</span><span class="token string">".ads"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  　　<span class="token comment" spellcheck="true">// 获取所有p标签的父节点className包含.ads的节点</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/images/learning-zepto-js-object-sixth/screen-shot-6.png" alt=""></p>
+<p>pluck方法返回一个数组，参数是一个字符串，为属性名，返回的值是调用对象所对应的属性的值；</p>
+<p>然后传入uniq方法，方法做了一个去重处理；</p>
+<p>最外层的方法filtered，如果第二个参数selector不为空，则通过第一个参数调用filter方法并将第二个参数传入filter方法，否则直接返回第一个参数。</p>
+<h3 id="parents"><a href="#parents" class="headerlink" title="parents:"></a>parents:</h3><p>获取所有对象的所有父节点。直至html标签结束。可以传入一个参数，作为选择器筛选；</p>
+<p>参数只能是一个选择器字符串；</p>
+<p>返回的集合不会出现重复的元素；</p>
+<p>如果想取出元素的直接父节点，使用parent；</p>
+<p>如果想取出第一个符合筛选条件的父节点，使用closest。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">parents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　   　　<span class="token comment" spellcheck="true">// 获取所有p标签的所有父节点</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">parents</span><span class="token punctuation">(</span><span class="token string">".ads"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　<span class="token comment" spellcheck="true">// 获取所有p标签的所有父节点className包含ads的节点</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>//使用parents如果不传入参数，则始终会包含一个body以及html元素；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-7.png" alt=""></p>
+<p>方法首先声明一个数组用于存放dom元素，将this赋值给nodes变量；</p>
+<p>使用一个while循环，条件为nodes.length &gt; 0；</p>
+<p>在循环内部，通过$.map给nodes进行赋值，map方法内部将node赋值为node的父节点，</p>
+<p>然后判断，如果节点不是document并且该节点不存在于ancestors数组中，则将节点push至数组，并返回node。</p>
+<p>所以说循环停止的条件就是node节点为document时。</p>
+<p>最后调用filtered方法并返回。</p>
+<h3 id="siblings"><a href="#siblings" class="headerlink" title="siblings:"></a>siblings:</h3><p>获取对象所有的兄弟节点。参数可以是一个选择器字符串，如传入参数则根据选择器过滤。</p>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">siblings</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　　　　<span class="token comment" spellcheck="true">// 获取所有p标签的同级标签</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">siblings</span><span class="token punctuation">(</span><span class="token string">".ad"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 　　<span class="token comment" spellcheck="true">// 所有的p标签的同级的className包含ad的元素</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>通过siblings获取到的dom元素会重复。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-8.png" alt=""></p>
+<p>方法内部用到了一个children方法。<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-9.png" alt=""></p>
+<p>方法内部取出元素的父节点并传入children方法，返回元素的父节点的子节点，相当于自己的所有兄弟节点以及自身。</p>
+<p>通过该返回集合call一下filter方法。</p>
+<p>并将除了自身以外的所有节点返回。</p>
+<p>最后通过filtered方法进行筛选，返回；</p>
+<p>注意，siblings获取的元素会重复，会重复，会重复（重说三）；<br><img src="/images/learning-zepto-js-object-sixth/screen-shot-10.png" alt=""><br><img src="/images/learning-zepto-js-object-sixth/screen-shot-11.png" alt=""></p>
+<p>就像这样，script标签出现了两次；</p>
+<p>ok，先说到这里了。写写博客练习一下语言表达能力，感觉自己能理解了，还是说不好，纠结ing…</p>
+
+</div>
+
+<section class="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+<script>
+  var disqus_shortname = 'jiashunming';
+  
+  var disqus_url = 'http://jiasm.github.io/2015/09/01/学习zpeto-js-对象方法-6/';
+  
+  var disqus_config = function () {
+    this.page.url = location.href
+    this.page.identifier = '9072f360-b97a-11e6-a57e-a123f1f8b6ca'
+    this.page.title = document.querySelector('h1').innerText
+  };
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.setAttribute('data-timestamp', +new Date());
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<script>
+  // I'm not sure your browser supports `es6`
+  window.addEventListener('load', function () {
+    [].concat(Array.from(document.querySelectorAll('code')), Array.from(document.querySelectorAll('pre'))).filter(function (item) {return item.className.indexOf('language') >= 0}).forEach(function (tag) { tag.classList.add('line-numbers') })
+    Prism.highlightAll()
+
+    let scrollY = window.scrollY
+    let headersList = Array.from(document.querySelector('#post-content').querySelectorAll('h1,h2,h3,h4,h5,h6')).map(function (item) {
+      let rect = item.getBoundingClientRect()
+      let anchorTag = document.querySelector(`a.toc-link[href="#${item.id}"]`)
+
+      if (!anchorTag) return
+      return {
+        top: scrollY + rect.top - rect.height,
+        tag: item,
+        anchorTag: anchorTag
+      }
+    }).filter(function (item) { return item })
+
+    window.addEventListener('scroll', debounce(scrollHandler, 200))
+    scrollHandler()
+
+    function scrollHandler () {
+      let scrollY = window.scrollY
+      let minInfo = null
+
+      for (let item of headersList) {
+        if (!minInfo) {
+          minInfo = item
+          continue
+        }
+
+        if ((scrollY - item.top) >= 0 && (scrollY - minInfo.top) > (scrollY - item.top)) {
+          minInfo = item
+        }
+      }
+
+      if (minInfo) {
+        headersList.forEach(function (item) {
+          item.anchorTag && item.anchorTag.classList.remove('selected')
+        })
+        minInfo.anchorTag.classList.add('selected')
+      }
+    }
+
+    function debounce (func, delay) {
+      let debounceIdentify = 0
+      return function () {
+        debounceIdentify && clearTimeout(debounceIdentify)
+        debounceIdentify = setTimeout(function () {
+          debounceIdentify = 0
+          func.apply(this, arguments)
+        }, delay)
+      }
+    }
+  })
+</script>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>

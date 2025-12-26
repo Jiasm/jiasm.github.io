@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  
+  
+  
+  <title>Jarvis&#39;s Blog</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+
+  <body class="fixed">
+    <div class="container">
+      <header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">Jarvis&#39;s Blog</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link menu-item-home">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/about" class="menu-item-link menu-item-about">About</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/contact" class="menu-item-link menu-item-contact">Contact</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/links" class="menu-item-link menu-item-friends">Friends</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://github.com/jiasm" class="menu-item-link menu-item-github">Github</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+        <main class="main">
+          <html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <title>
+    
+  </title>
+<link rel="stylesheet" href="/css/prism-coy.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head>
+
+<body>
+  <section class="posts">
+    
+      <a class="post" href="/2018/07/29/koa源码阅读-1-koa与koa-compose/">
+        <div class="post-title">
+          koa源码阅读[1]-koa与koa-compose
+        </div>
+        <div class="post-content">
+          接上次挖的坑，对koa2.x相关的源码进行分析 第一篇。不得不说，koa是一个很轻量、很优雅的http框架，尤其是在2.x以后移除了co的引入，使其代码变得更为清晰。  
+express和koa同为一批人进行开发，与express相比，koa显得非常的迷你。因为express是一个大而全的http框架，内置了类似router之类的中间件进行处理。而在koa中，则将类似功能的中间件全部摘了出来，早期koa里边是内置了koa-compose的，而现在也是将其分了出来。koa只保留一个简单的中间件的整合，http请求的处理，作为一个功能性的中间件框架来存在，自身仅有少量的逻辑。koa-compose则是作为整合中间件最为关键的一个工具、洋葱模型的具体实现，所以要将两者放在一起来看。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="b0c0fa80-92f5-11e8-90cf-cf954482d09f">0 Comments</span>
+          <span class="post-time">
+            2018-07-29 14:07
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/07/22/koa源码阅读-0/">
+        <div class="post-title">
+          koa源码阅读[0]
+        </div>
+        <div class="post-content">
+          Node.js也是写了两三年的时间了，刚开始学习Node的时候，hello world就是创建一个HttpServer，后来在工作中也是经历过Express、Koa1.x、Koa2.x以及最近还在研究的结合着TypeScript的routing-controllers（驱动依然是Express与Koa）。用的比较多的还是Koa版本，也是对它的洋葱模型比较感兴趣，所以最近抽出时间来阅读其源码，正好近期可能会对一个Express项目进行重构，将其重构为koa2.x版本的，所以，阅读其源码对于重构也是一种有效的帮助。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="c48876f0-8d83-11e8-8291-41f8b0341cf6">0 Comments</span>
+          <span class="post-time">
+            2018-07-22 15:49
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/07/21/TypeScript在node项目中的实践/">
+        <div class="post-title">
+          TypeScript在node项目中的实践
+        </div>
+        <div class="post-content">
+          TypeScript可以理解为是JavaScript的一个超集，也就是说涵盖了所有JavaScript的功能，并在之上有着自己独特的语法。最近的一个新项目开始了TS的踩坑之旅，现分享一些可以借鉴的套路给大家。
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="a3016590-8ce4-11e8-bcdf-31f59a8d2cc4">0 Comments</span>
+          <span class="post-time">
+            2018-07-21 20:50
+          </span>
+        </div>
+      </a>
+      
+      <a class="post" href="/2018/07/08/Javascript装饰器的妙用/">
+        <div class="post-title">
+          Javascript装饰器的妙用
+        </div>
+        <div class="post-content">
+          最近新开了一个Node项目，采用TypeScript来开发，在数据库及路由管理方面用了不少的装饰器，发觉这的确是一个好东西。装饰器是一个还处于草案中的特性，目前木有直接支持该语法的环境，但是可以通过 babel 之类的进行转换为旧语法来实现效果，所以在TypeScript中，可以放心的使用@Decorator。  
+        </div>
+        <div class="post-meta">
+          <span class="disqus-comment-count" data-disqus-identifier="dc72eeb0-80f6-11e8-96f3-b9ed9cb7a1c1">0 Comments</span>
+          <span class="post-time">
+            2018-07-08 17:58
+          </span>
+        </div>
+      </a>
+      
+  </section>
+
+  
+</body>
+
+</html>
+
+        </main>
+        <a href="#" class="goto-top">
+          <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <footer class="footer">
+  <div class="footer-content">
+    <div class="footer-info" class="inner">
+      <p class="copyright">&copy; 2025 ShunMing Jia<br></p>
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      theme by <a href="https://github.com/Jiasm/hexo-theme-sheet" target="_blank">Sheet</a>
+    </div>
+    <ul class="contact-info">
+      
+        <a class="contact-link" href="https://github.com/jiasm" target="_blank"><i class="fa fa-github"></i></a>
+      
+      
+        <a class="contact-link" href="https://weibo.com/jarvis1996" target="_blank"><i class="fa fa-weibo"></i></a>
+      
+      
+        <a class="contact-link" href="https://twitter.com/jiashm" target="_blank"><i class="fa fa-twitter"></i></a>
+      
+      
+        <a class="contact-link" href="https://www.facebook.com/jiashunming" target="_blank"><i class="fa fa-facebook"></i></a>
+      
+      
+        <a class="contact-link" href="mailto:jiashunming@outlook.com" target="_blank"><i class="fa fa-envelope"></i></a>
+      
+    </ul>
+  </div>
+</footer>
+
+  <!-- 使用 DISQUS js 代码 -->
+  <script id="dsq-count-scr" src="//jiashunming.disqus.com/count.js" async="async"></script>
+
+
+
+      <script>
+      function footerHandler () {
+        if (!window.screen || !document.body) return
+        var hasComments = document.querySelector('.comments')
+        if ((window.screen.availHeight - (hasComments ? 350 : 0)) > document.body.clientHeight) {
+          document.body.classList.add('fixed')
+        } else {
+          document.body.classList.remove('fixed')
+        }
+      }
+      footerHandler()
+      window.addEventListener('resize', footerHandler)
+    </script>
+  </body>
+  <script>
+    var pathname = new URL(location.href).pathname.replace(/\/$/, '')
+
+    switch (pathname) {
+      case '/about':
+        document.querySelector('.menu-item-about').classList.add('active')
+        break
+      case '/contact':
+        document.querySelector('.menu-item-contact').classList.add('active')
+        break
+      case '/links':
+        document.querySelector('.menu-item-friends').classList.add('active')
+        break
+      default:
+        document.querySelector('.menu-item-home').classList.add('active')
+    }
+  </script>
+  
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f1f7cb8bfb6de7f6a6277fee35703d98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+
+</html>
